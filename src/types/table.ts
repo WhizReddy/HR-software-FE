@@ -1,5 +1,3 @@
-// Native replacements for @mui/x-data-grid types
-
 export interface ColDef<TRow = Record<string, unknown>> {
     field: string
     headerName: string

@@ -106,16 +106,6 @@
     border-bottom: 1px solid var(--border-color);
 }
 
-.MuiTab-root {
-    color: var(--text-muted) !important;
-    font-weight: 500 !important;
-}
-
-.Mui-selected {
-    color: var(--primary-blue) !important;
-    font-weight: 600 !important;
-}
-
 .rescheduleModal {
     background-color: #ffffff;
     border-radius: 10px;
