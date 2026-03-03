@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useMemo, useState, useEffect, useRef } from 'react'
 import { Bell } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useGetAllNotifications } from './Hook/index'
@@ -24,11 +24,10 @@ const NotificationDropdown: React.FC = () => {
         notifications: [],
         setNotifications: () => { },
     }
-    const [length, setLength] = useState(0)
-
-    useEffect(() => {
-        setLength(notifications.filter((n) => !n.isRead).length)
-    }, [notifications])
+    const unreadCount = useMemo(
+        () => notifications.filter((n) => !n.isRead).length,
+        [notifications],
+    )
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -42,18 +41,19 @@ const NotificationDropdown: React.FC = () => {
         }
     }, [])
 
-    const handleToggleDropdown = () => {
-        setIsOpen(!isOpen)
-    }
+    const handleToggleDropdown = () => setIsOpen((prev) => !prev)
 
     const removeNotification = async (notification: Notification) => {
+        if (notification.isRead) {
+            return
+        }
+
         try {
             await AxiosInstance.patch(`notification/${notification._id}`)
             const updatedNotifications = notifications.map(n =>
                 n._id === notification._id ? { ...n, isRead: true } : n
             )
             setNotifications(updatedNotifications)
-            setLength(prev => prev - 1)
         } catch (error) {
             console.error(
                 `Error removing notification ${notification._id}:`,
@@ -62,23 +62,33 @@ const NotificationDropdown: React.FC = () => {
         }
     }
 
+    const getRouteByType = (notification: Notification) => {
+        switch (notification.type) {
+            case 'events':
+                return `/events?event=${notification.typeId}`
+            case 'vacation':
+                return `/vacation?vacationType=requests&selectedVacation=${notification.typeId}`
+            case 'candidates':
+                return `/view/${notification.typeId}`
+            case 'allVacation':
+                return '/vacation?vacationType=requests&page=0&limit=5'
+            case 'allCandidates':
+            case 'allApplication':
+                return '/candidates'
+            default:
+                return null
+        }
+    }
+
     const handleNotificationClick = (notification: Notification) => {
         if (!notification.isRead) {
             removeNotification(notification)
         }
-        if (notification.type === 'events') {
-            navigate(`/events?event=${notification.typeId}`)
+
+        const route = getRouteByType(notification)
+        if (route) {
+            navigate(route)
             setIsOpen(false)
-        } else if (notification.type === 'vacation') {
-            navigate(
-                `/vacation?vacationType=requests&selectedVacation=${notification.typeId}`,
-            )
-        } else if (notification.type === 'candidates') {
-            navigate(`/view/${notification.typeId}`)
-        } else if (notification.type === 'allVacation') {
-            navigate(`/vacation?vacationType=requests&page=0&limit=5`)
-        } else if (notification.type === 'allCandidates') {
-            navigate(`/candidates`)
         }
     }
 
@@ -95,6 +105,7 @@ const NotificationDropdown: React.FC = () => {
                 return 'purple'
             case 'allVacation':
                 return 'green'
+            case 'allCandidates':
             case 'allApplication':
                 return 'purple'
             default:
@@ -104,20 +115,27 @@ const NotificationDropdown: React.FC = () => {
 
     const markAllAsRead = async () => {
         try {
-            const updatedNotifications = notifications.map(n => ({ ...n, isRead: true }))
-            for (const notification of updatedNotifications) {
-                if (!notification.isRead) {
-                    await AxiosInstance.patch(`notification/${notification._id}`)
-                }
+            const unreadNotifications = notifications.filter((notification) => !notification.isRead)
+            await Promise.all(
+                unreadNotifications.map((notification) =>
+                    AxiosInstance.patch(`notification/${notification._id}`),
+                ),
+            )
+
+            if (unreadNotifications.length > 0) {
+                const updatedNotifications = notifications.map((n) => ({ ...n, isRead: true }))
+                setNotifications(updatedNotifications)
             }
-            setNotifications(updatedNotifications)
-            setLength(0)
         } catch (error) {
             console.error('Error marking all as read:', error)
         }
     }
 
     const showAll = async () => {
+        if (!currentUser?._id) {
+            return
+        }
+
         try {
             const result = await AxiosInstance.get(
                 `notification/user/${currentUser?._id}?period=week`,
@@ -136,56 +154,69 @@ const NotificationDropdown: React.FC = () => {
                 onClick={handleToggleDropdown}
             >
                 <Bell size={24} />
-                {length > 0 && (
+                {unreadCount > 0 && (
                     <span className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full">
-                        {length}
+                        {unreadCount}
                     </span>
                 )}
             </button>
             {isOpen && (
                 <div
-                    className="absolute right-0 mt-2 p-2 w-[450px] bg-white shadow-xl rounded-lg overflow-y-auto max-h-[400px] z-[60] scrollbar-hide"
+                    className="absolute right-0 z-[60] mt-2 w-[min(92vw,28rem)] overflow-hidden rounded-lg border border-slate-200 bg-white shadow-xl"
                 >
-                    {notifications.map((notification) => (
-                        <div
-                            key={notification._id}
-                            className={`mb-2 bg-white border border-slate-100 rounded-md shadow-sm cursor-pointer hover:bg-slate-50 transition-colors`}
-                            style={{ borderBottomWidth: '4px', borderBottomColor: getColorByType(notification.type, notification.isRead) }}
-                            onClick={() => handleNotificationClick(notification)}
-                        >
-                            <div className="p-3 flex items-center justify-between">
-                                <div>
-                                    <h4 className="font-semibold text-sm text-slate-800">
-                                        {notification.title}
-                                    </h4>
-                                    <p className="text-sm text-slate-600 max-w-[300px] truncate">
-                                        {notification.content}
-                                    </p>
-                                </div>
-                                <span
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        removeNotification(notification)
-                                    }}
-                                    className={`text-xs font-medium cursor-pointer ${notification.isRead ? 'text-slate-400 font-normal' : 'text-blue-600 hover:text-blue-800'
-                                        }`}
-                                >
-                                    {notification.isRead ? 'Read' : 'Mark as read'}
-                                </span>
+                    <div className="max-h-[26rem] overflow-y-auto p-2">
+                        {notifications.length === 0 && (
+                            <div className="px-3 py-8 text-center text-sm text-slate-500">
+                                No notifications to show.
                             </div>
-                        </div>
-                    ))}
-                    <div className="flex justify-between mt-2 pt-2 border-t border-slate-100 px-2">
-                        {length > 0 && (
+                        )}
+
+                        {notifications.map((notification) => (
+                            <div
+                                key={notification._id}
+                                className="mb-2 cursor-pointer rounded-md border border-slate-100 bg-white shadow-sm transition-colors hover:bg-slate-50"
+                                style={{
+                                    borderBottomWidth: '4px',
+                                    borderBottomColor: getColorByType(notification.type, notification.isRead),
+                                }}
+                                onClick={() => handleNotificationClick(notification)}
+                            >
+                                <div className="flex items-start justify-between gap-2 p-3">
+                                    <div className="min-w-0">
+                                        <h4 className="truncate text-sm font-semibold text-slate-800">
+                                            {notification.title}
+                                        </h4>
+                                        <p className="truncate text-sm text-slate-600">
+                                            {notification.content}
+                                        </p>
+                                    </div>
+                                    <span
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            removeNotification(notification)
+                                        }}
+                                        className={`shrink-0 text-xs font-medium ${notification.isRead ? 'text-slate-400' : 'text-blue-600 hover:text-blue-800'
+                                            }`}
+                                    >
+                                        {notification.isRead ? 'Read' : 'Mark as read'}
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="flex items-center justify-between border-t border-slate-100 px-4 py-2">
+                        {unreadCount > 0 && (
                             <button
-                                className="text-sm text-slate-500 hover:text-blue-600 transition-colors"
+                                className="text-sm text-slate-500 transition-colors hover:text-blue-600"
                                 onClick={markAllAsRead}
                             >
                                 Mark all as read
                             </button>
                         )}
+
                         <button
-                            className="text-sm text-slate-500 hover:text-blue-600 transition-colors"
+                            className="ml-auto text-sm text-slate-500 transition-colors hover:text-blue-600"
                             onClick={showAll}
                         >
                             Show all

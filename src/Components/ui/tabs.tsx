@@ -24,14 +24,14 @@ const TabsTrigger = React.forwardRef<
   HTMLElement,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Tab>
 >(({ className, ...props }, ref) => (
-  <TabsPrimitive.Tab
-    ref={ref}
-    className={cn(
-      'inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 aria-selected:bg-background aria-selected:text-foreground aria-selected:shadow',
-      className,
-    )}
-    {...props}
-  />
+    <TabsPrimitive.Tab
+      ref={ref}
+      className={cn(
+        'inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 aria-selected:bg-background aria-selected:text-foreground aria-selected:shadow',
+        className,
+      )}
+      {...props}
+    />
 ))
 TabsTrigger.displayName = 'TabsTrigger'
 

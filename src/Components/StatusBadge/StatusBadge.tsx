@@ -1,4 +1,6 @@
 import React from 'react'
+import { Badge } from '@/Components/ui/badge'
+import { cn } from '@/lib/utils'
 
 interface StatusBadgeProps {
     status: string
@@ -19,10 +21,11 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, color }) => {
     const classes = color && colorMap[color] ? colorMap[color] : 'bg-slate-100 text-slate-600 border-slate-200'
 
     return (
-        <span
-            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border capitalize ${classes}`}
+        <Badge
+            variant="outline"
+            className={cn('rounded-full text-xs font-semibold capitalize', classes)}
         >
             {status}
-        </span>
+        </Badge>
     )
 }

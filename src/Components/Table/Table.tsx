@@ -1,8 +1,18 @@
 import React from 'react'
 import { ColDef, PaginationModel, RowParams } from '@/types/table'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/Components/ui/table'
+import { Card } from '@/Components/ui/card'
+import { Button } from '@/Components/ui/button'
+import { Pagination, PaginationContent, PaginationItem } from '@/Components/ui/pagination'
 
-interface DataTableProps<TRow extends Record<string, unknown>> {
+interface DataTableProps<TRow> {
     rows: TRow[]
     columns: ColDef<TRow>[]
     getRowId: (row: TRow) => number | string
@@ -15,7 +25,7 @@ interface DataTableProps<TRow extends Record<string, unknown>> {
     actions?: React.ReactNode
 }
 
-function DataTable<TRow extends Record<string, unknown>>({
+function DataTable<TRow>({
     rows,
     columns,
     getRowId,
@@ -29,9 +39,10 @@ function DataTable<TRow extends Record<string, unknown>>({
 }: DataTableProps<TRow>) {
     const canPrev = page > 0
     const canNext = page < totalPages - 1
+    const normalizedTotalPages = totalPages || 1
 
     return (
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+        <Card className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
             {/* Optional header row */}
             {(title || actions) && (
                 <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
@@ -40,25 +51,25 @@ function DataTable<TRow extends Record<string, unknown>>({
                 </div>
             )}
 
-            <div className="w-full overflow-x-auto">
-                <table className="w-full text-sm text-left">
-                    <thead>
-                        <tr className="bg-slate-50 border-b border-slate-100">
+            <div className="w-full overflow-x-auto px-2">
+                <Table className="w-full text-left text-sm">
+                    <TableHeader>
+                        <TableRow className="border-slate-100 bg-slate-50 hover:bg-slate-50">
                             {columns.map((col) => (
-                                <th
+                                <TableHead
                                     key={col.field}
-                                    className="px-5 py-3.5 font-semibold text-xs uppercase tracking-wider text-slate-500 whitespace-nowrap"
+                                    className="whitespace-nowrap px-3 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500"
                                     style={col.width ? { width: col.width } : undefined}
                                 >
                                     {col.headerName}
-                                </th>
+                                </TableHead>
                             ))}
-                        </tr>
-                    </thead>
-                    <tbody>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
                         {rows.length === 0 ? (
-                            <tr>
-                                <td
+                            <TableRow>
+                                <TableCell
                                     colSpan={columns.length}
                                     className="text-center py-16 text-slate-400 text-sm"
                                 >
@@ -66,11 +77,11 @@ function DataTable<TRow extends Record<string, unknown>>({
                                         <span className="text-2xl">📭</span>
                                         <span>No data to display</span>
                                     </div>
-                                </td>
-                            </tr>
+                                </TableCell>
+                            </TableRow>
                         ) : (
                             rows.map((row, idx) => (
-                                <tr
+                                <TableRow
                                     key={getRowId(row)}
                                     onClick={() =>
                                         handleRowClick && handleRowClick({ row })
@@ -82,24 +93,24 @@ function DataTable<TRow extends Record<string, unknown>>({
                                         }`}
                                 >
                                     {columns.map((col) => (
-                                        <td
+                                        <TableCell
                                             key={col.field}
-                                            className="px-5 py-3.5 text-slate-700 whitespace-nowrap text-sm"
+                                            className="whitespace-nowrap px-3 py-3.5 text-sm text-slate-700"
                                         >
                                             {col.renderCell
                                                 ? col.renderCell({
-                                                    value: row[col.field],
+                                                    value: (row as Record<string, unknown>)[col.field],
                                                     row,
                                                     field: col.field,
                                                 })
-                                                : String(row[col.field] ?? '')}
-                                        </td>
+                                                : String((row as Record<string, unknown>)[col.field] ?? '')}
+                                        </TableCell>
                                     ))}
-                                </tr>
+                                </TableRow>
                             ))
                         )}
-                    </tbody>
-                </table>
+                    </TableBody>
+                </Table>
             </div>
 
             {/* Pagination */}
@@ -108,32 +119,41 @@ function DataTable<TRow extends Record<string, unknown>>({
                     Page{' '}
                     <span className="font-semibold text-slate-700">{page + 1}</span>
                     {' '}of{' '}
-                    <span className="font-semibold text-slate-700">{totalPages || 1}</span>
+                    <span className="font-semibold text-slate-700">{normalizedTotalPages}</span>
                 </p>
-                <div className="flex items-center gap-1.5">
-                    <button
-                        disabled={!canPrev}
-                        onClick={() =>
-                            onPaginationModelChange({ page: page - 1, pageSize })
-                        }
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 text-xs font-medium hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                    >
-                        <ChevronLeft size={14} />
-                        Prev
-                    </button>
-                    <button
-                        disabled={!canNext}
-                        onClick={() =>
-                            onPaginationModelChange({ page: page + 1, pageSize })
-                        }
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 text-xs font-medium hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                    >
-                        Next
-                        <ChevronRight size={14} />
-                    </button>
-                </div>
+
+                <Pagination className="mx-0 w-auto justify-end">
+                    <PaginationContent>
+                        <PaginationItem>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                disabled={!canPrev}
+                                onClick={() =>
+                                    onPaginationModelChange({ page: page - 1, pageSize })
+                                }
+                            >
+                                Prev
+                            </Button>
+                        </PaginationItem>
+                        <PaginationItem>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                disabled={!canNext}
+                                onClick={() =>
+                                    onPaginationModelChange({ page: page + 1, pageSize })
+                                }
+                            >
+                                Next
+                            </Button>
+                        </PaginationItem>
+                    </PaginationContent>
+                </Pagination>
             </div>
-        </div>
+        </Card>
     )
 }
 

@@ -1,15 +1,60 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import NotificationDropdown from '../../Pages/Notification/Notification'
 import { useAuth } from '@/Context/AuthProvider'
 import { Avatar, AvatarFallback } from '@/Components/ui/avatar'
 import { SidebarTrigger } from '@/Components/ui/sidebar'
+import { ChevronDown, LogOut, User } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 export const Header: React.FC = () => {
-  const { currentUser } = useAuth()
+  const { currentUser, logout } = useAuth()
+  const navigate = useNavigate()
+  const [isProfileOpen, setIsProfileOpen] = useState(false)
+  const profileDropdownRef = useRef<HTMLDivElement>(null)
 
   const initials = currentUser
     ? `${currentUser.firstName?.charAt(0) ?? ''}${currentUser.lastName?.charAt(0) ?? ''}`
     : 'U'
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        profileDropdownRef.current &&
+        !profileDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsProfileOpen(false)
+      }
+    }
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsProfileOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleEscape)
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleEscape)
+    }
+  }, [])
+
+  const handleLogout = () => {
+    logout()
+    setIsProfileOpen(false)
+    navigate('/')
+  }
+
+  const handleGoToProfile = () => {
+    setIsProfileOpen(false)
+    if (currentUser?._id) {
+      navigate(`/profile/${currentUser._id}`)
+      return
+    }
+    navigate('/dashboard')
+  }
 
   return (
     <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-slate-100 bg-white px-5 shadow-[0_1px_6px_rgba(0,0,0,0.04)]">
@@ -17,11 +62,49 @@ export const Header: React.FC = () => {
 
       <div className="flex items-center gap-3">
         <NotificationDropdown />
-        <Avatar className="h-8 w-8 cursor-pointer bg-gradient-to-br from-[#2457a3] to-[#4A7BCD] text-white shadow-sm">
-          <AvatarFallback className="bg-transparent text-xs font-bold text-white">
-            {initials}
-          </AvatarFallback>
-        </Avatar>
+        <div ref={profileDropdownRef} className="relative">
+          <button
+            type="button"
+            onClick={() => setIsProfileOpen((prev) => !prev)}
+            className="flex items-center gap-1 rounded-full border border-slate-200 bg-white p-1 pr-2 transition-colors hover:bg-slate-50"
+          >
+            <Avatar className="h-8 w-8 cursor-pointer bg-gradient-to-br from-[#2457a3] to-[#4A7BCD] text-white shadow-sm">
+              <AvatarFallback className="bg-transparent text-xs font-bold text-white">
+                {initials}
+              </AvatarFallback>
+            </Avatar>
+            <ChevronDown size={14} className="text-slate-500" />
+          </button>
+
+          {isProfileOpen && (
+            <div className="absolute right-0 z-50 mt-2 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
+              <div className="border-b border-slate-100 px-3 py-2">
+                <p className="truncate text-sm font-semibold text-slate-800">
+                  {currentUser?.firstName} {currentUser?.lastName}
+                </p>
+                <p className="truncate text-xs text-slate-500">{currentUser?.email}</p>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleGoToProfile}
+                className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-slate-700 transition-colors hover:bg-slate-50"
+              >
+                <User size={15} />
+                My Profile
+              </button>
+
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-red-600 transition-colors hover:bg-red-50"
+              >
+                <LogOut size={15} />
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   )

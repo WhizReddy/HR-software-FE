@@ -13,6 +13,7 @@ import {
   LogOut,
   Handshake,
 } from 'lucide-react'
+import { useAuth } from '@/Context/AuthProvider'
 
 import {
   Sidebar,
@@ -44,9 +45,10 @@ const navItems = [
 export const SideBar: React.FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
+  const { logout } = useAuth()
 
   const handleLogout = () => {
-    localStorage.removeItem('access_token')
+    logout()
     navigate('/')
   }
 

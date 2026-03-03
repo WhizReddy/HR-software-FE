@@ -1,5 +1,13 @@
 import React from 'react'
 import { useLocation, Link } from 'react-router-dom'
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+} from '@/Components/ui/breadcrumb'
 
 const routeLabels: Record<string, string> = {
     dashboard: 'Dashboard',
@@ -24,28 +32,39 @@ export const BreadcrumbComponent: React.FC = () => {
     if (crumbs.length === 0) return null
 
     return (
-        <nav className="flex items-center gap-1.5 text-xs text-slate-500 mb-4">
-            <Link to="/dashboard" className="hover:text-[#2457a3] transition-colors">
-                Home
-            </Link>
-            {crumbs.map((crumb, idx) => {
-                const path = '/' + crumbs.slice(0, idx + 1).join('/')
-                const label = routeLabels[crumb] || crumb
-                const isLast = idx === crumbs.length - 1
+        <Breadcrumb className="mb-4">
+            <BreadcrumbList className="text-xs text-slate-500">
+                <BreadcrumbItem>
+                    <BreadcrumbLink render={<Link to="/dashboard" className="hover:text-[#2457a3]" />}>
+                        Home
+                    </BreadcrumbLink>
+                </BreadcrumbItem>
 
-                return (
-                    <React.Fragment key={path}>
-                        <span className="text-slate-300">/</span>
-                        {isLast ? (
-                            <span className="text-slate-700 font-semibold capitalize">{label}</span>
-                        ) : (
-                            <Link to={path} className="hover:text-[#2457a3] transition-colors capitalize">
-                                {label}
-                            </Link>
-                        )}
-                    </React.Fragment>
-                )
-            })}
-        </nav>
+                {crumbs.map((crumb, idx) => {
+                    const path = '/' + crumbs.slice(0, idx + 1).join('/')
+                    const label = routeLabels[crumb] || crumb
+                    const isLast = idx === crumbs.length - 1
+
+                    return (
+                        <React.Fragment key={path}>
+                            <BreadcrumbSeparator className="text-slate-300" />
+                            <BreadcrumbItem>
+                                {isLast ? (
+                                    <BreadcrumbPage className="font-semibold capitalize text-slate-700">
+                                        {label}
+                                    </BreadcrumbPage>
+                                ) : (
+                                    <BreadcrumbLink
+                                        render={<Link to={path} className="capitalize hover:text-[#2457a3]" />}
+                                    >
+                                        {label}
+                                    </BreadcrumbLink>
+                                )}
+                            </BreadcrumbItem>
+                        </React.Fragment>
+                    )
+                })}
+            </BreadcrumbList>
+        </Breadcrumb>
     )
 }

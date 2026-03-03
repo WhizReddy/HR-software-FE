@@ -28,7 +28,7 @@ const DashboardContent: React.FC = () => {
     })
 
     return (
-        <div className="space-y-6 max-w-[1400px] mx-auto">
+        <div className="mx-auto max-w-[1400px] space-y-6">
             {/* Greeting */}
             <div className="flex items-center justify-between">
                 <div>
@@ -42,7 +42,7 @@ const DashboardContent: React.FC = () => {
             </div>
 
             {/* Stat cards — using inline grid for reliability */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <CardInfo title="Present" content={employeeData.present.toString()} icon="Present" />
                 <CardInfo title="Absent" content={employeeData.absent.toString()} icon="Absent" />
                 <CardInfo title="On Leave" content={employeeData.onLeave.toString()} icon="On Leave" />
@@ -50,29 +50,29 @@ const DashboardContent: React.FC = () => {
             </div>
 
             {/* Main row: Calendar + InfoSection + PieChart */}
-            <div style={{ display: 'grid', gridTemplateColumns: '3fr 4fr 3fr', gap: '1.25rem' }}>
+            <div className="grid grid-cols-1 gap-5 xl:grid-cols-12">
                 {/* Calendar */}
-                <div className="bg-white border border-slate-100 rounded-2xl shadow-sm p-5">
+                <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm xl:col-span-3">
                     <h3 className="text-sm font-semibold text-slate-700 mb-4">Calendar</h3>
                     <Calendar />
                 </div>
 
                 {/* Info Section */}
-                <div className="bg-white border border-slate-100 rounded-2xl shadow-sm p-5">
+                <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm xl:col-span-5">
                     <InfoSection />
                 </div>
 
                 {/* Pie Chart */}
-                <div className="bg-white border border-slate-100 rounded-2xl shadow-sm p-5">
+                <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm xl:col-span-4">
                     <h3 className="text-sm font-semibold text-slate-700 mb-4">Employee Status</h3>
                     <PieChartComponent />
                 </div>
             </div>
 
             {/* Team directory */}
-            <div className="bg-white border border-slate-100 rounded-2xl shadow-sm p-5">
+            <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
                 <h3 className="text-sm font-semibold text-slate-700 mb-5">Team Directory</h3>
-                <div className="flex flex-wrap gap-5">
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-7">
                     {UserProfileDataList?.map((employee: UserProfileData) => (
                         <div
                             key={employee._id}

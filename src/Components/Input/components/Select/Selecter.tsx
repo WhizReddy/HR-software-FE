@@ -1,10 +1,12 @@
 import React from 'react'
+import { Label } from '@/Components/ui/label'
+import { cn } from '@/lib/utils'
 
 interface SelecterProps {
     label?: string
     name?: string
     value?: string | string[]
-    onChange?: (value: string | string[]) => void
+    onChange?: (value: any) => void
     options?: { value: string; label: string }[] | string[]
     multiple?: boolean
     width?: string | number
@@ -47,9 +49,9 @@ const Selecter: React.FC<SelecterProps> = ({
             style={{ width: width ? (typeof width === 'number' ? `${width}px` : width) : '100%' }}
         >
             {label && (
-                <label htmlFor={name} className="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                <Label htmlFor={name} className="text-xs font-semibold uppercase tracking-wider text-slate-600">
                     {label}
-                </label>
+                </Label>
             )}
             <select
                 id={name}
@@ -59,10 +61,11 @@ const Selecter: React.FC<SelecterProps> = ({
                 disabled={disabled}
                 value={selectedValue}
                 onChange={handleChange}
-                className="w-full rounded-lg border border-slate-200 bg-white text-slate-800 text-sm px-3 py-2
-                    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                    disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed
-                    transition-shadow"
+                className={cn(
+                    'h-9 w-full rounded-md border border-input bg-white px-3 py-2 text-sm text-slate-800 transition-colors',
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-0',
+                    'disabled:cursor-not-allowed disabled:opacity-50',
+                )}
             >
                 {placeholder && (
                     <option value="" disabled>

@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { MoreVertical, Pencil, Trash2 } from 'lucide-react'
+import { Button } from '@/Components/ui/button'
+import { Card } from '@/Components/ui/card'
 
 interface EventsData {
     _id: string
@@ -28,31 +30,38 @@ const LongMenu: React.FC<LongMenuProps> = ({ event, onEdit, onDelete }) => {
 
     return (
         <div className="relative" ref={ref}>
-            <button
+            <Button
+                type="button"
+                variant="ghost"
+                size="icon-sm"
                 onClick={(e) => { e.stopPropagation(); setOpen(!open) }}
-                className="p-1.5 rounded-full text-slate-500 hover:bg-slate-100 transition-colors"
+                className="text-slate-500"
             >
                 <MoreVertical size={18} />
-            </button>
+            </Button>
             {open && (
-                <div className="absolute right-0 top-8 z-30 bg-white border border-slate-200 rounded-xl shadow-lg py-1 min-w-[140px]">
+                <Card className="absolute right-0 top-8 z-30 min-w-[140px] rounded-xl border border-slate-200 py-1 shadow-lg">
                     {onEdit && (
-                        <button
+                        <Button
+                            type="button"
+                            variant="ghost"
                             onClick={() => { setOpen(false); onEdit(event) }}
-                            className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+                            className="h-auto w-full justify-start rounded-none px-4 py-2.5 text-sm text-slate-700"
                         >
                             <Pencil size={15} /> Edit
-                        </button>
+                        </Button>
                     )}
                     {onDelete && (
-                        <button
+                        <Button
+                            type="button"
+                            variant="ghost"
                             onClick={() => { setOpen(false); onDelete(event._id) }}
-                            className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                            className="h-auto w-full justify-start rounded-none px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 hover:text-red-600"
                         >
                             <Trash2 size={15} /> Delete
-                        </button>
+                        </Button>
                     )}
-                </div>
+                </Card>
             )}
         </div>
     )

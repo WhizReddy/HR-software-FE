@@ -1,5 +1,11 @@
 import React, { useState } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from '@/Components/ui/carousel'
 
 interface CarouselProps {
     images?: string[]
@@ -21,38 +27,44 @@ const Example: React.FC<CarouselProps> = ({ images = [], children }) => {
     const next = () => setCurrent((c) => (c === images.length - 1 ? 0 : c + 1))
 
     return (
-        <div className="relative w-full rounded-xl overflow-hidden bg-slate-900">
-            <img
-                src={images[current]}
-                alt={`slide-${current}`}
-                className="w-full object-cover max-h-72"
-            />
+        <Carousel className="w-full overflow-hidden rounded-xl bg-slate-900">
+            <CarouselContent
+                className="ml-0"
+                style={{
+                    transform: `translateX(-${current * 100}%)`,
+                    transition: 'transform 250ms ease',
+                }}
+            >
+                {images.map((image, i) => (
+                    <CarouselItem key={image + i} className="pl-0">
+                        <img src={image} alt={`slide-${i}`} className="max-h-72 w-full object-cover" />
+                    </CarouselItem>
+                ))}
+            </CarouselContent>
+
             {images.length > 1 && (
                 <>
-                    <button
+                    <CarouselPrevious
                         onClick={prev}
-                        className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/40 text-white hover:bg-black/60 transition-colors"
-                    >
-                        <ChevronLeft size={18} />
-                    </button>
-                    <button
+                        className="left-2 top-1/2 h-8 w-8 -translate-y-1/2 border-none bg-black/40 text-white hover:bg-black/60"
+                    />
+                    <CarouselNext
                         onClick={next}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/40 text-white hover:bg-black/60 transition-colors"
-                    >
-                        <ChevronRight size={18} />
-                    </button>
-                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+                        className="right-2 top-1/2 h-8 w-8 -translate-y-1/2 border-none bg-black/40 text-white hover:bg-black/60"
+                    />
+                    <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1.5">
                         {images.map((_, i) => (
                             <button
                                 key={i}
+                                type="button"
                                 onClick={() => setCurrent(i)}
-                                className={`w-2 h-2 rounded-full transition-colors ${i === current ? 'bg-white' : 'bg-white/40'}`}
+                                className={`h-2 w-2 rounded-full transition-colors ${i === current ? 'bg-white' : 'bg-white/40'}`}
                             />
                         ))}
                     </div>
                 </>
             )}
-        </div>
+        </Carousel>
     )
 }
 
