@@ -312,22 +312,22 @@ export default function ViewCandidats() {
                                 <Input
                                     IsUsername
                                     type="textarea"
-                                    name="costumMessage"
+                                    name="customSubject"
+                                    label="Subject"
+                                    multiline
+                                    rows={1}
+                                    value={customSubject}
+                                    onChange={(e: any) => setCustomSubject(e.target.value)}
+                                />
+                                <Input
+                                    IsUsername
+                                    type="textarea"
+                                    name="customMessage"
                                     label="Message"
                                     multiline
                                     rows={3}
                                     value={customMessage}
                                     onChange={(e: any) => setCustomMessage(e.target.value)}
-                                />
-                                <Input
-                                    IsUsername
-                                    type="textarea"
-                                    name="customSubject"
-                                    label="Subject"
-                                    multiline
-                                    rows={3}
-                                    value={customSubject}
-                                    onChange={(e: any) => setCustomSubject(e.target.value)}
                                 />
                             </>
                         )}

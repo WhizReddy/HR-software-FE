@@ -36,7 +36,6 @@ export default function Forms() {
         setEditParticipants,
         editType,
         setEditType,
-        endDate,
         handleCloseDrawer,
         drawerOpen,
     } = useEvents()
@@ -181,8 +180,8 @@ export default function Forms() {
                             borderColor="#2469FF"
                             disabled={(editingEvent ? editPollOptions : pollOptions).length >= 3}
                         />
-                        {editingEvent ? editPollOptions : pollOptions.length >= 3 &&
-                            <div style={{ color: 'red', fontSize: '14px' }}> Maximum of 3 options allowed.</div>}
+                        {(editingEvent ? editPollOptions.length >= 3 : pollOptions.length >= 3) &&
+                            <div style={{ color: 'red', fontSize: '14px' }}>Maximum of 3 options allowed.</div>}
                     </div>
                 )}
                 <div className={style.border}></div>
