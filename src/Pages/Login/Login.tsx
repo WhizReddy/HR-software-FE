@@ -150,6 +150,15 @@ const LoginComponent = () => {
                                 <ErrorText className="text-center w-full block m-0">{error}</ErrorText>
                             </div>
                         )}
+
+                        <div className="text-center mt-2">
+                            <a
+                                href="/forgot-password"
+                                className="text-sm text-primary-blue hover:underline font-medium"
+                            >
+                                Forgot Password?
+                            </a>
+                        </div>
                     </form>
                 </CardContent>
             </Card>

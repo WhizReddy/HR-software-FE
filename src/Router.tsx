@@ -40,6 +40,10 @@ export default function Router() {
             element: <ResetPass />,
         },
         {
+            path: '/reset-password',
+            element: <ResetPass />,
+        },
+        {
             path: 'career',
             element: <Career />,
         },

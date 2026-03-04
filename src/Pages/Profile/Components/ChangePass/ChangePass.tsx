@@ -71,6 +71,7 @@ function ChangePassContent() {
                 btnText="Forget Password"
                 width="350px"
                 marginTop="9px"
+                onClick={() => window.location.href = '/forgot-password'}
             />
         </>
     )
