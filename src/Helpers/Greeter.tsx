@@ -3,10 +3,10 @@ export const greeter = () => {
     const hours = currDate.getHours()
 
     if (hours >= 5 && hours < 12) {
-        return 'Good Morning,'
+        return 'Good Morning'
     } else if (hours >= 12 && hours < 19) {
-        return 'Good Afternoon,'
+        return 'Good Afternoon'
     } else {
-        return 'Good Evening,'
+        return 'Good Evening'
     }
 }

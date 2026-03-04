@@ -34,7 +34,7 @@ export const PasswordProvider: React.FC<{ children: React.ReactNode }> = ({
             setError('New password and confirm password do not match')
             return false
         }
-        if (newPassword.length < 5) {
+        if (newPassword.length < 8) {
             setError('New password must be at least 8 characters long')
             return false
         }
@@ -70,7 +70,7 @@ export const PasswordProvider: React.FC<{ children: React.ReactNode }> = ({
                 const errorData = error.response.data
                 setError(
                     errorData.message ||
-                        'An error occurred while updating the password',
+                    'An error occurred while updating the password',
                 )
             } else {
                 setError('An error occurred while updating the password')

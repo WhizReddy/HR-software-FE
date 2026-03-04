@@ -96,7 +96,7 @@ export default function Forms() {
                         type="datetime-local"
                         width={173}
                         onChange={editingEvent ? handleEditChange : handleChange}
-                        value={editingEvent ? editingEvent.endDate.slice(0, 16) : endDate
+                        value={editingEvent ? editingEvent.endDate.slice(0, 16) : event.endDate
                         }
                     />
                 </div>

@@ -3,14 +3,13 @@ import { MoreVertical, Pencil, Trash2 } from 'lucide-react'
 import { Button } from '@/Components/ui/button'
 import { Card } from '@/Components/ui/card'
 
-interface EventsData {
+interface EventsDataMenu {
     _id: string
-    [key: string]: unknown
 }
 
 interface LongMenuProps {
-    event: EventsData
-    onEdit?: (event: EventsData) => void
+    event: EventsDataMenu
+    onEdit?: (event: EventsDataMenu) => void
     onDelete?: (id: string) => void
 }
 

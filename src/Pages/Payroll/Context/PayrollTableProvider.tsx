@@ -13,15 +13,11 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
     const [year, setYear] = useState<number | undefined>(undefined)
     const [fullName, setFullName] = useState('')
     const [bonus, setBonus] = useState<number | undefined>(undefined)
-    const [minNetSalary, setMinNetSalary] = useState<number | undefined>(
-        undefined,
-    )
-    const [maxNetSalary, setMaxNetSalary] = useState<number | undefined>(
-        undefined,
-    )
-    const [workingDays, setWorkingDays] = useState<number | undefined>(
-        undefined,
-    )
+    const [minNetSalary, setMinNetSalary] = useState<number | undefined>(undefined)
+    const [maxNetSalary, setMaxNetSalary] = useState<number | undefined>(undefined)
+    const [workingDays, setWorkingDays] = useState<number | undefined>(undefined)
+    const [netSalary, setNetSalary] = useState<number | undefined>(undefined)
+    const [filters, setFilters] = useState<Record<string, string | boolean>>({})
     const [page, setPage] = useState(0)
     const [pageSize, setPageSize] = useState(5)
 
@@ -36,12 +32,22 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         data: PayrollRow[]
         totalPages: number
     }> => {
+        // Build URL without undefined params — prevents "No data to display" bug
+        const params = new URLSearchParams()
+        params.set('limit', String(pageSize))
+        params.set('page', String(page))
+        if (month !== undefined) params.set('month', String(month))
+        if (year !== undefined) params.set('year', String(year))
+        if (bonus !== undefined) params.set('bonus', String(bonus))
+        if (maxNetSalary !== undefined) params.set('maxNetSalary', String(maxNetSalary))
+        if (minNetSalary !== undefined) params.set('minNetSalary', String(minNetSalary))
+        if (workingDays !== undefined) params.set('workingDays', String(workingDays))
+        if (fullName) params.set('fullName', fullName)
+
         const response = await AxiosInstance.get<{
             data: PayrollRow[]
             totalPages: number
-        }>(
-            `/salary?month=${month}&year=${year}&bonus=${bonus}&maxNetSalary=${maxNetSalary}&minNetSalary=${minNetSalary}&workingDays=${workingDays}&fullName=${fullName}&limit=${pageSize}&page=${page}`,
-        )
+        }>(`/salary?${params.toString()}`)
         return response.data
     }
 
@@ -71,7 +77,7 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
             originalId: payrollItem.userId._id,
             netSalary: `${payrollItem.netSalary}${payrollItem.currency}`,
             healthInsurance: `${payrollItem.healthInsurance}${payrollItem.currency}`,
-            month: getMonthName(payrollItem.month),
+            month: getMonthName(payrollItem.month as number),
             workingDays: payrollItem.workingDays,
             tax: payrollItem.tax,
             socialSecurity: payrollItem.socialSecurity,
@@ -103,7 +109,9 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const getRowId = (row: PayrollRow) => row.id
 
-    const handleRowClick = (params: { row: PayrollRow }) => { navigate(`/payroll/user/${params.row.originalId}`) }
+    const handleRowClick = (params: { row: PayrollRow }) => {
+        navigate(`/payroll/user/${params.row.originalId}`)
+    }
 
     const contextValue = {
         rows,
@@ -120,6 +128,12 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         isError,
         setBonus,
         setWorkingDays,
+        // Required by PayrollContextType interface
+        setName: setFullName,
+        netSalary,
+        setNetSalary,
+        filters,
+        setFilters,
         page,
         pageSize,
         totalPages: payrollData?.totalPages ?? 0,

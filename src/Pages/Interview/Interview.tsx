@@ -35,7 +35,8 @@ function InterviewKanbanContent() {
         setStartDate,
         setEndDate,
         filteredInterviews,
-        isFiltered
+        isFiltered,
+        processingIds,
     } = useInterviewContext()
 
     if (loading) return <div>Loading...</div>
@@ -105,7 +106,7 @@ function InterviewKanbanContent() {
                             }`}
                         onClick={() => handleTabChange({} as React.SyntheticEvent, phase)}
                     >
-                        {phase.toUpperCase()}
+                        {phase.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
                     </button>
                 ))}
             </div>
@@ -114,7 +115,7 @@ function InterviewKanbanContent() {
                 <div className={style.kanbanColumns}>
                     <div key={currentTab} className={style.kanbanColumn}>
                         <h2>
-                            {currentTab.toUpperCase()}
+                            {currentTab.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
                             <span className="text-slate-600 ml-2">
                                 ({filteredInterviews.length})
                             </span>
@@ -165,7 +166,7 @@ function InterviewKanbanContent() {
                                                         )}
                                                         {currentTab !== 'employed' && currentTab !== 'applicant' && (
                                                             <div className={style.buttonContainer}>
-                                                                <span title="Edit">
+                                                                <span title="Reschedule">
                                                                     <Button
                                                                         type={ButtonTypes.SECONDARY}
                                                                         btnText=""
@@ -180,10 +181,11 @@ function InterviewKanbanContent() {
                                                                         onClick={() =>
                                                                             handleOpenModal(interview, true)
                                                                         }
+                                                                        disabled={processingIds.has(interview._id.toString())}
                                                                     />
                                                                 </span>
                                                                 <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-                                                                    <span title="Delete">
+                                                                    <span title="Reject">
                                                                         {currentTab !== 'rejected' && (
                                                                             <Button
                                                                                 btnText=" "
@@ -197,6 +199,7 @@ function InterviewKanbanContent() {
                                                                                 alignItems="center"
                                                                                 icon={<Trash2 size={18} />}
                                                                                 onClick={() => handleCancel(interview)}
+                                                                                disabled={processingIds.has(interview._id.toString())}
                                                                             />
                                                                         )}
                                                                     </span>
@@ -214,6 +217,7 @@ function InterviewKanbanContent() {
                                                                                 alignItems="center"
                                                                                 icon={<Check size={18} />}
                                                                                 onClick={() => handleAccept(interview)}
+                                                                                disabled={processingIds.has(interview._id.toString())}
                                                                             />
                                                                         </span>
                                                                     )}

@@ -33,9 +33,10 @@ function EventsContentAndComponents() {
         toastSeverity,
         isAdmin,
         eventToDeleteId,
-        handleSeeEventDetails,
         handleOpenDrawer,
-        formatDate
+        formatDate,
+        handleDeleteEventModal,
+        handleSeeEventDetails
     } = useEvents()
 
     const {
@@ -101,7 +102,11 @@ function EventsContentAndComponents() {
                             >
                                 <div className={style.titleContainer}>
                                     <div className={style.title}> {event.title} </div>
-                                    {isAdmin && <LongMenu event={event} />}
+                                    {isAdmin && <LongMenu
+                                        event={event}
+                                        onEdit={(e) => handleOpenDrawer('edit', e)}
+                                        onDelete={handleDeleteEventModal}
+                                    />}
                                 </div>
                                 <div className={style.description}>
                                     {event.description}

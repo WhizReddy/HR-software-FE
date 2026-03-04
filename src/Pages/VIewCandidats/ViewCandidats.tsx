@@ -7,6 +7,8 @@ import { ModalComponent } from '../../Components/Modal/Modal';
 import Input from '@/Components/Input/Index';
 import { useState } from 'react';
 
+import Toast from '@/Components/Toast/Toast';
+
 export default function ViewCandidats() {
     const {
         applicant,
@@ -23,6 +25,13 @@ export default function ViewCandidats() {
         handleCloseConfirmationModal,
         customSubject,
         setCustomSubject,
+        secondInterviewDate,
+        setSecondInterviewDate,
+        modalAction,
+        toastOpen,
+        toastMessage,
+        toastSeverity,
+        handleToastClose
     } = useApplicantById()
 
     const calculateAge = (dob: string): number => {
@@ -181,15 +190,46 @@ export default function ViewCandidats() {
                         display: 'flex',
                         gap: '10px',
                         flexDirection: 'column',
+                        marginTop: '15px'
                     }}
                 >
-                    <div className={style.label}>Create Interview:</div>
-                    <Button
-                        type={ButtonTypes.PRIMARY}
-                        btnText="Create Interview"
-                        width="100%"
-                        onClick={() => handleOpenModal('active')}
-                    />
+                    <div className={style.label}>Actions:</div>
+
+                    {applicant?.status !== 'rejected' && applicant?.status !== 'employed' && (
+                        <>
+                            {applicant?.currentPhase === 'first_interview' ? (
+                                <Button
+                                    type={ButtonTypes.PRIMARY}
+                                    btnText="Schedule Phase 2 Interview"
+                                    width="100%"
+                                    onClick={() => handleOpenModal('active')}
+                                />
+                            ) : (
+                                <Button
+                                    type={ButtonTypes.PRIMARY}
+                                    btnText="Schedule Interview"
+                                    width="100%"
+                                    onClick={() => handleOpenModal('active')}
+                                />
+                            )}
+
+                            {applicant?.currentPhase !== 'applicant' && (
+                                <Button
+                                    type={ButtonTypes.PRIMARY}
+                                    btnText="Employ Candidate"
+                                    width="100%"
+                                    onClick={() => handleOpenModal('employ')}
+                                />
+                            )}
+
+                            <Button
+                                type={ButtonTypes.SECONDARY}
+                                btnText="Reject Candidate"
+                                width="100%"
+                                onClick={() => handleOpenModal('reject')}
+                            />
+                        </>
+                    )}
                 </div>
             </Card>
             {showModal && (
@@ -204,8 +244,11 @@ export default function ViewCandidats() {
                         <div className={style.title}>Confirm Action</div>
                         <div>
                             {' '}
-                            Are you sure you want to confirm interview with this
-                            candidate?
+                            {modalAction === 'active'
+                                ? 'Are you sure you want to schedule an interview with this candidate?'
+                                : modalAction === 'reject'
+                                    ? 'Are you sure you want to reject this candidate?'
+                                    : 'Are you sure you want to employ this candidate?'}
                         </div>
                         <div
                             style={{
@@ -248,10 +291,12 @@ export default function ViewCandidats() {
                             IsUsername
                             type="datetime-local"
                             name="interviewDate"
-                            label="Date"
-                            value={firstInterviewDate}
+                            label={applicant?.currentPhase === 'first_interview' ? 'Phase 2 Interview Date' : 'Phase 1 Interview Date'}
+                            value={applicant?.currentPhase === 'first_interview' ? secondInterviewDate : firstInterviewDate}
                             onChange={(e: any) =>
-                                setFirstInterviewDate(e.target.value)
+                                applicant?.currentPhase === 'first_interview'
+                                    ? setSecondInterviewDate(e.target.value)
+                                    : setFirstInterviewDate(e.target.value)
                             }
                         />
                         <label className="flex items-center gap-2 cursor-pointer pt-2">
@@ -278,7 +323,7 @@ export default function ViewCandidats() {
                                     IsUsername
                                     type="textarea"
                                     name="customSubject"
-                                    label="Message"
+                                    label="Subject"
                                     multiline
                                     rows={3}
                                     value={customSubject}
@@ -310,6 +355,13 @@ export default function ViewCandidats() {
                     </div>
                 </ModalComponent>
             )}
+
+            <Toast
+                open={toastOpen}
+                message={toastMessage}
+                severity={toastSeverity}
+                onClose={handleToastClose}
+            />
         </div>
     )
 }

@@ -131,33 +131,39 @@ export const useUpdateVacationForm = (vacation: UseQueryResult<any, Error>) => {
         onSubmit: async ({ value }) => {
             value.endDate = dayjs(value.endDate).toISOString()
             value.startDate = dayjs(value.startDate).toISOString()
-            updater.mutate({ vacation: value })
-            if (updater.isError) {
-                setToastConfigs({
-                    isOpen: true,
-                    message:
-                        updater.error?.message || 'Failed to update vacation',
-                    severity: 'error',
-                })
-                if (updater.error instanceof AxiosError)
-                    setErrors({
-                        createError: null,
-                        updateError: updater.error.response?.data,
-                    })
-                else {
-                    setErrors({
-                        createError: null,
-                        updateError: 'something happened',
-                    })
-                }
-            } else {
-                setToastConfigs({
-                    isOpen: true,
-                    message: 'Vacation updated successfully',
-                    severity: 'success',
-                })
-                handleCloseVacationModalOpen()
-            }
+            // Use mutation callbacks — checking isError synchronously after mutate() is
+            // always false because mutate() is fire-and-forget (async race condition).
+            updater.mutate(
+                { vacation: value },
+                {
+                    onSuccess: () => {
+                        setToastConfigs({
+                            isOpen: true,
+                            message: 'Vacation updated successfully',
+                            severity: 'success',
+                        })
+                        handleCloseVacationModalOpen()
+                    },
+                    onError: (error) => {
+                        setToastConfigs({
+                            isOpen: true,
+                            message: error?.message || 'Failed to update vacation',
+                            severity: 'error',
+                        })
+                        if (error instanceof AxiosError)
+                            setErrors({
+                                createError: null,
+                                updateError: error.response?.data,
+                            })
+                        else {
+                            setErrors({
+                                createError: null,
+                                updateError: 'something happened',
+                            })
+                        }
+                    },
+                },
+            )
         },
     })
     return { form }
@@ -167,7 +173,7 @@ export const useCreateVacationForm = () => {
     const { createVacationToggler, setErrors, setToastConfigs } =
         useContext(VacationContext)
 
-    const { mutate, isError, error: mutationError } = useCreateVacation()
+    const { mutate } = useCreateVacation()
 
     const form = useForm<{
         description: string
@@ -182,33 +188,39 @@ export const useCreateVacationForm = () => {
             endDate: dayjs(new Date()).add(2, 'day').format('YYYY-MM-DD'),
         },
         onSubmit: async ({ value }) => {
-            mutate({ vacation: value })
-            if (isError) {
-                setToastConfigs({
-                    isOpen: true,
-                    message:
-                        mutationError?.message || 'Failed to create vacation',
-                    severity: 'error',
-                })
-                if (mutationError instanceof AxiosError)
-                    setErrors({
-                        createError: mutationError.response?.data,
-                        updateError: null,
-                    })
-                else {
-                    setErrors({
-                        createError: 'something happened',
-                        updateError: null,
-                    })
-                }
-            } else {
-                setToastConfigs({
-                    isOpen: true,
-                    message: 'Vacation created successfully',
-                    severity: 'success',
-                })
-                createVacationToggler()
-            }
+            // Use mutation callbacks — checking isError synchronously after mutate() is
+            // always false because mutate() is fire-and-forget (async race condition).
+            mutate(
+                { vacation: value },
+                {
+                    onSuccess: () => {
+                        setToastConfigs({
+                            isOpen: true,
+                            message: 'Vacation created successfully',
+                            severity: 'success',
+                        })
+                        createVacationToggler()
+                    },
+                    onError: (error) => {
+                        setToastConfigs({
+                            isOpen: true,
+                            message: error?.message || 'Failed to create vacation',
+                            severity: 'error',
+                        })
+                        if (error instanceof AxiosError)
+                            setErrors({
+                                createError: (error as AxiosError).response?.data as string,
+                                updateError: null,
+                            })
+                        else {
+                            setErrors({
+                                createError: 'something happened',
+                                updateError: null,
+                            })
+                        }
+                    },
+                },
+            )
         },
     })
 

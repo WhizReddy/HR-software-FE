@@ -54,7 +54,12 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
             selectedInterview.currentPhase === 'first_interview'
                 ? selectedInterview.firstInterviewDate
                 : selectedInterview.secondInterviewDate
-        setInterviewDate(initialDate || '')
+
+        // datetime-local input requires YYYY-MM-DDThh:mm format. 
+        // ISO string contains seconds and 'Z' timezone which breaks the input
+        const formattedDate = initialDate ? initialDate.slice(0, 16) : ''
+
+        setInterviewDate(formattedDate)
         setNotes(selectedInterview.notes || '')
         setCustomMessage(selectedInterview.customMessage || '')
         setCustomSubject(selectedInterview.customSubject || '')
@@ -71,11 +76,10 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
                 customSubject,
                 useCustomEmail,
             )
+            handleClose()
         } else {
             console.error('Interview date is required')
         }
-
-        handleClose()
     }
 
     return (

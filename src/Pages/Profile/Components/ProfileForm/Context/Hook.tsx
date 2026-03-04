@@ -165,8 +165,11 @@ export const useCreatePayroll = () => {
 export const useUpdatePayroll = () => {
     const { id } = useParams<{ id: string }>()
     const currentDate = new Date()
-    const currentYear = currentDate.getFullYear()
-    const lastMonth = currentDate.getMonth() - 1
+    // Handle January rollover: month 0 (Jan) - 1 = -1, which is invalid.
+    // Use month 12 of the previous year instead.
+    const currentMonth = currentDate.getMonth() // 0-indexed
+    const lastMonth = currentMonth === 0 ? 12 : currentMonth
+    const lastMonthYear = currentMonth === 0 ? currentDate.getFullYear() - 1 : currentDate.getFullYear()
 
     const [EditingPayroll, setEditingPayroll] =
         useState<EmployeePayroll | null>(null)
@@ -177,12 +180,15 @@ export const useUpdatePayroll = () => {
     )
 
     const { isLoading, error, status } = useQuery<EmployeePayroll[], Error>({
-        queryKey: ['EditingPayroll', id, lastMonth, currentYear],
+        queryKey: ['EditingPayroll', id, lastMonth, lastMonthYear],
         queryFn: async () => {
-            const url = `/salary/user/${id}?month=${lastMonth}&year=${currentYear}`
+            const url = `/salary/user/${id}?month=${lastMonth}&year=${lastMonthYear}`
             const response = await AxiosInstance.get<EmployeePayroll[]>(url)
-            console.log('Gerti', response.data[0]._id)
-            setEditingPayroll(response.data[0])
+            if (response.data && response.data.length > 0) {
+                setEditingPayroll(response.data[0])
+            } else {
+                setEditingPayroll(null)
+            }
             return response.data
         },
     })

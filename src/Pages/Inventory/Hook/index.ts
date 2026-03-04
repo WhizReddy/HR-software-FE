@@ -63,7 +63,7 @@ export const useCreateInventoryItem = () => {
 
 export const useCreateItemForm = () => {
     const { setError } = useContext(InventoryContext)
-    const { mutate, isError, error } = useCreateInventoryItem()
+    const { mutate } = useCreateInventoryItem()
 
     const form = useForm({
         defaultValues: {
@@ -71,25 +71,29 @@ export const useCreateItemForm = () => {
             serialNumber: '',
         },
         onSubmit: async ({ value }) => {
-            mutate({
-                type: value.type as 'laptop' | 'monitor',
-                serialNumber: value.serialNumber,
-            })
-            if (isError) {
-                if (error instanceof AxiosError) {
-                    if (error?.response?.data?.message) {
-                        setError(error?.response?.data?.message)
-                        return
-                    }
-                    if (error.code === 'ERR_NETWORK') {
-                        setError(
-                            'No internet connection. Please try again later.',
-                        )
-                        return
-                    }
-                }
-                setError('An error occurred. Please try again later.')
-            }
+            mutate(
+                {
+                    type: value.type as 'laptop' | 'monitor',
+                    serialNumber: value.serialNumber,
+                },
+                {
+                    onError: (error) => {
+                        if (error instanceof AxiosError) {
+                            if (error?.response?.data?.message) {
+                                setError(error?.response?.data?.message)
+                                return
+                            }
+                            if (error.code === 'ERR_NETWORK') {
+                                setError(
+                                    'No internet connection. Please try again later.',
+                                )
+                                return
+                            }
+                        }
+                        setError('An error occurred. Please try again later.')
+                    },
+                },
+            )
         },
         validatorAdapter: valibotValidator(),
     })

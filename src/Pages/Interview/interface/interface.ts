@@ -62,4 +62,5 @@ export interface InterviewContextType {
     setFilteredInterviews: Dispatch<React.SetStateAction<Interview[]>>
     scheduleType: 'schedule' | 'reschedule'
     setScheduleType: Dispatch<React.SetStateAction<'schedule' | 'reschedule'>>
+    processingIds: Set<string>
 }

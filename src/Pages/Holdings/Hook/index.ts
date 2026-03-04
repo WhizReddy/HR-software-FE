@@ -106,7 +106,7 @@ export const useHandleItemReturner = () => {
 }
 
 export const useAssignAssetForm = () => {
-    const { mutateAsync, error } = useHandleItemAssigner()
+    const { mutateAsync } = useHandleItemAssigner()
     const {
         searchParams,
         handleCloseOnModal: handleClose,
@@ -119,24 +119,24 @@ export const useAssignAssetForm = () => {
             date: new Date().toISOString().split('T')[0],
         },
         onSubmit: async ({ value }) => {
-            await mutateAsync({
-                assetId: value.assetId as string,
-                userId: searchParams.get('selectedUser') as string,
-                date: value.date,
-            })
-            if (error) {
-                setToastConfigs({
-                    isOpen: true,
-                    message: 'Error assigning item',
-                    severity: 'error',
+            try {
+                await mutateAsync({
+                    assetId: value.assetId as string,
+                    userId: searchParams.get('selectedUser') as string,
+                    date: value.date,
                 })
-            } else {
                 setToastConfigs({
                     isOpen: true,
                     message: 'Item assigned successfully',
                     severity: 'success',
                 })
                 handleClose()
+            } catch {
+                setToastConfigs({
+                    isOpen: true,
+                    message: 'Error assigning item',
+                    severity: 'error',
+                })
             }
         },
         validatorAdapter: valibotValidator(),
@@ -149,7 +149,7 @@ export const useReturnAssetForm = () => {
         useContext(HoldingsContext)
     const itemGetter = useGetItem()
 
-    const { mutateAsync, error } = useHandleItemReturner()
+    const { mutateAsync } = useHandleItemReturner()
 
     const form = useForm({
         defaultValues: {
@@ -158,26 +158,25 @@ export const useReturnAssetForm = () => {
         },
 
         onSubmit: async ({ value }) => {
-            console.log(value)
-            await mutateAsync({
-                assetId: itemGetter.data._id,
-                status: value.status,
-                returnDate: value.returnDate,
-            })
-            console.log(error)
-            if (error) {
-                setToastConfigs({
-                    isOpen: true,
-                    message: 'Error returning item',
-                    severity: 'error',
+            try {
+                if (!itemGetter.data?._id) throw new Error('Asset data not loaded')
+                await mutateAsync({
+                    assetId: itemGetter.data._id,
+                    status: value.status,
+                    returnDate: value.returnDate,
                 })
-            } else {
                 setToastConfigs({
                     isOpen: true,
                     message: 'Item returned successfully',
                     severity: 'success',
                 })
                 handleClose()
+            } catch {
+                setToastConfigs({
+                    isOpen: true,
+                    message: 'Error returning item',
+                    severity: 'error',
+                })
             }
         },
         validatorAdapter: valibotValidator(),

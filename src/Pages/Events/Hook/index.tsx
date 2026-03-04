@@ -80,6 +80,11 @@ export const useCreateEvent = (handleCloseDrawer: () => void = () => { }) => {
 
     const createEventMutation = useMutation({
         mutationFn: async () => {
+            // Guard: endDate must be after startDate
+            if (event.startDate && event.endDate && new Date(event.endDate) <= new Date(event.startDate)) {
+                throw new Error('End date and time must be after the start date')
+            }
+
             const formData = new FormData()
             formData.append('title', event.title)
             formData.append('description', event.description)
@@ -328,6 +333,14 @@ export const useUpdateEvent = (handleCloseDrawer: () => void = () => { }) => {
         mutationFn: async () => {
             if (!editingEvent) {
                 throw new Error('No event selected for editing')
+            }
+            // Guard: endDate must be after startDate
+            if (
+                editingEvent.startDate &&
+                editingEvent.endDate &&
+                new Date(editingEvent.endDate) <= new Date(editingEvent.startDate)
+            ) {
+                throw new Error('End date and time must be after the start date')
             }
             const fieldsToUpdate = {
                 title: editingEvent.title,

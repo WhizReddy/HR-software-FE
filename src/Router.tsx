@@ -61,7 +61,7 @@ export default function Router() {
                     element: <Profile />,
                 },
                 {
-                    path: 'view/:id',
+                    path: '/view/:id',
                     element: <ViewCandidats />,
                 },
                 {

@@ -13,6 +13,9 @@ export interface CandidateView {
     salaryExpectations: string
     status: string
     cvAttachment: string
+    currentPhase?: string
+    firstInterviewDate?: string
+    secondInterviewDate?: string
 }
 
-export type ModalAction = 'active' | 'reject'
+export type ModalAction = 'active' | 'reject' | 'employ'
