@@ -43,6 +43,9 @@ export const ReturnAssetModal = () => {
                                     onSubmit={(e) => {
                                         e.preventDefault()
                                         e.stopPropagation()
+                                        if (document.activeElement instanceof HTMLElement) {
+                                            document.activeElement.blur()
+                                        }
                                         form.handleSubmit()
                                     }}
                                     className="flex flex-col gap-5"
@@ -104,7 +107,12 @@ export const ReturnAssetModal = () => {
                                         <Button
                                             type="button"
                                             variant="outline"
-                                            onClick={handleClose}
+                                            onClick={() => {
+                                                if (document.activeElement instanceof HTMLElement) {
+                                                    document.activeElement.blur()
+                                                }
+                                                handleClose()
+                                            }}
                                             className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50"
                                         >
                                             Cancel

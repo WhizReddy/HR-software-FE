@@ -7,7 +7,6 @@ import Input from '@/Components/Input/Index'
 import Button from '@/Components/Button/Button'
 import { ButtonTypes } from '@/Components/Button/ButtonTypes'
 import { useEvents } from '../Context/EventsContext'
-import style from '../styles/Events.module.css'
 import MapComponent from '../Components/GoogleMap/MapPicker'
 
 export default function Forms() {
@@ -61,7 +60,7 @@ export default function Forms() {
     return (
         <div>
             <DrawerComponent open={drawerOpen} onClose={handleCloseDrawer}>
-                <div className={style.create}>
+                <div className="flex justify-between items-center text-lg font-bold text-slate-800 mb-6 pb-4 border-b border-slate-100">
                     {editingEvent ? 'Edit Event' : 'Create New Event'}
                     <X
                         onClick={handleCloseDrawer}
@@ -84,7 +83,7 @@ export default function Forms() {
                         name="startDate"
                         type="datetime-local"
                         onChange={editingEvent ? handleEditChange : handleChange}
-                        value={editingEvent ? editingEvent.startDate.slice(0, 16) : event.startDate}
+                        value={editingEvent ? (editingEvent.startDate ? editingEvent.startDate.slice(0, 16) : '') : event.startDate}
                         width={178}
                     />
                     <Input
@@ -95,8 +94,7 @@ export default function Forms() {
                         type="datetime-local"
                         width={173}
                         onChange={editingEvent ? handleEditChange : handleChange}
-                        value={editingEvent ? editingEvent.endDate.slice(0, 16) : event.endDate
-                        }
+                        value={editingEvent ? (editingEvent.endDate ? editingEvent.endDate.slice(0, 16) : '') : event.endDate}
                     />
                 </div>
                 <MapComponent
@@ -184,7 +182,7 @@ export default function Forms() {
                             <div style={{ color: 'red', fontSize: '14px' }}>Maximum of 3 options allowed.</div>}
                     </div>
                 )}
-                <div className={style.border}></div>
+                <div className="w-full h-px bg-slate-200 my-6" />
                 <Button
                     btnText={editingEvent ? 'Update' : 'Save event'}
                     type={ButtonTypes.PRIMARY}

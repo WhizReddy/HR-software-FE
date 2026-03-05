@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import styles from './style/EventsPoll.module.css'
+
 import AxiosInstance from '@/Helpers/Axios'
 import { useAuth } from '@/Context/AuthProvider'
 import { EventPollProps, Poll, PollOption, Voter } from './Interface/Interface'
@@ -79,15 +79,29 @@ const EventPoll: React.FC<EventPollProps> = ({ poll, eventId, userId }) => {
         }
     }
 
-    const renderOptionContent = (option: PollOption) => {
+    const renderOptionContent = (option: PollOption, totalVotes: number) => {
         const userVoted = hasUserVoted(option.voters)
+        const percent = totalVotes > 0 ? Math.round((option.votes / totalVotes) * 100) : 0
 
         return (
-            <div className={styles.optionContent}>
-                <span>{option.option}</span>
-                <div className={styles.optionStats}>
-                    {renderDevCheckbox(userVoted)}
+            <div className="relative w-full py-3 px-4 flex justify-between items-center bg-white z-10 rounded-xl overflow-hidden group">
+                {/* Background progress bar */}
+                <div
+                    className={`absolute top-0 left-0 bottom-0 z-0 transition-all duration-500 ease-out ${userVoted ? 'bg-blue-50' : 'bg-slate-50 group-hover:bg-slate-100'}`}
+                    style={{ width: `${percent}%` }}
+                />
+
+                {/* Foreground content */}
+                <span className={`z-10 text-sm font-medium ${userVoted ? 'text-blue-700' : 'text-slate-700'}`}>
+                    {option.option}
+                </span>
+
+                <div className="z-10 flex items-center gap-3">
                     {renderAdminTooltip(option)}
+                    <span className={`text-xs font-semibold ${userVoted ? 'text-blue-600' : 'text-slate-400'}`}>
+                        {percent}%
+                    </span>
+                    {renderDevCheckbox(userVoted)}
                 </div>
             </div>
         )
@@ -97,14 +111,16 @@ const EventPoll: React.FC<EventPollProps> = ({ poll, eventId, userId }) => {
         if (isAdmin) return null
 
         return (
-            <span>
-                <input
-                    type="checkbox"
-                    checked={userVoted}
-                    readOnly
-                    className="w-4 h-4 text-emerald-600 bg-gray-100 border-gray-300 rounded focus:ring-emerald-500 cursor-pointer accent-emerald-600"
-                />
-            </span>
+            <div
+                className={`w-5 h-5 flex items-center justify-center rounded-full border-2 transition-colors ${userVoted ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-300 bg-white'
+                    }`}
+            >
+                {userVoted && (
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                    </svg>
+                )}
+            </div>
         )
     }
 
@@ -114,28 +130,41 @@ const EventPoll: React.FC<EventPollProps> = ({ poll, eventId, userId }) => {
         const tooltipText = option.voters.map(v => `${v.firstName} ${v.lastName}`).join('\n')
 
         return (
-            <div title={tooltipText}>
-                <span className={styles.voteCount}>{option.votes}</span>
+            <div title={tooltipText} className="flex items-center gap-1.5 cursor-help">
+                <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+                    {option.votes} {option.votes === 1 ? 'vote' : 'votes'}
+                </span>
             </div>
         )
     }
 
+    // Calculate total votes
+    const totalVotes = localPoll.options.reduce((acc, opt) => acc + opt.votes, 0)
+
     return (
-        <div className={styles.eventPoll}>
-            <div className={styles.border} />
-            <div className={styles.title}>{localPoll.question}</div>
-            {localPoll.options.map((option, index) => {
-                const userVoted = hasUserVoted(option.voters)
-                return (
-                    <div
-                        key={index}
-                        className={`${styles.option} ${userVoted ? styles.activeOption : ''}`}
-                        onClick={() => handleVote(option.option)}
-                    >
-                        {renderOptionContent(option)}
-                    </div>
-                )
-            })}
+        <div className="w-full flex flex-col gap-4 font-sans">
+            <h3 className="text-lg font-bold text-slate-800 tracking-tight">
+                {localPoll.question}
+            </h3>
+            <div className="flex flex-col gap-3">
+                {localPoll.options.map((option, index) => {
+                    const userVoted = hasUserVoted(option.voters)
+                    return (
+                        <div
+                            key={index}
+                            className={`relative rounded-xl border transition-colors cursor-pointer w-full overflow-hidden ${userVoted ? 'border-blue-200 ring-1 ring-blue-100' : 'border-slate-200 hover:border-slate-300'
+                                }`}
+                            onClick={() => handleVote(option.option)}
+                        >
+                            {renderOptionContent(option, totalVotes)}
+                        </div>
+                    )
+                })}
+            </div>
+
+            <div className="text-xs text-slate-400 mt-1">
+                {totalVotes} total {totalVotes === 1 ? 'vote' : 'votes'}
+            </div>
         </div>
     )
 }

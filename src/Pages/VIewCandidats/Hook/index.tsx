@@ -36,7 +36,7 @@ export const useApplicantById = () => {
 
     const handleConfirm = () => {
         if (modalAction === 'active') {
-            handleAccept()
+            // Just open the scheduling modal — the PATCH happens in handleSend
             setShowConfirmationModal(true)
         } else if (modalAction === 'reject') {
             handleReject()
@@ -50,6 +50,7 @@ export const useApplicantById = () => {
         try {
             await AxiosInstance.patch(`/applicant/${id}`, {
                 status: 'rejected',
+                currentPhase: 'rejected',
             })
             fetchApplicant()
             setToastMessage('Applicant rejected successfully')
@@ -68,6 +69,7 @@ export const useApplicantById = () => {
         try {
             await AxiosInstance.patch(`/applicant/${id}`, {
                 status: 'employed',
+                currentPhase: 'employed',
             })
             fetchApplicant()
             setToastMessage('Applicant employed successfully')
@@ -120,13 +122,27 @@ export const useApplicantById = () => {
             }
 
             // Scheduling Phase 1: applicant has no interview yet
-            if (applicant.currentPhase === 'applicant' || !applicant.currentPhase) {
-                if (firstInterviewDate) payload.firstInterviewDate = new Date(firstInterviewDate).toISOString()
+            // 'applied' is the backend enum value; 'applicant' is kept for legacy data compat
+            if (applicant.currentPhase === 'applied' || applicant.currentPhase === 'applicant' || !applicant.currentPhase) {
+                if (!firstInterviewDate) {
+                    setToastMessage('Please select an interview date')
+                    setToastSeverity('error')
+                    setToastOpen(true)
+                    return
+                }
+                payload.firstInterviewDate = new Date(firstInterviewDate).toISOString()
                 payload.currentPhase = 'first_interview'
+                payload.status = 'active' // Critical: transition status to active so they appear in Interview board
             }
             // Scheduling Phase 2: candidate already done Phase 1
             else if (applicant.currentPhase === 'first_interview') {
-                if (secondInterviewDate) payload.secondInterviewDate = new Date(secondInterviewDate).toISOString()
+                if (!secondInterviewDate) {
+                    setToastMessage('Please select an interview date')
+                    setToastSeverity('error')
+                    setToastOpen(true)
+                    return
+                }
+                payload.secondInterviewDate = new Date(secondInterviewDate).toISOString()
                 payload.currentPhase = 'second_interview'
             }
 

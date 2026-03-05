@@ -36,10 +36,11 @@ export const EmployeesWithHoldings = () => {
             return newParams
         })
     }
-    const setClickedOnAssignItem = () => {
+    const setClickedOnAssignItem = (userId: string) => {
         setSearchParams((prevParams) => {
             const newParams = new URLSearchParams(prevParams)
             newParams.set('assignItem', 'true')
+            newParams.set('selectedUser', userId)
             return newParams
         })
     }
@@ -67,11 +68,11 @@ export const EmployeesWithHoldings = () => {
                                 : undefined
                         }
                     >
-                        <div className="p-4 mt-2 bg-slate-50 border-t border-slate-100 rounded-b-lg">
-                            <div className="flex flex-col">
-                                <h3 className="text-sm font-semibold text-slate-800 mb-3 uppercase tracking-wider">Occupied items</h3>
-                                <div className="space-y-4">
-                                    <div className="flex flex-wrap gap-2">
+                        <div className="p-4 mt-0 bg-slate-50 border-t border-slate-100 rounded-b-lg">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                <div className="flex flex-col gap-2">
+                                    <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Occupied items</h3>
+                                    <div className="flex flex-wrap gap-2 min-h-8">
                                         {user.assets &&
                                             user.assets.length > 0 ? (
                                             user.assets.map(({ type, _id }) => (
@@ -80,31 +81,32 @@ export const EmployeesWithHoldings = () => {
                                                         setClickedOnHolding(_id)
                                                     }}
                                                     key={_id}
-                                                    className="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium bg-primary-blue/10 text-primary-blue hover:bg-primary-blue hover:text-white transition-colors cursor-pointer border border-primary-blue/20"
+                                                    className="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium bg-blue-100 text-blue-800 hover:bg-blue-200 transition-colors cursor-pointer border border-blue-200/50"
                                                 >
                                                     {type}
                                                 </p>
                                             ))
                                         ) : (
-                                            <p className="text-sm text-slate-500 italic">No holdings</p>
+                                            <p className="flex items-center text-sm text-slate-500 italic py-1">No holdings</p>
                                         )}
                                     </div>
-                                    <div>
-                                        <Button
-                                            onClick={setClickedOnAssignItem}
-                                            className="bg-primary-blue hover:bg-primary-blue-dark text-white rounded-lg shadow-sm"
-                                        >
-                                            Assign asset
-                                        </Button>
-                                    </div>
-                                    {searchParams.get('assignItem') && (
-                                        <AssignAssetModal />
-                                    )}
-                                    {searchParams.get('ownedItem') && (
-                                        <ReturnAssetModal />
-                                    )}
+                                </div>
+                                <div className="shrink-0 flex items-center">
+                                    <Button
+                                        onClick={() => setClickedOnAssignItem(user._id)}
+                                        variant="default"
+                                        className="shadow-sm"
+                                    >
+                                        Assign asset
+                                    </Button>
                                 </div>
                             </div>
+                            {searchParams.get('assignItem') && (
+                                <AssignAssetModal />
+                            )}
+                            {searchParams.get('ownedItem') && (
+                                <ReturnAssetModal />
+                            )}
                         </div>
                     </SimpleCollapsableCard>
                 )),

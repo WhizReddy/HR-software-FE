@@ -51,12 +51,15 @@ export const useGetAllEvents = () => {
     }
 }
 
-export const useCreateEvent = (handleCloseDrawer: () => void = () => { }) => {
+export const useCreateEvent = (
+    handleCloseDrawer: () => void = () => { },
+    eventPhotos: File[] = [],
+    setEventPhotos: React.Dispatch<React.SetStateAction<File[]>> = () => { }
+) => {
     const queryClient = useQueryClient()
     const [toastOpen, setToastOpen] = useState(false)
     const [toastMessage, setToastMessage] = useState('')
     const [toastSeverity, setToastSeverity] = useState<'success' | 'error'>('success')
-    const [eventPhotos, setEventPhotos] = useState<File[]>([])
     const [createdEvents, setCreatedEvents] = useState<EventsData[]>([])
 
     const [event, setEvent] = useState<EventsCreationData>({
@@ -88,12 +91,14 @@ export const useCreateEvent = (handleCloseDrawer: () => void = () => { }) => {
             const formData = new FormData()
             formData.append('title', event.title)
             formData.append('description', event.description)
-            formData.append('startDate', event.startDate)
-            formData.append('endDate', event.endDate)
-            formData.append('location', event.location)
-            formData.append('type', event.type)
-            participants.forEach((participant, index) => {
-                formData.append(`participants[${index}]`, participant)
+            // Only append optional fields when they have values —
+            // @IsOptional() skips validation for missing keys, but NOT for empty strings
+            if (event.startDate && !isNaN(Date.parse(event.startDate))) formData.append('startDate', new Date(event.startDate).toISOString())
+            if (event.endDate && !isNaN(Date.parse(event.endDate))) formData.append('endDate', new Date(event.endDate).toISOString())
+            if (event.location) formData.append('location', event.location)
+            if (event.type) formData.append('type', event.type)
+            participants.forEach((participant) => {
+                formData.append('participants', participant)
             })
             if (includesPoll) {
                 formData.append(
@@ -113,11 +118,7 @@ export const useCreateEvent = (handleCloseDrawer: () => void = () => { }) => {
             eventPhotos.forEach((photo) => {
                 formData.append('photo', photo)
             })
-            const response = await AxiosInstance.post('event', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
+            const response = await AxiosInstance.post('event', formData)
             return response.data
         },
         onSuccess: (data) => {
@@ -184,10 +185,6 @@ export const useCreateEvent = (handleCloseDrawer: () => void = () => { }) => {
         }))
     }
 
-    const handleFileUpload = (photo: File[]) => {
-        setEventPhotos(photo)
-    }
-
     const handleOptionChange = (index: number, value: string) => {
         const newOptions = [...pollOptions]
         newOptions[index] = value
@@ -221,14 +218,16 @@ export const useCreateEvent = (handleCloseDrawer: () => void = () => { }) => {
         toastMessage,
         handleToastClose,
         toastSeverity,
-        handleFileUpload,
-        eventPhotos,
         handleLocationChange,
         createdEvents,
     }
 }
 
-export const useUpdateEvent = (handleCloseDrawer: () => void = () => { }) => {
+export const useUpdateEvent = (
+    handleCloseDrawer: () => void = () => { },
+    eventPhotos: File[] = [],
+    setEventPhotos: React.Dispatch<React.SetStateAction<File[]>> = () => { }
+) => {
     const queryClient = useQueryClient()
     const [editingEvent, setEditingEvent] = useState<EventsData | null>(null)
     const [showEditDrawer, setEditDrawer] = useState(false)
@@ -319,8 +318,8 @@ export const useUpdateEvent = (handleCloseDrawer: () => void = () => { }) => {
     const setEventForEditing = (event: EventsData) => {
         setEditingEvent({
             ...event,
-            startDate: new Date(event.startDate).toISOString().slice(0, 16),
-            endDate: new Date(event.endDate).toISOString().slice(0, 16),
+            startDate: event.startDate && !isNaN(Date.parse(event.startDate)) ? new Date(event.startDate).toISOString().slice(0, 16) : '',
+            endDate: event.endDate && !isNaN(Date.parse(event.endDate)) ? new Date(event.endDate).toISOString().slice(0, 16) : '',
         })
         setEditParticipants(event.participants)
         setEditType(event.type)
@@ -342,16 +341,22 @@ export const useUpdateEvent = (handleCloseDrawer: () => void = () => { }) => {
             ) {
                 throw new Error('End date and time must be after the start date')
             }
-            const fieldsToUpdate = {
-                title: editingEvent.title,
-                description: editingEvent.description,
-                startDate: editingEvent.startDate,
-                endDate: editingEvent.endDate,
-                location: editingEvent.location,
-                participants: editParticipants,
-                type: editType,
-                poll: includePollInEdit
-                    ? {
+            const formData = new FormData()
+            if (editingEvent.title) formData.append('title', editingEvent.title)
+            if (editingEvent.description) formData.append('description', editingEvent.description)
+            if (editingEvent.startDate) formData.append('startDate', editingEvent.startDate)
+            if (editingEvent.endDate) formData.append('endDate', editingEvent.endDate)
+            if (editingEvent.location) formData.append('location', editingEvent.location)
+            if (editType) formData.append('type', editType)
+
+            editParticipants.forEach((participant) => {
+                formData.append('participants', participant)
+            })
+
+            if (includePollInEdit) {
+                formData.append(
+                    'poll',
+                    JSON.stringify({
                         question: editPollQuestion,
                         options: editPollOptions
                             .filter((option) => option.trim() !== '')
@@ -360,12 +365,17 @@ export const useUpdateEvent = (handleCloseDrawer: () => void = () => { }) => {
                                 votes: 0,
                                 voters: [],
                             })),
-                    }
-                    : null,
+                    })
+                )
             }
+
+            eventPhotos.forEach((photo) => {
+                formData.append('photo', photo)
+            })
+
             const response = await AxiosInstance.patch(
                 `/event/${editingEvent._id}`,
-                fieldsToUpdate,
+                formData,
             )
             return response.data
         },
@@ -385,6 +395,7 @@ export const useUpdateEvent = (handleCloseDrawer: () => void = () => { }) => {
 
             setEditingEvent(null)
             resetEditPollState()
+            setEventPhotos([])
             setEditDrawer(false)
             handleCloseDrawer()
         },

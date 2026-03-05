@@ -171,15 +171,21 @@ export default function ViewCandidats() {
                     <div className={style.section}>
                         <div className={style.label}>CV</div>
                         <div className={style.value}>
-                            {applicant?.cvAttachment && (
-                                <a
-                                    href={applicant.cvAttachment}
-                                    target="_blank"
-                                >
-                                    {' '}
-                                    View CV
-                                </a>
-                            )}
+                            {applicant?.cvAttachment && (() => {
+                                const cvUrl = applicant.cvAttachment.startsWith('http')
+                                    ? applicant.cvAttachment
+                                    : `${import.meta.env.VITE_API_URL}${applicant.cvAttachment}`
+                                return (
+                                    <a
+                                        href={cvUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-blue-500 hover:text-blue-700 underline flex items-center gap-1 font-medium"
+                                    >
+                                        View CV
+                                    </a>
+                                )
+                            })()}
                         </div>
                     </div>
                     <div className={style.border}></div>
@@ -197,23 +203,25 @@ export default function ViewCandidats() {
 
                     {applicant?.status !== 'rejected' && applicant?.status !== 'employed' && (
                         <>
-                            {applicant?.currentPhase === 'first_interview' ? (
+                            {/* Schedule Phase 1 or 2 */}
+                            {(!applicant?.currentPhase || applicant.currentPhase === 'applied' || applicant.currentPhase === 'applicant') && (
+                                <Button
+                                    type={ButtonTypes.PRIMARY}
+                                    btnText="Schedule Phase 1 Interview"
+                                    width="100%"
+                                    onClick={() => handleOpenModal('active')}
+                                />
+                            )}
+                            {applicant?.currentPhase === 'first_interview' && (
                                 <Button
                                     type={ButtonTypes.PRIMARY}
                                     btnText="Schedule Phase 2 Interview"
                                     width="100%"
                                     onClick={() => handleOpenModal('active')}
                                 />
-                            ) : (
-                                <Button
-                                    type={ButtonTypes.PRIMARY}
-                                    btnText="Schedule Interview"
-                                    width="100%"
-                                    onClick={() => handleOpenModal('active')}
-                                />
                             )}
 
-                            {applicant?.currentPhase !== 'applicant' && (
+                            {applicant?.currentPhase !== 'applicant' && applicant?.currentPhase !== 'applied' && (
                                 <Button
                                     type={ButtonTypes.PRIMARY}
                                     btnText="Employ Candidate"

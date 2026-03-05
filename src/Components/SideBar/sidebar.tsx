@@ -60,7 +60,7 @@ export const SideBar: React.FC = () => {
             E
           </div>
           <span className="truncate text-base font-bold tracking-tight text-slate-800 group-data-[collapsible=icon]:hidden">
-            Exypnos <span className="text-[#2457a3]">HR</span>
+            CRM <span className="text-[#2457a3]">HR</span>
           </span>
         </div>
       </SidebarHeader>

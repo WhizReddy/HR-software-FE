@@ -49,7 +49,7 @@ const NotificationDropdown: React.FC = () => {
         }
 
         try {
-            await AxiosInstance.patch(`notification/${notification._id}`)
+            await AxiosInstance.patch(`notification/${notification._id}/user/${currentUser?._id}`)
             const updatedNotifications = notifications.map(n =>
                 n._id === notification._id ? { ...n, isRead: true } : n
             )
@@ -118,7 +118,7 @@ const NotificationDropdown: React.FC = () => {
             const unreadNotifications = notifications.filter((notification) => !notification.isRead)
             await Promise.all(
                 unreadNotifications.map((notification) =>
-                    AxiosInstance.patch(`notification/${notification._id}`),
+                    AxiosInstance.patch(`notification/${notification._id}/user/${currentUser?._id}`),
                 ),
             )
 

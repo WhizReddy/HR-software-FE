@@ -30,26 +30,28 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                // Fetch present (office) and remote counts from the backend
-                const [presentRes, remoteRes, allRes] = await Promise.all([
+                // Fetch present (office), remote, total, and on-leave counts
+                const [presentRes, remoteRes, allRes, onLeaveRes] = await Promise.all([
                     AxiosInstance.get<number>('/user/remote/false'),  // present (not remote)
                     AxiosInstance.get<number>('/user/remote/true'),   // remote
                     AxiosInstance.get<any[]>('/user'),                // all users for totals
+                    AxiosInstance.get<number>('/vacation/onLeave'),   // users currently on leave
                 ])
 
                 const present = typeof presentRes.data === 'number' ? presentRes.data : 0
                 const remote = typeof remoteRes.data === 'number' ? remoteRes.data : 0
                 const allUsers = Array.isArray(allRes.data) ? allRes.data.length : 0
+                const onLeave = typeof onLeaveRes.data === 'number' ? onLeaveRes.data : 0
 
-                // Approximate absent as remaining (total - present - remote)
-                const known = present + remote
+                // Approximate absent as remaining (total - present - remote - onLeave)
+                const known = present + remote + onLeave
                 const absent = Math.max(0, allUsers - known)
 
                 setEmployeeData({
                     present,
                     remote,
                     absent,
-                    onLeave: 0, // vacation data not in this endpoint
+                    onLeave,
                 })
             } catch {
                 // Keep defaults on error — data is not critical

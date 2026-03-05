@@ -70,8 +70,8 @@ const Dropzone: React.FC<DropzoneProps> = ({ className }) => {
                     </>
                 ) : (
                     <div className={styles.previewGrid}>
-                        {previewFiles.map((file) => (
-                            <div key={file.name} className={styles.previewItem}>
+                        {previewFiles.map((file, i) => (
+                            <div key={file.name + i} className={styles.previewItem}>
                                 <FileText
                                     className={styles.fileIcon}
                                 />

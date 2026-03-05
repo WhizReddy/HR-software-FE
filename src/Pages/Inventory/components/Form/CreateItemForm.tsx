@@ -36,7 +36,7 @@ export const CreateItemForm = () => {
                                     label="Item Type"
                                     name="Item Type"
                                     multiple={false}
-                                    options={['monitor', 'laptop']}
+                                    options={['laptop', 'monitor', 'keyboard', 'mouse', 'phone', 'tablet', 'headset']}
                                     value={field.state.value}
                                     onChange={(newValue) =>
                                         field.handleChange(newValue as string)

@@ -1,7 +1,7 @@
 import MyButton from '../../Components/Button/Button'
 import { ButtonTypes } from '../../Components/Button/ButtonTypes'
 import Input from '../../Components/Input/Index'
-import logo from '/Images/recruitmentLogo.png'
+
 import image from '/Images/Vector-illustration-of-communication-Graphics-69695603-1-removebg-preview.png'
 import Card from '../../Components/Card/Card'
 import { UploadCloud } from 'lucide-react'
@@ -43,7 +43,7 @@ function RecruitmentBase() {
                 className={style.cardContainer}
             >
                 <div className={style.header}>
-                    <img className={style.companyLogo} alt="img" src={logo} />
+                    <h2 className="text-2xl font-bold text-center w-full">Apply to CRM</h2>
                     <div className={style.title}>Apply to CRM</div>
                 </div>
                 <form

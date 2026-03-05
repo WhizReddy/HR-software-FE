@@ -166,7 +166,7 @@ function InterviewKanbanContent() {
                                                         )}
                                                         {currentTab !== 'employed' && currentTab !== 'applicant' && (
                                                             <div className={style.buttonContainer}>
-                                                                <span title="Reschedule">
+                                                                <span title="Schedule Next Interview">
                                                                     <Button
                                                                         type={ButtonTypes.SECONDARY}
                                                                         btnText=""
@@ -179,7 +179,7 @@ function InterviewKanbanContent() {
                                                                         borderColor="#2457A3"
                                                                         icon={<CalendarRange size={18} />}
                                                                         onClick={() =>
-                                                                            handleOpenModal(interview, true)
+                                                                            handleOpenModal(interview, false)
                                                                         }
                                                                         disabled={processingIds.has(interview._id.toString())}
                                                                     />

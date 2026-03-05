@@ -10,8 +10,8 @@ import {
 
 export const CreateInventoryItemSchema = object({
     type: picklist(
-        ['laptop', 'monitor'],
-        "Please select an item type of 'laptop' or'monitor'",
+        ['laptop', 'monitor', 'keyboard', 'mouse', 'phone', 'tablet', 'headset'],
+        "Please select a valid item type",
     ),
     serialNumber: pipe(
         string('Serial Number is required'),

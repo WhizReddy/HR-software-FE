@@ -31,7 +31,14 @@ const DrawerComponent: React.FC<DrawerProps> = ({
                 style={{ width, maxWidth: width }}
             >
                 <DrawerHeader className="border-b border-slate-100 px-5 py-4">
-                    {title ? <DrawerTitle>{title}</DrawerTitle> : <DrawerDescription className="hidden" />}
+                    {title ? (
+                        <DrawerTitle>{title}</DrawerTitle>
+                    ) : (
+                        <>
+                            <DrawerTitle className="sr-only">Drawer Menu</DrawerTitle>
+                            <DrawerDescription className="sr-only">Menu Description</DrawerDescription>
+                        </>
+                    )}
                 </DrawerHeader>
                 <div className="flex-1 overflow-y-auto p-5">{children}</div>
             </DrawerContent>

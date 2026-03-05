@@ -1,6 +1,5 @@
 import EventPoll from '../EventPoll/EventsPoll'
 import { Calendar, MapPin, X } from 'lucide-react'
-import style from '../../styles/Events.module.css'
 import { useAuth } from '@/Context/AuthProvider'
 import Example from '@/Components/Carosel/Carosel'
 import { useEvents } from '../../Context/EventsContext'
@@ -31,47 +30,68 @@ const SelectedEventCard = () => {
     }
 
     return (
-        <div className={style.Wrap}>
-            {selectedEvent?.photo && selectedEvent.photo.length > 0 ? <Example images={selectedEvent.photo} /> : ''}
-            <div className={style.selectedEvent}>
-                <div className={style.flex}>
-                    <div className={style.title}>{selectedEvent.title}</div>
-                    <X className="cursor-pointer text-slate-500 hover:text-slate-800"
+        <div className="flex flex-col bg-white rounded-xl overflow-hidden shadow-xl max-h-[90vh] w-full">
+            {selectedEvent?.photo && selectedEvent.photo.length > 0 && (
+                <div className="w-full bg-slate-900">
+                    <Example images={selectedEvent.photo} />
+                </div>
+            )}
+
+            <div className="flex-1 overflow-y-auto p-6 md:p-8 custom-scrollbar">
+                <div className="flex justify-between items-start mb-6">
+                    <h2 className="text-2xl md:text-3xl font-bold text-slate-800 leading-tight pr-4">
+                        {selectedEvent.title}
+                    </h2>
+                    <button
                         onClick={() => {
                             setSelectedEvent(null)
                             setShowEventModal(false)
                         }}
-                    />
+                        className="p-2 -mr-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-full transition-colors flex-shrink-0"
+                    >
+                        <X size={24} />
+                    </button>
                 </div>
-                <div className={style.description}>
+
+                <div className="prose prose-slate max-w-none mb-8 text-slate-600 whitespace-pre-line leading-relaxed">
                     {selectedEvent.description}
                 </div>
-                <div className={style.dataContainer}>
-                    <div className={style.dateContainer}>
-                        <div className={style.data}>
-                            <Calendar size={20} className="text-slate-500" />
-                            {formatDate(selectedEvent.startDate)} - {formatDate(selectedEvent.endDate)}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 p-5 bg-slate-50 rounded-xl border border-slate-100">
+                    <div className="flex items-start gap-3 text-slate-700">
+                        <Calendar className="mt-0.5 text-blue-500" size={20} />
+                        <div>
+                            <div className="text-sm font-semibold text-slate-900 mb-0.5">Date & Time</div>
+                            <div className="text-sm">{formatDate(selectedEvent.startDate)} - {formatDate(selectedEvent.endDate)}</div>
                         </div>
                     </div>
-                    <div className={style.data}>
-                        <MapPin size={20} className="text-slate-500" />
-                        <div>{selectedEvent.location}</div>
+                    <div className="flex items-start gap-3 text-slate-700">
+                        <MapPin className="mt-0.5 text-blue-500" size={20} />
+                        <div>
+                            <div className="text-sm font-semibold text-slate-900 mb-0.5">Location</div>
+                            <div className="text-sm line-clamp-2">{selectedEvent.location}</div>
+                        </div>
                     </div>
                 </div>
-                <div style={{ width: '100%', height: '400px' }}>
-                    <MapComponent onLocationChange={(address, lat, lng) =>
-                        console.log(address, lat, lng)
-                    }
-                        savedLocation={selectedEvent.location}
-                        showInput={false}
-                    />
-                </div>
+
+                {selectedEvent.location && (
+                    <div className="w-full h-[300px] mb-8 rounded-xl overflow-hidden border border-slate-200">
+                        <MapComponent
+                            onLocationChange={(address, lat, lng) => console.log(address, lat, lng)}
+                            savedLocation={selectedEvent.location}
+                            showInput={false}
+                        />
+                    </div>
+                )}
+
                 {selectedEvent.poll && (
-                    <EventPoll
-                        poll={selectedEvent.poll}
-                        eventId={selectedEvent._id}
-                        userId={currentUser?._id}
-                    />
+                    <div className="mt-8 pt-8 border-t border-slate-100">
+                        <EventPoll
+                            poll={selectedEvent.poll}
+                            eventId={selectedEvent._id}
+                            userId={currentUser?._id?.toString()}
+                        />
+                    </div>
                 )}
             </div>
         </div>

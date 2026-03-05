@@ -83,7 +83,7 @@ export const InterviewProvider: React.FC<{ children: React.ReactNode }> = ({
             const mappedInterviews: Interview[] = interviewsData.map(
                 (applicant) => {
                     // Trust the DB's currentPhase field directly.
-                    let phase = applicant.currentPhase || 'applicant'
+                    let phase = applicant.currentPhase || 'applied'
 
                     // Normalise statuses that map to special board columns
                     if (applicant.status === 'rejected') phase = 'rejected'
@@ -230,10 +230,15 @@ export const InterviewProvider: React.FC<{ children: React.ReactNode }> = ({
                 : 'firstInterviewDate'
             newPhase = selectedInterview.currentPhase
         } else {
-            if (selectedInterview.currentPhase === 'second_interview') {
+            if (selectedInterview.currentPhase === 'first_interview') {
+                // Advancing from first → second interview
+                dateField = 'secondInterviewDate'
+                newPhase = 'second_interview'
+            } else if (selectedInterview.currentPhase === 'second_interview') {
                 dateField = 'secondInterviewDate'
                 newPhase = 'second_interview'
             } else {
+                // New candidate — schedule first interview
                 dateField = 'firstInterviewDate'
                 newPhase = 'first_interview'
             }
@@ -329,9 +334,10 @@ export const InterviewProvider: React.FC<{ children: React.ReactNode }> = ({
                     setToastOpen(true)
                 }
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Failed to update interview status:', error)
-            setToastMessage('Failed to accept the candidate')
+            const errorMsg = error.response?.data?.message || 'Failed to accept the candidate'
+            setToastMessage(Array.isArray(errorMsg) ? errorMsg[0] : errorMsg)
             setToastSeverity('error')
             setToastOpen(true)
         } finally {
@@ -397,9 +403,10 @@ export const InterviewProvider: React.FC<{ children: React.ReactNode }> = ({
                     ),
                 )
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Failed to update interview phase:', error)
-            setToastMessage('Failed to move candidate')
+            const errorMsg = error.response?.data?.message || 'Failed to move candidate'
+            setToastMessage(Array.isArray(errorMsg) ? errorMsg[0] : errorMsg)
             setToastSeverity('error')
             setToastOpen(true)
         }

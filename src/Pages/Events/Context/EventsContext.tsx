@@ -22,6 +22,7 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
     const allEmails = users.map((user) => user.auth?.email)
 
     const formatDate = (date: string): string => {
+        if (!date || typeof date !== 'string' || !date.includes('T')) return '';
         return date.split('T')[0].replace(/-/g, '/');
     };
 
@@ -64,6 +65,12 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
         }
     }
 
+    const [eventPhotos, setEventPhotos] = useState<File[]>([])
+
+    const handleFileUpload = (photo: File[]) => {
+        setEventPhotos(photo)
+    }
+
     const {
         handleChange,
         event,
@@ -79,11 +86,9 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
         toastMessage,
         handleToastClose,
         toastSeverity,
-        handleFileUpload,
-        eventPhotos,
         handleLocationChange,
         createdEvents,
-    } = useCreateEvent(handleCloseDrawer)
+    } = useCreateEvent(handleCloseDrawer, eventPhotos, setEventPhotos)
 
     const {
         editingEvent,
@@ -105,7 +110,7 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
         setEditParticipants,
         editType,
         setEditType,
-    } = useUpdateEvent(handleCloseDrawer)
+    } = useUpdateEvent(handleCloseDrawer, eventPhotos, setEventPhotos)
 
     const {
         handleDelete,

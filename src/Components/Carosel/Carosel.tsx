@@ -13,7 +13,14 @@ interface CarouselProps {
 }
 
 const Example: React.FC<CarouselProps> = ({ images = [], children }) => {
+    const [api, setApi] = useState<any>()
     const [current, setCurrent] = useState(0)
+
+    React.useEffect(() => {
+        if (!api) return
+        setCurrent(api.selectedScrollSnap())
+        api.on('select', () => setCurrent(api.selectedScrollSnap()))
+    }, [api])
 
     if (!images || images.length === 0) {
         return (
@@ -23,23 +30,21 @@ const Example: React.FC<CarouselProps> = ({ images = [], children }) => {
         )
     }
 
-    const prev = () => setCurrent((c) => (c === 0 ? images.length - 1 : c - 1))
-    const next = () => setCurrent((c) => (c === images.length - 1 ? 0 : c + 1))
+    const prev = () => api?.scrollPrev()
+    const next = () => api?.scrollNext()
+    const scrollTo = (index: number) => api?.scrollTo(index)
 
     return (
-        <Carousel className="w-full overflow-hidden rounded-xl bg-slate-900">
-            <CarouselContent
-                className="ml-0"
-                style={{
-                    transform: `translateX(-${current * 100}%)`,
-                    transition: 'transform 250ms ease',
-                }}
-            >
-                {images.map((image, i) => (
-                    <CarouselItem key={image + i} className="pl-0">
-                        <img src={image} alt={`slide-${i}`} className="max-h-72 w-full object-cover" />
-                    </CarouselItem>
-                ))}
+        <Carousel setApi={setApi} className="w-full overflow-hidden rounded-xl bg-slate-900">
+            <CarouselContent className="ml-0">
+                {images.map((image, i) => {
+                    const imageUrl = image.startsWith('http') ? image : `${import.meta.env.VITE_API_URL}${image}`
+                    return (
+                        <CarouselItem key={image + i} className="pl-0">
+                            <img src={imageUrl} alt={`slide-${i}`} className="max-h-72 w-full object-cover" />
+                        </CarouselItem>
+                    )
+                })}
             </CarouselContent>
 
             {images.length > 1 && (
@@ -57,7 +62,7 @@ const Example: React.FC<CarouselProps> = ({ images = [], children }) => {
                             <button
                                 key={i}
                                 type="button"
-                                onClick={() => setCurrent(i)}
+                                onClick={() => scrollTo(i)}
                                 className={`h-2 w-2 rounded-full transition-colors ${i === current ? 'bg-white' : 'bg-white/40'}`}
                             />
                         ))}

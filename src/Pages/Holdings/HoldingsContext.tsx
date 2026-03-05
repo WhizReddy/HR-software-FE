@@ -48,28 +48,28 @@ interface HoldingsContextType {
 
 const defaultContextValue: HoldingsContextType = {
     searchParams: new URLSearchParams(),
-    setSearchParams: () => {},
+    setSearchParams: () => { },
     toastConfigs: {
         message: null,
         severity: 'success',
         isOpen: false,
     },
-    setToastConfigs: () => {},
-    handleToastClose: () => {},
+    setToastConfigs: () => { },
+    handleToastClose: () => { },
     itemReturnConfigs: {
         state: '',
         date: new Date().toISOString(),
     },
-    setItemReturnConfigs: () => {},
-    handleCloseOnModal: () => {},
+    setItemReturnConfigs: () => { },
+    handleCloseOnModal: () => { },
     isOpenAssignAsset: false,
-    setIsOpenAssignAsset: () => {},
+    setIsOpenAssignAsset: () => { },
     optionsAssignAsset: [],
-    setOptionsAssignAsset: () => {},
+    setOptionsAssignAsset: () => { },
     autocompleteLoadingAssignAsset: false,
-    setAutocompleteLoadingAssignAsset: () => {},
+    setAutocompleteLoadingAssignAsset: () => { },
     autocompleteValueAssignAsset: null,
-    setAutocompleteValueAssignAsset: () => {},
+    setAutocompleteValueAssignAsset: () => { },
 }
 
 export const HoldingsContext =
@@ -118,6 +118,7 @@ const HoldingsProvider: FC<{ children: ReactNode }> = ({ children }) => {
             const newParams = new URLSearchParams(prev)
             newParams.delete('ownedItem')
             newParams.delete('assignItem')
+            newParams.delete('selectedUser')
             return newParams
         })
     }

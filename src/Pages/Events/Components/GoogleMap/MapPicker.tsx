@@ -159,7 +159,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
                         value={searchValue}
                         onChange={(e: any) => setSearchValue(e.target.value)}
                         placeholder="Enter location"
-                        name="Location"
+                        name="location"
                         label="Location"
                         icon={<Search onClick={handleSearch} className="cursor-pointer text-slate-500" size={20} />}
                         style={{ marginBottom: '15px' }}

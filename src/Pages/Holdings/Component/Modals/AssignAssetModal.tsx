@@ -13,7 +13,6 @@ export const AssignAssetModal = () => {
     const {
         searchParams,
         handleCloseOnModal: handleClose,
-        isOpenAssignAsset: isOpen,
         optionsAssignAsset: options,
         setOptionsAssignAsset: setOptions,
         autocompleteLoadingAssignAsset: autocompleteLoading,
@@ -21,6 +20,8 @@ export const AssignAssetModal = () => {
         autocompleteValueAssignAsset: autocompleteValue,
         setAutocompleteValueAssignAsset: setAutocompleteValue,
     } = useContext(HoldingsContext)
+
+    const isOpen = !!searchParams.get('assignItem')
 
     const { form } = useAssignAssetForm()
 
@@ -62,6 +63,9 @@ export const AssignAssetModal = () => {
                     onSubmit={(e) => {
                         e.preventDefault()
                         e.stopPropagation()
+                        if (document.activeElement instanceof HTMLElement) {
+                            document.activeElement.blur()
+                        }
                         form.handleSubmit()
                     }}
                     className="flex flex-col gap-5"
@@ -136,7 +140,12 @@ export const AssignAssetModal = () => {
                         <Button
                             type="button"
                             variant="outline"
-                            onClick={handleClose}
+                            onClick={() => {
+                                if (document.activeElement instanceof HTMLElement) {
+                                    document.activeElement.blur()
+                                }
+                                handleClose()
+                            }}
                             className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50"
                         >
                             Cancel

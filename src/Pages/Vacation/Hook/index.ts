@@ -129,12 +129,15 @@ export const useUpdateVacationForm = (vacation: UseQueryResult<any, Error>) => {
         },
         validatorAdapter: valibotValidator(),
         onSubmit: async ({ value }) => {
-            value.endDate = dayjs(value.endDate).toISOString()
-            value.startDate = dayjs(value.startDate).toISOString()
+            const payload = {
+                ...value,
+                endDate: dayjs(value.endDate).toISOString(),
+                startDate: dayjs(value.startDate).toISOString(),
+            }
             // Use mutation callbacks — checking isError synchronously after mutate() is
             // always false because mutate() is fire-and-forget (async race condition).
             updater.mutate(
-                { vacation: value },
+                { vacation: payload },
                 {
                     onSuccess: () => {
                         setToastConfigs({
@@ -153,7 +156,7 @@ export const useUpdateVacationForm = (vacation: UseQueryResult<any, Error>) => {
                         if (error instanceof AxiosError)
                             setErrors({
                                 createError: null,
-                                updateError: error.response?.data,
+                                updateError: error.response?.data?.message || 'Conflict occurred updating vacation',
                             })
                         else {
                             setErrors({
@@ -188,10 +191,15 @@ export const useCreateVacationForm = () => {
             endDate: dayjs(new Date()).add(2, 'day').format('YYYY-MM-DD'),
         },
         onSubmit: async ({ value }) => {
+            const payload = {
+                ...value,
+                endDate: dayjs(value.endDate).toISOString(),
+                startDate: dayjs(value.startDate).toISOString(),
+            }
             // Use mutation callbacks — checking isError synchronously after mutate() is
             // always false because mutate() is fire-and-forget (async race condition).
             mutate(
-                { vacation: value },
+                { vacation: payload },
                 {
                     onSuccess: () => {
                         setToastConfigs({

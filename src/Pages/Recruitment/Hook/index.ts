@@ -21,7 +21,7 @@ export const useRecruitmentForm = () => {
     }>({
         defaultValues: {
             applicationMethod: '',
-            dob: new Date().toISOString().split('T')[0],
+            dob: '',
             email: '',
             experience: '',
             file: null,
