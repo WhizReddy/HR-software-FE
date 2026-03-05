@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react'
-import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api'
+import { GoogleMap, useLoadScript, MarkerF } from '@react-google-maps/api'
 import Input from '@/Components/Input/Index'
 import { Search } from 'lucide-react'
 
@@ -29,6 +29,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
 }) => {
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: 'AIzaSyBSyIgo2TtwzkihGKrRGcrWxW_k6zwkYOk',
+        libraries: ['places', 'marker'] as any,
     })
 
     const [map, setMap] = useState<MapType | null>(null)
@@ -175,7 +176,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
                 onClick={handleMapClick}
             >
                 {markerPosition && (
-                    <Marker
+                    <MarkerF
                         position={markerPosition}
                         icon={{
                             url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',

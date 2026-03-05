@@ -29,6 +29,12 @@ const DrawerComponent: React.FC<DrawerProps> = ({
             <DrawerContent
                 className="max-w-none border-slate-200 bg-white"
                 style={{ width, maxWidth: width }}
+                onCloseAutoFocus={(e) => {
+                    e.preventDefault()
+                    if (document.activeElement instanceof HTMLElement) {
+                        document.activeElement.blur()
+                    }
+                }}
             >
                 <DrawerHeader className="border-b border-slate-100 px-5 py-4">
                     {title ? (

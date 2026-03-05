@@ -57,7 +57,7 @@ function EventsContentAndComponents() {
     }, [fetchNextPage, inView])
 
     return (
-        <div className="flex flex-col h-full max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+        <div id="events-root" className="flex flex-col h-full max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
             <Toast
                 severity={toastOpen ? toastSeverity : updateToastSeverity}
                 open={toastOpen || updateToastOpen}
