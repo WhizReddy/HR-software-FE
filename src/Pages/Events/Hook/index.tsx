@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import AxiosInstance from '@/Helpers/Axios'
+import { AxiosError } from 'axios'
 import { EventsCreationData, EventsData } from '../Interface/Events'
 import { useSearchParams } from 'react-router-dom'
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query'
@@ -148,9 +149,11 @@ export const useCreateEvent = (
             setEventPhotos([])
             handleCloseDrawer()
         },
-        onError: (error: Error) => {
+        onError: (error: Error | AxiosError) => {
             console.error('Error creating event', error)
-            setToastMessage('Error creating event')
+            const errorMsg = error instanceof AxiosError ? error.response?.data?.message : error.message
+            const finalMessage = Array.isArray(errorMsg) ? errorMsg[0] : (errorMsg || 'Error creating event')
+            setToastMessage(finalMessage)
             setToastSeverity('error')
             setToastOpen(true)
         },
@@ -399,9 +402,11 @@ export const useUpdateEvent = (
             setEditDrawer(false)
             handleCloseDrawer()
         },
-        onError: (error) => {
+        onError: (error: Error | AxiosError) => {
             console.error('Error updating event:', error)
-            setUpdateToastMessage('Error updating event')
+            const errorMsg = error instanceof AxiosError ? error.response?.data?.message : error.message
+            const finalMessage = Array.isArray(errorMsg) ? errorMsg[0] : (errorMsg || 'Error updating event')
+            setUpdateToastMessage(finalMessage)
             setUpdateToastOpen(true)
             setUpdateToastSeverity('error')
         },
