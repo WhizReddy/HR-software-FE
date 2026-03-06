@@ -69,7 +69,7 @@ export const VacationTable = () => {
                             : value === 'rejected'
                                 ? 'red'
                                 : ''
-                return <StatusBadge color={color} status={value} />
+                return <StatusBadge color={color} status={value as string} />
             },
         },
         {
@@ -77,14 +77,14 @@ export const VacationTable = () => {
             headerName: 'Start Date',
             flex: 1,
             renderCell: (param: RenderCellParams) =>
-                dateFormatter(param.value),
+                dateFormatter(param.value as string),
         },
         {
             field: 'endDate',
             headerName: 'End Date',
             flex: 1,
             renderCell: (param: RenderCellParams) =>
-                dateFormatter(param.value),
+                dateFormatter(param.value as string),
         },
         {
             field: 'actions',
@@ -109,17 +109,35 @@ export const VacationTable = () => {
 
     const getRowId = (row: { id: number | string }) => row.id
 
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchParams((prev) => {
+            const newParams = new URLSearchParams(prev)
+            if (e.target.value) {
+                newParams.set('search', e.target.value)
+            } else {
+                newParams.delete('search')
+            }
+            newParams.set('page', '0')
+            return newParams
+        })
+    }
+
     return (
         <>
-            <DataTable
-                onPaginationModelChange={handlePaginationModelChange}
-                page={Number(searchParams.get('page')!)}
-                pageSize={Number(searchParams.get('limit')!)}
-                totalPages={data.totalPages}
-                rows={rows}
-                columns={columns}
-                getRowId={getRowId}
-            />
+            <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-4 mt-5">
+                <DataTable
+                    onPaginationModelChange={handlePaginationModelChange}
+                    page={Number(searchParams.get('page')!)}
+                    pageSize={Number(searchParams.get('limit')!)}
+                    totalPages={data.totalPages}
+                    rows={rows}
+                    columns={columns}
+                    getRowId={getRowId}
+                    searchValue={searchParams.get('search') || ''}
+                    onSearchChange={handleSearchChange}
+                    searchPlaceholder="Search vacations..."
+                />
+            </div>
             {searchParams.get('selectedVacation') && <SelectedVacationModal />}
             <Toast
                 open={toastConfigs.isOpen}

@@ -1,8 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { EventsData, EventsContextProps } from '../Interface/Events'
-import { useCreateEvent, useUpdateEvent, useDeleteEvent } from '../Hook/index'
+import { EventsData, EventsContextProps } from '@/Pages/Events/Interface/Events'
+import { useCreateEvent, useUpdateEvent, useDeleteEvent } from '@/Pages/Events/Hook/index'
 import { useAuth } from '@/Context/AuthProvider'
-import { useGetAllUsers } from '@/Pages/Employees/Hook'
 import { useSearchParams } from 'react-router-dom'
 import AxiosInstance from '@/Helpers/Axios'
 
@@ -15,11 +14,9 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
     const [selectedEvent, setSelectedEvent] = useState<EventsData | null>(null)
     const [drawerOpen, setDrawerOpen] = useState(false)
     const [drawerAction, setDrawerAction] = useState<'create' | 'edit'>('create')
-    const { data: users = [] } = useGetAllUsers()
     const { currentUser } = useAuth()
     const isAdmin = currentUser?.role === 'admin' || currentUser?.role === 'hr'
     const typesofEvent = ['sports', 'teambuilding', 'training', 'other']
-    const allEmails = users.map((user) => user.auth?.email)
 
     const formatDate = (date: string): string => {
         if (!date || typeof date !== 'string' || !date.includes('T')) return '';
@@ -77,18 +74,21 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
         createEvent,
         pollQuestion,
         pollOptions,
-        participants,
         handleOptionChange,
         handleAddOption,
         includesPoll,
-        setParticipants,
         toastOpen,
         toastMessage,
         handleToastClose,
         toastSeverity,
         handleLocationChange,
         createdEvents,
+        participants,
+        setParticipants,
     } = useCreateEvent(handleCloseDrawer, eventPhotos, setEventPhotos)
+
+    const [allEmails, setAllEmails] = useState<string[]>([])
+    const [editParticipants, setEditParticipants] = useState<string[]>([])
 
     const {
         editingEvent,
@@ -106,8 +106,6 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
         updateToastMessage,
         updateToastOpen,
         updateToastSeverity,
-        editParticipants,
-        setEditParticipants,
         editType,
         setEditType,
     } = useUpdateEvent(handleCloseDrawer, eventPhotos, setEventPhotos)
@@ -131,8 +129,6 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
                 handleOptionChange,
                 handleAddOption,
                 handleAddEditOption,
-                setParticipants,
-                participants,
                 event,
                 editingEvent,
                 includesPoll,
@@ -164,21 +160,23 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
                 toastSeverity,
                 endDate: event.endDate,
                 isAdmin,
-                allEmails,
                 typesofEvent,
                 eventToDeleteId,
                 handleSeeEventDetails,
                 drawerOpen,
                 handleOpenDrawer,
                 handleCloseDrawer,
-                editParticipants,
-                setEditParticipants,
                 editType,
                 setEditType,
                 handleFileUpload,
                 eventPhotos,
                 createdEvents,
-                formatDate
+                formatDate,
+                allEmails,
+                participants,
+                setParticipants,
+                editParticipants,
+                setEditParticipants
             }}
         >
             {children}

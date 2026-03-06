@@ -14,6 +14,8 @@ function CandidatesCoontext() {
         page,
         pageSize,
         isPending,
+        search,
+        setSearch
     } = useCandidateContext()
 
     return (
@@ -39,6 +41,9 @@ function CandidatesCoontext() {
                     page={page}
                     pageSize={pageSize}
                     onPaginationModelChange={handlePaginationModelChange}
+                    searchValue={search}
+                    onSearchChange={(e) => setSearch(e.target.value)}
+                    searchPlaceholder="Search candidates..."
                 />
             )}
         </div>

@@ -13,6 +13,8 @@ function EmployeesContent() {
         pageSize,
         totalPages,
         isPending,
+        search,
+        setSearch,
     } = useEmployeeContext()
 
     return (
@@ -31,6 +33,9 @@ function EmployeesContent() {
                     page={page}
                     pageSize={pageSize}
                     onPaginationModelChange={handlePaginationModelChange}
+                    searchValue={search}
+                    onSearchChange={(e) => setSearch(e.target.value)}
+                    searchPlaceholder="Search employees..."
                 />
             )}
         </div>

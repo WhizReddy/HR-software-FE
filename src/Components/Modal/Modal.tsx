@@ -28,7 +28,7 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
             }}
         >
             <DialogContent
-                style={{ width, height: height || 'auto', padding }}
+                style={{ width: width === '100%' ? '100%' : '95vw', maxWidth: width, height: height || 'auto', padding }}
             >
                 {children}
             </DialogContent>

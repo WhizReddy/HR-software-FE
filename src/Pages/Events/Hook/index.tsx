@@ -84,6 +84,12 @@ export const useCreateEvent = (
 
     const createEventMutation = useMutation({
         mutationFn: async () => {
+            console.log('Submitting Event:', event)
+            if (!event.title.trim() || !event.description.trim()) {
+                console.warn('Event creation failed: Title and Description are required', { title: event.title, description: event.description })
+                throw new Error('Title and Description are required')
+            }
+
             // Guard: endDate must be after startDate
             if (event.startDate && event.endDate && new Date(event.endDate) <= new Date(event.startDate)) {
                 throw new Error('End date and time must be after the start date')
@@ -98,9 +104,6 @@ export const useCreateEvent = (
             if (event.endDate && !isNaN(Date.parse(event.endDate))) formData.append('endDate', new Date(event.endDate).toISOString())
             if (event.location) formData.append('location', event.location)
             if (event.type) formData.append('type', event.type)
-            participants.forEach((participant) => {
-                formData.append('participants', participant)
-            })
             if (includesPoll) {
                 formData.append(
                     'poll',
@@ -120,9 +123,11 @@ export const useCreateEvent = (
                 formData.append('photo', photo)
             })
             const response = await AxiosInstance.post('event', formData)
+            console.log('Event Creation Response:', response.data)
             return response.data
         },
         onSuccess: (data) => {
+            console.log('Event created successfully, data:', data)
             setToastMessage('Event created successfully')
             setToastOpen(true)
             setToastSeverity('success')
@@ -174,6 +179,7 @@ export const useCreateEvent = (
                 location: value,
             }))
         } else {
+            console.log(`Events handlechange: updating ${name} to ${value}`)
             setEvent((prevEvent) => ({
                 ...prevEvent,
                 [name]: value,
@@ -243,7 +249,6 @@ export const useUpdateEvent = (
     const [updateToastSeverity, setUpdateToastSeverity] = useState<
         'success' | 'error'
     >('success')
-    const [editParticipants, setEditParticipants] = useState<string[]>([])
     const [editType, setEditType] = useState<string>('')
 
     const toggleForm = () => {
@@ -261,7 +266,6 @@ export const useUpdateEvent = (
     const handleEditClick = (eventToEdit: EventsData['_id']) => {
         AxiosInstance.get(`/event/${eventToEdit}`).then((response) => {
             setEditingEvent(response.data)
-            setEditParticipants(response.data.participants)
             setEditType(response.data.type)
             setIncludePollInEdit(!!response.data.poll)
             if (response.data.poll) {
@@ -294,8 +298,6 @@ export const useUpdateEvent = (
             setIncludePollInEdit(checked)
         } else if (name === 'pollQuestion') {
             setEditPollQuestion(value)
-        } else if (name === 'participants') {
-            setEditParticipants(value.split(',').map((_id) => _id.trim()))
         } else if (name === 'type') {
             setEditType(value)
         } else {
@@ -324,7 +326,6 @@ export const useUpdateEvent = (
             startDate: event.startDate && !isNaN(Date.parse(event.startDate)) ? new Date(event.startDate).toISOString().slice(0, 16) : '',
             endDate: event.endDate && !isNaN(Date.parse(event.endDate)) ? new Date(event.endDate).toISOString().slice(0, 16) : '',
         })
-        setEditParticipants(event.participants)
         setEditType(event.type)
     }
     const handleUpdateToastClose = () => {
@@ -336,6 +337,11 @@ export const useUpdateEvent = (
             if (!editingEvent) {
                 throw new Error('No event selected for editing')
             }
+
+            if (!editingEvent.title.trim() || !editingEvent.description.trim()) {
+                throw new Error('Title and Description are required')
+            }
+
             // Guard: endDate must be after startDate
             if (
                 editingEvent.startDate &&
@@ -347,14 +353,10 @@ export const useUpdateEvent = (
             const formData = new FormData()
             if (editingEvent.title) formData.append('title', editingEvent.title)
             if (editingEvent.description) formData.append('description', editingEvent.description)
-            if (editingEvent.startDate) formData.append('startDate', editingEvent.startDate)
-            if (editingEvent.endDate) formData.append('endDate', editingEvent.endDate)
+            if (editingEvent.startDate && !isNaN(Date.parse(editingEvent.startDate))) formData.append('startDate', new Date(editingEvent.startDate).toISOString())
+            if (editingEvent.endDate && !isNaN(Date.parse(editingEvent.endDate))) formData.append('endDate', new Date(editingEvent.endDate).toISOString())
             if (editingEvent.location) formData.append('location', editingEvent.location)
             if (editType) formData.append('type', editType)
-
-            editParticipants.forEach((participant) => {
-                formData.append('participants', participant)
-            })
 
             if (includePollInEdit) {
                 formData.append(
@@ -431,8 +433,6 @@ export const useUpdateEvent = (
         updateToastMessage,
         updateToastOpen,
         updateToastSeverity,
-        editParticipants,
-        setEditParticipants,
         editType,
         setEditType,
         updatedEvent,

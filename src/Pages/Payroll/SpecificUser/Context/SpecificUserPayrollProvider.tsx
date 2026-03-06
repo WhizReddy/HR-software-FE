@@ -47,7 +47,7 @@ export const PayrollProviderSpecific: React.FC<{
             originalId: payrollData.userId._id,
             netSalary: `${payrollData.netSalary}${payrollData.currency}`,
             healthInsurance: `${payrollData.healthInsurance}${payrollData.currency}`,
-            month: getMonthName(payrollData.month),
+            month: getMonthName(Number(payrollData.month)),
             workingDays: payrollData.workingDays,
             socialSecurity: payrollData.socialSecurity,
             fullName: `${payrollData.userId.firstName} ${payrollData.userId.lastName}`,

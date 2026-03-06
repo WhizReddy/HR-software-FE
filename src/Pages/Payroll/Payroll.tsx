@@ -67,99 +67,89 @@ function PayrollContent() {
 
     return (
         <div className={style.payroll}>
-            <div
-                style={{
-                    alignSelf: 'flex-end',
-                    position: 'absolute',
-                    top: 64,
-                    display: 'flex',
-                    alignItems: 'center',
-                }}
-            >
-                <Button
-                    btnText=""
-                    borderColor="transparent"
-                    type={ButtonTypes.SECONDARY}
-                    onClick={() => setShowFilters((prev) => !prev)}
-                    icon={showFilters ? <X /> : <Filter />}
-                />
-                <div
-                    className={`transition-all duration-300 overflow-hidden ml-2 ${showFilters ? 'w-[950px] opacity-100' : 'w-0 opacity-0'
-                        }`}
-                >
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            width: '950px'
-                        }}
-                    >
-                        <Input
-                            width={150}
-                            name="Filter"
-                            type="month"
-                            label="Month & Year"
-                            isFilter
-                            onChange={handleDateChange}
-                        />
-                        <Input
-                            width={150}
-                            name="fullName"
-                            type="text"
-                            label="Full Name"
-                            isFilter
-                            onChange={handleFullNameChange}
-                        />
-                        <Input
-                            width={150}
-                            name="workingDays"
-                            type="number"
-                            label="Working Days"
-                            isFilter
-                            onChange={handleWorkingDaysChange}
-                        />
-                        <Input
-                            width={150}
-                            name="maxNetSalary"
-                            type="number"
-                            label="Max Net Salary"
-                            isFilter
-                            onChange={handleMaxSalaryChange}
-                        />
-                        <Input
-                            width={150}
-                            name="minNetSalary"
-                            type="number"
-                            label="Min Net Salary"
-                            isFilter
-                            onChange={handleMinSalaryChange}
-                        />
-                        <Input
-                            width={150}
-                            name="bonus"
-                            type="number"
-                            label="Bonus"
-                            isFilter
-                            onChange={handleBonusChange}
-                        />
-                    </div>
-                </div>
-            </div>
             {isPending ? (
                 <div className={style.ring}>
-                    <RingLoader />
+                    <RingLoader color="#2457A3" />
                 </div>
             ) : (
-                <DataTable
-                    rows={rows}
-                    columns={columns}
-                    getRowId={getRowId}
-                    handleRowClick={handleRowClick}
-                    totalPages={totalPages}
-                    page={page}
-                    pageSize={pageSize}
-                    onPaginationModelChange={handlePaginationModelChange}
-                />
+                <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-4 mt-5">
+                    <DataTable
+                        rows={rows}
+                        columns={columns}
+                        getRowId={getRowId}
+                        handleRowClick={handleRowClick}
+                        totalPages={totalPages}
+                        page={page}
+                        pageSize={pageSize}
+                        onPaginationModelChange={handlePaginationModelChange}
+                        filterNode={
+                            <div className="flex items-center">
+                                <Button
+                                    btnText=""
+                                    borderColor="transparent"
+                                    type={ButtonTypes.SECONDARY}
+                                    onClick={() => setShowFilters((prev) => !prev)}
+                                    icon={showFilters ? <X /> : <Filter />}
+                                />
+                                <div
+                                    className={`transition-all duration-300 overflow-hidden ml-2 ${showFilters ? 'w-auto opacity-100' : 'w-0 opacity-0'
+                                        }`}
+                                >
+                                    <div className="flex gap-4">
+                                        <Input
+                                            width="150px"
+                                            name="Filter"
+                                            type="month"
+                                            label="Month & Year"
+                                            isFilter
+                                            onChange={handleDateChange}
+                                        />
+                                        <Input
+                                            width="150px"
+                                            name="fullName"
+                                            type="text"
+                                            label="Full Name"
+                                            isFilter
+                                            onChange={handleFullNameChange}
+                                        />
+                                        <Input
+                                            width="150px"
+                                            name="workingDays"
+                                            type="number"
+                                            label="Working Days"
+                                            isFilter
+                                            onChange={handleWorkingDaysChange}
+                                        />
+                                        <Input
+                                            width="150px"
+                                            name="maxNetSalary"
+                                            type="number"
+                                            label="Max Salary"
+                                            isFilter
+                                            onChange={handleMaxSalaryChange}
+                                        />
+                                        <Input
+                                            width="150px"
+                                            name="minNetSalary"
+                                            type="number"
+                                            label="Min Salary"
+                                            isFilter
+                                            onChange={handleMinSalaryChange}
+                                        />
+                                        <Input
+                                            width="150px"
+                                            name="bonus"
+                                            type="number"
+                                            label="Bonus"
+                                            isFilter
+                                            onChange={handleBonusChange}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    />
+                </div>
             )}
         </div>
     )

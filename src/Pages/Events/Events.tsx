@@ -7,7 +7,7 @@ import { ModalComponent } from '@/Components/Modal/Modal'
 import LongMenu from '@/Components/Menu/Menu'
 import SelectedEventCard from './Components/SelectedEvent/SelectedEvent'
 import Toast from '@/Components/Toast/Toast'
-import { EventsProvider, useEvents } from './Context/EventsContext'
+import { EventsProvider, useEvents } from '@/Pages/Events/Context/EventsContext'
 import Forms from './Forms/Forms'
 import { useGetAllEvents } from './Hook'
 import { useInView } from 'react-intersection-observer'
@@ -57,7 +57,7 @@ function EventsContentAndComponents() {
     }, [fetchNextPage, inView])
 
     return (
-        <div id="events-root" className="flex flex-col h-full max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+        <div id="events-root" className="flex flex-col max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
             <Toast
                 severity={toastOpen ? toastSeverity : updateToastSeverity}
                 open={toastOpen || updateToastOpen}
@@ -104,11 +104,24 @@ function EventsContentAndComponents() {
                             page.data.map((event: EventsData) => (
                                 <div
                                     key={event._id}
-                                    className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col h-[320px] group"
+                                    className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col h-[400px] group"
                                 >
-                                    <div className="p-5 flex-1 flex flex-col">
-                                        <div className="flex justify-between items-start mb-3 gap-2">
-                                            <h3 className="text-lg font-bold text-slate-800 line-clamp-2 leading-tight">
+                                    {event.photo && event.photo.length > 0 ? (
+                                        <div className="w-full h-40 bg-slate-100 overflow-hidden flex-shrink-0">
+                                            <img
+                                                src={event.photo[0]}
+                                                alt={event.title}
+                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div className="w-full h-40 bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center flex-shrink-0">
+                                            <Calendar className="text-slate-300" size={40} />
+                                        </div>
+                                    )}
+                                    <div className="p-4 flex-1 flex flex-col">
+                                        <div className="flex justify-between items-start mb-2 gap-2">
+                                            <h3 className="text-lg font-bold text-slate-800 line-clamp-1 leading-tight">
                                                 {event.title}
                                             </h3>
                                             {isAdmin && (

@@ -19,10 +19,18 @@ const InfoSection: React.FC = () => {
                 {events?.slice(0, 4).map((event: EventsData) => (
                     <li
                         key={event._id}
-                        className="relative pl-6 py-3 border-b border-slate-100 last:border-0 group hover:bg-slate-50 transition-colors rounded-md px-2"
+                        className="relative pl-6 py-3 border-b border-slate-100 last:border-0 group hover:bg-slate-50 transition-colors rounded-md px-2 flex gap-3"
                     >
                         {/* Blue Dot Indicator */}
                         <span className="absolute left-2 top-5 w-2 h-2 rounded-full bg-primary-blue shadow-sm"></span>
+
+                        {event.photo && event.photo.length > 0 && (
+                            <img
+                                src={event.photo[0]}
+                                alt={event.title}
+                                className="w-12 h-12 rounded-lg object-cover flex-shrink-0 mt-1 shadow-sm"
+                            />
+                        )}
 
                         <div className="flex flex-col gap-1 w-full">
                             <div className="flex justify-between items-start w-full gap-2">

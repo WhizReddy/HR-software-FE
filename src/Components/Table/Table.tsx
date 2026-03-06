@@ -1,5 +1,7 @@
 import React from 'react'
 import { ColDef, PaginationModel, RowParams } from '@/types/table'
+import { Search } from 'lucide-react'
+import Input from '@/Components/Input/Index'
 import {
     Table,
     TableBody,
@@ -23,6 +25,10 @@ interface DataTableProps<TRow> {
     onPaginationModelChange: (model: PaginationModel) => void
     title?: string
     actions?: React.ReactNode
+    searchValue?: string
+    onSearchChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+    searchPlaceholder?: string
+    filterNode?: React.ReactNode
 }
 
 function DataTable<TRow>({
@@ -36,6 +42,10 @@ function DataTable<TRow>({
     onPaginationModelChange,
     title,
     actions,
+    searchValue,
+    onSearchChange,
+    searchPlaceholder,
+    filterNode,
 }: DataTableProps<TRow>) {
     const canPrev = page > 0
     const canNext = page < totalPages - 1
@@ -44,10 +54,33 @@ function DataTable<TRow>({
     return (
         <Card className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
             {/* Optional header row */}
-            {(title || actions) && (
-                <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-                    {title && <h2 className="font-semibold text-slate-800 text-base">{title}</h2>}
-                    {actions && <div className="flex items-center gap-2">{actions}</div>}
+            {(title || actions || onSearchChange || filterNode) && (
+                <div className="flex flex-col sm:flex-row items-center justify-between px-5 py-4 border-b border-slate-100 gap-4">
+                    <div className="flex items-center w-full sm:w-auto gap-4 flex-1">
+                        {title && <h2 className="font-semibold text-slate-800 text-base whitespace-nowrap">{title}</h2>}
+                        {onSearchChange && (
+                            <div className="w-full sm:max-w-xs">
+                                <Input
+                                    IsUsername
+                                    type="search"
+                                    name="table-search"
+                                    placeholder={searchPlaceholder}
+                                    label={undefined}
+                                    value={searchValue || ''}
+                                    onChange={onSearchChange}
+                                    iconPosition="start"
+                                    icon={<Search size={18} className="text-slate-400" />}
+                                    width="100%"
+                                />
+                            </div>
+                        )}
+                    </div>
+                    {(filterNode || actions) && (
+                        <div className="flex items-center w-full sm:w-auto gap-3 justify-end">
+                            {filterNode}
+                            {actions}
+                        </div>
+                    )}
                 </div>
             )}
 

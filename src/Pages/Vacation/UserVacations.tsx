@@ -3,7 +3,7 @@ import style from './style/userVacations.module.scss'
 
 import { VacationProvider } from './VacationContext'
 import { useGetUserWithVacations } from './Hook'
-import { Vacation } from './TVacation'
+import { Vacation } from './types'
 import { Check, X, Clock } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'

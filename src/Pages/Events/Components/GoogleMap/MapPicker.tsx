@@ -22,14 +22,16 @@ interface MapComponentProps {
     showInput?: boolean
 }
 
+const libraries = ['places', 'marker'] as any
+
 const MapComponent: React.FC<MapComponentProps> = ({
     onLocationChange,
     savedLocation,
     showInput,
 }) => {
     const { isLoaded, loadError } = useLoadScript({
-        googleMapsApiKey: 'AIzaSyBSyIgo2TtwzkihGKrRGcrWxW_k6zwkYOk',
-        libraries: ['places', 'marker'] as any,
+        googleMapsApiKey: 'AIzaSyDvjGa1duEDjFVNzg-zhqW2DC6XcgTQpA8',
+        libraries,
     })
 
     const [map, setMap] = useState<MapType | null>(null)
@@ -91,9 +93,8 @@ const MapComponent: React.FC<MapComponentProps> = ({
                         position.lng,
                     )
                 } else {
-                    alert(
-                        'Geocode was not successful for the following reason: ' +
-                        status,
+                    console.warn(
+                        'Geocode search was not successful for the following reason: ' + status + '. Please check your Google Maps API Key configuration.'
                     )
                 }
             })
@@ -122,9 +123,8 @@ const MapComponent: React.FC<MapComponentProps> = ({
                             clickedPosition.lng,
                         )
                     } else {
-                        alert(
-                            'Geocode was not successful for the following reason: ' +
-                            status,
+                        console.warn(
+                            'Geocode click was not successful for the following reason: ' + status + '. Please check your Google Maps API Key configuration.'
                         )
                         setSearchValue(
                             `${clickedPosition.lat}, ${clickedPosition.lng}`,

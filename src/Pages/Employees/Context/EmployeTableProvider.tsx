@@ -10,6 +10,16 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
     const [page, setPage] = useState(0)
     const [pageSize, setPageSize] = useState(5)
+    const [search, setSearch] = useState('')
+
+    // Add simple debounce effect for search
+    const [debouncedSearch, setDebouncedSearch] = useState(search)
+    React.useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedSearch(search)
+        }, 500)
+        return () => clearTimeout(handler)
+    }, [search])
 
     const handlePaginationModelChange = (model: PaginationModel) => {
         setPage(model.page)
@@ -17,12 +27,12 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
     }
 
     const fetchEmployes = async () => {
-        const response = await AxiosInstance.get<{ data: UserProfileData[], totalPages: number }>(`/user?page=${page}&limit=${pageSize}`)
+        const response = await AxiosInstance.get<{ data: UserProfileData[], totalPages: number }>(`/user?page=${page}&limit=${pageSize}&search=${debouncedSearch}`)
         return response.data
     }
 
     const { data: users, isPending } = useQuery<{ data: UserProfileData[]; totalPages: number }, Error>({
-        queryKey: ['users', page, pageSize],
+        queryKey: ['users', page, pageSize, debouncedSearch],
         queryFn: () => fetchEmployes(),
     })
 
@@ -74,6 +84,8 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
         isPending,
         page,
         pageSize,
+        search,
+        setSearch,
         totalPages: users?.totalPages ?? 0,
     }
 

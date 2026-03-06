@@ -9,18 +9,29 @@ import { useQuery } from '@tanstack/react-query'
 export const CandidateProvider: React.FC<{ children: any }> = ({ children }) => {
     const [page, setPage] = React.useState(0)
     const [pageSize, setPageSize] = React.useState(5)
+    const [search, setSearch] = React.useState('')
+
+    // Add simple debounce effect for search
+    const [debouncedSearch, setDebouncedSearch] = React.useState(search)
+    React.useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedSearch(search)
+        }, 500)
+        return () => clearTimeout(handler)
+    }, [search])
+
     const handlePaginationModelChange = (model: PaginationModel) => {
         setPage(model.page)
         setPageSize(model.pageSize)
     }
 
     const fetchCandidates = async (): Promise<{ data: CandidateRow[], totalPages: number }> => {
-        const response = await AxiosInstance.get(`/applicant?page=${page}&limit=${pageSize}`)
+        const response = await AxiosInstance.get(`/applicant?page=${page}&limit=${pageSize}&search=${debouncedSearch}`)
         return response.data
     }
 
     const { data: applicants, isPending } = useQuery({
-        queryKey: ['applicants', page, pageSize],
+        queryKey: ['applicants', page, pageSize, debouncedSearch],
         queryFn: () => fetchCandidates(),
     })
 
@@ -62,7 +73,7 @@ export const CandidateProvider: React.FC<{ children: any }> = ({ children }) => 
                                 : params.value === 'employed'
                                     ? 'purple'
                                     : ''
-                return <StatusBadge status={params.value} color={color} />
+                return <StatusBadge status={params.value as string} color={color} />
             },
         },
         { field: 'phoneNumber', headerName: 'Phone', flex: 1.8 },
@@ -96,6 +107,8 @@ export const CandidateProvider: React.FC<{ children: any }> = ({ children }) => 
         handlePaginationModelChange,
         page,
         pageSize,
+        search,
+        setSearch,
         totalPages: applicants?.totalPages ?? 0,
         isPending,
     }
