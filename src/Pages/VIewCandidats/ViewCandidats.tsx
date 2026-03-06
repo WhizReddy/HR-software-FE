@@ -117,7 +117,7 @@ export default function ViewCandidats() {
                         <div className={style.section}>
                             <div className={style.label}>Phone Number</div>
                             <div className={style.value}>
-                                {applicant?.phoneNumber}
+                                {applicant?.phoneNumber ? (applicant.phoneNumber.startsWith('+') ? applicant.phoneNumber : `+355${applicant.phoneNumber}`) : 'N/A'}
                             </div>
                         </div>
                         <div className={style.border}></div>

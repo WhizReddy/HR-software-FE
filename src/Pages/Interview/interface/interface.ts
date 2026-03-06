@@ -47,17 +47,10 @@ export interface InterviewContextType {
     handleAccept: (interview: Interview) => void
     phases: string[]
     handleTabChange: (event: React.SyntheticEvent, newValue: string) => void
-    handleApplyFilter: () => void
-    handleClearFilter: () => void
     currentTab: string
-    currentPhase: string
-    startDate: string
-    endDate: string
-    setCurrentPhase: Dispatch<React.SetStateAction<string>>
-    setStartDate: Dispatch<React.SetStateAction<string>>
-    setEndDate: Dispatch<React.SetStateAction<string>>
+    searchQuery: string
+    setSearchQuery: Dispatch<React.SetStateAction<string>>
     filteredInterviews: Interview[]
-    isFiltered: boolean
 
     setFilteredInterviews: Dispatch<React.SetStateAction<Interview[]>>
     scheduleType: 'schedule' | 'reschedule'

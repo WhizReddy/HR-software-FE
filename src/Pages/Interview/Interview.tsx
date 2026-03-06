@@ -6,7 +6,6 @@ import style from './styles/Interview.module.css'
 import Button from '@/Components/Button/Button'
 import RescheduleModal from './Component/ScheduleForm'
 import Input from '@/Components/Input/Index'
-import Selecter from '@/Components/Input/components/Select/Selecter'
 
 function InterviewKanbanContent() {
     const {
@@ -24,18 +23,11 @@ function InterviewKanbanContent() {
         formatDate,
         phases,
         handleAccept,
-        handleApplyFilter,
-        handleClearFilter,
         handleTabChange,
         currentTab,
-        currentPhase,
-        startDate,
-        endDate,
-        setCurrentPhase,
-        setStartDate,
-        setEndDate,
+        searchQuery,
+        setSearchQuery,
         filteredInterviews,
-        isFiltered,
         processingIds,
     } = useInterviewContext()
 
@@ -47,53 +39,16 @@ function InterviewKanbanContent() {
     return (
         <div className={style.kanbanBoard}>
             <div className={style.filterContainer}>
-                <Selecter
-                    name="currentPhase"
-                    label="Current Phase"
-                    multiple={false}
-                    value={currentPhase}
-                    width='250px'
-                    options={phases}
-                    onChange={(newValue) =>
-                        setCurrentPhase(Array.isArray(newValue) ? newValue[0] : newValue)
-                    }
-                />
                 <Input
                     IsUsername
-                    name=""
-                    shrink
-                    label="Start Date"
-                    type="date"
-                    value={startDate || ''}
-                    width="250px"
-                    onChange={(e) => setStartDate(e.target.value)}
+                    name="searchQuery"
+                    label="Search Candidates..."
+                    type="text"
+                    value={searchQuery}
+                    width="350px"
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     className={style.filterField}
                 />
-                <Input
-                    IsUsername
-                    name=""
-                    label="End Date"
-                    type="date"
-                    shrink
-                    value={endDate || ''}
-                    width="250px"
-                    onChange={(e) => setEndDate(e.target.value)}
-                    className={style.filterField}
-                />
-                <Button
-                    type={ButtonTypes.PRIMARY}
-                    width="170px"
-                    btnText="Apply Filter"
-                    onClick={handleApplyFilter}
-                />
-                {isFiltered && (
-                    <Button
-                        type={ButtonTypes.SECONDARY}
-                        width="170px"
-                        btnText="Clear Filter"
-                        onClick={handleClearFilter}
-                    />
-                )}
             </div>
 
             <div className="flex border-b border-gray-200 mb-6 gap-6 overflow-x-auto">

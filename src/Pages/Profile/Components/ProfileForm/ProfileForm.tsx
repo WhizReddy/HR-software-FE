@@ -124,7 +124,7 @@ const ProfileFormContext = () => {
                         disabled={!isAdmin}
                         label="PhoneNumber"
                         onChange={handleChange}
-                        value={user.phone}
+                        value={user.phone ? (user.phone.startsWith('+') ? user.phone : `+355${user.phone}`) : ''}
                     />
                 </div>
             </div>

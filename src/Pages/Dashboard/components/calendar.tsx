@@ -8,9 +8,9 @@ export default function Calendar() {
     const highlightedDays = [1, 2, 15]
 
     return (
-        <div className="p-4 bg-white rounded-lg w-full">
-            <div className="flex justify-between items-center mb-4 px-2">
-                <h3 className="font-semibold text-lg text-slate-800">{today.format('MMMM YYYY')}</h3>
+        <div className="w-full">
+            <div className="flex justify-between items-center mb-6 px-1">
+                <h3 className="font-extrabold text-xl text-slate-800 tracking-tight">{today.format('MMMM YYYY')}</h3>
             </div>
             <div className="grid grid-cols-7 gap-1 text-center text-xs mb-3 font-medium text-slate-400 uppercase tracking-wider">
                 <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>

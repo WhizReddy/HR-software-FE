@@ -45,11 +45,8 @@ export const InterviewProvider: React.FC<{ children: React.ReactNode }> = ({
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isReschedule, setIsReschedule] = useState(false)
     const navigate = useNavigate()
-    const [currentPhase, setCurrentPhase] = useState<string>('first_interview')
-    const [startDate, setStartDate] = useState<string>('')
-    const [endDate, setEndDate] = useState<string>('')
+    const [searchQuery, setSearchQuery] = useState<string>('')
     const [currentTab, setCurrentTab] = useState<string>('first_interview')
-    const [isFiltered, setIsFiltered] = useState(false)
     // Per-interview processing flag to prevent double-clicks
     const [processingIds, setProcessingIds] = useState<Set<string>>(new Set())
 
@@ -126,46 +123,23 @@ export const InterviewProvider: React.FC<{ children: React.ReactNode }> = ({
             return false
         })
 
-        if (isFiltered && startDate && endDate) {
-            const start = new Date(startDate)
-            const end = new Date(endDate)
-            end.setHours(23, 59, 59, 999)
-
-            filtered = filtered.filter((interview) => {
-                const interviewDateRaw =
-                    interview.currentPhase === 'second_interview'
-                        ? interview.secondInterviewDate
-                        : interview.firstInterviewDate
-
-                if (interviewDateRaw) {
-                    const interviewDate = new Date(interviewDateRaw)
-                    return interviewDate >= start && interviewDate <= end
-                }
-                return false
-            })
+        if (searchQuery.trim() !== '') {
+            const query = searchQuery.toLowerCase().trim()
+            filtered = filtered.filter((interview) =>
+                interview.firstName.toLowerCase().includes(query) ||
+                interview.lastName.toLowerCase().includes(query) ||
+                `${interview.firstName} ${interview.lastName}`.toLowerCase().includes(query)
+            )
         }
 
         return filtered
-    }, [interviews, currentTab, isFiltered, startDate, endDate])
+    }, [interviews, currentTab, searchQuery])
 
     const handleTabChange = (
         _event: React.SyntheticEvent,
         newValue: string,
     ) => {
         setCurrentTab(newValue)
-    }
-
-    const handleApplyFilter = () => {
-        setIsFiltered(true)
-        setCurrentTab(currentPhase)
-    }
-
-    const handleClearFilter = () => {
-        setIsFiltered(false)
-        setCurrentPhase('first_interview')
-        setStartDate('')
-        setEndDate('')
-        setCurrentTab('first_interview')
     }
 
     const handleOpenModal = (interview: Interview, isReschedule = false) => {
@@ -443,17 +417,10 @@ export const InterviewProvider: React.FC<{ children: React.ReactNode }> = ({
                 setScheduleType,
                 setFilteredInterviews: () => { /* derived via useMemo — no-op kept for interface compat */ },
                 handleTabChange,
-                handleApplyFilter,
-                handleClearFilter,
                 currentTab,
-                currentPhase,
-                startDate,
-                endDate,
-                setCurrentPhase,
-                setStartDate,
-                setEndDate,
+                searchQuery,
+                setSearchQuery,
                 filteredInterviews,
-                isFiltered,
                 processingIds,
             }}
         >

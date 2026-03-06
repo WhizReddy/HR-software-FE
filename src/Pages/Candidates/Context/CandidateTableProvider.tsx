@@ -46,7 +46,7 @@ export const CandidateProvider: React.FC<{ children: any }> = ({ children }) => 
             lastName: applicant.lastName,
             fullName: `${applicant.firstName} ${applicant.lastName}`,
             email: applicant.email,
-            phoneNumber: applicant.phoneNumber,
+            phoneNumber: applicant.phoneNumber.startsWith('+') ? applicant.phoneNumber : `+355${applicant.phoneNumber}`,
             experience: applicant.experience,
             applicationMethod: applicant.applicationMethod,
             age: applicant.age,

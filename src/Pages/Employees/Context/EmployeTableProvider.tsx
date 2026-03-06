@@ -44,7 +44,7 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
             originalId: user._id,
             imageUrl: user.imageUrl,
             role: user.role,
-            phone: user.phone,
+            phone: user.phone ? (user.phone.startsWith('+') ? user.phone : `+355${user.phone}`) : 'N/A',
             email: user.auth?.email || '',
             fullName: `${user.firstName} ${user.lastName}`,
         })) || []

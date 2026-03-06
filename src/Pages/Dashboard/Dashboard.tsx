@@ -28,79 +28,93 @@ const DashboardContent: React.FC = () => {
     })
 
     return (
-        <div className="mx-auto max-w-[1400px] space-y-6">
-            {/* Greeting */}
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold text-slate-800 tracking-tight">
-                        {greeter()}, <span className="text-[#2457a3]">{userName}</span> 👋
-                    </h1>
-                    {isAdmin && (
-                        <p className="text-slate-500 text-sm mt-1">Here's what's happening with your team today.</p>
-                    )}
-                </div>
-            </div>
+        <div className="relative min-h-screen bg-slate-50/50">
+            {/* Background ambient blurs */}
+            <div className="absolute top-0 -left-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+            <div className="absolute top-0 -right-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+            <div className="absolute -bottom-32 left-32 w-72 h-72 bg-emerald-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
 
-            {/* Stat cards — using inline grid for reliability */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <CardInfo title="Present" content={employeeData.present.toString()} icon="Present" />
-                <CardInfo title="Absent" content={employeeData.absent.toString()} icon="Absent" />
-                <CardInfo title="On Leave" content={employeeData.onLeave.toString()} icon="On Leave" />
-                <CardInfo title="Remote" content={employeeData.remote.toString()} icon="Remote" />
-            </div>
-
-            {/* Main row: Calendar + InfoSection + PieChart */}
-            <div className="grid grid-cols-1 gap-5 xl:grid-cols-12">
-                {/* Calendar */}
-                <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm xl:col-span-3">
-                    <h3 className="text-sm font-semibold text-slate-700 mb-4">Calendar</h3>
-                    <Calendar />
+            <div className="relative mx-auto max-w-[1400px] space-y-8 p-4 sm:p-6 lg:p-8 z-10">
+                {/* Greeting */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div>
+                        <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+                            {greeter()}, <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">{userName}</span> 👋
+                        </h1>
+                        {isAdmin && (
+                            <p className="text-slate-500 font-medium mt-2">Here's what's happening with your team today.</p>
+                        )}
+                    </div>
                 </div>
 
-                {/* Info Section */}
-                <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm xl:col-span-5">
-                    <InfoSection />
-                </div>
+                {/* Main Bento Grid layout */}
+                <div className="grid grid-cols-1 gap-6 xl:grid-cols-12 auto-rows-min">
 
-                {/* Pie Chart */}
-                <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm xl:col-span-4">
-                    <h3 className="text-sm font-semibold text-slate-700 mb-4">Employee Status</h3>
-                    <PieChartComponent />
-                </div>
-            </div>
+                    {/* Stat cards - Spanning top section */}
+                    <div className="xl:col-span-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                        <CardInfo title="Present" content={employeeData.present.toString()} icon="Present" />
+                        <CardInfo title="Absent" content={employeeData.absent.toString()} icon="Absent" />
+                        <CardInfo title="On Leave" content={employeeData.onLeave.toString()} icon="On Leave" />
+                        <CardInfo title="Remote" content={employeeData.remote.toString()} icon="Remote" />
+                    </div>
 
-            {/* Team directory */}
-            <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                <h3 className="text-sm font-semibold text-slate-700 mb-5">Team Directory</h3>
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-7">
-                    {UserProfileDataList?.map((employee: UserProfileData) => (
-                        <div
-                            key={employee._id}
-                            className="flex flex-col items-center gap-2 group cursor-pointer p-3 rounded-xl hover:bg-slate-50 transition-colors"
-                            onClick={() => navigate(`/profile/${employee._id}`)}
-                        >
-                            <div className="relative w-14 h-14">
-                                {employee.imageUrl ? (
-                                    <img
-                                        src={employee.imageUrl}
-                                        alt={`${employee.firstName} ${employee.lastName}`}
-                                        className="w-14 h-14 rounded-full object-cover ring-2 ring-slate-100 group-hover:ring-[#2457a3] transition-all"
-                                    />
-                                ) : (
-                                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#2457a3] to-[#4A7BCD] flex items-center justify-center text-white font-bold text-lg ring-2 ring-slate-100 group-hover:ring-[#2457a3] transition-all">
-                                        {employee.firstName?.charAt(0)}{employee.lastName?.charAt(0)}
-                                    </div>
-                                )}
-                                <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-400 rounded-full border-2 border-white" />
-                            </div>
-                            <div className="text-center">
-                                <p className="text-xs font-semibold text-slate-700 group-hover:text-[#2457a3] transition-colors leading-tight">
-                                    {employee.firstName} {employee.lastName}
-                                </p>
-                                <p className="text-[10px] text-slate-400 capitalize mt-0.5">{(employee as any).role ?? ''}</p>
-                            </div>
+                    {/* Left Column: Calendar (Bento tile) */}
+                    <div className="rounded-3xl border border-white/60 bg-white/70 backdrop-blur-xl p-6 shadow-xl shadow-slate-200/40 xl:col-span-4 h-full flex flex-col">
+                        <h3 className="text-base font-bold text-slate-800 mb-4 tracking-tight">Calendar</h3>
+                        <div className="flex-1">
+                            <Calendar />
                         </div>
-                    ))}
+                    </div>
+
+                    {/* Middle Column: Info Section (Events) */}
+                    <div className="rounded-3xl border border-white/60 bg-white/70 backdrop-blur-xl p-6 shadow-xl shadow-slate-200/40 xl:col-span-4 h-full flex flex-col">
+                        <InfoSection />
+                    </div>
+
+                    {/* Right Column: Pie Chart */}
+                    <div className="rounded-3xl border border-white/60 bg-white/70 backdrop-blur-xl p-6 shadow-xl shadow-slate-200/40 xl:col-span-4 h-full flex flex-col">
+                        <h3 className="text-base font-bold text-slate-800 mb-4 tracking-tight">Status Overview</h3>
+                        <div className="flex-1 flex items-center justify-center">
+                            <PieChartComponent />
+                        </div>
+                    </div>
+
+                    {/* Team directory spanning bottom row */}
+                    <div className="rounded-3xl border border-white/60 bg-white/70 backdrop-blur-xl p-6 shadow-xl shadow-slate-200/40 xl:col-span-12">
+                        <h3 className="text-base font-bold text-slate-800 mb-6 tracking-tight">Team Directory</h3>
+                        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10">
+                            {UserProfileDataList?.map((employee: UserProfileData) => (
+                                <div
+                                    key={employee._id}
+                                    className="flex flex-col items-center gap-3 group cursor-pointer p-3 rounded-2xl hover:bg-white border border-transparent hover:border-slate-100 hover:shadow-md transition-all duration-300 hover:-translate-y-1"
+                                    onClick={() => navigate(`/profile/${employee._id}`)}
+                                >
+                                    <div className="relative w-16 h-16">
+                                        {employee.imageUrl ? (
+                                            <img
+                                                src={employee.imageUrl}
+                                                alt={`${employee.firstName} ${employee.lastName}`}
+                                                className="w-16 h-16 rounded-full object-cover ring-4 ring-white shadow-sm group-hover:ring-blue-100 transition-all duration-300"
+                                            />
+                                        ) : (
+                                            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center text-white font-bold text-xl ring-4 ring-white shadow-sm group-hover:ring-blue-100 transition-all duration-300">
+                                                {employee.firstName?.charAt(0)}{employee.lastName?.charAt(0)}
+                                            </div>
+                                        )}
+                                        <span className="absolute bottom-0 right-0 w-4 h-4 bg-emerald-400 rounded-full border-2 border-white shadow-sm" />
+                                    </div>
+                                    <div className="text-center w-full px-1">
+                                        <p className="text-sm font-semibold text-slate-800 group-hover:text-blue-600 transition-colors leading-tight truncate">
+                                            {employee.firstName} {employee.lastName}
+                                        </p>
+                                        <p className="text-xs font-medium text-slate-500 capitalize mt-1 truncate">
+                                            {(employee as any).role ?? 'Employee'}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -62,7 +62,8 @@ const Selecter: React.FC<SelecterProps> = ({
                 value={selectedValue}
                 onChange={handleChange}
                 className={cn(
-                    'h-9 w-full rounded-md border border-input bg-white px-3 py-2 text-sm text-slate-800 transition-colors',
+                    'w-full rounded-md border border-input bg-white px-3 text-sm text-slate-800 transition-colors',
+                    multiple ? 'min-h-[120px] py-1' : 'h-9 py-2',
                     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-0',
                     'disabled:cursor-not-allowed disabled:opacity-50',
                 )}
