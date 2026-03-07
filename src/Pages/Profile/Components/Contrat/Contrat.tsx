@@ -1,7 +1,6 @@
 import Input from '../../../../Components/Input/Index'
 import { ButtonTypes } from '../../../../Components/Button/ButtonTypes'
 import Button from '../../../../Components/Button/Button'
-import style from '../ProfileForm/ProfileForm.module.css'
 import { ProfileProvider } from '../ProfileForm/Context/ProfileProvider'
 import { useCreatePayroll, useUpdatePayroll } from '../ProfileForm/Context/Hook'
 import Toast from '@/Components/Toast/Toast'
@@ -28,7 +27,7 @@ const ContratContent = () => {
     } = useCreatePayroll()
 
     return (
-        <div className={style.container}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
             <Toast
                 severity={EditingPayroll ? toastSeverity : createToastSeverity}
                 open={EditingPayroll ? toastOpen : createToastOpen}
@@ -37,80 +36,85 @@ const ContratContent = () => {
                     EditingPayroll ? handleToastClose : handleCreateToastClose
                 }
             />
-            <div className={style.title}>Payroll Information</div>
-            <div className={style.forms}>
-                <Input
-                    IsUsername
-                    type="number"
-                    label="WorkingDays"
-                    name="workingDays"
-                    shrink={true}
-                    width={350}
-                    value={
-                        EditingPayroll
-                            ? EditingPayroll?.workingDays
-                            : payroll.workingDays
-                    }
-                    onChange={
-                        EditingPayroll
-                            ? handleUpdateChangePayroll
-                            : handleChangePayroll
-                    }
-                />
-                <Input
-                    IsUsername
-                    shrink={true}
-                    name="grossSalary"
-                    label="Gross salary"
-                    width={350}
-                    value={
-                        EditingPayroll
-                            ? EditingPayroll?.grossSalary
-                            : payroll.grossSalary
-                    }
-                    onChange={
-                        EditingPayroll
-                            ? handleUpdateChangePayroll
-                            : handleChangePayroll
-                    }
-                />
-            </div>
-            <div className={style.border}></div>
 
-            <div className={style.title}>Add Bonus</div>
+            {/* Left Column - Payroll Information Card */}
+            <div className="glass-card p-8 shadow-sm border border-slate-100/50 bg-white/70 h-full flex flex-col">
+                <h3 className="text-lg font-bold text-[#2457a3] mb-6 border-b border-slate-100/50 pb-4">Payroll Information</h3>
 
-            <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    width: '350px',
-                    gap: '20px',
-                }}
-            >
-                <Input IsUsername label="Bonus" name="bonus" />
-                <Input
-                    IsUsername
-                    label="Bonus Description"
-                    name="bonusDescription"
-                    type="textarea"
-                    multiline={true}
-                    rows={3}
-                />
+                <div className="space-y-6 flex-1">
+                    <div className="space-y-1">
+                        <Input
+                            IsUsername
+                            type="number"
+                            label="Working Days"
+                            name="workingDays"
+                            shrink={true}
+                            width="100%"
+                            value={
+                                EditingPayroll
+                                    ? EditingPayroll?.workingDays
+                                    : payroll.workingDays
+                            }
+                            onChange={
+                                EditingPayroll
+                                    ? handleUpdateChangePayroll
+                                    : handleChangePayroll
+                            }
+                        />
+                    </div>
+                    <div className="space-y-1">
+                        <Input
+                            IsUsername
+                            shrink={true}
+                            name="grossSalary"
+                            label="Gross Salary"
+                            width="100%"
+                            value={
+                                EditingPayroll
+                                    ? EditingPayroll?.grossSalary
+                                    : payroll.grossSalary
+                            }
+                            onChange={
+                                EditingPayroll
+                                    ? handleUpdateChangePayroll
+                                    : handleChangePayroll
+                            }
+                        />
+                    </div>
+                </div>
             </div>
 
-            <div className={style.inputWidth}>
-                <Button
-                    type={ButtonTypes.PRIMARY}
-                    btnText={
-                        EditingPayroll ? 'Update Payroll' : 'Create Payroll'
-                    }
-                    onClick={
-                        EditingPayroll
-                            ? handleUpdatePayroll
-                            : handleCreatePayroll
-                    }
-                    width="350px"
-                />
+            {/* Right Column - Bonus Card */}
+            <div className="glass-card p-8 shadow-sm border border-slate-100/50 bg-white/70 h-full flex flex-col justify-between">
+                <div>
+                    <h3 className="text-lg font-bold text-emerald-600 mb-6 border-b border-slate-100/50 pb-4">Additional Bonus</h3>
+
+                    <div className="space-y-6">
+                        <div className="space-y-1">
+                            <Input IsUsername label="Bonus Amount" name="bonus" width="100%" />
+                        </div>
+                        <div className="space-y-1">
+                            <Input
+                                IsUsername
+                                label="Bonus Description"
+                                name="bonusDescription"
+                                type="textarea"
+                                multiline={true}
+                                rows={3}
+                                width="100%"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="pt-8 mt-auto">
+                    <Button
+                        type={ButtonTypes.PRIMARY}
+                        btnText={EditingPayroll ? 'Update Payroll' : 'Create Payroll'}
+                        onClick={EditingPayroll ? handleUpdatePayroll : handleCreatePayroll}
+                        className="w-full bg-[#2457a3] hover:bg-[#1a407a] text-white transition-all shadow-md active:scale-95 py-2.5 rounded-lg font-medium"
+                    />
+                </div>
             </div>
         </div>
     )

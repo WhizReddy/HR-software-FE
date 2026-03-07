@@ -28,6 +28,7 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
             }}
         >
             <DialogContent
+                className="glass-modal border-none"
                 style={{ width: width === '100%' ? '100%' : '95vw', maxWidth: width, height: height || 'auto', padding }}
             >
                 {children}

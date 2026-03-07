@@ -18,7 +18,13 @@ function EmployeesContent() {
     } = useEmployeeContext()
 
     return (
-        <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-4 mt-5">
+        <div className="w-full flex-1 p-4 sm:p-6 lg:p-8">
+            <div className="mb-8 relative z-10">
+                <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Employee Directory</h1>
+                <p className="text-slate-500 mt-2 text-base max-w-2xl">
+                    Manage your organization's entire workforce. View profiles, search for specific roles, and manage access in one central hub.
+                </p>
+            </div>
             {isPending ? (
                 <div className="flex justify-center items-center min-h-[60vh]">
                     <RingLoader color="#2457A3" />

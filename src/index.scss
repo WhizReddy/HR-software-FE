@@ -118,6 +118,23 @@ body {
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
 
+/* Glassmorphism 2.0 Utilities */
+.glass-card {
+    @apply bg-white/70 backdrop-blur-xl border border-white/60 shadow-xl shadow-slate-200/40 rounded-3xl transition-all duration-300;
+}
+
+.glass-panel {
+    @apply bg-white/80 backdrop-blur-lg border border-white/60 shadow-lg shadow-slate-200/30 rounded-2xl transition-all duration-300;
+}
+
+.glass-modal {
+    @apply bg-white/90 backdrop-blur-2xl border border-white/60 shadow-2xl rounded-3xl;
+}
+
+.glass-active {
+    @apply bg-white border border-slate-100 shadow-md transform -translate-y-1;
+}
+
 @theme inline {
     --radius-sm: calc(var(--radius) - 4px);
     --radius-md: calc(var(--radius) - 2px);

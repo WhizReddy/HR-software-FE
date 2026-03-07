@@ -53,13 +53,13 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
     const variants = {
         [ButtonTypes.PRIMARY]:
-            'bg-[#2457a3] hover:bg-[#1b4285] text-white border border-[#2457a3] focus:ring-[#2457a3]',
+            'bg-[#2457a3] hover:bg-[#1b4285] text-white border border-[#2457a3] focus:ring-[#2457a3] shadow-sm hover:shadow-md hover:-translate-y-[1px] active:scale-95 transition-all duration-300',
         [ButtonTypes.SECONDARY]:
-            'bg-white hover:bg-slate-50 text-[#2457a3] border border-[#2457a3] focus:ring-[#2457a3]',
+            'bg-white/80 backdrop-blur-sm hover:bg-slate-50 text-[#2457a3] border border-slate-200 focus:ring-[#2457a3] shadow-sm hover:shadow-md hover:-translate-y-[1px] active:scale-95 transition-all duration-300',
         [ButtonTypes.DANGER]:
-            'bg-red-600 hover:bg-red-700 text-white border border-red-600 focus:ring-red-500',
+            'bg-red-600 hover:bg-red-700 text-white border border-red-600 focus:ring-red-500 shadow-sm hover:shadow-md hover:-translate-y-[1px] active:scale-95 transition-all duration-300',
         [ButtonTypes.TERTIARY]:
-            'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 focus:ring-slate-400',
+            'bg-slate-100/80 backdrop-blur-sm hover:bg-slate-200 text-slate-700 border border-slate-200 focus:ring-slate-400 shadow-sm hover:shadow-md hover:-translate-y-[1px] active:scale-95 transition-all duration-300',
     }
 
     const inlineStyle: React.CSSProperties = {

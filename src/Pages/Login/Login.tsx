@@ -50,26 +50,57 @@ const LoginComponent = () => {
         )
 
     return (
-        <div className="min-h-screen w-full flex relative overflow-hidden bg-slate-50">
-            {/* Ambient Background Blur */}
-            <div className="absolute top-[-20%] left-[-10%] w-[50rem] h-[50rem] bg-indigo-200/50 rounded-full mix-blend-multiply filter blur-[100px] opacity-70 animate-blob"></div>
-            <div className="absolute top-[-10%] right-[-10%] w-[40rem] h-[40rem] bg-blue-200/50 rounded-full mix-blend-multiply filter blur-[100px] opacity-70 animate-blob animation-delay-2000"></div>
-            <div className="absolute bottom-[-20%] left-[20%] w-[40rem] h-[40rem] bg-sky-200/50 rounded-full mix-blend-multiply filter blur-[100px] opacity-70 animate-blob animation-delay-4000"></div>
+        <div className="min-h-screen w-full flex bg-slate-50 relative overflow-hidden">
+            {/* Global Ambient Background */}
+            <div className="absolute top-[-20%] left-[-10%] w-[50rem] h-[50rem] bg-indigo-200/50 rounded-full mix-blend-multiply filter blur-[100px] opacity-70 animate-blob pointer-events-none"></div>
+            <div className="absolute top-[-10%] right-[-10%] w-[40rem] h-[40rem] bg-blue-200/50 rounded-full mix-blend-multiply filter blur-[100px] opacity-70 animate-blob animation-delay-2000 pointer-events-none"></div>
 
-            <div className="relative w-full flex items-center justify-center p-4 z-10">
-                <Card className="w-full max-w-[440px] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] border border-white/60 bg-white/70 backdrop-blur-2xl rounded-3xl">
-                    <CardHeader className="space-y-2 items-center justify-center pb-8 pt-10">
-                        <div className="bg-gradient-to-br from-[#2457a3] to-[#4A7BCD] text-white w-20 h-20 rounded-2xl flex items-center justify-center mb-4 shadow-lg ring-4 ring-white/50 transition-transform hover:scale-105 duration-300">
-                            <h2 className="text-3xl font-extrabold tracking-wider">CRM</h2>
+            {/* Main Split Layout */}
+            <div className="flex w-full min-h-screen z-10">
+
+                {/* Left Marketing Panel - Deep Navy Theme */}
+                <div className="hidden lg:flex flex-col justify-between w-1/2 bg-[#2457a3] p-12 relative overflow-hidden">
+                    {/* Inner Accent Decor */}
+                    <div className="absolute -top-20 -left-20 w-96 h-96 bg-white/10 rounded-full blur-3xl isolate"></div>
+                    <div className="absolute bottom-10 right-10 w-64 h-64 bg-emerald-400/20 rounded-full blur-3xl isolate"></div>
+
+                    <div className="relative z-10">
+                        <div className="bg-white/10 backdrop-blur-md w-16 h-16 rounded-2xl flex items-center justify-center mb-12 border border-white/20 shadow-2xl">
+                            <h2 className="text-2xl font-extrabold text-white tracking-widest">HR</h2>
                         </div>
-                        <CardTitle className="text-3xl font-bold tracking-tight text-slate-800">Welcome Back</CardTitle>
-                        <CardDescription className="text-slate-500 font-medium text-base">
-                            Sign in to your HR Management System
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="px-8 pb-10">
+                        <h1 className="text-5xl font-extrabold text-white leading-tight mb-6">
+                            Manage your people <br />
+                            <span className="text-blue-200">brilliantly.</span>
+                        </h1>
+                        <p className="text-blue-100/80 text-lg max-w-md font-light">
+                            The all-in-one modern toolkit designed for HR teams to drive engagement, manage assets, and streamline recruitment effortlessly.
+                        </p>
+                    </div>
+
+                    <div className="relative z-10">
+                        <div className="flex items-center gap-4 bg-white/10 backdrop-blur-md border border-white/10 p-4 rounded-2xl w-max shadow-xl">
+                            <div className="flex -space-x-4">
+                                <img className="w-10 h-10 rounded-full border-2 border-[#2457a3]" src="https://i.pravatar.cc/100?img=1" alt="User" />
+                                <img className="w-10 h-10 rounded-full border-2 border-[#2457a3]" src="https://i.pravatar.cc/100?img=2" alt="User" />
+                                <img className="w-10 h-10 rounded-full border-2 border-[#2457a3]" src="https://i.pravatar.cc/100?img=3" alt="User" />
+                            </div>
+                            <div className="text-sm text-white font-medium">
+                                Trusted by <span className="font-bold text-emerald-400">10,000+</span> professionals
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Right Login Panel */}
+                <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 relative">
+                    <div className="w-full max-w-md space-y-8 glass-modal p-8 sm:p-10 border border-white/60">
+                        <div className="text-center">
+                            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 mb-2">Welcome Back</h2>
+                            <p className="text-slate-500 font-medium">Please sign in to your account</p>
+                        </div>
+
                         <form
-                            className="space-y-6"
+                            className="space-y-6 mt-8"
                             onSubmit={(e) => {
                                 e.preventDefault()
                                 e.stopPropagation()
@@ -78,26 +109,20 @@ const LoginComponent = () => {
                         >
                             <form.Field
                                 name="email"
-                                validators={{
-                                    onChange: LoginSchema.entries.email,
-                                }}
+                                validators={{ onChange: LoginSchema.entries.email }}
                                 children={(field) => (
                                     <div className="space-y-2">
-                                        <Label htmlFor="email" className="text-slate-700 font-medium">Email Address</Label>
+                                        <Label htmlFor="email" className="text-slate-700 font-bold text-xs uppercase tracking-wider">Email Address</Label>
                                         <Input
                                             id="email"
                                             type="email"
                                             placeholder="name@company.com"
                                             value={field.state.value}
-                                            onChange={(e) =>
-                                                field.handleChange(e.target.value)
-                                            }
-                                            className="h-11 focus-visible:ring-primary-blue"
+                                            onChange={(e) => field.handleChange(e.target.value)}
+                                            className="h-12 bg-white/70"
                                         />
                                         {field.state.meta.errors && (
-                                            <ErrorText>
-                                                {field.state.meta.errors.join(', ')}
-                                            </ErrorText>
+                                            <ErrorText>{field.state.meta.errors.join(', ')}</ErrorText>
                                         )}
                                     </div>
                                 )}
@@ -105,39 +130,34 @@ const LoginComponent = () => {
 
                             <form.Field
                                 name="password"
-                                validators={{
-                                    onChange: LoginSchema.entries.password,
-                                }}
+                                validators={{ onChange: LoginSchema.entries.password }}
                                 children={(field) => (
                                     <div className="space-y-2">
-                                        <Label htmlFor="password" className="text-slate-700 font-medium">Password</Label>
+                                        <div className="flex items-center justify-between">
+                                            <Label htmlFor="password" className="text-slate-700 font-bold text-xs uppercase tracking-wider">Password</Label>
+                                            <a href="/forgot-password" className="text-sm font-semibold text-[#2457a3] hover:text-[#1a407a] transition-colors">
+                                                Forgot password?
+                                            </a>
+                                        </div>
                                         <div className="relative">
                                             <Input
                                                 id="password"
                                                 type={showPassword ? 'text' : 'password'}
                                                 placeholder="••••••••"
                                                 value={field.state.value}
-                                                onChange={(e) =>
-                                                    field.handleChange(e.target.value)
-                                                }
-                                                className="h-11 focus-visible:ring-primary-blue pr-10"
+                                                onChange={(e) => field.handleChange(e.target.value)}
+                                                className="h-12 pr-10 bg-white/70"
                                             />
                                             <button
                                                 type="button"
-                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none"
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none transition-colors"
                                                 onClick={() => setShowPassword(!showPassword)}
                                             >
-                                                {showPassword ? (
-                                                    <EyeOff className="h-4 w-4" />
-                                                ) : (
-                                                    <Eye className="h-4 w-4" />
-                                                )}
+                                                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                                             </button>
                                         </div>
                                         {field.state.meta.errors && (
-                                            <ErrorText>
-                                                {field.state.meta.errors}
-                                            </ErrorText>
+                                            <ErrorText>{field.state.meta.errors}</ErrorText>
                                         )}
                                     </div>
                                 )}
@@ -145,29 +165,20 @@ const LoginComponent = () => {
 
                             <Button
                                 type="submit"
-                                className="w-full h-12 bg-gradient-to-r from-[#2457a3] to-[#4A7BCD] hover:opacity-90 text-white font-medium text-base rounded-xl transition-all shadow-md mt-6"
+                                className="w-full h-12 bg-[#2457a3] hover:bg-[#1a407a] text-white font-semibold text-base rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 active:scale-95 mt-8"
                                 disabled={form.state.isSubmitting}
                             >
-                                {form.state.isSubmitting ? 'Logging in...' : 'Sign In'}
+                                {form.state.isSubmitting ? 'Authenticating...' : 'Sign In'}
                             </Button>
 
                             {error && (
-                                <div className="p-3 mt-4 bg-red-50 border border-red-200 rounded-md">
+                                <div className="p-3 mt-4 bg-red-50/80 backdrop-blur-md border border-red-200 rounded-lg shadow-sm">
                                     <ErrorText className="text-center w-full block m-0">{error}</ErrorText>
                                 </div>
                             )}
-
-                            <div className="text-center mt-4">
-                                <a
-                                    href="/forgot-password"
-                                    className="text-sm text-[#2457a3] hover:text-[#1a407a] hover:underline transition-colors font-medium"
-                                >
-                                    Forgot Password?
-                                </a>
-                            </div>
                         </form>
-                    </CardContent>
-                </Card>
+                    </div>
+                </div>
             </div>
         </div>
     )

@@ -12,18 +12,20 @@ const PrivateRoute = () => {
   }
 
   return (
-    <SidebarProvider defaultOpen>
-      <div className="flex min-h-svh w-full bg-transparent">
-        <SideBar />
-        <SidebarInset className="min-w-0 bg-transparent">
-          <Header />
-          <main className="flex-1 overflow-y-auto p-4 sm:p-6">
-            <BreadcrumbComponent />
-            <Outlet />
-          </main>
-        </SidebarInset>
-      </div>
-    </SidebarProvider>
+    <>
+      <SidebarProvider defaultOpen>
+        <div className="flex min-h-svh w-full bg-slate-50/50">
+          <SideBar />
+          <SidebarInset className="min-w-0 bg-transparent flex flex-col pt-4">
+            <Header />
+            <main className="flex-1 overflow-y-auto p-4 sm:p-6">
+              <BreadcrumbComponent />
+              <Outlet />
+            </main>
+          </SidebarInset>
+        </div>
+      </SidebarProvider>
+    </>
   )
 }
 

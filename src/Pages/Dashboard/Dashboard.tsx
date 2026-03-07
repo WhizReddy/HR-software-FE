@@ -28,12 +28,7 @@ const DashboardContent: React.FC = () => {
     })
 
     return (
-        <div className="relative min-h-screen bg-slate-50/50">
-            {/* Background ambient blurs */}
-            <div className="absolute top-0 -left-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-            <div className="absolute top-0 -right-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-            <div className="absolute -bottom-32 left-32 w-72 h-72 bg-emerald-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
-
+        <div className="relative overflow-x-hidden">
             <div className="relative mx-auto max-w-[1400px] space-y-8 p-4 sm:p-6 lg:p-8 z-10">
                 {/* Greeting */}
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">

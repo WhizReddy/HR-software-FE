@@ -89,107 +89,149 @@ const ResetPass: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
-            <Card className="w-full max-w-md shadow-lg border-0">
-                <CardHeader className="space-y-1 items-center justify-center pb-8 pt-8">
-                    <div className="bg-primary-blue text-white w-20 h-20 rounded-2xl flex items-center justify-center mb-4 shadow-md rotate-3 transition-transform hover:rotate-0">
-                        <h2 className="text-3xl font-extrabold tracking-wider">CRM</h2>
-                    </div>
-                    <CardTitle className="text-2xl font-bold">
-                        {step === 'email' ? 'Forgot Password' : 'Reset Password'}
-                    </CardTitle>
-                    <CardDescription className="text-slate-500">
-                        {step === 'email'
-                            ? 'Enter your email to receive a reset link'
-                            : 'Enter your new password'}
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    {step === 'email' ? (
-                        <form className="space-y-6" onSubmit={handleForgotPasswordSubmit}>
-                            <div className="space-y-2">
-                                <Label htmlFor="email" className="text-slate-700 font-medium">
-                                    Email Address
-                                </Label>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    placeholder="name@company.com"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    className="h-11 focus-visible:ring-primary-blue"
-                                />
-                            </div>
+        <div className="min-h-screen w-full flex bg-slate-50 relative overflow-hidden">
+            {/* Global Ambient Background */}
+            <div className="absolute top-[-20%] left-[-10%] w-[50rem] h-[50rem] bg-indigo-200/50 rounded-full mix-blend-multiply filter blur-[100px] opacity-70 animate-blob pointer-events-none"></div>
+            <div className="absolute top-[-10%] right-[-10%] w-[40rem] h-[40rem] bg-blue-200/50 rounded-full mix-blend-multiply filter blur-[100px] opacity-70 animate-blob animation-delay-2000 pointer-events-none"></div>
 
-                            <Button
-                                type="submit"
-                                className="w-full h-11 bg-primary-blue hover:bg-primary-blue-dark text-white font-medium text-base rounded-md transition-colors"
-                                disabled={isLoading}
-                            >
-                                {isLoading ? 'Sending...' : 'Send Reset Link'}
-                            </Button>
-                        </form>
-                    ) : (
-                        <form className="space-y-6" onSubmit={handleResetPasswordSubmit}>
-                            <div className="space-y-2">
-                                <Label htmlFor="newPassword" className="text-slate-700 font-medium">
-                                    New Password
-                                </Label>
-                                <Input
-                                    id="newPassword"
-                                    type="password"
-                                    placeholder="••••••••"
-                                    value={newPassword}
-                                    onChange={(e) => setNewPassword(e.target.value)}
-                                    className="h-11 focus-visible:ring-primary-blue"
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="confirmPassword" className="text-slate-700 font-medium">
-                                    Confirm Password
-                                </Label>
-                                <Input
-                                    id="confirmPassword"
-                                    type="password"
-                                    placeholder="••••••••"
-                                    value={confirmPassword}
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                    className="h-11 focus-visible:ring-primary-blue"
-                                />
-                            </div>
+            {/* Main Split Layout */}
+            <div className="flex w-full min-h-screen z-10">
 
-                            <Button
-                                type="submit"
-                                className="w-full h-11 bg-primary-blue hover:bg-primary-blue-dark text-white font-medium text-base rounded-md transition-colors"
-                                disabled={isLoading}
-                            >
-                                {isLoading ? 'Resetting...' : 'Reset Password'}
-                            </Button>
-                        </form>
-                    )}
+                {/* Left Marketing Panel - Deep Navy Theme */}
+                <div className="hidden lg:flex flex-col justify-between w-1/2 bg-[#2457a3] p-12 relative overflow-hidden">
+                    {/* Inner Accent Decor */}
+                    <div className="absolute -top-20 -left-20 w-96 h-96 bg-white/10 rounded-full blur-3xl isolate"></div>
+                    <div className="absolute bottom-10 right-10 w-64 h-64 bg-emerald-400/20 rounded-full blur-3xl isolate"></div>
 
-                    {error && (
-                        <div className="p-3 mt-4 bg-red-50 border border-red-200 rounded-md">
-                            <p className="text-sm text-red-600 text-center">{error}</p>
+                    <div className="relative z-10">
+                        <div className="bg-white/10 backdrop-blur-md w-16 h-16 rounded-2xl flex items-center justify-center mb-12 border border-white/20 shadow-2xl">
+                            <h2 className="text-2xl font-extrabold text-white tracking-widest">HR</h2>
                         </div>
-                    )}
-
-                    {success && (
-                        <div className="p-3 mt-4 bg-green-50 border border-green-200 rounded-md">
-                            <p className="text-sm text-green-600 text-center">{success}</p>
-                        </div>
-                    )}
-
-                    <div className="mt-6 text-center">
-                        <Link
-                            to="/"
-                            className="text-sm text-primary-blue hover:underline font-medium"
-                        >
-                            Back to Login
-                        </Link>
+                        <h1 className="text-5xl font-extrabold text-white leading-tight mb-6">
+                            Secure your account <br />
+                            <span className="text-blue-200">safely.</span>
+                        </h1>
+                        <p className="text-blue-100/80 text-lg max-w-md font-light">
+                            Reset your password quickly and securely to regain access to your HR Management toolkit.
+                        </p>
                     </div>
-                </CardContent>
-            </Card>
+
+                    <div className="relative z-10">
+                        <div className="flex items-center gap-4 bg-white/10 backdrop-blur-md border border-white/10 p-4 rounded-2xl w-max shadow-xl">
+                            <div className="flex -space-x-4">
+                                <img className="w-10 h-10 rounded-full border-2 border-[#2457a3]" src="https://i.pravatar.cc/100?img=1" alt="User" />
+                                <img className="w-10 h-10 rounded-full border-2 border-[#2457a3]" src="https://i.pravatar.cc/100?img=2" alt="User" />
+                                <img className="w-10 h-10 rounded-full border-2 border-[#2457a3]" src="https://i.pravatar.cc/100?img=3" alt="User" />
+                            </div>
+                            <div className="text-sm text-white font-medium">
+                                Trusted by <span className="font-bold text-emerald-400">10,000+</span> professionals
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Right Reset Panel */}
+                <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 relative">
+                    <div className="w-full max-w-md space-y-8 glass-modal p-8 sm:p-10 border border-white/60">
+                        <div className="text-center">
+                            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 mb-2">
+                                {step === 'email' ? 'Forgot Password' : 'Reset Password'}
+                            </h2>
+                            <p className="text-slate-500 font-medium">
+                                {step === 'email'
+                                    ? 'Enter your email to receive a reset link'
+                                    : 'Enter your new password'}
+                            </p>
+                        </div>
+
+                        <div className="mt-8">
+                            {step === 'email' ? (
+                                <form className="space-y-6" onSubmit={handleForgotPasswordSubmit}>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="email" className="text-slate-700 font-bold text-xs uppercase tracking-wider">
+                                            Email Address
+                                        </Label>
+                                        <Input
+                                            id="email"
+                                            type="email"
+                                            placeholder="name@company.com"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            className="h-12 bg-white/70"
+                                        />
+                                    </div>
+
+                                    <Button
+                                        type="submit"
+                                        className="w-full h-12 bg-[#2457a3] hover:bg-[#1a407a] text-white font-semibold text-base rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 active:scale-95 mt-6"
+                                        disabled={isLoading}
+                                    >
+                                        {isLoading ? 'Sending...' : 'Send Reset Link'}
+                                    </Button>
+                                </form>
+                            ) : (
+                                <form className="space-y-6" onSubmit={handleResetPasswordSubmit}>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="newPassword" className="text-slate-700 font-bold text-xs uppercase tracking-wider">
+                                            New Password
+                                        </Label>
+                                        <Input
+                                            id="newPassword"
+                                            type="password"
+                                            placeholder="••••••••"
+                                            value={newPassword}
+                                            onChange={(e) => setNewPassword(e.target.value)}
+                                            className="h-12 bg-white/70"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="confirmPassword" className="text-slate-700 font-bold text-xs uppercase tracking-wider">
+                                            Confirm Password
+                                        </Label>
+                                        <Input
+                                            id="confirmPassword"
+                                            type="password"
+                                            placeholder="••••••••"
+                                            value={confirmPassword}
+                                            onChange={(e) => setConfirmPassword(e.target.value)}
+                                            className="h-12 bg-white/70"
+                                        />
+                                    </div>
+
+                                    <Button
+                                        type="submit"
+                                        className="w-full h-12 bg-[#2457a3] hover:bg-[#1a407a] text-white font-semibold text-base rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 active:scale-95 mt-6"
+                                        disabled={isLoading}
+                                    >
+                                        {isLoading ? 'Resetting...' : 'Reset Password'}
+                                    </Button>
+                                </form>
+                            )}
+                        </div>
+
+                        {error && (
+                            <div className="p-3 mt-4 bg-red-50/80 backdrop-blur-md border border-red-200 rounded-lg shadow-sm">
+                                <p className="text-sm font-medium text-red-600 text-center">{error}</p>
+                            </div>
+                        )}
+
+                        {success && (
+                            <div className="p-3 mt-4 bg-green-50/80 backdrop-blur-md border border-green-200 rounded-lg shadow-sm">
+                                <p className="text-sm font-medium text-green-600 text-center">{success}</p>
+                            </div>
+                        )}
+
+                        <div className="mt-8 text-center">
+                            <Link
+                                to="/"
+                                className="text-sm text-[#2457a3] hover:text-[#1a407a] transition-colors font-medium hover:underline"
+                            >
+                                Back to Login
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }

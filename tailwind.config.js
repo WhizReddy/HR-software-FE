@@ -6,6 +6,25 @@ export default {
   ],
   theme: {
     extend: {
+      colors: {
+        navy: {
+          50: '#f2f6fa',
+          100: '#e1edf4',
+          200: '#cbe0eb',
+          300: '#a5ccdd',
+          400: '#75aecc',
+          500: '#5393b9',
+          600: '#417aa1',
+          700: '#356285',
+          800: '#2e526d',
+          900: '#2457a3', /* Deep Navy */
+        },
+        primary: {
+          DEFAULT: '#2457a3',
+          light: '#4A7BCD',
+          dark: '#153B75',
+        }
+      },
       animation: {
         blob: "blob 7s infinite",
         "fade-in-up": "fadeInUp 0.8s ease-out forwards",

@@ -52,12 +52,12 @@ function DataTable<TRow>({
     const normalizedTotalPages = totalPages || 1
 
     return (
-        <Card className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
+        <Card className="glass-card overflow-hidden border-none p-0">
             {/* Optional header row */}
             {(title || actions || onSearchChange || filterNode) && (
                 <div className="flex flex-col sm:flex-row items-center justify-between px-5 py-4 border-b border-slate-100 gap-4">
                     <div className="flex items-center w-full sm:w-auto gap-4 flex-1">
-                        {title && <h2 className="font-semibold text-slate-800 text-base whitespace-nowrap">{title}</h2>}
+                        {title && <h2 className="font-bold text-slate-800 text-lg tracking-tight whitespace-nowrap">{title}</h2>}
                         {onSearchChange && (
                             <div className="w-full sm:max-w-xs">
                                 <Input
@@ -87,7 +87,7 @@ function DataTable<TRow>({
             <div className="w-full overflow-x-auto px-2">
                 <Table className="w-full text-left text-sm">
                     <TableHeader>
-                        <TableRow className="border-slate-100 bg-slate-50 hover:bg-slate-50">
+                        <TableRow className="border-b border-slate-200/60 bg-slate-50/50 backdrop-blur-sm hover:bg-slate-50/50">
                             {columns.map((col) => (
                                 <TableHead
                                     key={col.field}
@@ -119,10 +119,10 @@ function DataTable<TRow>({
                                     onClick={() =>
                                         handleRowClick && handleRowClick({ row })
                                     }
-                                    className={`border-b border-slate-50 transition-colors last:border-0 ${idx % 2 === 0 ? '' : 'bg-slate-50/50'
+                                    className={`border-b border-slate-100/50 transition-all duration-300 last:border-0 ${idx % 2 === 0 ? 'bg-white/40' : 'bg-slate-50/40'
                                         } ${handleRowClick
-                                            ? 'hover:bg-blue-50 cursor-pointer'
-                                            : 'hover:bg-slate-50'
+                                            ? 'hover:bg-blue-50/80 hover:shadow-sm cursor-pointer hover:-translate-y-[1px]'
+                                            : 'hover:bg-slate-50/80'
                                         }`}
                                 >
                                     {columns.map((col) => (
@@ -147,7 +147,7 @@ function DataTable<TRow>({
             </div>
 
             {/* Pagination */}
-            <div className="flex items-center justify-between px-5 py-3.5 bg-slate-50 border-t border-slate-100">
+            <div className="flex items-center justify-between px-5 py-4 bg-white/40 backdrop-blur-md border-t border-slate-100/50 rounded-b-3xl">
                 <p className="text-xs text-slate-500">
                     Page{' '}
                     <span className="font-semibold text-slate-700">{page + 1}</span>
