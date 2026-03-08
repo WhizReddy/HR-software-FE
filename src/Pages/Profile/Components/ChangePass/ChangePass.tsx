@@ -39,11 +39,15 @@ function ChangePassContent() {
                             </li>
                             <li className="flex items-center gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                Contains at least one number
+                                At least one uppercase & lowercase letter
                             </li>
                             <li className="flex items-center gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                Contains special characters
+                                At least one number (0-9)
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                At least one special character (!@#$%)
                             </li>
                         </ul>
                     </div>
@@ -51,13 +55,27 @@ function ChangePassContent() {
                     {/* Right side form */}
                     <div className="space-y-5">
                         {success && (
-                            <div className="p-3 bg-green-50/80 backdrop-blur-md border border-green-200 rounded-lg shadow-sm">
-                                <p className="text-sm font-medium text-green-600 text-center">{success}</p>
+                            <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl shadow-sm animate-in fade-in slide-in-from-top-2 duration-300">
+                                <div className="flex items-center gap-3">
+                                    <div className="bg-emerald-500 rounded-full p-1">
+                                        <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                    <p className="text-sm font-semibold text-emerald-700">{success}</p>
+                                </div>
                             </div>
                         )}
                         {error && (
-                            <div className="p-3 bg-red-50/80 backdrop-blur-md border border-red-200 rounded-lg shadow-sm">
-                                <p className="text-sm font-medium text-red-600 text-center">{error}</p>
+                            <div className="p-4 bg-red-50 border border-red-200 rounded-xl shadow-sm animate-in fade-in slide-in-from-top-2 duration-300">
+                                <div className="flex items-center gap-3">
+                                    <div className="bg-red-500 rounded-full p-1">
+                                        <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </div>
+                                    <p className="text-sm font-semibold text-red-700">{error}</p>
+                                </div>
                             </div>
                         )}
 
