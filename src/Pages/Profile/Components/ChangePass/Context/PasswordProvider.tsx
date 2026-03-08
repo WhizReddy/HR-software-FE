@@ -38,6 +38,13 @@ export const PasswordProvider: React.FC<{ children: React.ReactNode }> = ({
             setError('New password must be at least 8 characters long')
             return false
         }
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/
+        if (!passwordRegex.test(newPassword)) {
+            setError(
+                'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
+            )
+            return false
+        }
         setError('')
         return true
     }
