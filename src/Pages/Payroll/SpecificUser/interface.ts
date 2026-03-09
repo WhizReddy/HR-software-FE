@@ -33,6 +33,7 @@ export interface PayrollRowSpecifc {
     grossSalary: number
     month: number | string
     year: number
+    tax: number
     userId: {
         _id: string
         firstName: string

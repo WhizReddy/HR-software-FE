@@ -46,11 +46,13 @@ const DashboardContent: React.FC = () => {
                 <div className="grid grid-cols-1 gap-6 xl:grid-cols-12 auto-rows-min">
 
                     {/* Stat cards - Spanning top section */}
-                    <div className="xl:col-span-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                        <CardInfo title="Present" content={employeeData.present.toString()} icon="Present" />
-                        <CardInfo title="Absent" content={employeeData.absent.toString()} icon="Absent" />
-                        <CardInfo title="On Leave" content={employeeData.onLeave.toString()} icon="On Leave" />
-                        <CardInfo title="Remote" content={employeeData.remote.toString()} icon="Remote" />
+                    <div className="xl:col-span-12 w-full">
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 w-full">
+                            <CardInfo title="Present" content={employeeData.present.toString()} icon="Present" />
+                            <CardInfo title="Absent" content={employeeData.absent.toString()} icon="Absent" />
+                            <CardInfo title="On Leave" content={employeeData.onLeave.toString()} icon="On Leave" />
+                            <CardInfo title="Remote" content={employeeData.remote.toString()} icon="Remote" />
+                        </div>
                     </div>
 
                     {/* Left Column: Calendar (Bento tile) */}
@@ -62,12 +64,12 @@ const DashboardContent: React.FC = () => {
                     </div>
 
                     {/* Middle Column: Info Section (Events) */}
-                    <div className="rounded-3xl border border-white/60 bg-white/70 backdrop-blur-xl p-6 shadow-xl shadow-slate-200/40 xl:col-span-4 h-full flex flex-col">
+                    <div className="rounded-3xl border border-white/60 bg-white/70 backdrop-blur-xl p-6 shadow-xl shadow-slate-200/40 xl:col-span-4 min-h-[500px] flex flex-col">
                         <InfoSection />
                     </div>
 
                     {/* Right Column: Pie Chart */}
-                    <div className="rounded-3xl border border-white/60 bg-white/70 backdrop-blur-xl p-6 shadow-xl shadow-slate-200/40 xl:col-span-4 h-full flex flex-col">
+                    <div className="rounded-3xl border border-white/60 bg-white/70 backdrop-blur-xl p-6 shadow-xl shadow-slate-200/40 xl:col-span-4 min-h-[500px] flex flex-col">
                         <h3 className="text-base font-bold text-slate-800 mb-4 tracking-tight">Status Overview</h3>
                         <div className="flex-1 flex items-center justify-center">
                             <PieChartComponent />

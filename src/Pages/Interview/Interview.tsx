@@ -1,9 +1,6 @@
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { Check, Trash2, CalendarRange } from 'lucide-react'
-import { ButtonTypes } from '@/Components/Button/ButtonTypes'
 import { InterviewProvider, useInterviewContext } from './Hook/InterviewContext'
 import style from './styles/Interview.module.css'
-import Button from '@/Components/Button/Button'
 import RescheduleModal from './Component/ScheduleForm'
 import Input from '@/Components/Input/Index'
 
@@ -18,11 +15,10 @@ function InterviewKanbanContent() {
         handleCloseModal,
         handleSchedule,
         handleCancel,
-        onDragEnd,
         handleNavigateToProfile,
         formatDate,
-        phases,
         handleAccept,
+        phases,
         handleTabChange,
         currentTab,
         searchQuery,
@@ -53,7 +49,7 @@ function InterviewKanbanContent() {
                 </div>
 
                 <div className="flex border-b border-slate-200/60 mb-8 gap-8 overflow-x-auto pb-2 custom-scrollbar px-2">
-                    {phases.map((phase) => (
+                    {(phases as string[]).map((phase) => (
                         <button
                             key={phase}
                             className={`pb-4 font-semibold text-sm transition-all border-b-2 whitespace-nowrap px-4 py-2 rounded-t-lg ${currentTab === phase
@@ -62,136 +58,126 @@ function InterviewKanbanContent() {
                                 }`}
                             onClick={() => handleTabChange({} as React.SyntheticEvent, phase)}
                         >
-                            {phase.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
+                            {(phase as string).replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
                         </button>
                     ))}
                 </div>
 
-                <DragDropContext onDragEnd={onDragEnd}>
-                    <div className={style.kanbanColumns}>
-                        <div key={currentTab} className={style.kanbanColumn}>
-                            <h2>
-                                {currentTab.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
-                                <span className="text-slate-600 ml-2">
-                                    ({filteredInterviews.length})
-                                </span>
-                            </h2>
-                            <Droppable droppableId={currentTab}>
-                                {(provided) => (
-                                    <div
-                                        {...provided.droppableProps}
-                                        ref={provided.innerRef}
-                                        className={style.kanbanList}
-                                    >
-                                        {filteredInterviews.length === 0 ? (
-                                            <p>Sorry, there is nothing to show here.</p>
-                                        ) : (
-                                            filteredInterviews.map((interview, index) => (
-                                                <Draggable
-                                                    key={interview._id.toString()}
-                                                    draggableId={interview._id.toString()}
-                                                    index={index}
-                                                >
-                                                    {(provided) => (
-                                                        <div
-                                                            ref={provided.innerRef}
-                                                            {...provided.draggableProps}
-                                                            {...provided.dragHandleProps}
-                                                            className={style.kanbanItem}
-                                                        >
-                                                            <h3
-                                                                onClick={() =>
-                                                                    handleNavigateToProfile(interview._id.toString())
-                                                                }
-                                                                className={style.candidateName}
-                                                            >
-                                                                {`${interview.firstName} ${interview.lastName}`} {interview.positionApplied}
-                                                            </h3>
-                                                            {currentTab !== 'employed' && currentTab !== 'applicant' && (
-                                                                <>
-                                                                    <p>
-                                                                        <b>Interview Date:</b>{' '}
-                                                                        {interview.currentPhase === 'second_interview'
-                                                                            ? formatDate(interview.secondInterviewDate)
-                                                                            : formatDate(interview.firstInterviewDate)}
-                                                                    </p>
-                                                                    <p><b>Email:</b> {interview.email}</p>
-                                                                    <p><b>Phone:</b> {interview.phoneNumber}</p>
-                                                                    <p><b>Notes:</b> {interview.notes}</p>
-                                                                </>
-                                                            )}
-                                                            {currentTab !== 'employed' && currentTab !== 'applicant' && (
-                                                                <div className={style.buttonContainer}>
-                                                                    <span title="Schedule Next Interview">
-                                                                        <Button
-                                                                            type={ButtonTypes.SECONDARY}
-                                                                            btnText=""
-                                                                            width="40px"
-                                                                            height="30px"
-                                                                            display="flex"
-                                                                            justifyContent="center"
-                                                                            alignItems="center"
-                                                                            color="#2457A3"
-                                                                            borderColor="#2457A3"
-                                                                            icon={<CalendarRange size={18} />}
-                                                                            onClick={() =>
-                                                                                handleOpenModal(interview, false)
-                                                                            }
-                                                                            disabled={processingIds.has(interview._id.toString())}
-                                                                        />
-                                                                    </span>
-                                                                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-                                                                        <span title="Reject">
-                                                                            {currentTab !== 'rejected' && (
-                                                                                <Button
-                                                                                    btnText=" "
-                                                                                    type={ButtonTypes.SECONDARY}
-                                                                                    width="35px"
-                                                                                    height="30px"
-                                                                                    color="#C70039"
-                                                                                    borderColor="#C70039"
-                                                                                    display="flex"
-                                                                                    justifyContent="center"
-                                                                                    alignItems="center"
-                                                                                    icon={<Trash2 size={18} />}
-                                                                                    onClick={() => handleCancel(interview)}
-                                                                                    disabled={processingIds.has(interview._id.toString())}
-                                                                                />
-                                                                            )}
-                                                                        </span>
-                                                                        {currentTab !== 'applicant' && (
-                                                                            <span title="Accept">
-                                                                                <Button
-                                                                                    btnText=""
-                                                                                    type={ButtonTypes.SECONDARY}
-                                                                                    width="35px"
-                                                                                    height="30px"
-                                                                                    color="rgb(2, 167, 0)"
-                                                                                    borderColor="rgb(2, 167, 0)"
-                                                                                    display="flex"
-                                                                                    justifyContent="center"
-                                                                                    alignItems="center"
-                                                                                    icon={<Check size={18} />}
-                                                                                    onClick={() => handleAccept(interview)}
-                                                                                    disabled={processingIds.has(interview._id.toString())}
-                                                                                />
-                                                                            </span>
-                                                                        )}
-                                                                    </div>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    )}
-                                                </Draggable>
-                                            ))
-                                        )}
-                                        {provided.placeholder}
-                                    </div>
+                <div className="overflow-x-auto px-4 pb-8">
+                    <table className="w-full border-separate border-spacing-y-3">
+                        <thead>
+                            <tr className="text-slate-500 text-sm font-semibold text-left">
+                                <th className="px-6 py-3">Candidate</th>
+                                <th className="px-6 py-3">Position</th>
+                                {currentTab !== 'employed' && currentTab !== 'applicant' && (
+                                    <th className="px-6 py-3">Interview Date</th>
                                 )}
-                            </Droppable>
-                        </div>
-                    </div>
-                </DragDropContext>
+                                <th className="px-6 py-3">Contact Info</th>
+                                <th className="px-6 py-3 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredInterviews.length === 0 ? (
+                                <tr>
+                                    <td colSpan={5} className="text-center py-20 text-slate-400 bg-white/30 rounded-2xl border border-dashed border-slate-200">
+                                        No candidates found in this phase.
+                                    </td>
+                                </tr>
+                            ) : (
+                                filteredInterviews.map((interview) => (
+                                    <tr key={interview._id.toString()} className="group hover:translate-y-[-2px] transition-all duration-300">
+                                        {/* Candidate Name */}
+                                        <td className="bg-white/70 backdrop-blur-md px-6 py-4 rounded-l-2xl border-y border-l border-white/60 shadow-sm group-hover:bg-white/90 group-hover:shadow-md">
+                                            <div className="flex flex-col">
+                                                <span
+                                                    onClick={() => handleNavigateToProfile(interview._id.toString())}
+                                                    className="font-bold text-slate-800 cursor-pointer hover:text-[#2457a3] transition-colors text-base"
+                                                >
+                                                    {`${interview.firstName} ${interview.lastName}`}
+                                                </span>
+                                                {interview.notes && (
+                                                    <span className="text-xs text-slate-400 italic mt-1 line-clamp-1 truncate max-w-[200px]" title={interview.notes}>
+                                                        {interview.notes}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </td>
+
+                                        {/* Position */}
+                                        <td className="bg-white/70 backdrop-blur-md px-6 py-4 border-y border-white/60 shadow-sm group-hover:bg-white/90 group-hover:shadow-md">
+                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100 uppercase tracking-wider">
+                                                {interview.positionApplied}
+                                            </span>
+                                        </td>
+
+                                        {/* Interview Date */}
+                                        {currentTab !== 'employed' && currentTab !== 'applicant' && (
+                                            <td className="bg-white/70 backdrop-blur-md px-6 py-4 border-y border-white/60 shadow-sm group-hover:bg-white/90 group-hover:shadow-md">
+                                                <div className="flex items-center gap-2 text-slate-600 font-medium text-sm">
+                                                    <CalendarRange size={14} className="text-[#2457a3]" />
+                                                    {interview.currentPhase === 'second_interview'
+                                                        ? formatDate(interview.secondInterviewDate)
+                                                        : formatDate(interview.firstInterviewDate)}
+                                                </div>
+                                            </td>
+                                        )}
+
+                                        {/* Contact Info */}
+                                        <td className="bg-white/70 backdrop-blur-md px-6 py-4 border-y border-white/60 shadow-sm group-hover:bg-white/90 group-hover:shadow-md">
+                                            <div className="flex flex-col gap-0.5 text-xs">
+                                                <span className="text-slate-500 flex items-center gap-1.5">
+                                                    <span className="w-1 h-1 rounded-full bg-slate-300" />
+                                                    {interview.email}
+                                                </span>
+                                                <span className="text-slate-400 font-medium">
+                                                    {interview.phoneNumber}
+                                                </span>
+                                            </div>
+                                        </td>
+
+                                        {/* Actions */}
+                                        <td className="bg-white/70 backdrop-blur-md px-6 py-4 rounded-r-2xl border-y border-r border-white/60 shadow-sm group-hover:bg-white/90 group-hover:shadow-md">
+                                            <div className="flex justify-end items-center gap-2">
+                                                {currentTab !== 'employed' && currentTab !== 'applicant' && (
+                                                    <button
+                                                        onClick={() => handleOpenModal(interview, false)}
+                                                        disabled={processingIds.has(interview._id.toString())}
+                                                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-xl transition-colors disabled:opacity-50"
+                                                        title="Schedule Next Interview"
+                                                    >
+                                                        <CalendarRange size={18} />
+                                                    </button>
+                                                )}
+
+                                                {currentTab !== 'employed' && currentTab !== 'rejected' && (
+                                                    <button
+                                                        onClick={() => handleCancel(interview)}
+                                                        disabled={processingIds.has(interview._id.toString())}
+                                                        className="p-2 text-red-500 hover:bg-red-50 rounded-xl transition-colors disabled:opacity-50"
+                                                        title="Reject"
+                                                    >
+                                                        <Trash2 size={18} />
+                                                    </button>
+                                                )}
+
+                                                {currentTab !== 'employed' && currentTab !== 'applicant' && (
+                                                    <button
+                                                        onClick={() => handleAccept(interview)}
+                                                        disabled={processingIds.has(interview._id.toString())}
+                                                        className="p-2 text-green-600 hover:bg-green-50 rounded-xl transition-colors disabled:opacity-50"
+                                                        title="Accept"
+                                                    >
+                                                        <Check size={18} />
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
 
                 {isModalOpen && selectedInterview && (
                     <RescheduleModal
