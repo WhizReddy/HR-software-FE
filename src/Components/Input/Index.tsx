@@ -68,7 +68,7 @@ const Input: React.FC<InputProps> = ({
         'bg-white/80 backdrop-blur-md border-slate-200 text-slate-800 placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-0 shadow-sm hover:bg-white hover:shadow-md transition-all duration-300',
         icon && iconPosition === 'start' ? 'pl-10' : '',
         icon && iconPosition === 'end' ? 'pr-10' : '',
-        resolvedType === 'datetime-local' ? 'block w-full appearance-none min-h-[40px] [&::-webkit-calendar-picker-indicator]:opacity-100 [&::-webkit-calendar-picker-indicator]:cursor-pointer' : ''
+        resolvedType === 'datetime-local' ? 'block w-full min-h-[40px] [&::-webkit-calendar-picker-indicator]:opacity-100 [&::-webkit-calendar-picker-indicator]:cursor-pointer' : ''
     )
 
     return (
@@ -113,6 +113,24 @@ const Input: React.FC<InputProps> = ({
                         type={isCheckBox ? 'checkbox' : resolvedType}
                         value={value ?? initialValue ?? ''}
                         onChange={onChange}
+                        onFocus={(e) => {
+                            if (resolvedType === 'datetime-local' && 'showPicker' in e.target) {
+                                try {
+                                    (e.target as any).showPicker();
+                                } catch (err) {
+                                    console.error('Error showing picker:', err);
+                                }
+                            }
+                        }}
+                        onClick={(e) => {
+                            if (resolvedType === 'datetime-local' && 'showPicker' in e.target) {
+                                try {
+                                    (e.target as any).showPicker();
+                                } catch (err) {
+                                    console.error('Error showing picker:', err);
+                                }
+                            }
+                        }}
                         placeholder={computedPlaceholder}
                         required={required}
                         disabled={disabled}
