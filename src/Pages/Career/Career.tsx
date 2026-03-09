@@ -105,9 +105,13 @@ export const Careers = () => {
 
                 <div className={style.jobList}>
                     {isLoading ? (
-                        <p>Loading events...</p>
+                        <div className="col-span-full flex justify-center py-12">
+                            <p className="text-slate-400 animate-pulse">Loading amazing opportunities...</p>
+                        </div>
                     ) : filteredEvents.length === 0 ? (
-                        <p>We did not find what you are looking for.</p>
+                        <div className="col-span-full text-center py-12 glass-card">
+                            <p className="text-slate-500 font-medium">We did not find what you are looking for.</p>
+                        </div>
                     ) : (
                         filteredEvents.map((event) => (
                             <div key={event._id} className={style.jobCard}>
@@ -116,24 +120,21 @@ export const Careers = () => {
                                     <p className={style.description}>
                                         {event.description}
                                     </p>
-                                    <p className={style.location}>
+                                    <div className={style.location}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></svg>
                                         {event.location}
-                                    </p>
+                                    </div>
                                     <div className={style.actions}>
-                                        <Link to={'/recruitment'}>Apply</Link>
+                                        <Link to={'/recruitment'}>Apply Now</Link>
                                     </div>
                                 </div>
                                 {isAdmin ? (
                                     <div className={style.dropdownContainer}>
-                                        <button className="flex items-center justify-center p-1 rounded hover:bg-slate-100 transition-colors">
-                                            <MoreHorizontal
-                                                onClick={() =>
-                                                    toggleDropdown(
-                                                        event._id.toString(),
-                                                    )
-                                                }
-                                                className={style.moreIcon}
-                                            />
+                                        <button
+                                            onClick={() => toggleDropdown(event._id.toString())}
+                                            className="flex items-center justify-center p-2 rounded-full hover:bg-slate-100 transition-colors bg-white/50 border border-slate-200/50 shadow-sm"
+                                        >
+                                            <MoreHorizontal className={style.moreIcon} size={18} />
                                         </button>
                                         {openDropdown === event._id && (
                                             <div className={style.dropdownMenu}>
@@ -142,16 +143,17 @@ export const Careers = () => {
                                                         handleEditClick(event)
                                                     }
                                                 >
-                                                    Edit
+                                                    Edit Position
                                                 </button>
                                                 <button
+                                                    className="text-red-600 hover:bg-red-50"
                                                     onClick={() =>
                                                         handleDeleteEventModal(
                                                             event._id,
                                                         )
                                                     }
                                                 >
-                                                    Delete
+                                                    Remove
                                                 </button>
                                             </div>
                                         )}

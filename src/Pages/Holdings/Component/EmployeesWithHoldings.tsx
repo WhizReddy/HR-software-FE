@@ -54,65 +54,128 @@ export const EmployeesWithHoldings = () => {
     )
 
     return (
-        <div className="flex flex-col gap-4 mt-6">
-            {data?.pages.map((page) =>
-                page.data.map((user: UserWithHoldings) => (
-                    <SimpleCollapsableCard
-                        key={user._id}
-                        user={user}
-                        searchParams={searchParams}
-                        setSearchParams={setSearchParams}
-                        items={
-                            user.assets
-                                ? { type: 'Holding', itemArr: user.assets }
-                                : undefined
-                        }
-                    >
-                        <div className="p-4 mt-0 bg-slate-50 border-t border-slate-100 rounded-b-lg">
-                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                                <div className="flex flex-col gap-2">
-                                    <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Occupied items</h3>
-                                    <div className="flex flex-wrap gap-2 min-h-8">
-                                        {user.assets &&
-                                            user.assets.length > 0 ? (
-                                            user.assets.map(({ type, _id }) => (
-                                                <p
-                                                    onClick={() => {
-                                                        setClickedOnHolding(_id)
-                                                    }}
-                                                    key={_id}
-                                                    className="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium bg-blue-100 text-blue-800 hover:bg-blue-200 transition-colors cursor-pointer border border-blue-200/50"
-                                                >
-                                                    {type}
-                                                </p>
-                                            ))
-                                        ) : (
-                                            <p className="flex items-center text-sm text-slate-500 italic py-1">No holdings</p>
-                                        )}
+        <div className="flex flex-col mt-6">
+            <div className={style.tableHeader}>
+                <span>Employee</span>
+                <span>Role</span>
+                <span>Active Holdings</span>
+                <span>Status</span>
+                <span className="text-right">Action</span>
+            </div>
+
+            <div className="flex flex-col gap-3">
+                {data?.pages.map((page) =>
+                    page.data.map((user: UserWithHoldings) => (
+                        <div key={user._id} className={style.rowWrapper}>
+                            <SimpleCollapsableCard
+                                user={user}
+                                searchParams={searchParams}
+                                setSearchParams={setSearchParams}
+                            >
+                                {/* Custom Row Header that aligns with Table Header */}
+                                <div
+                                    className="flex items-center justify-between px-6 py-4 cursor-pointer hover:bg-slate-50/50 transition-colors"
+                                    onClick={(e) => {
+                                        // Find the button that toggles the card in the parent or handle it here if needed
+                                        // Since SimpleCollapsableCard handles its own internal state, we might need to 
+                                        // adjust how it receives its header content if we want full control.
+                                        // For now, let's keep it simple and just style the children.
+                                    }}
+                                >
+                                    <div className={style.gridRow}>
+                                        <div className={style.employeeCol}>
+                                            {user.imageUrl ? (
+                                                <img
+                                                    src={user.imageUrl}
+                                                    alt={`${user.firstName} ${user.lastName}`}
+                                                    className="w-10 h-10 rounded-full object-cover border border-slate-200"
+                                                />
+                                            ) : (
+                                                <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm">
+                                                    {user.firstName[0]}{user.lastName[0]}
+                                                </div>
+                                            )}
+                                            <span className="font-semibold text-slate-800">
+                                                {user.firstName} {user.lastName}
+                                            </span>
+                                        </div>
+
+                                        <div className={style.roleCol}>
+                                            {user.role || 'Employee'}
+                                        </div>
+
+                                        <div className={style.holdingsCol}>
+                                            {user.assets && user.assets.length > 0 ? (
+                                                <span className="px-2.5 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-bold border border-blue-100">
+                                                    {user.assets.length} Assets
+                                                </span>
+                                            ) : (
+                                                <span className={style.emptyState}>No assets</span>
+                                            )}
+                                        </div>
+
+                                        <div className="flex items-center">
+                                            <span className={`${style.statusBadge} ${user.assets && user.assets.length > 0 ? style.active : style.inactive}`}>
+                                                {user.assets && user.assets.length > 0 ? 'W/ ASSETS' : 'W/O ASSETS'}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Action button inside the row header for quick access */}
+                                    <div className="flex items-center gap-4">
+                                        <Button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setClickedOnAssignItem(user._id);
+                                            }}
+                                            variant="ghost"
+                                            size="sm"
+                                            className="h-9 px-4 text-blue-600 hover:text-blue-700 hover:bg-blue-50 font-bold"
+                                        >
+                                            Assign
+                                        </Button>
                                     </div>
                                 </div>
-                                <div className="shrink-0 flex items-center">
-                                    <Button
-                                        onClick={() => setClickedOnAssignItem(user._id)}
-                                        variant="default"
-                                        className="shadow-sm"
-                                    >
-                                        Assign asset
-                                    </Button>
+
+                                {/* Expanded Content (Details) */}
+                                <div className="p-6 bg-slate-50/30 border-t border-slate-100/50">
+                                    <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Inventory Details</h3>
+                                    <div className="flex flex-wrap gap-2">
+                                        {user.assets && user.assets.length > 0 ? (
+                                            user.assets.map(({ type, _id }) => (
+                                                <div
+                                                    key={_id}
+                                                    onClick={() => setClickedOnHolding(_id)}
+                                                    className={style.assetBadge}
+                                                >
+                                                    {type}
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <p className="text-sm text-slate-400 italic">This employee currently has no company assets assigned.</p>
+                                        )}
+                                    </div>
+
+                                    {searchParams.get('assignItem') && (
+                                        <AssignAssetModal />
+                                    )}
+                                    {searchParams.get('ownedItem') && (
+                                        <ReturnAssetModal />
+                                    )}
                                 </div>
-                            </div>
-                            {searchParams.get('assignItem') && (
-                                <AssignAssetModal />
-                            )}
-                            {searchParams.get('ownedItem') && (
-                                <ReturnAssetModal />
-                            )}
+                            </SimpleCollapsableCard>
                         </div>
-                    </SimpleCollapsableCard>
-                )),
-            )}
-            <div ref={ref} className="text-center py-4 text-slate-500 text-sm">
-                {isFetchingNextPage && 'Loading...'}
+                    )),
+                )}
+            </div>
+            <div ref={ref} className="text-center py-8 text-slate-400 text-sm font-medium">
+                {isFetchingNextPage && (
+                    <div className="flex items-center justify-center gap-2">
+                        <div className="w-1.5 h-1.5 bg-slate-300 rounded-full animate-bounce" />
+                        <div className="w-1.5 h-1.5 bg-slate-300 rounded-full animate-bounce [animation-delay:0.2s]" />
+                        <div className="w-1.5 h-1.5 bg-slate-300 rounded-full animate-bounce [animation-delay:0.4s]" />
+                    </div>
+                )}
             </div>
         </div>
     )
