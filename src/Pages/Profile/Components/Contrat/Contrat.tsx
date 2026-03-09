@@ -53,7 +53,7 @@ const ContratContent = () => {
                             value={
                                 EditingPayroll
                                     ? EditingPayroll?.workingDays
-                                    : payroll.workingDays
+                                    : payroll.workingDays || ''
                             }
                             onChange={
                                 EditingPayroll
@@ -72,7 +72,7 @@ const ContratContent = () => {
                             value={
                                 EditingPayroll
                                     ? EditingPayroll?.grossSalary
-                                    : payroll.grossSalary
+                                    : payroll.grossSalary || ''
                             }
                             onChange={
                                 EditingPayroll
@@ -94,7 +94,7 @@ const ContratContent = () => {
                             value={
                                 EditingPayroll
                                     ? EditingPayroll?.extraHours
-                                    : payroll.extraHours
+                                    : payroll.extraHours || ''
                             }
                             onChange={
                                 EditingPayroll
@@ -122,7 +122,7 @@ const ContratContent = () => {
                                 value={
                                     EditingPayroll
                                         ? EditingPayroll?.bonus
-                                        : payroll.bonus
+                                        : payroll.bonus || ''
                                 }
                                 onChange={
                                     EditingPayroll
@@ -143,7 +143,7 @@ const ContratContent = () => {
                                 value={
                                     EditingPayroll
                                         ? EditingPayroll?.bonusDescription
-                                        : payroll.bonusDescription
+                                        : payroll.bonusDescription || ''
                                 }
                                 onChange={
                                     EditingPayroll
