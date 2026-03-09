@@ -105,6 +105,9 @@ export const useCreatePayroll = () => {
     const [payroll, setPayroll] = useState<EmployePayroll>({
         workingDays: undefined,
         grossSalary: undefined,
+        bonus: undefined,
+        bonusDescription: '',
+        extraHours: undefined,
         userId: id || '',
     })
     const [createToastOpen, setCreateToastOpen] = useState(false)
@@ -131,6 +134,9 @@ export const useCreatePayroll = () => {
             ...payroll,
             workingDays: payroll.workingDays,
             grossSalary: payroll.grossSalary,
+            bonus: payroll.bonus,
+            bonusDescription: payroll.bonusDescription,
+            extraHours: payroll.extraHours,
         }
 
         try {
@@ -216,6 +222,9 @@ export const useUpdatePayroll = () => {
         const fieldsToUpdate = {
             workingDays: EditingPayroll.workingDays,
             grossSalary: EditingPayroll.grossSalary,
+            bonus: EditingPayroll.bonus,
+            bonusDescription: EditingPayroll.bonusDescription,
+            extraHours: EditingPayroll.extraHours,
         }
         console.log(EditingPayroll)
         try {

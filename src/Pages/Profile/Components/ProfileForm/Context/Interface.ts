@@ -27,6 +27,9 @@ export interface EmployeePayroll {
     _id: string
     workingDays: number | undefined
     grossSalary: number | undefined
+    bonus: number | undefined
+    bonusDescription: string
+    extraHours: number | undefined
     month: number
     year: number
     userId: string
@@ -35,5 +38,8 @@ export interface EmployeePayroll {
 export interface EmployePayroll {
     workingDays: number | undefined
     grossSalary: number | undefined
+    bonus: number | undefined
+    bonusDescription: string
+    extraHours: number | undefined
     userId: string
 }

@@ -25,7 +25,7 @@ function SpecificUserPayrollContent() {
         const date = event.target.value
         const [yearString, monthString] = date.split('-')
         setYear(parseInt(yearString))
-        setMonth(parseInt(monthString))
+        setMonth(parseInt(monthString) - 1)
     }
 
     if (isPending)

@@ -82,6 +82,28 @@ const ContratContent = () => {
                         />
                     </div>
                 </div>
+                <div className="space-y-6 flex-1 mt-6">
+                    <div className="space-y-1">
+                        <Input
+                            IsUsername
+                            type="number"
+                            label="Extra Hours"
+                            name="extraHours"
+                            shrink={true}
+                            width="100%"
+                            value={
+                                EditingPayroll
+                                    ? EditingPayroll?.extraHours
+                                    : payroll.extraHours
+                            }
+                            onChange={
+                                EditingPayroll
+                                    ? handleUpdateChangePayroll
+                                    : handleChangePayroll
+                            }
+                        />
+                    </div>
+                </div>
             </div>
 
             {/* Right Column - Bonus Card */}
@@ -91,7 +113,23 @@ const ContratContent = () => {
 
                     <div className="space-y-6">
                         <div className="space-y-1">
-                            <Input IsUsername label="Bonus Amount" name="bonus" width="100%" />
+                            <Input
+                                IsUsername
+                                label="Bonus Amount"
+                                name="bonus"
+                                type="number"
+                                width="100%"
+                                value={
+                                    EditingPayroll
+                                        ? EditingPayroll?.bonus
+                                        : payroll.bonus
+                                }
+                                onChange={
+                                    EditingPayroll
+                                        ? handleUpdateChangePayroll
+                                        : handleChangePayroll
+                                }
+                            />
                         </div>
                         <div className="space-y-1">
                             <Input
@@ -102,6 +140,16 @@ const ContratContent = () => {
                                 multiline={true}
                                 rows={3}
                                 width="100%"
+                                value={
+                                    EditingPayroll
+                                        ? EditingPayroll?.bonusDescription
+                                        : payroll.bonusDescription
+                                }
+                                onChange={
+                                    EditingPayroll
+                                        ? handleUpdateChangePayroll
+                                        : handleChangePayroll
+                                }
                             />
                         </div>
                     </div>
