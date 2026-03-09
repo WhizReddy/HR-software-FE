@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styles from './Carousel.module.css'
 
 
@@ -22,9 +22,9 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
     const [currentIndex, setCurrentIndex] = useState(0)
     const [isHovered, setIsHovered] = useState(false)
 
-    const nextSlide = () => {
+    const nextSlide = useCallback(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length)
-    }
+    }, [images.length])
 
     const prevSlide = () => {
         setCurrentIndex(
@@ -41,7 +41,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
             const interval = setInterval(nextSlide, autoPlayInterval);
             return () => clearInterval(interval);
         }
-    }, [autoPlay, isHovered, autoPlayInterval]);
+    }, [autoPlay, isHovered, autoPlayInterval, nextSlide]);
 
     return (
         <div

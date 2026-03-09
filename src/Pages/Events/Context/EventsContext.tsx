@@ -87,7 +87,7 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
         setParticipants,
     } = useCreateEvent(handleCloseDrawer, eventPhotos, setEventPhotos)
 
-    const [allEmails, setAllEmails] = useState<string[]>([])
+    const [allEmails] = useState<string[]>([])
     const [editParticipants, setEditParticipants] = useState<string[]>([])
 
     const {

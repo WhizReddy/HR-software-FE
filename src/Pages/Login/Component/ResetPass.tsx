@@ -5,16 +5,6 @@ import AxiosInstance from '@/Helpers/Axios'
 import { Button } from '@/Components/ui/button'
 import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from '@/Components/ui/card'
-
-
-
 const ResetPass: React.FC = () => {
     const [searchParams] = useSearchParams()
     const tokenFromUrl = searchParams.get('token')

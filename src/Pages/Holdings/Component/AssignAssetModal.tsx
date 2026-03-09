@@ -7,7 +7,6 @@ import { useParams } from 'react-router-dom'
 import { useHandleItemAssigner } from '../Hook'
 
 import style from '../style/userHoldings.module.scss'
-import { inputStyles } from '@/Components/Input/Styles'
 import Button from '@/Components/Button/Button'
 import { ButtonTypes } from '@/Components/Button/ButtonTypes'
 import Input from '@/Components/Input/Index'
@@ -19,13 +18,10 @@ export default function AssignAssetModal() {
         setToastConfigs,
     } = useContext(HoldingsContext)
 
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen] = useState(false)
     const [options, setOptions] = useState<Asset[]>([])
     const [autocompleteLoading, setAutocompleteLoading] = useState(false)
     const [assetId, setAssetId] = useState<string | null>(null)
-    const [autocompleteValue, setAutocompleteValue] = useState<Asset | null>(
-        null,
-    )
     const [date, setDate] = useState<string>(new Date().toISOString())
 
     const itemAssigner = useHandleItemAssigner()
@@ -81,7 +77,6 @@ export default function AssignAssetModal() {
                         handleClose()
                     }
                     setAssetId(null)
-                    setAutocompleteValue(null)
                 }}
                 className={style.itemAssigner}
             >
@@ -94,8 +89,6 @@ export default function AssignAssetModal() {
                         onChange={(e) => {
                             const val = e.target.value
                             setAssetId(val)
-                            const option = options.find((o) => o._id === val)
-                            if (option) setAutocompleteValue(option)
                         }}
                         disabled={autocompleteLoading}
                     >

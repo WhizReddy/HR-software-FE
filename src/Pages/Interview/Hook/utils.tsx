@@ -1,4 +1,4 @@
-import { Interview } from './InterviewContext'
+import { Interview } from '../interface/interface'
 
 export const formatDate = (dateString: string | number | Date) => {
     if (!dateString) {
