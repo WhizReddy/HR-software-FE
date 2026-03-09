@@ -1,6 +1,6 @@
 export interface User {
     email: string
-    _id: number
+    _id: string | number
     name: string
     firstName: string
     lastName: string
@@ -10,6 +10,7 @@ export interface User {
 }
 
 export interface AuthContextType {
+    isInitializing: boolean
     isAuthenticated: boolean
     userRole: string | null
     currentUser: User | null

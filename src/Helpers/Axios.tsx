@@ -9,15 +9,22 @@ AxiosInstance.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('access_token')
         if (token) {
-            config.headers['Authorization'] = `Bearer ${token}`
-            console.log(
-                'Authorization header:',
-                config.headers['Authorization'],
-            )
+            config.headers = config.headers || {}
+            config.headers.Authorization = `Bearer ${token}`
         }
         return config
     },
     (error) => Promise.reject(error),
+)
+
+AxiosInstance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error?.response?.status === 401) {
+            window.dispatchEvent(new Event('auth:logout'))
+        }
+        return Promise.reject(error)
+    },
 )
 
 export default AxiosInstance

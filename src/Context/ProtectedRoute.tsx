@@ -3,9 +3,14 @@ import { SideBar } from '@/Components/SideBar/sidebar'
 import { BreadcrumbComponent } from '@/Components/BreadCrumbs/BreadCrumbs'
 import Header from '@/Components/Header/header'
 import { SidebarInset, SidebarProvider } from '@/Components/ui/sidebar'
+import { useAuth } from './AuthProvider'
 
 const PrivateRoute = () => {
-  const isAuthenticated = !!localStorage.getItem('access_token')
+  const { isAuthenticated, isInitializing } = useAuth()
+
+  if (isInitializing) {
+    return null
+  }
 
   if (!isAuthenticated) {
     return <Navigate to="/" />
