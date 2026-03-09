@@ -35,8 +35,8 @@ export const RecruitmentSchema = object({
             const currDate = dayjs()
             const age = currDate.diff(birthDate, 'year')
 
-            return age >= 18 && age <= 65
-        }, 'You must be between 18-65 years old'),
+            return age >= 16 && age <= 65
+        }, 'You must be between 16-65 years old'),
     ),
     email: pipe(string('Email is required'), email('Invalid email format')),
     experience: picklist(experienceList, 'Please pick one value from the list'),
@@ -44,7 +44,7 @@ export const RecruitmentSchema = object({
         instance(FileList, 'Please enter a file'),
         check((input) => input.length > 0),
         transform((input) => input[0]),
-        mimeType(['application/pdf']),
+        mimeType(['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']),
         maxSize(1024 * 1024 * 10),
     ),
 
@@ -59,7 +59,7 @@ export const RecruitmentSchema = object({
 
     phoneNumber: pipe(
         string('Phone Number is required'),
-        regex(/^6[789]\d{7}$/, 'Invalid phone number format'),
+        regex(/^6[6-9]\d{7}$/, 'Invalid phone number format'),
         startsWith('6', 'The number should start with a 6   '),
     ),
 

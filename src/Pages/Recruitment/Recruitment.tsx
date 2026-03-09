@@ -33,7 +33,7 @@ function RecruitmentBase() {
     } = useContext(RecruitmentContext)
     const { form } = useRecruitmentForm()
     return (
-        <main className="min-h-screen bg-slate-50 flex overflow-hidden">
+        <main className="min-h-screen bg-slate-50 flex flex-col md:flex-row">
             {/* Left Panel - Branding Split */}
             <div className="hidden md:flex flex-col flex-1 bg-gradient-to-br from-[#1a407a] to-[#2457a3] p-12 relative overflow-hidden text-white justify-center">
                 {/* Decorative Elements */}
@@ -52,9 +52,9 @@ function RecruitmentBase() {
             </div>
 
             {/* Right Panel - Form Container */}
-            <div className="flex-1 w-full bg-slate-50/50 backdrop-blur-3xl flex items-center justify-center p-4 sm:p-8 lg:p-12 h-screen overflow-hidden">
-                <div className="absolute inset-0 z-0 bg-grid-slate-200/[0.04] bg-[bottom_1px_center]"></div>
-                <div className="flex-1 w-full max-w-2xl bg-white/80 backdrop-blur-xl md:rounded-[2rem] shadow-2xl border border-white p-8 md:p-12 relative z-10 overflow-y-auto custom-scrollbar">
+            <div className="flex-1 w-full bg-slate-50/50 backdrop-blur-3xl flex items-start justify-center p-4 sm:p-8 lg:p-12 overflow-y-auto">
+                <div className="absolute inset-0 z-0 bg-grid-slate-200/[0.04] bg-[bottom_1px_center] pointer-events-none"></div>
+                <div className="flex-1 w-full max-w-2xl bg-white/80 backdrop-blur-xl md:rounded-[2rem] shadow-2xl border border-white p-8 md:p-12 relative z-10 my-auto">
                     <div className="mb-8">
                         <h2 className="text-3xl font-extrabold text-[#2457a3] tracking-tight">Join Our Team</h2>
                         <p className="text-slate-500 mt-2">Take the next step in your career with CRM.</p>
