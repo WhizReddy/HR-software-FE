@@ -117,12 +117,17 @@ export const useCreatePayroll = () => {
     >('success')
 
     const handleChangePayroll = (
-        event: React.ChangeEvent<HTMLInputElement>,
+        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     ) => {
         const { name, value } = event.target
         setPayroll((prevPayroll) => ({
             ...prevPayroll,
-            [name]: value === '' ? undefined : Number(value),
+            [name]:
+                name === 'bonusDescription'
+                    ? value
+                    : value === ''
+                        ? undefined
+                        : Number(value),
         }))
     }
 
@@ -201,14 +206,19 @@ export const useUpdatePayroll = () => {
 
     console.log(status)
     const handleUpdateChangePayroll = (
-        event: React.ChangeEvent<HTMLInputElement>,
+        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     ) => {
         const { name, value } = event.target
         setEditingPayroll((prevPayroll) => {
             if (!prevPayroll) return null
             return {
                 ...prevPayroll,
-                [name]: value === '' ? undefined : Number(value),
+                [name]:
+                    name === 'bonusDescription'
+                        ? value
+                        : value === ''
+                            ? undefined
+                            : Number(value),
             }
         })
     }
