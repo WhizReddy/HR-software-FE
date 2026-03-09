@@ -8,6 +8,7 @@ import { Button } from '@/Components/ui/button'
 import { AssignAssetModal } from './Modals/AssignAssetModal.tsx'
 import { ReturnAssetModal } from './Modals/ReturnAssetModal.tsx'
 import { RingLoader } from 'react-spinners'
+import style from '../style/employeesWithHoldings.module.scss'
 
 export const EmployeesWithHoldings = () => {
     const {
@@ -75,12 +76,6 @@ export const EmployeesWithHoldings = () => {
                                 {/* Custom Row Header that aligns with Table Header */}
                                 <div
                                     className="flex items-center justify-between px-6 py-4 cursor-pointer hover:bg-slate-50/50 transition-colors"
-                                    onClick={(e) => {
-                                        // Find the button that toggles the card in the parent or handle it here if needed
-                                        // Since SimpleCollapsableCard handles its own internal state, we might need to 
-                                        // adjust how it receives its header content if we want full control.
-                                        // For now, let's keep it simple and just style the children.
-                                    }}
                                 >
                                     <div className={style.gridRow}>
                                         <div className={style.employeeCol}>
