@@ -6,48 +6,27 @@ React + TypeScript + Vite frontend for the HR software platform.
 
 ```bash
 npm ci
+cp .env.example .env
 npm run dev
 ```
 
-Set env vars:
+## Free Deployment (Vercel)
 
-```bash
-cp .env.example .env
-```
+1. Push this repository to GitHub.
+2. In Vercel, create a new project from this repo.
+3. Set environment variable in Vercel:
+   - `VITE_API_URL=https://<your-backend-service>.onrender.com`
+4. Deploy.
 
-## Production Container
+## CI
 
-Build image:
+Workflow: `.github/workflows/frontend-ci.yml`
 
-```bash
-docker build -t hr-frontend --build-arg VITE_API_URL=https://api.example.com .
-```
+Runs on pushes/PRs:
+- `npm run lint`
+- `npm run build`
 
-Run image:
+## Notes
 
-```bash
-docker run --rm -p 8080:80 hr-frontend
-```
-
-## CI/CD (GitHub Actions)
-
-Workflow: `.github/workflows/deploy-frontend.yml`
-
-Required repository secrets:
-
-- `GHCR_USERNAME`
-- `GHCR_TOKEN`
-- `VITE_API_URL`
-- `SSH_HOST`
-- `SSH_USER`
-- `SSH_KEY`
-- `SSH_PORT` (optional)
-
-## VPS Stack Templates
-
-See `deploy/vps/` for:
-
-- `docker-compose.yml`
-- `Caddyfile`
-- `backend.env.example`
-- deployment runbook (`deploy/vps/README.md`)
+- Backend is expected to run on Render free tier.
+- If your backend sleeps on free tier, first request may be slow.
