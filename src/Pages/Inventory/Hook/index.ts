@@ -15,14 +15,14 @@ export const useAllInventoryItems = () => {
     return useQuery({
         queryKey: [
             'allInventoryItems',
-            searchParams.get('page') || '1',
-            searchParams.get('limit') || '10',
+            searchParams.get('page') || '0',
+            searchParams.get('limit') || '5',
             searchParams.get('search') || '',
         ],
         queryFn: () =>
             getAllInventoryItems(
-                searchParams.get('page') || '1',
-                searchParams.get('limit') || '10',
+                searchParams.get('page') || '0',
+                searchParams.get('limit') || '5',
                 searchParams.get('search') || '',
             ),
     })

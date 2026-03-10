@@ -122,7 +122,7 @@ export const useCreateEvent = (
             eventPhotos.forEach((photo) => {
                 formData.append('photo', photo)
             })
-            const response = await AxiosInstance.post('event', formData)
+            const response = await AxiosInstance.post('/event', formData)
             console.log('Event Creation Response:', response.data)
             return response.data
         },
@@ -135,6 +135,11 @@ export const useCreateEvent = (
 
             queryClient.invalidateQueries({
                 queryKey: ['events'],
+                exact: false,
+            })
+            queryClient.refetchQueries({
+                queryKey: ['events'],
+                type: 'active',
             })
 
             setEvent({
@@ -396,6 +401,11 @@ export const useUpdateEvent = (
 
             queryClient.invalidateQueries({
                 queryKey: ['events'],
+                exact: false,
+            })
+            queryClient.refetchQueries({
+                queryKey: ['events'],
+                type: 'active',
             })
 
             setEditingEvent(null)
@@ -465,6 +475,11 @@ export const useDeleteEvent = () => {
             )
             queryClient.invalidateQueries({
                 queryKey: ['events'],
+                exact: false,
+            })
+            queryClient.refetchQueries({
+                queryKey: ['events'],
+                type: 'active',
             })
         },
         onError: (error: Error) => {

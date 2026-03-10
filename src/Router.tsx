@@ -28,7 +28,7 @@ export default function Router() {
             element: <Login />,
         },
         {
-            path: 'recruitment',
+            path: '/recruitment',
             element: <Recruitment />,
         },
         {
@@ -44,7 +44,7 @@ export default function Router() {
             element: <ResetPass />,
         },
         {
-            path: 'career',
+            path: '/career',
             element: <Career />,
         },
         {

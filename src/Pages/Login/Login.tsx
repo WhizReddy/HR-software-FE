@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/Context/AuthProvider'
 import { LoginContext, LoginProvider } from './LoginContext'
 import { useFormLogin } from './Hook'
@@ -128,9 +128,9 @@ const LoginComponent = () => {
                                     <div className="space-y-2">
                                         <div className="flex items-center justify-between">
                                             <Label htmlFor="password" className="text-slate-700 font-bold text-xs uppercase tracking-wider">Password</Label>
-                                            <a href="/forgot-password" className="text-sm font-semibold text-[#2457a3] hover:text-[#1a407a] transition-colors">
+                                            <Link to="/forgot-password" className="text-sm font-semibold text-[#2457a3] hover:text-[#1a407a] transition-colors">
                                                 Forgot password?
-                                            </a>
+                                            </Link>
                                         </div>
                                         <div className="relative">
                                             <Input
