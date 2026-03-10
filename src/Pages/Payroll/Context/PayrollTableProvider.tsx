@@ -74,20 +74,26 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
     const rows: PayrollRow[] =
         payrollData?.data.map((payrollItem, index) => ({
             id: page * pageSize + index + 1,
-            originalId: payrollItem.userId._id,
+            originalId: payrollItem.userId?._id || '',
             netSalary: `${payrollItem.netSalary}${payrollItem.currency}`,
             healthInsurance: `${payrollItem.healthInsurance}${payrollItem.currency}`,
             month: getMonthName(payrollItem.month as number),
             workingDays: payrollItem.workingDays,
             tax: payrollItem.tax,
             socialSecurity: payrollItem.socialSecurity,
-            fullName: `${payrollItem.userId.firstName} ${payrollItem.userId.lastName}`,
+            fullName: payrollItem.userId
+                ? `${payrollItem.userId.firstName} ${payrollItem.userId.lastName}`
+                : 'Unknown user',
             grossSalary: payrollItem.grossSalary,
             year: payrollItem.year,
             bonusDescription: payrollItem.bonusDescription,
             currency: payrollItem.currency,
             bonus: payrollItem.bonus,
-            userId: payrollItem.userId,
+            userId: payrollItem.userId || {
+                _id: '',
+                firstName: 'Unknown',
+                lastName: 'User',
+            },
         })) ?? []
 
     const columns = [
@@ -110,6 +116,9 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
     const getRowId = (row: PayrollRow) => row.id
 
     const handleRowClick = (params: { row: PayrollRow }) => {
+        if (!params.row.originalId) {
+            return
+        }
         navigate(`/payroll/user/${params.row.originalId}`)
     }
 
