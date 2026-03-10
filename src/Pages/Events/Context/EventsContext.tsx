@@ -72,6 +72,7 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
         handleChange,
         event,
         createEvent,
+        isCreating,
         pollQuestion,
         pollOptions,
         handleOptionChange,
@@ -123,6 +124,7 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
             value={{
                 handleLocationChange,
                 createEvent,
+                isCreating,
                 updateEvent,
                 handleDelete,
                 handleEditChange,

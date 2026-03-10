@@ -162,7 +162,12 @@ export const useCreateEvent = (
         onError: (error: Error | AxiosError) => {
             console.error('Error creating event', error)
             const errorMsg = error instanceof AxiosError ? error.response?.data?.message : error.message
-            const finalMessage = Array.isArray(errorMsg) ? errorMsg[0] : (errorMsg || 'Error creating event')
+            const normalizedMessage = Array.isArray(errorMsg)
+                ? errorMsg[0]
+                : typeof errorMsg === 'string'
+                    ? errorMsg
+                    : JSON.stringify(errorMsg)
+            const finalMessage = normalizedMessage || 'Error creating event'
             setToastMessage(finalMessage)
             setToastSeverity('error')
             setToastOpen(true)
@@ -217,6 +222,7 @@ export const useCreateEvent = (
 
     return {
         createEvent: createEventMutation.mutate,
+        isCreating: createEventMutation.isPending,
         handleChange,
         event,
         endDate: event.endDate,

@@ -19,6 +19,7 @@ export default function Forms() {
         handleAddOption,
         handleAddEditOption,
         createEvent,
+        isCreating,
         updateEvent,
         pollQuestion,
         pollOptions,
@@ -230,12 +231,13 @@ export default function Forms() {
             {/* Sticky Action Footer */}
             <div className="absolute bottom-0 left-0 right-0 p-5 bg-white border-t border-slate-100" style={{ zIndex: 10 }}>
                 <Button
-                    btnText={editingEvent ? 'Update Event' : 'Publish Event'}
+                    btnText={editingEvent ? 'Update Event' : isCreating ? 'Publishing...' : 'Publish Event'}
                     type={ButtonTypes.PRIMARY}
                     backgroundColor="#2457A3"
                     border="none"
                     width="100%"
                     padding="12px"
+                    disabled={isCreating}
                     onClick={editingEvent ? updateEvent : createEvent}
                 />
             </div>

@@ -49,6 +49,7 @@ export interface EventsCreationData {
 
 export interface EventsContextProps {
     createEvent: UseMutateFunction<any, Error, void, unknown>
+    isCreating: boolean
     updateEvent: UseMutateFunction<any, Error, void, unknown>
     handleDelete: (id: string | number) => void
     handleEditChange: (e: React.ChangeEvent<HTMLInputElement>) => void
