@@ -30,11 +30,13 @@ export const useGetVacations = () => {
             'vacations',
             searchParams.get('page'),
             searchParams.get('limit'),
+            searchParams.get('search'),
         ],
         queryFn: () =>
             getAllVacations(
                 searchParams.get('page') as string,
                 searchParams.get('limit') as string,
+                searchParams.get('search') || '',
             ),
     })
 }

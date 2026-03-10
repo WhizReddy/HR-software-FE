@@ -13,9 +13,18 @@ const LIMIT = 5
 export const getAllVacations = async (
     page: string,
     limit: string,
+    search?: string,
 ): Promise<Vacations> => {
-    return (await AxiosInstance.get(`/vacation?page=${page}&limit=${limit}`))
-        .data
+    const params = new URLSearchParams({
+        page,
+        limit,
+    })
+
+    if (search) {
+        params.set('search', search)
+    }
+
+    return (await AxiosInstance.get(`/vacation?${params.toString()}`)).data
 }
 
 export const getUsersWithVacations = async ({

@@ -1,47 +1,53 @@
-import { ChangeEvent, useContext } from 'react'
-import { debounce } from '@/Helpers/debounce'
+import { useContext, useEffect, useState } from 'react'
 import Input from '@/Components/Input/Index'
 import { Search } from 'lucide-react'
 import { VacationContext } from '../VacationContext'
+import {
+    hasSearchParamsChanged,
+    upsertFilterParams,
+} from '@/Helpers/urlFilters'
+import { useDebouncedValue } from '@/hooks/use-debounced-value'
 
 export const EmployeesWithVacationsSearchFilter = () => {
     const { searchParams, setSearchParams } = useContext(VacationContext)
+    const [searchInput, setSearchInput] = useState(
+        searchParams.get('search') || '',
+    )
+    const debouncedSearch = useDebouncedValue(searchInput, 400)
+
+    useEffect(() => {
+        setSearchInput(searchParams.get('search') || '')
+    }, [searchParams])
+
+    useEffect(() => {
+        setSearchParams((prev) => {
+            const nextParams = upsertFilterParams(
+                prev,
+                {
+                    search: debouncedSearch.trim() || null,
+                    selectedVacation: null,
+                    userId: null,
+                },
+                { resetPage: true },
+            )
+
+            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
+        })
+    }, [debouncedSearch, setSearchParams])
 
     const handleChange = (value: string) => {
         setSearchParams((prev) => {
-            const newParams = new URLSearchParams(prev)
-            if (newParams.get('selectedHolding')) {
-                newParams.delete('selectedHolding')
-            }
-
-            if (value === 'all') {
-                newParams.delete('users')
-            } else {
-                newParams.set('users', value)
-            }
-
-            return newParams
+            const nextParams = upsertFilterParams(
+                prev,
+                {
+                    users: value === 'all' ? null : value,
+                    selectedVacation: null,
+                    userId: null,
+                },
+                { resetPage: true },
+            )
+            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
         })
-    }
-
-    const debouncedSetSearchParams = debounce((value: string) => {
-        setSearchParams((prev) => {
-            const newParams = new URLSearchParams(prev)
-            if (newParams.get('selectedHolding')) {
-                newParams.delete('selectedHolding')
-            }
-
-            if (value) {
-                newParams.set('search', value)
-            } else {
-                newParams.delete('search')
-            }
-            return newParams
-        })
-    }, 500)
-
-    const onSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-        debouncedSetSearchParams(e.target.value)
     }
 
     const userFilterChoices = [
@@ -62,8 +68,8 @@ export const EmployeesWithVacationsSearchFilter = () => {
                     IsUsername
                     label="Search Employees"
                     name="search"
-                    initialValue={searchParams.get('search') || ''}
-                    onChange={onSearchChange}
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
                 />
             </div>
 
@@ -77,6 +83,7 @@ export const EmployeesWithVacationsSearchFilter = () => {
                         return (
                             <button
                                 key={filter.value}
+                                type="button"
                                 onClick={() => handleChange(filter.value)}
                                 className={`px-4 py-1.5 text-xs font-medium rounded-md transition-all duration-200 ease-in-out ${isActive
                                         ? 'bg-white text-primary-blue shadow-sm ring-1 ring-slate-200/50'

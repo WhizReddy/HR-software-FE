@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { InventoryContext } from '../InventoryContext'
 import { useAllInventoryItems } from '../Hook'
 import { SingleInventoryItem } from './SingleInventoryItem'
@@ -7,23 +7,45 @@ import { Laptop, Monitor } from 'lucide-react'
 import DataTable from '@/Components/Table/Table'
 import { PaginationModel, RenderCellParams } from '@/types/table'
 import { RingLoader } from 'react-spinners'
+import {
+    ensurePaginationParams,
+    hasSearchParamsChanged,
+    parseNumberParam,
+    upsertFilterParams,
+} from '@/Helpers/urlFilters'
+import { useDebouncedValue } from '@/hooks/use-debounced-value'
 
 export const InventoryTable = () => {
     const { isError, error, data, isPending } = useAllInventoryItems()
 
     const { handleOpenViewAssetModalOpen, searchParams, setSearchParams } =
         useContext(InventoryContext)
+    const [searchInput, setSearchInput] = useState(
+        searchParams.get('search') || '',
+    )
+    const debouncedSearch = useDebouncedValue(searchInput, 400)
 
     useEffect(() => {
-        if (!searchParams.get('page')) {
-            setSearchParams((prev) => {
-                const newParams = new URLSearchParams(prev)
-                newParams.set('page', '0')
-                newParams.set('limit', '5')
-                return newParams
-            })
-        }
-    }, [searchParams, setSearchParams])
+        setSearchParams((prev) => {
+            const nextParams = ensurePaginationParams(prev)
+            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
+        })
+    }, [setSearchParams])
+
+    useEffect(() => {
+        setSearchInput(searchParams.get('search') || '')
+    }, [searchParams])
+
+    useEffect(() => {
+        setSearchParams((prev) => {
+            const nextParams = upsertFilterParams(
+                prev,
+                { search: debouncedSearch.trim() || null },
+                { resetPage: true },
+            )
+            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
+        })
+    }, [debouncedSearch, setSearchParams])
 
     if (isError) return <div className="p-4 text-red-500">Error: {error.message}</div>
 
@@ -44,15 +66,16 @@ export const InventoryTable = () => {
 
     const handlePaginationModelChange = (model: PaginationModel) => {
         setSearchParams((prev) => {
-            const newParams = new URLSearchParams(prev)
-            newParams.set('page', model.page.toString())
-            newParams.set('limit', model.pageSize.toString())
-            return newParams
+            const nextParams = upsertFilterParams(prev, {
+                page: model.page.toString(),
+                limit: model.pageSize.toString(),
+            })
+            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
         })
     }
 
-    const currentPage = Number(searchParams.get('page')) || 0
-    const pageSize = Number(searchParams.get('limit')) || 5
+    const currentPage = parseNumberParam(searchParams, 'page', 0)
+    const pageSize = parseNumberParam(searchParams, 'limit', 5)
     const totalPages = data.totalPages || 1
 
     const columns: any[] = [
@@ -120,19 +143,6 @@ export const InventoryTable = () => {
 
     const getRowId = (row: any) => row.id
 
-    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchParams((prev) => {
-            const newParams = new URLSearchParams(prev)
-            if (e.target.value) {
-                newParams.set('search', e.target.value)
-            } else {
-                newParams.delete('search')
-            }
-            newParams.set('page', '0')
-            return newParams
-        })
-    }
-
     return (
         <div className="mt-6">
             <DataTable
@@ -143,8 +153,8 @@ export const InventoryTable = () => {
                 page={currentPage}
                 pageSize={pageSize}
                 onPaginationModelChange={handlePaginationModelChange}
-                searchValue={searchParams.get('search') || ''}
-                onSearchChange={handleSearchChange}
+                searchValue={searchInput}
+                onSearchChange={(e) => setSearchInput(e.target.value)}
                 searchPlaceholder="Search inventory..."
             />
 
@@ -154,4 +164,3 @@ export const InventoryTable = () => {
         </div>
     )
 }
-

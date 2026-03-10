@@ -21,6 +21,14 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
     const [page, setPage] = useState(0)
     const [pageSize, setPageSize] = useState(5)
 
+    const updateFilterWithPageReset = <T,>(
+        setter: React.Dispatch<React.SetStateAction<T>>,
+        value: T,
+    ) => {
+        setter(value)
+        setPage(0)
+    }
+
     const handlePaginationModelChange = (model: PaginationModel) => {
         setPage(model.page)
         setPageSize(model.pageSize)
@@ -119,19 +127,27 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         headerTextColors,
         getRowId,
         handleRowClick,
-        setFullName,
-        setMaxNetSalary,
-        setMinNetSalary,
-        setMonth,
-        setYear,
+        setFullName: (value: string) =>
+            updateFilterWithPageReset(setFullName, value),
+        setMaxNetSalary: (value: number | undefined) =>
+            updateFilterWithPageReset(setMaxNetSalary, value),
+        setMinNetSalary: (value: number | undefined) =>
+            updateFilterWithPageReset(setMinNetSalary, value),
+        setMonth: (value: number | undefined) =>
+            updateFilterWithPageReset(setMonth, value),
+        setYear: (value: number | undefined) =>
+            updateFilterWithPageReset(setYear, value),
         isPending,
         isError,
-        setBonus,
-        setWorkingDays,
+        setBonus: (value: number | undefined) =>
+            updateFilterWithPageReset(setBonus, value),
+        setWorkingDays: (value: number | undefined) =>
+            updateFilterWithPageReset(setWorkingDays, value),
         // Required by PayrollContextType interface
-        setName: setFullName,
+        setName: (value: string) => updateFilterWithPageReset(setFullName, value),
         netSalary,
-        setNetSalary,
+        setNetSalary: (value: number | undefined) =>
+            updateFilterWithPageReset(setNetSalary, value),
         filters,
         setFilters,
         page,

@@ -1,29 +1,60 @@
 import React, { useState } from 'react'
 import { PaginationModel, RenderCellParams } from '@/types/table'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { EmployeeContext, EmployeeRow, UserProfileData } from '../interfaces/Employe'
 import AxiosInstance from '@/Helpers/Axios'
 import { useQuery } from '@tanstack/react-query'
+import {
+    ensurePaginationParams,
+    hasSearchParamsChanged,
+    parseNumberParam,
+    upsertFilterParams,
+} from '@/Helpers/urlFilters'
+import { useDebouncedValue } from '@/hooks/use-debounced-value'
 
 export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
-    const [page, setPage] = useState(0)
-    const [pageSize, setPageSize] = useState(5)
-    const [search, setSearch] = useState('')
+    const [searchParams, setSearchParams] = useSearchParams()
+    const [search, setSearch] = useState(searchParams.get('search') || '')
+    const debouncedSearch = useDebouncedValue(search, 400)
 
-    // Add simple debounce effect for search
-    const [debouncedSearch, setDebouncedSearch] = useState(search)
     React.useEffect(() => {
-        const handler = setTimeout(() => {
-            setDebouncedSearch(search)
-        }, 500)
-        return () => clearTimeout(handler)
-    }, [search])
+        setSearchParams((prev) => {
+            const nextParams = ensurePaginationParams(prev)
+            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
+        })
+    }, [setSearchParams])
+
+    React.useEffect(() => {
+        const urlSearch = searchParams.get('search') || ''
+        setSearch((prev) => (prev === urlSearch ? prev : urlSearch))
+    }, [searchParams])
+
+    React.useEffect(() => {
+        setSearchParams((prev) => {
+            const nextParams = upsertFilterParams(
+                prev,
+                { search: debouncedSearch.trim() || null },
+                { resetPage: true },
+            )
+
+            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
+        })
+    }, [debouncedSearch, setSearchParams])
+
+    const page = parseNumberParam(searchParams, 'page', 0)
+    const pageSize = parseNumberParam(searchParams, 'limit', 5)
 
     const handlePaginationModelChange = (model: PaginationModel) => {
-        setPage(model.page)
-        setPageSize(model.pageSize)
+        setSearchParams((prev) => {
+            const nextParams = upsertFilterParams(prev, {
+                page: model.page.toString(),
+                limit: model.pageSize.toString(),
+            })
+
+            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
+        })
     }
 
     const fetchEmployes = async () => {

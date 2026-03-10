@@ -30,9 +30,16 @@ function PayrollContent() {
 
     const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const date = event.target.value
+        if (!date) {
+            setYear(undefined)
+            setMonth(undefined)
+            return
+        }
         const [yearString, monthString] = date.split('-')
-        setYear(parseInt(yearString))
-        setMonth(parseInt(monthString) - 1)
+        const parsedYear = Number(yearString)
+        const parsedMonth = Number(monthString)
+        setYear(Number.isFinite(parsedYear) ? parsedYear : undefined)
+        setMonth(Number.isFinite(parsedMonth) ? parsedMonth - 1 : undefined)
     }
 
     const handleFullNameChange = (
@@ -44,23 +51,27 @@ function PayrollContent() {
     const handleWorkingDaysChange = (
         event: React.ChangeEvent<HTMLInputElement>,
     ) => {
-        setWorkingDays(parseInt(event.target.value))
+        const value = event.target.value
+        setWorkingDays(value ? Number(value) : undefined)
     }
 
     const handleMinSalaryChange = (
         event: React.ChangeEvent<HTMLInputElement>,
     ) => {
-        setMinNetSalary(parseFloat(event.target.value))
+        const value = event.target.value
+        setMinNetSalary(value ? Number(value) : undefined)
     }
 
     const handleMaxSalaryChange = (
         event: React.ChangeEvent<HTMLInputElement>,
     ) => {
-        setMaxNetSalary(parseFloat(event.target.value))
+        const value = event.target.value
+        setMaxNetSalary(value ? Number(value) : undefined)
     }
 
     const handleBonusChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setBonus(parseFloat(event.target.value))
+        const value = event.target.value
+        setBonus(value ? Number(value) : undefined)
     }
 
     const [showFilters, setShowFilters] = useState(false)

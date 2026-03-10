@@ -9,6 +9,14 @@ import { SelectedVacationModal } from './form/SelectedVacationModal'
 import { StatusBadge } from '@/Components/StatusBadge/StatusBadge'
 import Toast from '@/Components/Toast/Toast'
 import { Vacation } from '../types'
+import {
+    ensurePaginationParams,
+    hasSearchParamsChanged,
+    parseNumberParam,
+    upsertFilterParams,
+} from '@/Helpers/urlFilters'
+import { useDebouncedValue } from '@/hooks/use-debounced-value'
+import { useState } from 'react'
 
 export const VacationTable = () => {
     const {
@@ -19,17 +27,32 @@ export const VacationTable = () => {
         handleToastClose,
     } = useContext(VacationContext)
     const { data, error, isPending } = useGetVacations()
+    const [searchInput, setSearchInput] = useState(
+        searchParams.get('search') || '',
+    )
+    const debouncedSearch = useDebouncedValue(searchInput, 400)
 
     useEffect(() => {
-        if (searchParams.get('page') === null) {
-            setSearchParams((prev) => {
-                const newParams = new URLSearchParams(prev)
-                newParams.set('page', '0')
-                newParams.set('limit', '5')
-                return newParams
-            })
-        }
-    }, [searchParams, setSearchParams])
+        setSearchParams((prev) => {
+            const nextParams = ensurePaginationParams(prev)
+            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
+        })
+    }, [setSearchParams])
+
+    useEffect(() => {
+        setSearchInput(searchParams.get('search') || '')
+    }, [searchParams])
+
+    useEffect(() => {
+        setSearchParams((prev) => {
+            const nextParams = upsertFilterParams(
+                prev,
+                { search: debouncedSearch.trim() || null },
+                { resetPage: true },
+            )
+            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
+        })
+    }, [debouncedSearch, setSearchParams])
 
     if (error) return <p>Error: {error.message}</p>
     if (isPending) return <div className="flex justify-center p-4"><div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>
@@ -45,10 +68,11 @@ export const VacationTable = () => {
     }))
     const handlePaginationModelChange = (model: PaginationModel) => {
         setSearchParams((prev) => {
-            const newParams = new URLSearchParams(prev)
-            newParams.set('page', model.page.toString())
-            newParams.set('limit', model.pageSize.toString())
-            return newParams
+            const nextParams = upsertFilterParams(prev, {
+                page: model.page.toString(),
+                limit: model.pageSize.toString(),
+            })
+            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
         })
     }
 
@@ -109,32 +133,19 @@ export const VacationTable = () => {
 
     const getRowId = (row: { id: number | string }) => row.id
 
-    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchParams((prev) => {
-            const newParams = new URLSearchParams(prev)
-            if (e.target.value) {
-                newParams.set('search', e.target.value)
-            } else {
-                newParams.delete('search')
-            }
-            newParams.set('page', '0')
-            return newParams
-        })
-    }
-
     return (
         <>
             <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-4 mt-5">
                 <DataTable
                     onPaginationModelChange={handlePaginationModelChange}
-                    page={Number(searchParams.get('page')!)}
-                    pageSize={Number(searchParams.get('limit')!)}
+                    page={parseNumberParam(searchParams, 'page', 0)}
+                    pageSize={parseNumberParam(searchParams, 'limit', 5)}
                     totalPages={data.totalPages}
                     rows={rows}
                     columns={columns}
                     getRowId={getRowId}
-                    searchValue={searchParams.get('search') || ''}
-                    onSearchChange={handleSearchChange}
+                    searchValue={searchInput}
+                    onSearchChange={(e) => setSearchInput(e.target.value)}
                     searchPlaceholder="Search vacations..."
                 />
             </div>

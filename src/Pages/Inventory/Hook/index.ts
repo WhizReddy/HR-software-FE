@@ -17,11 +17,13 @@ export const useAllInventoryItems = () => {
             'allInventoryItems',
             searchParams.get('page') || '1',
             searchParams.get('limit') || '10',
+            searchParams.get('search') || '',
         ],
         queryFn: () =>
             getAllInventoryItems(
                 searchParams.get('page') || '1',
                 searchParams.get('limit') || '10',
+                searchParams.get('search') || '',
             ),
     })
 }

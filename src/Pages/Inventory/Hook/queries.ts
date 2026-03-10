@@ -4,8 +4,18 @@ import { InventoryItem } from '../types'
 export const getAllInventoryItems = async (
     page: string = '1',
     limit: string = '10',
+    search?: string,
 ): Promise<{ data: InventoryItem[]; totalPages: number }> => {
-    const res = await AxiosInstance.get(`/asset?page=${page}&limit=${limit}`)
+    const params = new URLSearchParams({
+        page,
+        limit,
+    })
+
+    if (search) {
+        params.set('search', search)
+    }
+
+    const res = await AxiosInstance.get(`/asset?${params.toString()}`)
     return res.data
 }
 

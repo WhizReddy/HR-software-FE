@@ -19,16 +19,18 @@ function CandidatesCoontext() {
     } = useCandidateContext()
 
     return (
-        <div className="modern-card" style={{ marginTop: '20px' }}>
+        <div className="w-full flex-1 p-4 sm:p-6 lg:p-8">
+            <div className="mb-8 relative z-10">
+                <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+                    Candidate Pipeline
+                </h1>
+                <p className="text-slate-500 mt-2 text-base max-w-2xl">
+                    Search and review applicants consistently across the hiring pipeline.
+                </p>
+            </div>
+            <div className="glass-card overflow-hidden border-none p-0">
             {isPending ? (
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        minHeight: '60vh',
-                    }}
-                >
+                <div className="flex justify-center items-center min-h-[60vh]">
                     <RingLoader color="var(--primary-blue)" />
                 </div>
             ) : (
@@ -46,6 +48,7 @@ function CandidatesCoontext() {
                     searchPlaceholder="Search candidates..."
                 />
             )}
+            </div>
         </div>
     )
 }
