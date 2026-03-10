@@ -53,21 +53,26 @@ export const SideBar: React.FC = () => {
   }
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-slate-200 bg-white">
-      <SidebarHeader className="h-14 justify-center border-b border-slate-100 px-3">
+    <Sidebar
+      collapsible="icon"
+      className="border-r border-slate-200/70 bg-white/85 backdrop-blur-xl supports-[backdrop-filter]:bg-white/70"
+    >
+      <SidebarHeader className="h-16 justify-center border-b border-slate-100/80 px-3">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#2457a3] to-[#4A7BCD] text-sm font-bold text-white shadow-sm">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#2457a3] via-[#2f67ba] to-[#5d8add] text-sm font-bold text-white shadow-md shadow-blue-300/40">
             E
           </div>
           <span className="truncate text-base font-bold tracking-tight text-slate-800 group-data-[collapsible=icon]:hidden">
-            CRM <span className="text-[#2457a3]">HR</span>
+            PEOPLE <span className="text-[#2457a3]">HUB</span>
           </span>
         </div>
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+        <SidebarGroup className="px-2 pt-4">
+          <SidebarGroupLabel className="px-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+            Navigation
+          </SidebarGroupLabel>
           <SidebarMenu>
             {navItems.map(({ label, path, icon: Icon }) => {
               const isActive = location.pathname.startsWith(path)
@@ -77,7 +82,11 @@ export const SideBar: React.FC = () => {
                     isActive={isActive}
                     tooltip={label}
                     onClick={() => navigate(path)}
-                    className={isActive ? 'bg-[#2457a3] text-white hover:bg-[#2457a3]/90 hover:text-white' : 'text-slate-600'}
+                    className={
+                      isActive
+                        ? 'bg-gradient-to-r from-[#2457a3] to-[#3c6fc0] text-white shadow-md shadow-blue-300/40 hover:text-white'
+                        : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'
+                    }
                   >
                     <Icon size={18} className="shrink-0" />
                     <span>{label}</span>
@@ -91,13 +100,13 @@ export const SideBar: React.FC = () => {
 
       <SidebarSeparator />
 
-      <SidebarFooter>
+      <SidebarFooter className="p-2">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
               tooltip="Logout"
               onClick={handleLogout}
-              className="text-slate-500 hover:bg-red-50 hover:text-red-500"
+              className="text-slate-500 hover:bg-red-50 hover:text-red-600"
             >
               <LogOut size={18} className="shrink-0" />
               <span>Logout</span>

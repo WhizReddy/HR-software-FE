@@ -57,8 +57,16 @@ export const Header: React.FC = () => {
   }
 
   return (
-    <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-slate-100 bg-white px-5 shadow-[0_1px_6px_rgba(0,0,0,0.04)]">
-      <SidebarTrigger className="text-slate-500 hover:text-slate-700" />
+    <header className="sticky top-0 z-20 mx-4 mt-4 flex h-16 items-center justify-between rounded-2xl border border-white/70 bg-white/75 px-5 shadow-[0_10px_30px_rgba(15,23,42,0.08)] backdrop-blur-xl">
+      <div className="flex items-center gap-3">
+        <SidebarTrigger className="text-slate-500 hover:text-slate-700" />
+        <div className="hidden md:block">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+            Workspace
+          </p>
+          <p className="text-sm font-semibold text-slate-700">People Operations Hub</p>
+        </div>
+      </div>
 
       <div className="flex items-center gap-3">
         <NotificationDropdown />
@@ -66,7 +74,7 @@ export const Header: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsProfileOpen((prev) => !prev)}
-            className="flex items-center gap-1 rounded-full border border-slate-200 bg-white p-1 pr-2 transition-colors hover:bg-slate-50"
+            className="flex items-center gap-1 rounded-full border border-slate-200/80 bg-white/90 p-1 pr-2 transition-colors hover:bg-slate-50"
           >
             <Avatar className="h-8 w-8 cursor-pointer bg-gradient-to-br from-[#2457a3] to-[#4A7BCD] text-white shadow-sm">
               <AvatarFallback className="bg-transparent text-xs font-bold text-white">

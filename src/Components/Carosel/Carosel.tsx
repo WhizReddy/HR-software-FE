@@ -51,11 +51,11 @@ const Example: React.FC<CarouselProps> = ({ images = [], children }) => {
                 <>
                     <CarouselPrevious
                         onClick={prev}
-                        className="left-2 top-1/2 h-8 w-8 -translate-y-1/2 border-none bg-black/40 text-white hover:bg-black/60"
+                        className="left-2 top-1/2 h-10 w-10 -translate-y-1/2 border-none bg-black/45 text-white hover:bg-black/65"
                     />
                     <CarouselNext
                         onClick={next}
-                        className="right-2 top-1/2 h-8 w-8 -translate-y-1/2 border-none bg-black/40 text-white hover:bg-black/60"
+                        className="right-2 top-1/2 h-10 w-10 -translate-y-1/2 border-none bg-black/45 text-white hover:bg-black/65"
                     />
                     <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1.5">
                         {images.map((_, i) => (

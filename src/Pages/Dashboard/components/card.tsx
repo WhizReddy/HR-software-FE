@@ -45,17 +45,16 @@ const CardInfo: React.FC<CardProps> = ({ title, content, icon }) => {
     const Icon = cfg.icon
 
     return (
-        <div className="relative overflow-hidden bg-white/70 backdrop-blur-xl rounded-3xl border border-white/60 shadow-xl shadow-slate-200/40 p-6 flex items-center gap-5 hover:bg-white hover:-translate-y-1 hover:scale-[1.02] transition-all duration-300 cursor-pointer group">
-            {/* Icon bubble */}
-            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 bg-gradient-to-br ${cfg.gradient} shadow-md group-hover:shadow-lg transition-shadow duration-300`}>
+        <div className="relative overflow-hidden rounded-3xl border border-white/70 bg-white/80 p-6 shadow-lg shadow-slate-200/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group">
+            <div className="flex items-center gap-5">
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 bg-gradient-to-br ${cfg.gradient} shadow-md group-hover:shadow-lg transition-shadow duration-300`}>
                 <Icon size={24} className="text-white" />
+                </div>
+                <div className="flex flex-col z-10">
+                    <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.16em] mb-1">{title}</p>
+                    <p className="text-4xl font-extrabold text-slate-800 leading-none group-hover:text-transparent bg-clip-text group-hover:bg-gradient-to-r group-hover:from-slate-800 group-hover:to-slate-600 transition-all duration-300">{content}</p>
+                </div>
             </div>
-            {/* Text */}
-            <div className="flex flex-col z-10">
-                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">{title}</p>
-                <p className="text-4xl font-extrabold text-slate-800 leading-none group-hover:text-transparent bg-clip-text group-hover:bg-gradient-to-r group-hover:from-slate-800 group-hover:to-slate-600 transition-all duration-300">{content}</p>
-            </div>
-            {/* Decorative circle */}
             <div className={`absolute -right-6 -bottom-6 w-32 h-32 rounded-full opacity-[0.08] group-hover:opacity-15 group-hover:scale-110 transition-all duration-500 bg-gradient-to-br ${cfg.gradient}`} />
         </div>
     )

@@ -81,15 +81,15 @@ const Button: React.FC<ButtonProps> = ({
     const variantClass = variants[type]
 
     return (
-        <ShadcnButton
-            type={isSubmit ? 'submit' : htmlType}
-            onClick={onClick}
-            disabled={disabled}
-            className={cn(
-                'h-auto rounded-lg text-sm font-medium transition-all duration-150 focus:ring-2 focus:ring-offset-1',
-                variantClass,
-                className,
-            )}
+            <ShadcnButton
+                type={isSubmit ? 'submit' : htmlType}
+                onClick={onClick}
+                disabled={disabled}
+                className={cn(
+                    'min-h-10 rounded-xl px-4 text-sm font-semibold transition-all duration-200 focus:ring-2 focus:ring-offset-1',
+                    variantClass,
+                    className,
+                )}
             style={inlineStyle}
             {...props}
         >
