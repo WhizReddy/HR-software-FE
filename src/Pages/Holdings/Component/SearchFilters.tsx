@@ -25,9 +25,6 @@ export const HoldingsSearchFilter = () => {
                 prev,
                 {
                     search: debouncedSearch.trim() || null,
-                    selectedUser: null,
-                    assignItem: null,
-                    ownedItem: null,
                 },
                 { resetPage: true },
             )

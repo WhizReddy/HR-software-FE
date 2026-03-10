@@ -6,15 +6,15 @@ export interface PayrollContextType {
     columns: ColDef<PayrollRow>[]
     handleRowClick: (params: RowParams<PayrollRow>) => void
     getRowId: (row: PayrollRow) => number
-    setMonth: (month: number | undefined) => void
+    setMonth: (month: number) => void
     setName: (name: string) => void
-    setYear: (year: number | undefined) => void
-    setNetSalary: (netSalary: number | undefined) => void
+    setYear: (year: number) => void
+    setNetSalary: (netSalary: number) => void
     setFullName: (fullName: string) => void
-    setWorkingDays: (workingDays: number | undefined) => void
-    setMaxNetSalary: (maxNetSalary: number | undefined) => void
-    setMinNetSalary: (maxNetSalary: number | undefined) => void
-    setBonus: (bonus: number | undefined) => void
+    setWorkingDays: (workingDays: number) => void
+    setMaxNetSalary: (maxNetSalary: number) => void
+    setMinNetSalary: (maxNetSalary: number) => void
+    setBonus: (bonus: number) => void
     isPending: boolean
     netSalary: number | undefined
     page: number

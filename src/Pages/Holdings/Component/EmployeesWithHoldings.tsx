@@ -151,18 +151,14 @@ export const EmployeesWithHoldings = () => {
                                         )}
                                     </div>
 
-                                    {searchParams.get('assignItem') && (
-                                        <AssignAssetModal />
-                                    )}
-                                    {searchParams.get('ownedItem') && (
-                                        <ReturnAssetModal />
-                                    )}
                                 </div>
                             </SimpleCollapsableCard>
                         </div>
                     )),
                 )}
             </div>
+            {searchParams.get('assignItem') && <AssignAssetModal />}
+            {searchParams.get('ownedItem') && <ReturnAssetModal />}
             <div ref={ref} className="text-center py-8 text-slate-400 text-sm font-medium">
                 {isFetchingNextPage && (
                     <div className="flex items-center justify-center gap-2">
