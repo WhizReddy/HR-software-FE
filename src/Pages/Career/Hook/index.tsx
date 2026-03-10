@@ -31,7 +31,7 @@ export const useGetAllEvents = () => {
 
     const fetchEvents = () => {
         setIsLoading(true)
-        AxiosInstance.get<EventsData[]>('/event?type=career')
+        AxiosInstance.get<EventsData[]>('/event/career')
             .then((response) => {
                 console.log('Fetched gertiii:', response.data)
                 setTimeout(() => {
@@ -105,7 +105,7 @@ export const useCreateEvent = (
                     )
                     setCreateEventError(
                         error.response.data.message ||
-                            'Failed to create event. Please try again.',
+                        'Failed to create event. Please try again.',
                     )
                 } else {
                     setCreateEventError(
