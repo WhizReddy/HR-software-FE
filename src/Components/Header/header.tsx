@@ -74,6 +74,9 @@ export const Header: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsProfileOpen((prev) => !prev)}
+            aria-expanded={isProfileOpen}
+            aria-haspopup="menu"
+            aria-label="Open profile menu"
             className="flex items-center gap-1 rounded-full border border-slate-200/80 bg-white/90 p-1 pr-2 transition-colors hover:bg-slate-50"
           >
             <Avatar className="h-8 w-8 cursor-pointer bg-gradient-to-br from-[#2457a3] to-[#4A7BCD] text-white shadow-sm">
@@ -85,7 +88,11 @@ export const Header: React.FC = () => {
           </button>
 
           {isProfileOpen && (
-            <div className="absolute right-0 z-50 mt-2 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
+            <div
+              role="menu"
+              aria-label="Profile options"
+              className="absolute right-0 z-50 mt-2 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg"
+            >
               <div className="border-b border-slate-100 px-3 py-2">
                 <p className="truncate text-sm font-semibold text-slate-800">
                   {currentUser?.firstName} {currentUser?.lastName}

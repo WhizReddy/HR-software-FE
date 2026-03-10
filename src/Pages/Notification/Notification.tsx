@@ -152,6 +152,9 @@ const NotificationDropdown: React.FC = () => {
                 type="button"
                 className="relative p-2 text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
                 onClick={handleToggleDropdown}
+                aria-expanded={isOpen}
+                aria-haspopup="menu"
+                aria-label={`Notifications${unreadCount > 0 ? `, ${unreadCount} unread` : ''}`}
             >
                 <Bell size={24} />
                 {unreadCount > 0 && (
@@ -162,6 +165,8 @@ const NotificationDropdown: React.FC = () => {
             </button>
             {isOpen && (
                 <div
+                    role="menu"
+                    aria-label="Notifications list"
                     className="absolute right-0 z-[60] mt-2 w-[min(92vw,28rem)] overflow-hidden rounded-lg border border-slate-200 bg-white shadow-xl"
                 >
                     <div className="max-h-[26rem] overflow-y-auto p-2">
@@ -190,7 +195,9 @@ const NotificationDropdown: React.FC = () => {
                                             {notification.content}
                                         </p>
                                     </div>
-                                    <span
+                                    <button
+                                        type="button"
+                                        aria-label={notification.isRead ? 'Notification already read' : 'Mark notification as read'}
                                         onClick={(e) => {
                                             e.stopPropagation()
                                             removeNotification(notification)
@@ -199,7 +206,7 @@ const NotificationDropdown: React.FC = () => {
                                             }`}
                                     >
                                         {notification.isRead ? 'Read' : 'Mark as read'}
-                                    </span>
+                                    </button>
                                 </div>
                             </div>
                         ))}

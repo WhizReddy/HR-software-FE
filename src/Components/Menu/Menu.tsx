@@ -34,12 +34,19 @@ const LongMenu: React.FC<LongMenuProps> = ({ event, onEdit, onDelete }) => {
                 variant="ghost"
                 size="icon-sm"
                 onClick={(e) => { e.stopPropagation(); setOpen(!open) }}
+                aria-label={open ? 'Close actions menu' : 'Open actions menu'}
+                aria-expanded={open}
+                aria-haspopup="menu"
                 className="text-slate-500"
             >
                 <MoreVertical size={18} />
             </Button>
             {open && (
-                <Card className="absolute right-0 top-8 z-30 min-w-[140px] rounded-xl border border-slate-200 py-1 shadow-lg">
+                <Card
+                    role="menu"
+                    aria-label="Event actions"
+                    className="absolute right-0 top-8 z-30 min-w-[140px] rounded-xl border border-slate-200 py-1 shadow-lg"
+                >
                     {onEdit && (
                         <Button
                             type="button"
