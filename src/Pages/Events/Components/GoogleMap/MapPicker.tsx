@@ -158,7 +158,11 @@ const MapComponent: React.FC<MapComponentProps> = ({
                         IsUsername
                         type="text"
                         value={searchValue}
-                        onChange={(e: any) => setSearchValue(e.target.value)}
+                        onChange={(e: any) => {
+                            setSearchValue(e.target.value)
+                            // Fallback: sync raw text to parent immediately in case they don't click Search
+                            onLocationChange(e.target.value, markerPosition?.lat || center.lat, markerPosition?.lng || center.lng)
+                        }}
                         placeholder="Enter location"
                         name="location"
                         label="Location"

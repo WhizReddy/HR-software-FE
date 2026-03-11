@@ -6,6 +6,7 @@ import React, {
     useState,
 } from 'react'
 import { AuthContextType, User } from './Interface'
+import AxiosInstance from '@/Helpers/Axios'
 
 export const AuthContext = React.createContext<AuthContextType | undefined>(
     undefined,
@@ -96,8 +97,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         const handleLogoutEvent = () => clearSession()
         window.addEventListener('auth:logout', handleLogoutEvent)
 
+        // Keep-alive ping to prevent Render free tier from sleeping
+        const pingInterval = setInterval(() => {
+            if (localStorage.getItem('access_token')) {
+                AxiosInstance.get('/health').catch(() => { /* mute errors */ });
+            }
+        }, 10 * 60 * 1000); // 10 minutes
+
         return () => {
             window.removeEventListener('auth:logout', handleLogoutEvent)
+            clearInterval(pingInterval)
             if (logoutTimerRef.current) {
                 clearTimeout(logoutTimerRef.current)
             }
