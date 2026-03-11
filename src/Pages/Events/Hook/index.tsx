@@ -61,7 +61,6 @@ export const useCreateEvent = (
     const [toastOpen, setToastOpen] = useState(false)
     const [toastMessage, setToastMessage] = useState('')
     const [toastSeverity, setToastSeverity] = useState<'success' | 'error'>('success')
-    const [createdEvents, setCreatedEvents] = useState<EventsData[]>([])
 
     const [event, setEvent] = useState<EventsCreationData>({
         title: '',
@@ -131,7 +130,6 @@ export const useCreateEvent = (
             setToastMessage('Event created successfully')
             setToastOpen(true)
             setToastSeverity('success')
-            setCreatedEvents((prevEvents) => [...prevEvents, data])
 
             queryClient.invalidateQueries({
                 queryKey: ['events'],
@@ -239,7 +237,6 @@ export const useCreateEvent = (
         handleToastClose,
         toastSeverity,
         handleLocationChange,
-        createdEvents,
     }
 }
 

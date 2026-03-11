@@ -104,6 +104,5 @@ export interface EventsContextProps {
     eventPhotos: File[]
     handleLocationChange: (address: string) => void
     hideToast?: () => void
-    createdEvents: EventsData[]
     formatDate: (date: string) => string
 }

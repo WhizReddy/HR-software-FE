@@ -32,6 +32,10 @@ export default function Router() {
             element: <Recruitment />,
         },
         {
+            path: '/recrutiment',
+            element: <Recruitment />,
+        },
+        {
             path: '/applicant/confirm',
             element: <EmailConfirmation />,
         },

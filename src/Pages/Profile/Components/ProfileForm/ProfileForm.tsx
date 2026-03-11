@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import Input from '../../../../Components/Input/Index'
 import { ButtonTypes } from '../../../../Components/Button/ButtonTypes'
 import Button from '../../../../Components/Button/Button'
@@ -9,6 +10,7 @@ import { ProfileProvider } from './Context/ProfileProvider'
 
 const ProfileFormContext = () => {
     const { uploadImage, previewImage } = useFileUpload()
+    const fileInputRef = useRef<HTMLInputElement>(null)
 
     const { user, isCurrentUser, isAdmin, handleChange, handleUpdate } =
         useProfile()
@@ -55,12 +57,21 @@ const ProfileFormContext = () => {
                             />
                         ) : (
                             isCurrentUser && (
-                                <Button
-                                    onClick={handleUpdate}
-                                    type={ButtonTypes.PRIMARY}
-                                    btnText="Change Picture"
-                                    className="w-full bg-[#2457a3] hover:bg-[#1a407a] text-white transition-all shadow-md active:scale-95 py-2.5 rounded-lg font-medium"
-                                />
+                                <>
+                                    <input
+                                        ref={fileInputRef}
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={uploadImage}
+                                        className="hidden"
+                                    />
+                                    <Button
+                                        onClick={() => fileInputRef.current?.click()}
+                                        type={ButtonTypes.PRIMARY}
+                                        btnText="Upload New Picture"
+                                        className="w-full bg-[#2457a3] hover:bg-[#1a407a] text-white transition-all shadow-md active:scale-95 py-2.5 rounded-lg font-medium"
+                                    />
+                                </>
                             )
                         )}
                     </div>

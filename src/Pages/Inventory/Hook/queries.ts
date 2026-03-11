@@ -2,10 +2,10 @@ import AxiosInstance from '@/Helpers/Axios'
 import { InventoryItem } from '../types'
 
 export const getAllInventoryItems = async (
-    page: string = '1',
-    limit: string = '10',
+    page: string = '0',
+    limit: string = '5',
     search?: string,
-): Promise<{ data: InventoryItem[]; totalPages: number }> => {
+): Promise<{ data: InventoryItem[]; totalPages?: number; all?: number }> => {
     const params = new URLSearchParams({
         page,
         limit,

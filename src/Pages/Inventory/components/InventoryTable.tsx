@@ -76,7 +76,12 @@ export const InventoryTable = () => {
 
     const currentPage = parseNumberParam(searchParams, 'page', 0)
     const pageSize = parseNumberParam(searchParams, 'limit', 5)
-    const totalPages = data.totalPages || 1
+    const resolvedTotalPages =
+        typeof data.totalPages === 'number' && data.totalPages > 0
+            ? data.totalPages
+            : typeof data.all === 'number' && pageSize > 0
+                ? Math.max(1, Math.ceil(data.all / pageSize))
+                : 1
 
     const columns: any[] = [
         { field: 'displayId', headerName: 'No', width: '80px' },
@@ -149,7 +154,7 @@ export const InventoryTable = () => {
                 rows={rows}
                 columns={columns}
                 getRowId={getRowId}
-                totalPages={totalPages}
+                totalPages={resolvedTotalPages}
                 page={currentPage}
                 pageSize={pageSize}
                 onPaginationModelChange={handlePaginationModelChange}

@@ -83,7 +83,6 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
         handleToastClose,
         toastSeverity,
         handleLocationChange,
-        createdEvents,
         participants,
         setParticipants,
     } = useCreateEvent(handleCloseDrawer, eventPhotos, setEventPhotos)
@@ -172,7 +171,6 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
                 setEditType,
                 handleFileUpload,
                 eventPhotos,
-                createdEvents,
                 formatDate,
                 allEmails,
                 participants,
