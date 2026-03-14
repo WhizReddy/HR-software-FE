@@ -97,10 +97,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         const handleLogoutEvent = () => clearSession()
         window.addEventListener('auth:logout', handleLogoutEvent)
 
-        // Keep-alive ping to prevent Render free tier from sleeping
+        // Warm the backend on app load so the first real user action is less likely to hit a cold start.
+        AxiosInstance.get('/health').catch(() => {
+            /* mute errors */
+        })
+
+        // Keep-alive ping to reduce Render cold starts while an authenticated user is active.
         const pingInterval = setInterval(() => {
             if (localStorage.getItem('access_token')) {
-                AxiosInstance.get('/health').catch(() => { /* mute errors */ });
+                AxiosInstance.get('/health').catch(() => {
+                    /* mute errors */
+                })
             }
         }, 10 * 60 * 1000); // 10 minutes
 

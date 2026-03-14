@@ -6,6 +6,7 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from '@/Components/ui/carousel'
+import { resolveApiAssetUrl } from '@/Helpers/Axios'
 
 interface CarouselProps {
     images?: string[]
@@ -38,7 +39,7 @@ const Example: React.FC<CarouselProps> = ({ images = [], children }) => {
         <Carousel setApi={setApi} className="w-full overflow-hidden rounded-xl bg-slate-900">
             <CarouselContent className="ml-0">
                 {images.map((image, i) => {
-                    const imageUrl = image.startsWith('http') ? image : `${import.meta.env.VITE_API_URL}${image}`
+                    const imageUrl = resolveApiAssetUrl(image)
                     return (
                         <CarouselItem key={image + i} className="pl-0">
                             <img src={imageUrl} alt={`slide-${i}`} className="max-h-72 w-full object-cover" />

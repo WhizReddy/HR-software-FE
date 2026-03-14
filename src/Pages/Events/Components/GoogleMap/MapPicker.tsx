@@ -13,6 +13,10 @@ const center = {
     lng: 19.8189,
 }
 
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as
+    | string
+    | undefined
+
 type LatLngLiteral = google.maps.LatLngLiteral
 type MapType = google.maps.Map
 
@@ -30,7 +34,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
     showInput,
 }) => {
     const { isLoaded, loadError } = useLoadScript({
-        googleMapsApiKey: 'AIzaSyDvjGa1duEDjFVNzg-zhqW2DC6XcgTQpA8',
+        googleMapsApiKey: GOOGLE_MAPS_API_KEY || '',
         libraries,
     })
 
@@ -144,6 +148,10 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
     if (loadError) {
         return <div>Error loading maps</div>
+    }
+
+    if (!GOOGLE_MAPS_API_KEY) {
+        return <div>Google Maps is not configured for this environment.</div>
     }
 
     if (!isLoaded) {

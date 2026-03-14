@@ -1,7 +1,12 @@
 import axios from 'axios'
-const API_URL =
+export const API_URL =
     (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/+$/, '') ||
     'https://hr-software-backend.onrender.com'
+
+export const resolveApiAssetUrl = (path?: string | null) => {
+    if (!path) return ''
+    return path.startsWith('http') ? path : `${API_URL}${path}`
+}
 
 const AxiosInstance = axios.create({
     baseURL: API_URL,

@@ -8,6 +8,7 @@ import Input from '@/Components/Input/Index';
 import { useState } from 'react';
 
 import Toast from '@/Components/Toast/Toast';
+import { resolveApiAssetUrl } from '@/Helpers/Axios';
 
 export default function ViewCandidats() {
     const {
@@ -172,9 +173,7 @@ export default function ViewCandidats() {
                         <div className={style.label}>CV</div>
                         <div className={style.value}>
                             {applicant?.cvAttachment && (() => {
-                                const cvUrl = applicant.cvAttachment.startsWith('http')
-                                    ? applicant.cvAttachment
-                                    : `${import.meta.env.VITE_API_URL}${applicant.cvAttachment}`
+                                const cvUrl = resolveApiAssetUrl(applicant.cvAttachment)
                                 return (
                                     <a
                                         href={cvUrl}
