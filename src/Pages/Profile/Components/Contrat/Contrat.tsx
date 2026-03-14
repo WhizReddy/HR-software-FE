@@ -4,8 +4,13 @@ import Button from '../../../../Components/Button/Button'
 import { ProfileProvider } from '../ProfileForm/Context/ProfileProvider'
 import { useCreatePayroll, useUpdatePayroll } from '../ProfileForm/Context/Hook'
 import Toast from '@/Components/Toast/Toast'
+import { useAuth } from '@/Context/AuthProvider'
+import { isAdminRole, isSelfUser } from '@/Helpers/access'
+import { useParams } from 'react-router-dom'
 
 const ContratContent = () => {
+    const { currentUser, userRole } = useAuth()
+    const { id } = useParams<{ id: string }>()
     const {
         EditingPayroll,
         handleUpdateChangePayroll,
@@ -25,6 +30,20 @@ const ContratContent = () => {
         createToastOpen,
         handleCreateToastClose,
     } = useCreatePayroll()
+
+    const canManagePayroll = isAdminRole(userRole)
+    const canViewPayroll = canManagePayroll || isSelfUser(currentUser?._id, id)
+
+    if (!canViewPayroll) {
+        return (
+            <div className="glass-card p-8 shadow-sm border border-slate-100/50 bg-white/70">
+                <h3 className="text-lg font-bold text-slate-800">Payroll access restricted</h3>
+                <p className="mt-2 text-sm text-slate-500">
+                    Payroll details are only available for your own profile or HR/Admin users.
+                </p>
+            </div>
+        )
+    }
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
@@ -55,6 +74,7 @@ const ContratContent = () => {
                                     ? EditingPayroll?.workingDays
                                     : payroll.workingDays || ''
                             }
+                            disabled={!canManagePayroll}
                             onChange={
                                 EditingPayroll
                                     ? handleUpdateChangePayroll
@@ -74,6 +94,7 @@ const ContratContent = () => {
                                     ? EditingPayroll?.grossSalary
                                     : payroll.grossSalary || ''
                             }
+                            disabled={!canManagePayroll}
                             onChange={
                                 EditingPayroll
                                     ? handleUpdateChangePayroll
@@ -96,6 +117,7 @@ const ContratContent = () => {
                                     ? EditingPayroll?.extraHours
                                     : payroll.extraHours || ''
                             }
+                            disabled={!canManagePayroll}
                             onChange={
                                 EditingPayroll
                                     ? handleUpdateChangePayroll
@@ -124,6 +146,7 @@ const ContratContent = () => {
                                         ? EditingPayroll?.bonus
                                         : payroll.bonus || ''
                                 }
+                                disabled={!canManagePayroll}
                                 onChange={
                                     EditingPayroll
                                         ? handleUpdateChangePayroll
@@ -145,6 +168,7 @@ const ContratContent = () => {
                                         ? EditingPayroll?.bonusDescription
                                         : payroll.bonusDescription || ''
                                 }
+                                disabled={!canManagePayroll}
                                 onChange={
                                     EditingPayroll
                                         ? handleUpdateChangePayroll
@@ -156,12 +180,18 @@ const ContratContent = () => {
                 </div>
 
                 <div className="pt-8 mt-auto">
-                    <Button
-                        type={ButtonTypes.PRIMARY}
-                        btnText={EditingPayroll ? 'Update Payroll' : 'Create Payroll'}
-                        onClick={EditingPayroll ? handleUpdatePayroll : handleCreatePayroll}
-                        className="w-full bg-[#2457a3] hover:bg-[#1a407a] text-white transition-all shadow-md active:scale-95 py-2.5 rounded-lg font-medium"
-                    />
+                    {canManagePayroll ? (
+                        <Button
+                            type={ButtonTypes.PRIMARY}
+                            btnText={EditingPayroll ? 'Update Payroll' : 'Create Payroll'}
+                            onClick={EditingPayroll ? handleUpdatePayroll : handleCreatePayroll}
+                            className="w-full bg-[#2457a3] hover:bg-[#1a407a] text-white transition-all shadow-md active:scale-95 py-2.5 rounded-lg font-medium"
+                        />
+                    ) : (
+                        <p className="text-sm text-slate-500">
+                            Payroll entries are managed by HR/Admin.
+                        </p>
+                    )}
                 </div>
             </div>
         </div>

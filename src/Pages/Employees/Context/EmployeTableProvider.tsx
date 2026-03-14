@@ -32,16 +32,23 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
     }, [searchParams])
 
     React.useEffect(() => {
+        const normalizedSearch = debouncedSearch.trim()
+        const currentSearch = searchParams.get('search') || ''
+
+        if (normalizedSearch === currentSearch) {
+            return
+        }
+
         setSearchParams((prev) => {
             const nextParams = upsertFilterParams(
                 prev,
-                { search: debouncedSearch.trim() || null },
+                { search: normalizedSearch || null },
                 { resetPage: true },
             )
 
             return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
         })
-    }, [debouncedSearch, setSearchParams])
+    }, [debouncedSearch, searchParams, setSearchParams])
 
     const page = parseNumberParam(searchParams, 'page', 0)
     const pageSize = parseNumberParam(searchParams, 'limit', 5)

@@ -3,8 +3,17 @@ import ProfileForm from './Components/ProfileForm/ProfileForm'
 import ChangePass from './Components/ChangePass/ChangePass'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Components/ui/tabs'
 import { Card } from '@/Components/ui/card'
+import { useAuth } from '@/Context/AuthProvider'
+import { isAdminRole, isSelfUser } from '@/Helpers/access'
+import { useParams } from 'react-router-dom'
 
 export default function Profile() {
+    const { currentUser, userRole } = useAuth()
+    const { id } = useParams<{ id: string }>()
+
+    const canViewPayroll = isAdminRole(userRole) || isSelfUser(currentUser?._id, id)
+    const canViewSecurity = isSelfUser(currentUser?._id, id)
+
     return (
         <Card className="glass-card w-full shadow-sm border-none overflow-hidden mt-5">
             <div className="p-6">
@@ -16,18 +25,22 @@ export default function Profile() {
                         >
                             Profile details
                         </TabsTrigger>
-                        <TabsTrigger
-                            value="payroll"
-                            className="w-full justify-start py-3 px-4 font-medium text-slate-600 transition-all data-[state=active]:bg-white data-[state=active]:text-[#2457a3] data-[state=active]:shadow-sm hover:bg-white/50 rounded-xl"
-                        >
-                            Payroll & Contracts
-                        </TabsTrigger>
-                        <TabsTrigger
-                            value="security"
-                            className="w-full justify-start py-3 px-4 font-medium text-slate-600 transition-all data-[state=active]:bg-white data-[state=active]:text-[#2457a3] data-[state=active]:shadow-sm hover:bg-white/50 rounded-xl"
-                        >
-                            Security
-                        </TabsTrigger>
+                        {canViewPayroll && (
+                            <TabsTrigger
+                                value="payroll"
+                                className="w-full justify-start py-3 px-4 font-medium text-slate-600 transition-all data-[state=active]:bg-white data-[state=active]:text-[#2457a3] data-[state=active]:shadow-sm hover:bg-white/50 rounded-xl"
+                            >
+                                Payroll & Contracts
+                            </TabsTrigger>
+                        )}
+                        {canViewSecurity && (
+                            <TabsTrigger
+                                value="security"
+                                className="w-full justify-start py-3 px-4 font-medium text-slate-600 transition-all data-[state=active]:bg-white data-[state=active]:text-[#2457a3] data-[state=active]:shadow-sm hover:bg-white/50 rounded-xl"
+                            >
+                                Security
+                            </TabsTrigger>
+                        )}
                     </TabsList>
 
                     <div className="flex-1 min-h-[500px]">
@@ -35,13 +48,17 @@ export default function Profile() {
                             <ProfileForm />
                         </TabsContent>
 
-                        <TabsContent value="payroll" className="m-0 focus-visible:outline-none focus-visible:ring-0">
-                            <Contrat />
-                        </TabsContent>
+                        {canViewPayroll && (
+                            <TabsContent value="payroll" className="m-0 focus-visible:outline-none focus-visible:ring-0">
+                                <Contrat />
+                            </TabsContent>
+                        )}
 
-                        <TabsContent value="security" className="m-0 focus-visible:outline-none focus-visible:ring-0">
-                            <ChangePass />
-                        </TabsContent>
+                        {canViewSecurity && (
+                            <TabsContent value="security" className="m-0 focus-visible:outline-none focus-visible:ring-0">
+                                <ChangePass />
+                            </TabsContent>
+                        )}
                     </div>
                 </Tabs>
             </div>

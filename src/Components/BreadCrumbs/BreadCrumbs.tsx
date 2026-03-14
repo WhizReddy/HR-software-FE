@@ -15,6 +15,7 @@ const routeLabels: Record<string, string> = {
     candidates: 'Candidates',
     interview: 'Interview',
     events: 'Events',
+    'career-posts': 'Career Posts',
     payroll: 'Payroll',
     vacation: 'Vacation',
     holdings: 'Holdings',

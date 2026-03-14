@@ -1,4 +1,5 @@
 import { useAuth } from '@/Context/AuthProvider'
+import { isAdminRole } from '@/Helpers/access'
 import AxiosInstance from '@/Helpers/Axios'
 import { UserProfileData } from '@/Pages/Employees/interfaces/Employe'
 import { useQuery } from '@tanstack/react-query'
@@ -15,7 +16,7 @@ export const useGetAndUpdateUserById = () => {
     const { userRole, currentUser } = useAuth()
 
     const isCurrentUser = currentUser?._id === id
-    const isAdmin = userRole === 'hr'
+    const isAdmin = isAdminRole(userRole)
 
     useEffect(() => {
         setIsLoading(true)

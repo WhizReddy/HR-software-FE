@@ -2,6 +2,9 @@ import { EmployeesWithHoldings } from './Component/EmployeesWithHoldings.tsx'
 import style from './style/holdings.module.scss'
 import HoldingsProvider from './HoldingsContext.tsx'
 import { HoldingsSearchFilter } from './Component/SearchFilters.tsx'
+import { useAuth } from '@/Context/AuthProvider.tsx'
+import { isAdminRole } from '@/Helpers/access.ts'
+import { MyAssets } from './Component/MyAssets.tsx'
 
 function HoldingsComponent() {
     return (
@@ -24,6 +27,12 @@ function HoldingsComponent() {
 }
 
 export default function Holdings() {
+    const { currentUser } = useAuth()
+
+    if (!isAdminRole(currentUser?.role)) {
+        return <MyAssets />
+    }
+
     return (
         <HoldingsProvider>
             <HoldingsComponent />

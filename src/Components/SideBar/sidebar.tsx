@@ -12,8 +12,10 @@ import {
   BarChart2,
   LogOut,
   Handshake,
+  Megaphone,
 } from 'lucide-react'
 import { useAuth } from '@/Context/AuthProvider'
+import { isAdminRole } from '@/Helpers/access'
 
 import {
   Sidebar,
@@ -29,12 +31,13 @@ import {
   SidebarSeparator,
 } from '@/Components/ui/sidebar'
 
-const navItems = [
+const adminNavItems = [
   { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
   { label: 'Employees', path: '/employees', icon: Users },
   { label: 'Candidates', path: '/candidates', icon: UserCheck },
   { label: 'Interview', path: '/interview', icon: Briefcase },
   { label: 'Events', path: '/events', icon: Calendar },
+  { label: 'Career Posts', path: '/career-posts', icon: Megaphone },
   { label: 'Payroll', path: '/payroll', icon: CreditCard },
   { label: 'Vacation', path: '/vacation', icon: CalendarCheck },
   { label: 'Holdings', path: '/holdings', icon: Handshake },
@@ -42,10 +45,17 @@ const navItems = [
   { label: 'Stats', path: '/historic', icon: BarChart2 },
 ]
 
+const devNavItems = [
+  { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+  { label: 'Employees', path: '/employees', icon: Users },
+  { label: 'My Assets', path: '/holdings', icon: Handshake },
+]
+
 export const SideBar: React.FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const { logout } = useAuth()
+  const { currentUser, logout } = useAuth()
+  const navItems = isAdminRole(currentUser?.role) ? adminNavItems : devNavItems
 
   const handleLogout = () => {
     logout()
@@ -75,7 +85,9 @@ export const SideBar: React.FC = () => {
           </SidebarGroupLabel>
           <SidebarMenu>
             {navItems.map(({ label, path, icon: Icon }) => {
-              const isActive = location.pathname.startsWith(path)
+              const isActive =
+                location.pathname === path ||
+                (path !== '/dashboard' && location.pathname.startsWith(path))
               return (
                 <SidebarMenuItem key={path}>
                   <SidebarMenuButton

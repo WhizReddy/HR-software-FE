@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import AxiosInstance from '@/Helpers/Axios'
 
 export interface EventsData {
-    _id: number
+    _id: string
     title: string
     description: string
     location: string
@@ -78,41 +78,42 @@ export const useCreateEvent = (
         }))
     }
 
-    const createEvent = () => {
+    const createEvent = async () => {
         setCreateEventError(null)
 
         const newEvent = { ...event }
 
         console.log('Creating event with data:', newEvent)
 
-        AxiosInstance.post('/event', newEvent)
-            .then((response) => {
-                console.log('Event created successfully:', response.data)
-                setEvents((prevEvents) => [...prevEvents, response.data])
-                setEvent({
-                    title: '',
-                    description: '',
-                    location: '',
-                    type: EventType.CAREER,
-                })
+        try {
+            const response = await AxiosInstance.post('/event', newEvent)
+            console.log('Event created successfully:', response.data)
+            setEvents((prevEvents) => [response.data, ...prevEvents])
+            setEvent({
+                title: '',
+                description: '',
+                location: '',
+                type: EventType.CAREER,
             })
-            .catch((error) => {
-                console.error('Error creating event:', error)
-                if (error.response && error.response.data) {
-                    console.error(
-                        'Backend error response:',
-                        error.response.data,
-                    )
-                    setCreateEventError(
-                        error.response.data.message ||
-                        'Failed to create event. Please try again.',
-                    )
-                } else {
-                    setCreateEventError(
-                        'Failed to create event. Please try again.',
-                    )
-                }
-            })
+            return true
+        } catch (error: any) {
+            console.error('Error creating event:', error)
+            if (error.response && error.response.data) {
+                console.error(
+                    'Backend error response:',
+                    error.response.data,
+                )
+                setCreateEventError(
+                    error.response.data.message ||
+                    'Failed to create event. Please try again.',
+                )
+            } else {
+                setCreateEventError(
+                    'Failed to create event. Please try again.',
+                )
+            }
+            return false
+        }
     }
 
     return { createEvent, handleChange, event, createEventError }
@@ -169,8 +170,10 @@ export const useUpdateEvent = (
                 ),
             )
             toggleForm()
+            return true
         } catch (error) {
             console.error('Error updating event:', error)
+            return false
         }
     }
 
@@ -190,9 +193,9 @@ export const useDeleteEvent = (
     setEvents: React.Dispatch<React.SetStateAction<EventsData[]>>,
 ) => {
     const [showModal, setShowModal] = useState(false)
-    const [eventToDeleteId, setEventToDeleteId] = useState<number | null>(null)
+    const [eventToDeleteId, setEventToDeleteId] = useState<string | null>(null)
 
-    const handleDeleteEventModal = (eventId: number) => {
+    const handleDeleteEventModal = (eventId: string) => {
         setEventToDeleteId(eventId)
         setShowModal(true)
     }
@@ -202,20 +205,21 @@ export const useDeleteEvent = (
         setEventToDeleteId(null)
     }
 
-    const handleDelete = (eventId: number | null) => {
+    const handleDelete = async (eventId: string | null) => {
         if (eventId === null) return
 
-        AxiosInstance.delete(`/event/${eventId}`)
-            .then(() => {
-                console.log('Event deleted successfully')
-                setEvents((prevEvents) =>
-                    prevEvents.filter((event) => event._id !== eventId),
-                )
-                closeModal()
-            })
-            .catch((error) => {
-                console.error('Error deleting event:', error)
-            })
+        try {
+            await AxiosInstance.delete(`/event/${eventId}`)
+            console.log('Event deleted successfully')
+            setEvents((prevEvents) =>
+                prevEvents.filter((event) => event._id !== eventId),
+            )
+            closeModal()
+            return true
+        } catch (error) {
+            console.error('Error deleting event:', error)
+            return false
+        }
     }
 
     return {

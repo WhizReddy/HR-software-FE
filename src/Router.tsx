@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import ViewCandidats from './Pages/VIewCandidats/ViewCandidats.tsx'
 import PrivateRoute from './Context/ProtectedRoute.tsx'
+import RoleRoute from './Context/RoleRoute.tsx'
 import Candidates from './Pages/Candidates/Candidates.tsx'
 import Dashboard from './Pages/Dashboard/Dashboard.tsx'
 import Employees from './Pages/Employees/Employees.tsx'
@@ -13,6 +14,7 @@ import Profile from './Pages/Profile/Profile'
 import Recruitment from './Pages/Recruitment/Recruitment.tsx'
 import Inventory from './Pages/Inventory/Inventory.tsx'
 import Career from './Pages/Career/Career.tsx'
+import CareerPosts from './Pages/Career/CareerPosts.tsx'
 import Holdings from './Pages/Holdings/Holdings.tsx'
 import Vacation from './Pages/Vacation/Vacation.tsx'
 import SpecificUserPayroll from './Pages/Payroll/SpecificUser/SpecificUserPayroll.tsx'
@@ -20,6 +22,7 @@ import About from './Pages/About/About.tsx'
 import UserVacations from './Pages/Vacation/UserVacations.tsx'
 import EmailConfirmation from './Pages/Recruitment/Component/EmailConfirmation.tsx'
 import NotFound from './Pages/NotFound/NotFound.tsx'
+import { ADMIN_ROLES } from './Helpers/access.ts'
 
 export default function Router() {
     const router = createBrowserRouter([
@@ -66,7 +69,11 @@ export default function Router() {
                 },
                 {
                     path: '/view/:id',
-                    element: <ViewCandidats />,
+                    element: (
+                        <RoleRoute allowedRoles={[...ADMIN_ROLES]}>
+                            <ViewCandidats />
+                        </RoleRoute>
+                    ),
                 },
                 {
                     path: '/holdings',
@@ -74,23 +81,43 @@ export default function Router() {
                 },
                 {
                     path: '/vacation',
-                    element: <Vacation />,
+                    element: (
+                        <RoleRoute allowedRoles={[...ADMIN_ROLES]}>
+                            <Vacation />
+                        </RoleRoute>
+                    ),
                 },
                 {
                     path: '/vacation/:id',
-                    element: <UserVacations />,
+                    element: (
+                        <RoleRoute allowedRoles={[...ADMIN_ROLES]} allowSelfParam="id">
+                            <UserVacations />
+                        </RoleRoute>
+                    ),
                 },
                 {
                     path: '/payroll/user/:id',
-                    element: <SpecificUserPayroll />,
+                    element: (
+                        <RoleRoute allowedRoles={[...ADMIN_ROLES]} allowSelfParam="id">
+                            <SpecificUserPayroll />
+                        </RoleRoute>
+                    ),
                 },
                 {
                     path: '/payroll',
-                    element: <Payroll />,
+                    element: (
+                        <RoleRoute allowedRoles={[...ADMIN_ROLES]}>
+                            <Payroll />
+                        </RoleRoute>
+                    ),
                 },
                 {
                     path: '/candidates',
-                    element: <Candidates />,
+                    element: (
+                        <RoleRoute allowedRoles={[...ADMIN_ROLES]}>
+                            <Candidates />
+                        </RoleRoute>
+                    ),
                 },
                 {
                     path: '/events',
@@ -98,7 +125,19 @@ export default function Router() {
                 },
                 {
                     path: '/interview',
-                    element: <Interview />,
+                    element: (
+                        <RoleRoute allowedRoles={[...ADMIN_ROLES]}>
+                            <Interview />
+                        </RoleRoute>
+                    ),
+                },
+                {
+                    path: '/career-posts',
+                    element: (
+                        <RoleRoute allowedRoles={[...ADMIN_ROLES]}>
+                            <CareerPosts />
+                        </RoleRoute>
+                    ),
                 },
                 {
                     path: '/historic',
@@ -106,7 +145,11 @@ export default function Router() {
                 },
                 {
                     path: '/inventory',
-                    element: <Inventory />,
+                    element: (
+                        <RoleRoute allowedRoles={[...ADMIN_ROLES]}>
+                            <Inventory />
+                        </RoleRoute>
+                    ),
                 },
             ],
         },
