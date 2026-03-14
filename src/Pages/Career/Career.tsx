@@ -77,6 +77,14 @@ export const Careers = () => {
                         Be part of something bigger. Make a difference in the
                         world of technology.
                     </p>
+                    <div className="mt-6 flex justify-center">
+                        <Link
+                            to="/recruitment"
+                            className="inline-flex items-center rounded-xl bg-[#2457a3] px-5 py-3 text-sm font-semibold text-white shadow-md transition-colors hover:bg-[#1b4285]"
+                        >
+                            Submit General Application
+                        </Link>
+                    </div>
                 </div>
 
                 <div className={style.filter}>
@@ -111,6 +119,14 @@ export const Careers = () => {
                     ) : filteredEvents.length === 0 ? (
                         <div className="col-span-full text-center py-12 glass-card">
                             <p className="text-slate-500 font-medium">We did not find what you are looking for.</p>
+                            <div className="mt-4">
+                                <Link
+                                    to="/recruitment"
+                                    className="inline-flex items-center rounded-xl bg-[#2457a3] px-5 py-3 text-sm font-semibold text-white shadow-md transition-colors hover:bg-[#1b4285]"
+                                >
+                                    Apply Anyway
+                                </Link>
+                            </div>
                         </div>
                     ) : (
                         filteredEvents.map((event) => (

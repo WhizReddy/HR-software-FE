@@ -58,6 +58,14 @@ function RecruitmentBase() {
                     <div className="mb-8">
                         <h2 className="text-3xl font-extrabold text-[#2457a3] tracking-tight">Join Our Team</h2>
                         <p className="text-slate-500 mt-2">Take the next step in your career with CRM.</p>
+                        <p className="mt-3 rounded-xl bg-blue-50 px-4 py-3 text-sm text-slate-600">
+                            Use an email address that is not already tied to an existing employee login.
+                            If you are testing with Gmail, a plus alias like
+                            {' '}
+                            <code className="font-semibold text-slate-800">yourname+candidate@gmail.com</code>
+                            {' '}
+                            still lands in the same inbox.
+                        </p>
                     </div>
 
                     <form
