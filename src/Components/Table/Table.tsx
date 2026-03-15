@@ -1,6 +1,6 @@
 import React from 'react'
+import { ChevronLeft, ChevronRight, Inbox, Search } from 'lucide-react'
 import { ColDef, PaginationModel, RowParams } from '@/types/table'
-import { Search } from 'lucide-react'
 import Input from '@/Components/Input/Index'
 import {
     Table,
@@ -52,14 +52,19 @@ function DataTable<TRow>({
     const normalizedTotalPages = totalPages || 1
 
     return (
-        <Card className="glass-card overflow-hidden border-none p-0">
-            {/* Optional header row */}
+        <Card className="glass-card overflow-hidden border-none p-0 shadow-xl shadow-slate-200/35">
             {(title || actions || onSearchChange || filterNode) && (
-                <div className="flex flex-col sm:flex-row items-center justify-between px-5 py-4 border-b border-slate-100 gap-4">
-                    <div className="flex items-center w-full sm:w-auto gap-4 flex-1">
-                        {title && <h2 className="font-bold text-slate-800 text-lg tracking-tight whitespace-nowrap">{title}</h2>}
+                <div className="flex flex-col gap-4 border-b border-slate-100/80 px-5 py-5 lg:flex-row lg:items-center lg:justify-between">
+                    <div className="flex w-full flex-1 flex-col gap-3 sm:flex-row sm:items-center">
+                        {title && (
+                            <div className="min-w-0">
+                                <h2 className="truncate text-lg font-bold tracking-tight text-slate-800">
+                                    {title}
+                                </h2>
+                            </div>
+                        )}
                         {onSearchChange && (
-                            <div className="w-full sm:max-w-xs">
+                            <div className="w-full sm:max-w-sm">
                                 <Input
                                     IsUsername
                                     type="search"
@@ -75,8 +80,9 @@ function DataTable<TRow>({
                             </div>
                         )}
                     </div>
+
                     {(filterNode || actions) && (
-                        <div className="flex items-center w-full sm:w-auto gap-3 justify-end">
+                        <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-end lg:w-auto">
                             {filterNode}
                             {actions}
                         </div>
@@ -84,14 +90,14 @@ function DataTable<TRow>({
                 </div>
             )}
 
-            <div className="w-full overflow-x-auto px-2">
-                <Table className="w-full text-left text-sm">
+            <div className="px-2 pb-2 sm:px-3">
+                <Table className="min-w-full text-left text-sm">
                     <TableHeader>
-                        <TableRow className="border-b border-slate-200/60 bg-slate-50/50 backdrop-blur-sm hover:bg-slate-50/50">
+                        <TableRow className="border-b border-slate-200/70 bg-slate-50/70 backdrop-blur-sm hover:bg-slate-50/70">
                             {columns.map((col) => (
                                 <TableHead
                                     key={col.field}
-                                    className="whitespace-nowrap px-3 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500"
+                                    className="whitespace-nowrap px-4 py-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500"
                                     style={col.width ? { width: col.width } : undefined}
                                 >
                                     {col.headerName}
@@ -104,11 +110,16 @@ function DataTable<TRow>({
                             <TableRow>
                                 <TableCell
                                     colSpan={columns.length}
-                                    className="text-center py-16 text-slate-400 text-sm"
+                                    className="py-20 text-center text-sm text-slate-400"
                                 >
-                                    <div className="flex flex-col items-center gap-2">
-                                        <span className="text-2xl">📭</span>
-                                        <span>No data to display</span>
+                                    <div className="flex flex-col items-center gap-3">
+                                        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                                            <Inbox size={24} />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="font-semibold text-slate-600">No data to display</p>
+                                            <p className="text-xs text-slate-400">Try adjusting your search or filters.</p>
+                                        </div>
                                     </div>
                                 </TableCell>
                             </TableRow>
@@ -119,23 +130,25 @@ function DataTable<TRow>({
                                     onClick={() =>
                                         handleRowClick && handleRowClick({ row })
                                     }
-                                    className={`border-b border-slate-100/50 transition-all duration-300 last:border-0 ${idx % 2 === 0 ? 'bg-white/40' : 'bg-slate-50/40'
-                                        } ${handleRowClick
-                                            ? 'hover:bg-blue-50/80 hover:shadow-sm cursor-pointer hover:-translate-y-[1px]'
+                                    className={`border-b border-slate-100/50 transition-all duration-300 last:border-0 ${
+                                        idx % 2 === 0 ? 'bg-white/40' : 'bg-slate-50/40'
+                                    } ${
+                                        handleRowClick
+                                            ? 'cursor-pointer hover:-translate-y-[1px] hover:bg-blue-50/80 hover:shadow-sm'
                                             : 'hover:bg-slate-50/80'
-                                        }`}
+                                    }`}
                                 >
                                     {columns.map((col) => (
                                         <TableCell
                                             key={col.field}
-                                            className="whitespace-nowrap px-3 py-3.5 text-sm text-slate-700"
+                                            className="whitespace-nowrap px-4 py-4 align-middle text-sm text-slate-700"
                                         >
                                             {col.renderCell
                                                 ? col.renderCell({
-                                                    value: (row as Record<string, unknown>)[col.field],
-                                                    row,
-                                                    field: col.field,
-                                                })
+                                                      value: (row as Record<string, unknown>)[col.field],
+                                                      row,
+                                                      field: col.field,
+                                                  })
                                                 : String((row as Record<string, unknown>)[col.field] ?? '')}
                                         </TableCell>
                                     ))}
@@ -146,27 +159,31 @@ function DataTable<TRow>({
                 </Table>
             </div>
 
-            {/* Pagination */}
-            <div className="flex items-center justify-between px-5 py-4 bg-white/40 backdrop-blur-md border-t border-slate-100/50 rounded-b-3xl">
-                <p className="text-xs text-slate-500">
-                    Page{' '}
-                    <span className="font-semibold text-slate-700">{page + 1}</span>
-                    {' '}of{' '}
-                    <span className="font-semibold text-slate-700">{normalizedTotalPages}</span>
-                </p>
+            <div className="flex flex-col gap-3 border-t border-slate-100/70 bg-white/50 px-5 py-4 backdrop-blur-md sm:flex-row sm:items-center sm:justify-between">
+                <div className="space-y-1">
+                    <p className="text-sm font-semibold text-slate-700">
+                        Showing {rows.length} {rows.length === 1 ? 'result' : 'results'}
+                    </p>
+                    <p className="text-xs text-slate-500" aria-live="polite">
+                        Page <span className="font-semibold text-slate-700">{page + 1}</span> of{' '}
+                        <span className="font-semibold text-slate-700">{normalizedTotalPages}</span>
+                    </p>
+                </div>
 
                 <Pagination className="mx-0 w-auto justify-end">
-                    <PaginationContent>
+                    <PaginationContent className="gap-2">
                         <PaginationItem>
                             <Button
                                 type="button"
                                 variant="outline"
                                 size="sm"
                                 disabled={!canPrev}
+                                className="min-w-[92px]"
                                 onClick={() =>
                                     onPaginationModelChange({ page: page - 1, pageSize })
                                 }
                             >
+                                <ChevronLeft size={16} />
                                 Prev
                             </Button>
                         </PaginationItem>
@@ -176,11 +193,13 @@ function DataTable<TRow>({
                                 variant="outline"
                                 size="sm"
                                 disabled={!canNext}
+                                className="min-w-[92px]"
                                 onClick={() =>
                                     onPaginationModelChange({ page: page + 1, pageSize })
                                 }
                             >
                                 Next
+                                <ChevronRight size={16} />
                             </Button>
                         </PaginationItem>
                     </PaginationContent>

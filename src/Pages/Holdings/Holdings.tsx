@@ -5,18 +5,17 @@ import { HoldingsSearchFilter } from './Component/SearchFilters.tsx'
 import { useAuth } from '@/Context/AuthProvider.tsx'
 import { isAdminRole } from '@/Helpers/access.ts'
 import { MyAssets } from './Component/MyAssets.tsx'
+import PageIntro from '@/Components/PageIntro/PageIntro'
 
 function HoldingsComponent() {
     return (
         <main className={style.main}>
-            <div className="mb-6">
-                <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
-                    Holdings
-                </h1>
-                <p className="mt-2 max-w-2xl text-sm text-slate-500">
-                    Review employee asset ownership, assign inventory, and process returns from one place.
-                </p>
-            </div>
+            <PageIntro
+                eyebrow="Equipment"
+                title="Holdings"
+                description="Review employee asset ownership, inspect active assignments, and process returns from one place."
+                className="mb-6"
+            />
             <HoldingsSearchFilter />
 
             <div className={style.mainContainer}>

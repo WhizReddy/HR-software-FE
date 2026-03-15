@@ -3,4 +3,7 @@ export enum ButtonTypes {
     SECONDARY = 'SECONDARY',
     TERTIARY = 'TERTIARY',
     DANGER = 'DANGER',
+    SUCCESS = 'SUCCESS',
+    WARNING = 'WARNING',
+    NEUTRAL = 'NEUTRAL',
 }

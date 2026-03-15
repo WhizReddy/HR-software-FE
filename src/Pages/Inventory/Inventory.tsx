@@ -6,6 +6,7 @@ import { InventoryTable } from './components/InventoryTable.tsx'
 import { CreateItemForm } from './components/Form/CreateItemForm.tsx'
 import { Button } from '@/Components/ui/button'
 import { Plus } from 'lucide-react'
+import PageIntro from '@/Components/PageIntro/PageIntro'
 
 function InventoryBaseComponent() {
     const {
@@ -21,25 +22,19 @@ function InventoryBaseComponent() {
             >
                 <CreateItemForm />
             </ModalComponent>
-            <div className="mb-6">
-                <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
-                    Inventory
-                </h1>
-                <p className="mt-2 max-w-2xl text-sm text-slate-500">
-                    Track assets, monitor assignment status, and inspect serial-level details.
-                </p>
-            </div>
+            <PageIntro
+                eyebrow="Assets"
+                title="Inventory"
+                description="Track company equipment, monitor assignment status, and inspect serial-level details without leaving the inventory workspace."
+                className="mb-6"
+                actions={
+                    <Button type="button" onClick={handleOpenCreateModalOpen}>
+                        <Plus size={16} />
+                        Add Item
+                    </Button>
+                }
+            />
             <InventoryTable />
-            <div className="mt-4 flex justify-end">
-                <Button
-                    type="button"
-                    onClick={handleOpenCreateModalOpen}
-                    className="h-10 rounded-xl bg-[#2457a3] px-5 text-sm font-semibold text-white hover:bg-[#1b4285]"
-                >
-                    <Plus size={16} />
-                    Add Item
-                </Button>
-            </div>
         </main>
     )
 }
