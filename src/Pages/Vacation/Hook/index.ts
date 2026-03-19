@@ -224,14 +224,23 @@ export const useCreateVacationForm = () => {
                             message: error?.message || 'Failed to create vacation',
                             severity: 'error',
                         })
-                        if (error instanceof AxiosError)
+                        if (error instanceof AxiosError) {
+                            const data = (error as AxiosError).response?.data as any
+                            const msg =
+                                typeof data?.message === 'string'
+                                    ? data.message
+                                    : Array.isArray(data?.message)
+                                      ? data.message.join(', ')
+                                      : typeof data === 'string'
+                                        ? data
+                                        : 'Failed to create vacation'
                             setErrors({
-                                createError: (error as AxiosError).response?.data as string,
+                                createError: msg,
                                 updateError: null,
                             })
-                        else {
+                        } else {
                             setErrors({
-                                createError: 'something happened',
+                                createError: 'Something went wrong, please try again',
                                 updateError: null,
                             })
                         }

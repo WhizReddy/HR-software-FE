@@ -49,9 +49,18 @@ export const VacationForm: React.FC<MyComponentProps> = ({
                         updater.error?.message || 'Failed to update vacation',
                     severity: 'error',
                 })
-                if (updater.error instanceof AxiosError)
-                    setError(updater.error.response?.data)
-                else {
+                if (updater.error instanceof AxiosError) {
+                    const data = updater.error.response?.data as any
+                    const msg =
+                        typeof data?.message === 'string'
+                            ? data.message
+                            : Array.isArray(data?.message)
+                              ? data.message.join(', ')
+                              : typeof data === 'string'
+                                ? data
+                                : 'Failed to update vacation'
+                    setError(msg)
+                } else {
                     setError('something happened')
                 }
             } else {
