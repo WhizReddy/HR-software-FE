@@ -64,14 +64,16 @@ export const PayrollProviderSpecific: React.FC<{
     const rows: PayrollRowSpecifc[] =
         payrollId?.data.map((payrollData, index) => ({
             id: page * pageSize + index + 1,
-            originalId: payrollData.userId._id,
+            originalId: payrollData.userId?._id ?? '',
             netSalary: `${payrollData.netSalary}${payrollData.currency}`,
             healthInsurance: `${payrollData.healthInsurance}${payrollData.currency}`,
             month: getMonthName(Number(payrollData.month)),
             workingDays: payrollData.workingDays,
             socialSecurity: payrollData.socialSecurity,
             tax: payrollData.tax,
-            fullName: `${payrollData.userId.firstName} ${payrollData.userId.lastName}`,
+            fullName: payrollData.userId
+                ? `${payrollData.userId.firstName} ${payrollData.userId.lastName}`
+                : 'Unknown user',
             grossSalary: payrollData.grossSalary,
             year: payrollData.year,
             bonusDescription: payrollData.bonusDescription,
@@ -111,7 +113,7 @@ export const PayrollProviderSpecific: React.FC<{
         pageSize,
         totalPages: payrollId?.totalPages ?? 0,
         handlePaginationModelChange,
-        fullName: payrollId?.data[0]
+        fullName: payrollId?.data[0]?.userId
             ? `${payrollId.data[0].userId.firstName} ${payrollId.data[0].userId.lastName}`
             : '',
     }

@@ -25,8 +25,8 @@ export const UpdateVacationForm: React.FC<{
         vacation.data && (
             <>
                 <h3 className={style.fullName}>
-                    {vacation.data.userId.firstName}{' '}
-                    {vacation.data.userId.lastName}
+                    {vacation.data.userId?.firstName ?? 'Unknown'}{' '}
+                    {vacation.data.userId?.lastName ?? ''}
                 </h3>
                 <form
                     onSubmit={(e) => {
