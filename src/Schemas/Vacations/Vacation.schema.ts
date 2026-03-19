@@ -35,7 +35,7 @@ export const VacationSchema = pipe(
             [['startDate'], ['endDate']],
             (input) =>
                 dayjs(input.startDate).isBefore(dayjs(input.endDate)) ||
-                dayjs(input.endDate).isSame(dayjs()),
+                dayjs(input.endDate).isSame(dayjs(input.startDate)),
             'The ending date should be after the startdate',
         ),
         ['endDate'],

@@ -44,9 +44,11 @@ export const useGetVacations = () => {
 
 export const useGetVacation = () => {
     const { searchParams } = useContext(VacationContext)
+    const selectedVacation = searchParams.get('selectedVacation')
     return useQuery({
-        queryKey: ['vacation', searchParams.get('selectedVacation')],
-        queryFn: () => getVacation(searchParams.get('selectedVacation')!),
+        queryKey: ['vacation', selectedVacation],
+        queryFn: () => getVacation(selectedVacation!),
+        enabled: Boolean(selectedVacation),
     })
 }
 
