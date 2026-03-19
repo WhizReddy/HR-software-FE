@@ -49,13 +49,19 @@ const devNavItems = [
   { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
   { label: 'Employees', path: '/employees', icon: Users },
   { label: 'My Assets', path: '/holdings', icon: Handshake },
+  { label: 'My Vacation', path: '/my-vacation', icon: CalendarCheck },
 ]
 
 export const SideBar: React.FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const { currentUser, logout } = useAuth()
-  const navItems = isAdminRole(currentUser?.role) ? adminNavItems : devNavItems
+  const rawNavItems = isAdminRole(currentUser?.role) ? adminNavItems : devNavItems
+  const navItems = rawNavItems.map((item) =>
+    item.path === '/my-vacation'
+      ? { ...item, path: `/vacation/${currentUser?._id}` }
+      : item
+  )
 
   const handleLogout = () => {
     logout()
