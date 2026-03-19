@@ -21,6 +21,14 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
     const [page, setPage] = useState(0)
     const [pageSize, setPageSize] = useState(5)
 
+    const applyFilterChange = <T,>(
+        setter: React.Dispatch<React.SetStateAction<T>>,
+        value: T,
+    ) => {
+        setPage(0)
+        setter(value)
+    }
+
     const handlePaginationModelChange = (model: PaginationModel) => {
         setPage(model.page)
         setPageSize(model.pageSize)
@@ -32,7 +40,6 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         data: PayrollRow[]
         totalPages: number
     }> => {
-        // Build URL without undefined params — prevents "No data to display" bug
         const params = new URLSearchParams()
         params.set('limit', String(pageSize))
         params.set('page', String(page))
@@ -128,17 +135,20 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         headerTextColors,
         getRowId,
         handleRowClick,
-        setFullName,
-        setMaxNetSalary,
-        setMinNetSalary,
-        setMonth,
-        setYear,
+        setFullName: (value: string) => applyFilterChange(setFullName, value),
+        setMaxNetSalary: (value: number | undefined) =>
+            applyFilterChange(setMaxNetSalary, value),
+        setMinNetSalary: (value: number | undefined) =>
+            applyFilterChange(setMinNetSalary, value),
+        setMonth: (value: number | undefined) => applyFilterChange(setMonth, value),
+        setYear: (value: number | undefined) => applyFilterChange(setYear, value),
         isPending,
         isError,
-        setBonus,
-        setWorkingDays,
+        setBonus: (value: number | undefined) => applyFilterChange(setBonus, value),
+        setWorkingDays: (value: number | undefined) =>
+            applyFilterChange(setWorkingDays, value),
         // Required by PayrollContextType interface
-        setName: setFullName,
+        setName: (value: string) => applyFilterChange(setFullName, value),
         netSalary,
         setNetSalary,
         filters,

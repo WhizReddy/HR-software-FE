@@ -36,9 +36,20 @@ export const getUsersWithVacations = async ({
     search: string
     users: string
 }): Promise<UsersWithVacations> => {
-    const response = await AxiosInstance.get(
-        `/vacation/user?search=${search}&users=${users}&page=${pageParam}&limit=${LIMIT}&startDate=2024-01-01T00:00:00.810Z&endDate=2025-01-01T10:00:00.810Z`,
-    )
+    const params = new URLSearchParams({
+        page: String(pageParam),
+        limit: String(LIMIT),
+    })
+
+    if (search) {
+        params.set('search', search)
+    }
+
+    if (users) {
+        params.set('users', users)
+    }
+
+    const response = await AxiosInstance.get(`/vacation/user?${params.toString()}`)
     return {
         data: response.data.data,
         totalPages: response.data.totalPages,

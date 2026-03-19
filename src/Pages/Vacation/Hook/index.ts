@@ -21,6 +21,7 @@ import { useForm } from '@tanstack/react-form'
 import dayjs from 'dayjs'
 import { valibotValidator } from '@tanstack/valibot-form-adapter'
 import { AxiosError } from 'axios'
+import { useParams } from 'react-router-dom'
 
 export const useGetVacations = () => {
     const { searchParams } = useContext(VacationContext)
@@ -55,7 +56,7 @@ export const useGetUsersWithVacations = () => {
     return useInfiniteQuery({
         initialPageParam: 0,
         queryKey: [
-            'usersWithHoldings',
+            'usersWithVacations',
             searchParams.get('search'),
             searchParams.get('users'),
         ],
@@ -74,9 +75,13 @@ export const useGetUsersWithVacations = () => {
 }
 export const useGetUserWithVacations = () => {
     const { searchParams } = useContext(VacationContext)
+    const { id } = useParams<{ id: string }>()
+    const userId = id || searchParams.get('userId')
+
     return useQuery({
-        queryKey: ['userWithVacations', searchParams.get('userId')],
-        queryFn: () => getUserWithVacations(searchParams.get('userId')!),
+        queryKey: ['userWithVacations', userId],
+        queryFn: () => getUserWithVacations(userId!),
+        enabled: Boolean(userId),
     })
 }
 

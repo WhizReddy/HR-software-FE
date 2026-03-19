@@ -8,6 +8,16 @@ import { useState } from 'react'
 import { ButtonTypes } from '@/Components/Button/ButtonTypes'
 import Button from '@/Components/Button/Button'
 import { X, Filter } from 'lucide-react'
+
+const parseOptionalNumber = (value: string): number | undefined => {
+    if (!value.trim()) {
+        return undefined
+    }
+
+    const parsed = Number(value)
+    return Number.isFinite(parsed) ? parsed : undefined
+}
+
 function PayrollContent() {
     const {
         rows,
@@ -30,9 +40,16 @@ function PayrollContent() {
 
     const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const date = event.target.value
+        if (!date) {
+            setYear(undefined)
+            setMonth(undefined)
+            return
+        }
+
         const [yearString, monthString] = date.split('-')
-        setYear(parseInt(yearString))
-        setMonth(parseInt(monthString) - 1)
+        setYear(parseOptionalNumber(yearString))
+        const parsedMonth = parseOptionalNumber(monthString)
+        setMonth(parsedMonth !== undefined ? parsedMonth - 1 : undefined)
     }
 
     const handleFullNameChange = (
@@ -44,23 +61,23 @@ function PayrollContent() {
     const handleWorkingDaysChange = (
         event: React.ChangeEvent<HTMLInputElement>,
     ) => {
-        setWorkingDays(parseInt(event.target.value))
+        setWorkingDays(parseOptionalNumber(event.target.value))
     }
 
     const handleMinSalaryChange = (
         event: React.ChangeEvent<HTMLInputElement>,
     ) => {
-        setMinNetSalary(parseFloat(event.target.value))
+        setMinNetSalary(parseOptionalNumber(event.target.value))
     }
 
     const handleMaxSalaryChange = (
         event: React.ChangeEvent<HTMLInputElement>,
     ) => {
-        setMaxNetSalary(parseFloat(event.target.value))
+        setMaxNetSalary(parseOptionalNumber(event.target.value))
     }
 
     const handleBonusChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setBonus(parseFloat(event.target.value))
+        setBonus(parseOptionalNumber(event.target.value))
     }
 
     const [showFilters, setShowFilters] = useState(false)

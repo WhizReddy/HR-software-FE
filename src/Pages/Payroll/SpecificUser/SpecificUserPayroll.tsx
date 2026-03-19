@@ -6,6 +6,15 @@ import Input from '@/Components/Input/Index'
 import { EventsProvider } from '@/Pages/Events/Context/EventsContext'
 import { RingLoader } from 'react-spinners'
 
+const parseOptionalNumber = (value: string): number | undefined => {
+    if (!value.trim()) {
+        return undefined
+    }
+
+    const parsed = Number(value)
+    return Number.isFinite(parsed) ? parsed : undefined
+}
+
 function SpecificUserPayrollContent() {
     const {
         rows,
@@ -23,9 +32,16 @@ function SpecificUserPayrollContent() {
 
     const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const date = event.target.value
+        if (!date) {
+            setYear(undefined)
+            setMonth(undefined)
+            return
+        }
+
         const [yearString, monthString] = date.split('-')
-        setYear(parseInt(yearString))
-        setMonth(parseInt(monthString) - 1)
+        setYear(parseOptionalNumber(yearString))
+        const parsedMonth = parseOptionalNumber(monthString)
+        setMonth(parsedMonth !== undefined ? parsedMonth - 1 : undefined)
     }
 
     if (isPending)

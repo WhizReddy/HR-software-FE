@@ -15,6 +15,14 @@ export const PayrollProviderSpecific: React.FC<{
     const [page, setPage] = useState(0)
     const [pageSize, setPageSize] = useState(5)
 
+    const applyFilterChange = <T,>(
+        setter: React.Dispatch<React.SetStateAction<T>>,
+        value: T,
+    ) => {
+        setPage(0)
+        setter(value)
+    }
+
     const handlePaginationModelChange = (model: PaginationModel) => {
         setPage(model.page)
         setPageSize(model.pageSize)
@@ -24,12 +32,23 @@ export const PayrollProviderSpecific: React.FC<{
         data: PayrollRowSpecifc[]
         totalPages: number
     }> => {
+        const params = new URLSearchParams({
+            limit: String(pageSize),
+            page: String(page),
+        })
+
+        if (month !== undefined) {
+            params.set('month', String(month))
+        }
+
+        if (year !== undefined) {
+            params.set('year', String(year))
+        }
+
         const response = await AxiosInstance.get<{
             data: PayrollRowSpecifc[]
             totalPages: number
-        }>(
-            `/salary/user/${id}?month=${month}&year=${year}&limit=${pageSize}&page=${page}`,
-        )
+        }>(`/salary/user/${id}?${params.toString()}`)
         return response.data
     }
 
@@ -37,8 +56,9 @@ export const PayrollProviderSpecific: React.FC<{
         { data: PayrollRowSpecifc[]; totalPages: number },
         Error
     >({
-        queryKey: ['payrollId', month, year, page, pageSize],
+        queryKey: ['payrollId', id, month, year, page, pageSize],
         queryFn: () => fetchPayroll(),
+        enabled: Boolean(id),
     })
 
     const rows: PayrollRowSpecifc[] =
@@ -84,8 +104,8 @@ export const PayrollProviderSpecific: React.FC<{
         columns,
         headerTextColors,
         getRowId,
-        setMonth,
-        setYear,
+        setMonth: (value: number | undefined) => applyFilterChange(setMonth, value),
+        setYear: (value: number | undefined) => applyFilterChange(setYear, value),
         isPending,
         page,
         pageSize,
