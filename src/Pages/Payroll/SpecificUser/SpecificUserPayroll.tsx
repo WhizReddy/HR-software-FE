@@ -5,6 +5,9 @@ import { usePayrollContextSpecific } from './Context/SpecificUserPayrollContext'
 import Input from '@/Components/Input/Index'
 import { EventsProvider } from '@/Pages/Events/Context/EventsContext'
 import { RingLoader } from 'react-spinners'
+import Button from '@/Components/Button/Button'
+import { ButtonTypes } from '@/Components/Button/ButtonTypes'
+import { useState } from 'react'
 
 const parseOptionalNumber = (value: string): number | undefined => {
     if (!value.trim()) {
@@ -29,9 +32,12 @@ function SpecificUserPayrollContent() {
         handlePaginationModelChange,
         isPending,
     } = usePayrollContextSpecific()
+    const [monthValue, setMonthValue] = useState('')
 
     const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const date = event.target.value
+        setMonthValue(date)
+
         if (!date) {
             setYear(undefined)
             setMonth(undefined)
@@ -42,6 +48,12 @@ function SpecificUserPayrollContent() {
         setYear(parseOptionalNumber(yearString))
         const parsedMonth = parseOptionalNumber(monthString)
         setMonth(parsedMonth !== undefined ? parsedMonth - 1 : undefined)
+    }
+
+    const handleClearFilters = () => {
+        setMonthValue('')
+        setYear(undefined)
+        setMonth(undefined)
     }
 
     if (isPending)
@@ -80,7 +92,13 @@ function SpecificUserPayrollContent() {
                     type="month"
                     label="Month & Year"
                     IsUsername
+                    value={monthValue}
                     onChange={handleDateChange}
+                />
+                <Button
+                    btnText="Clear"
+                    type={ButtonTypes.SECONDARY}
+                    onClick={handleClearFilters}
                 />
             </div>
             <DataTable

@@ -9,6 +9,24 @@ import { ButtonTypes } from '@/Components/Button/ButtonTypes'
 import Button from '@/Components/Button/Button'
 import { X, Filter } from 'lucide-react'
 
+interface PayrollFilterValues {
+    month: string
+    fullName: string
+    workingDays: string
+    maxNetSalary: string
+    minNetSalary: string
+    bonus: string
+}
+
+const DEFAULT_FILTER_VALUES: PayrollFilterValues = {
+    month: '',
+    fullName: '',
+    workingDays: '',
+    maxNetSalary: '',
+    minNetSalary: '',
+    bonus: '',
+}
+
 const parseOptionalNumber = (value: string): number | undefined => {
     if (!value.trim()) {
         return undefined
@@ -37,9 +55,18 @@ function PayrollContent() {
         totalPages,
         handlePaginationModelChange,
     } = usePayrollContext()
+    const [showFilters, setShowFilters] = useState(false)
+    const [filterValues, setFilterValues] = useState<PayrollFilterValues>(
+        DEFAULT_FILTER_VALUES,
+    )
 
     const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const date = event.target.value
+        setFilterValues((prev) => ({
+            ...prev,
+            month: date,
+        }))
+
         if (!date) {
             setYear(undefined)
             setMonth(undefined)
@@ -55,32 +82,66 @@ function PayrollContent() {
     const handleFullNameChange = (
         event: React.ChangeEvent<HTMLInputElement>,
     ) => {
-        setFullName(event.target.value)
+        const value = event.target.value
+        setFilterValues((prev) => ({
+            ...prev,
+            fullName: value,
+        }))
+        setFullName(value)
     }
 
     const handleWorkingDaysChange = (
         event: React.ChangeEvent<HTMLInputElement>,
     ) => {
-        setWorkingDays(parseOptionalNumber(event.target.value))
+        const value = event.target.value
+        setFilterValues((prev) => ({
+            ...prev,
+            workingDays: value,
+        }))
+        setWorkingDays(parseOptionalNumber(value))
     }
 
     const handleMinSalaryChange = (
         event: React.ChangeEvent<HTMLInputElement>,
     ) => {
-        setMinNetSalary(parseOptionalNumber(event.target.value))
+        const value = event.target.value
+        setFilterValues((prev) => ({
+            ...prev,
+            minNetSalary: value,
+        }))
+        setMinNetSalary(parseOptionalNumber(value))
     }
 
     const handleMaxSalaryChange = (
         event: React.ChangeEvent<HTMLInputElement>,
     ) => {
-        setMaxNetSalary(parseOptionalNumber(event.target.value))
+        const value = event.target.value
+        setFilterValues((prev) => ({
+            ...prev,
+            maxNetSalary: value,
+        }))
+        setMaxNetSalary(parseOptionalNumber(value))
     }
 
     const handleBonusChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setBonus(parseOptionalNumber(event.target.value))
+        const value = event.target.value
+        setFilterValues((prev) => ({
+            ...prev,
+            bonus: value,
+        }))
+        setBonus(parseOptionalNumber(value))
     }
 
-    const [showFilters, setShowFilters] = useState(false)
+    const handleClearFilters = () => {
+        setFilterValues(DEFAULT_FILTER_VALUES)
+        setYear(undefined)
+        setMonth(undefined)
+        setFullName('')
+        setWorkingDays(undefined)
+        setMaxNetSalary(undefined)
+        setMinNetSalary(undefined)
+        setBonus(undefined)
+    }
 
     return (
         <div className={style.payroll}>
@@ -112,13 +173,14 @@ function PayrollContent() {
                                     className={`transition-all duration-300 overflow-hidden ml-2 ${showFilters ? 'w-auto opacity-100' : 'w-0 opacity-0'
                                         }`}
                                 >
-                                    <div className="flex gap-4">
+                                    <div className="flex flex-wrap items-end gap-4">
                                         <Input
                                             width="150px"
                                             name="Filter"
                                             type="month"
                                             label="Month & Year"
                                             isFilter
+                                            value={filterValues.month}
                                             onChange={handleDateChange}
                                         />
                                         <Input
@@ -127,6 +189,7 @@ function PayrollContent() {
                                             type="text"
                                             label="Full Name"
                                             isFilter
+                                            value={filterValues.fullName}
                                             onChange={handleFullNameChange}
                                         />
                                         <Input
@@ -135,6 +198,7 @@ function PayrollContent() {
                                             type="number"
                                             label="Working Days"
                                             isFilter
+                                            value={filterValues.workingDays}
                                             onChange={handleWorkingDaysChange}
                                         />
                                         <Input
@@ -143,6 +207,7 @@ function PayrollContent() {
                                             type="number"
                                             label="Max Salary"
                                             isFilter
+                                            value={filterValues.maxNetSalary}
                                             onChange={handleMaxSalaryChange}
                                         />
                                         <Input
@@ -151,6 +216,7 @@ function PayrollContent() {
                                             type="number"
                                             label="Min Salary"
                                             isFilter
+                                            value={filterValues.minNetSalary}
                                             onChange={handleMinSalaryChange}
                                         />
                                         <Input
@@ -159,7 +225,14 @@ function PayrollContent() {
                                             type="number"
                                             label="Bonus"
                                             isFilter
+                                            value={filterValues.bonus}
                                             onChange={handleBonusChange}
+                                        />
+                                        <Button
+                                            btnText="Clear"
+                                            type={ButtonTypes.SECONDARY}
+                                            onClick={handleClearFilters}
+                                            className="shrink-0"
                                         />
                                     </div>
                                 </div>
