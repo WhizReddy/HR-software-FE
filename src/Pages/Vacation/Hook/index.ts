@@ -20,8 +20,8 @@ import { CreateVacationFormFields } from '@/Schemas/Vacations/CreateVacation.sch
 import { useForm } from '@tanstack/react-form'
 import dayjs from 'dayjs'
 import { valibotValidator } from '@tanstack/valibot-form-adapter'
-import { AxiosError } from 'axios'
 import { useParams } from 'react-router-dom'
+import { getVacationErrorMessage } from '../errorMessage'
 
 export const useGetVacations = () => {
     const { searchParams } = useContext(VacationContext)
@@ -138,6 +138,11 @@ export const useUpdateVacationForm = (vacation: UseQueryResult<any, Error>) => {
         },
         validatorAdapter: valibotValidator(),
         onSubmit: async ({ value }) => {
+            setErrors({
+                createError: null,
+                updateError: null,
+            })
+
             const payload = {
                 ...value,
                 endDate: dayjs(value.endDate).toISOString(),
@@ -149,6 +154,10 @@ export const useUpdateVacationForm = (vacation: UseQueryResult<any, Error>) => {
                 { vacation: payload },
                 {
                     onSuccess: () => {
+                        setErrors({
+                            createError: null,
+                            updateError: null,
+                        })
                         setToastConfigs({
                             isOpen: true,
                             message: 'Vacation updated successfully',
@@ -157,22 +166,20 @@ export const useUpdateVacationForm = (vacation: UseQueryResult<any, Error>) => {
                         handleCloseVacationModalOpen()
                     },
                     onError: (error) => {
+                        const message = getVacationErrorMessage(
+                            error,
+                            'Failed to update vacation',
+                        )
+
                         setToastConfigs({
                             isOpen: true,
-                            message: error?.message || 'Failed to update vacation',
+                            message,
                             severity: 'error',
                         })
-                        if (error instanceof AxiosError)
-                            setErrors({
-                                createError: null,
-                                updateError: error.response?.data?.message || 'Conflict occurred updating vacation',
-                            })
-                        else {
-                            setErrors({
-                                createError: null,
-                                updateError: 'something happened',
-                            })
-                        }
+                        setErrors({
+                            createError: null,
+                            updateError: message,
+                        })
                     },
                 },
             )
@@ -200,6 +207,11 @@ export const useCreateVacationForm = () => {
             endDate: dayjs(new Date()).add(2, 'day').format('YYYY-MM-DD'),
         },
         onSubmit: async ({ value }) => {
+            setErrors({
+                createError: null,
+                updateError: null,
+            })
+
             const payload = {
                 ...value,
                 endDate: dayjs(value.endDate).toISOString(),
@@ -211,6 +223,10 @@ export const useCreateVacationForm = () => {
                 { vacation: payload },
                 {
                     onSuccess: () => {
+                        setErrors({
+                            createError: null,
+                            updateError: null,
+                        })
                         setToastConfigs({
                             isOpen: true,
                             message: 'Vacation created successfully',
@@ -219,31 +235,20 @@ export const useCreateVacationForm = () => {
                         createVacationToggler()
                     },
                     onError: (error) => {
+                        const message = getVacationErrorMessage(
+                            error,
+                            'Failed to create vacation',
+                        )
+
                         setToastConfigs({
                             isOpen: true,
-                            message: error?.message || 'Failed to create vacation',
+                            message,
                             severity: 'error',
                         })
-                        if (error instanceof AxiosError) {
-                            const data = (error as AxiosError).response?.data as any
-                            const msg =
-                                typeof data?.message === 'string'
-                                    ? data.message
-                                    : Array.isArray(data?.message)
-                                      ? data.message.join(', ')
-                                      : typeof data === 'string'
-                                        ? data
-                                        : 'Failed to create vacation'
-                            setErrors({
-                                createError: msg,
-                                updateError: null,
-                            })
-                        } else {
-                            setErrors({
-                                createError: 'Something went wrong, please try again',
-                                updateError: null,
-                            })
-                        }
+                        setErrors({
+                            createError: message,
+                            updateError: null,
+                        })
                     },
                 },
             )

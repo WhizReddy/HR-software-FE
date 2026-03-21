@@ -9,12 +9,12 @@ import { ButtonTypes } from '@/Components/Button/ButtonTypes'
 import { useUpdateVacation } from '../../Hook'
 import { useContext, useState } from 'react'
 import { VacationContext } from '../../VacationContext'
-import { AxiosError } from 'axios'
 import Selecter from '@/Components/Input/components/Select/Selecter'
 import Input from '@/Components/Input/Index'
 import style from '../../style/vacationForm.module.scss'
 import { useForm } from '@tanstack/react-form'
 import { valibotValidator } from '@tanstack/valibot-form-adapter'
+import { getVacationErrorMessage } from '../../errorMessage'
 
 type MyComponentProps = {
     data: UseQueryResult<any, Error>
@@ -37,40 +37,36 @@ export const VacationForm: React.FC<MyComponentProps> = ({
         },
         validatorAdapter: valibotValidator(),
         onSubmit: async ({ value }) => {
-            console.log(value)
-
             value.endDate = dayjs(value.endDate).toISOString()
             value.startDate = dayjs(value.startDate).toISOString()
-            updater.mutate({ vacation: value })
-            if (updater.isError) {
-                setToastConfigs({
-                    isOpen: true,
-                    message:
-                        updater.error?.message || 'Failed to update vacation',
-                    severity: 'error',
-                })
-                if (updater.error instanceof AxiosError) {
-                    const data = updater.error.response?.data as any
-                    const msg =
-                        typeof data?.message === 'string'
-                            ? data.message
-                            : Array.isArray(data?.message)
-                              ? data.message.join(', ')
-                              : typeof data === 'string'
-                                ? data
-                                : 'Failed to update vacation'
-                    setError(msg)
-                } else {
-                    setError('something happened')
-                }
-            } else {
-                setToastConfigs({
-                    isOpen: true,
-                    message: 'Vacation updated successfully',
-                    severity: 'success',
-                })
-                handleCloseVacationModalOpen()
-            }
+            setError(null)
+
+            updater.mutate(
+                { vacation: value },
+                {
+                    onSuccess: () => {
+                        setToastConfigs({
+                            isOpen: true,
+                            message: 'Vacation updated successfully',
+                            severity: 'success',
+                        })
+                        handleCloseVacationModalOpen()
+                    },
+                    onError: (mutationError) => {
+                        const message = getVacationErrorMessage(
+                            mutationError,
+                            'Failed to update vacation',
+                        )
+
+                        setToastConfigs({
+                            isOpen: true,
+                            message,
+                            severity: 'error',
+                        })
+                        setError(message)
+                    },
+                },
+            )
         },
     })
     return (
