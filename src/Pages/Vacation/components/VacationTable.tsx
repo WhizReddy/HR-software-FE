@@ -3,50 +3,36 @@ import DataTable from '@/Components/Table/Table'
 import { PaginationModel, RenderCellParams } from '@/types/table'
 import { dateFormatter } from '@/Helpers/dateFormater'
 import style from '../style/vacationTable.module.scss'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { VacationContext } from '../VacationContext'
 import { SelectedVacationModal } from './form/SelectedVacationModal'
 import { StatusBadge } from '@/Components/StatusBadge/StatusBadge'
 import Toast from '@/Components/Toast/Toast'
 import { Vacation } from '../types'
-import {
-    hasSearchParamsChanged,
-    parseNumberParam,
-    upsertFilterParams,
-} from '@/Helpers/urlFilters'
 import { useDebouncedValue } from '@/hooks/use-debounced-value'
-import { useState } from 'react'
 import Button from '@/Components/Button/Button'
 import { ButtonTypes } from '@/Components/Button/ButtonTypes'
 
 export const VacationTable = () => {
     const {
         searchParams,
-        setSearchParams,
         handleOpenViewVacationModalOpen,
         toastConfigs,
         handleToastClose,
     } = useContext(VacationContext)
-    const { data, error, isPending } = useGetVacations()
-    const [searchInput, setSearchInput] = useState(
-        searchParams.get('search') || '',
-    )
+    const [page, setPage] = useState(0)
+    const [pageSize, setPageSize] = useState(5)
+    const [searchInput, setSearchInput] = useState('')
     const debouncedSearch = useDebouncedValue(searchInput, 400)
+    const { data, error, isPending } = useGetVacations(
+        page,
+        pageSize,
+        debouncedSearch,
+    )
 
     useEffect(() => {
-        setSearchInput(searchParams.get('search') || '')
-    }, [searchParams])
-
-    useEffect(() => {
-        setSearchParams((prev) => {
-            const nextParams = upsertFilterParams(
-                prev,
-                { search: debouncedSearch.trim() || null },
-                { resetPage: true },
-            )
-            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
-        })
-    }, [debouncedSearch, setSearchParams])
+        setPage(0)
+    }, [debouncedSearch])
 
     if (error) return <p>Error: {error.message}</p>
     if (isPending) return <div className="flex justify-center p-4"><div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>
@@ -62,13 +48,8 @@ export const VacationTable = () => {
             actions: vacation._id,
         })) ?? []
     const handlePaginationModelChange = (model: PaginationModel) => {
-        setSearchParams((prev) => {
-            const nextParams = upsertFilterParams(prev, {
-                page: model.page.toString(),
-                limit: model.pageSize.toString(),
-            })
-            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
-        })
+        setPage(model.page)
+        setPageSize(model.pageSize)
     }
 
     const columns = [
@@ -134,8 +115,8 @@ export const VacationTable = () => {
             <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-4 mt-5">
                 <DataTable
                     onPaginationModelChange={handlePaginationModelChange}
-                    page={parseNumberParam(searchParams, 'page', 0)}
-                    pageSize={parseNumberParam(searchParams, 'limit', 5)}
+                    page={page}
+                    pageSize={pageSize}
                     totalPages={data?.totalPages ?? 0}
                     rows={rows}
                     columns={columns}
@@ -150,19 +131,7 @@ export const VacationTable = () => {
                             type={ButtonTypes.SECONDARY}
                             onClick={() => {
                                 setSearchInput('')
-                                setSearchParams((prev) => {
-                                    const nextParams = upsertFilterParams(
-                                        prev,
-                                        { search: null },
-                                        { resetPage: true },
-                                    )
-                                    return hasSearchParamsChanged(
-                                        prev,
-                                        nextParams,
-                                    )
-                                        ? nextParams
-                                        : prev
-                                })
+                                setPage(0)
                             }}
                             disabled={!hasSearch}
                         />

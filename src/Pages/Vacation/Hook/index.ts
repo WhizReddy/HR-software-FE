@@ -22,22 +22,12 @@ import dayjs from 'dayjs'
 import { valibotValidator } from '@tanstack/valibot-form-adapter'
 import { useParams } from 'react-router-dom'
 import { getVacationErrorMessage } from '../errorMessage'
-import { parseNumberParam } from '@/Helpers/urlFilters'
 
-export const useGetVacations = () => {
-    const { searchParams } = useContext(VacationContext)
-    const page = parseNumberParam(searchParams, 'page', 0)
-    const limit = parseNumberParam(searchParams, 'limit', 5)
-    const search = searchParams.get('search')?.trim() || ''
-
+export const useGetVacations = (page: number, limit: number, search = '') => {
     return useQuery({
         queryKey: ['vacations', page, limit, search],
         queryFn: () =>
-            getAllVacations(
-                String(page),
-                String(limit),
-                search,
-            ),
+            getAllVacations(String(page), String(limit), search.trim()),
         placeholderData: (previousData) => previousData,
     })
 }
