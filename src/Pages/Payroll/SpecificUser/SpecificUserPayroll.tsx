@@ -31,6 +31,8 @@ function SpecificUserPayrollContent() {
         totalPages,
         handlePaginationModelChange,
         isPending,
+        isError,
+        errorMessage,
     } = usePayrollContextSpecific()
     const [monthValue, setMonthValue] = useState('')
 
@@ -70,6 +72,18 @@ function SpecificUserPayrollContent() {
                 <RingLoader />
             </div>
         )
+
+    if (isError) {
+        return (
+            <div className="rounded-2xl border border-rose-200 bg-rose-50 p-6 text-rose-700 shadow-sm">
+                <h2 className="text-lg font-bold">Payroll failed to load</h2>
+                <p className="mt-2 text-sm leading-6">
+                    {errorMessage ||
+                        'The payroll request failed. Please try again in a moment.'}
+                </p>
+            </div>
+        )
+    }
 
     return (
         <div className={style.payroll}>

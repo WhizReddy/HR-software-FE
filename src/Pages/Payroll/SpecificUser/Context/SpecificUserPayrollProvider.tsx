@@ -52,7 +52,7 @@ export const PayrollProviderSpecific: React.FC<{
         return response.data
     }
 
-    const { data: payrollId, isPending } = useQuery<
+    const { data: payrollId, isPending, isError, error } = useQuery<
         { data: PayrollRowSpecifc[]; totalPages: number },
         Error
     >({
@@ -109,6 +109,8 @@ export const PayrollProviderSpecific: React.FC<{
         setMonth: (value: number | undefined) => applyFilterChange(setMonth, value),
         setYear: (value: number | undefined) => applyFilterChange(setYear, value),
         isPending,
+        isError,
+        errorMessage: error?.message || null,
         page,
         pageSize,
         totalPages: payrollId?.totalPages ?? 0,

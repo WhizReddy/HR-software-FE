@@ -16,6 +16,8 @@ export interface PayrollContextType {
     setMinNetSalary: (maxNetSalary: number | undefined) => void
     setBonus: (bonus: number | undefined) => void
     isPending: boolean
+    isError: boolean
+    errorMessage: string | null
     netSalary: number | undefined
     page: number
     setFilters: React.Dispatch<React.SetStateAction<Record<string, string | boolean>>>

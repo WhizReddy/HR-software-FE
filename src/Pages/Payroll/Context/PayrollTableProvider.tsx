@@ -62,6 +62,7 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         data: payrollData,
         isPending,
         isError,
+        error,
     } = useQuery<{ data: PayrollRow[]; totalPages: number }, Error>({
         queryKey: [
             'payroll',
@@ -144,6 +145,7 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         setYear: (value: number | undefined) => applyFilterChange(setYear, value),
         isPending,
         isError,
+        errorMessage: error?.message || null,
         setBonus: (value: number | undefined) => applyFilterChange(setBonus, value),
         setWorkingDays: (value: number | undefined) =>
             applyFilterChange(setWorkingDays, value),

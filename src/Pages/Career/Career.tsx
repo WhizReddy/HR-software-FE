@@ -13,9 +13,6 @@ import {
 } from './Hook'
 import { useAuth } from '@/Context/AuthProvider'
 import { isAdminRole } from '@/Helpers/access'
-import Workers from '/public/Images/happy workers.webp'
-import worker3 from '/public/Images/happyWork3.jpeg'
-import worker2 from '/public/Images/happyWorkers2.jpg'
 
 type CareersProps = {
     managementMode?: boolean
@@ -83,9 +80,29 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
     }
 
     const activeLocations = new Set(events.map((careerEvent) => careerEvent.location))
+    const featuredLocations = Array.from(activeLocations)
+        .filter(Boolean)
+        .slice(0, 3)
+    const culturePrinciples = [
+        {
+            title: 'Focused teams',
+            description:
+                'Small squads own problems end to end, with less ceremony and clearer accountability.',
+        },
+        {
+            title: 'Clear expectations',
+            description:
+                'People do their best work when the bar is high, explicit, and backed by good feedback.',
+        },
+        {
+            title: 'Steady growth',
+            description:
+                'We care about durable product decisions, clean execution, and teammates who keep improving.',
+        },
+    ]
 
     return (
-        <div className="min-h-screen bg-[linear-gradient(180deg,#f4f7fb_0%,#ffffff_28%,#f8fafc_100%)]">
+        <div className="min-h-screen bg-[#f5f7fb]">
             <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
                 {managementMode ? (
                     <section className="overflow-hidden rounded-[32px] border border-slate-200/70 bg-[linear-gradient(135deg,#12345d_0%,#2457a3_48%,#80a8ff_100%)] p-8 text-white shadow-2xl shadow-blue-900/20">
@@ -122,27 +139,24 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                         </div>
                     </section>
                 ) : (
-                    <section className="relative overflow-hidden rounded-[36px] border border-slate-200/70 bg-[radial-gradient(circle_at_top_left,_rgba(36,87,163,0.14),_transparent_30%),linear-gradient(135deg,#ffffff_0%,#eef5ff_46%,#f7fbff_100%)] p-8 shadow-xl shadow-slate-200/50">
-                        <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-blue-200/30 blur-3xl" />
-                        <div className="pointer-events-none absolute bottom-0 left-0 h-40 w-40 rounded-full bg-cyan-100/60 blur-3xl" />
-
-                        <div className="relative grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
+                    <section className="rounded-[32px] border border-slate-200/80 bg-white p-6 shadow-sm sm:p-8">
+                        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
                             <div>
-                                <p className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[#2457a3]">
+                                <p className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[#2457a3]">
                                     <BriefcaseBusiness size={14} />
                                     Career Board
                                 </p>
-                                <h1 className="mt-5 max-w-3xl text-4xl font-black tracking-tight text-slate-900 sm:text-5xl">
-                                    Build your next chapter with a team that ships thoughtfully.
+                                <h1 className="mt-5 max-w-3xl text-4xl font-black tracking-tight text-slate-900 sm:text-[3.4rem]">
+                                    Work on a product that teams rely on every day.
                                 </h1>
                                 <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
-                                    Explore open positions, understand the culture before you apply, and submit a general application even when the perfect role is not listed yet.
+                                    Browse current openings, understand how we work, and send a general application if the right role is not listed yet.
                                 </p>
 
                                 <div className="mt-8 flex flex-wrap gap-3">
                                     <Link
                                         to="/recruitment"
-                                        className="inline-flex items-center gap-2 rounded-xl bg-[#2457a3] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-200 transition hover:bg-[#1c4380]"
+                                        className="inline-flex items-center gap-2 rounded-xl bg-[#2457a3] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#1c4380]"
                                     >
                                         Submit General Application
                                         <ArrowRight size={16} />
@@ -156,10 +170,14 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         </Link>
                                     )}
                                 </div>
+
+                                <p className="mt-6 text-sm text-slate-500">
+                                    Clean communication, solid execution, and steady product improvement matter more here than inflated process.
+                                </p>
                             </div>
 
-                            <div className="grid gap-4 sm:grid-cols-3">
-                                <div className="rounded-3xl border border-white/80 bg-white/85 p-5 shadow-sm">
+                            <div className="grid gap-4 sm:grid-cols-2">
+                                <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5">
                                     <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                                         Open Roles
                                     </p>
@@ -167,7 +185,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         {events.length}
                                     </p>
                                 </div>
-                                <div className="rounded-3xl border border-white/80 bg-white/85 p-5 shadow-sm">
+                                <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5">
                                     <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                                         Locations
                                     </p>
@@ -175,20 +193,33 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         {activeLocations.size}
                                     </p>
                                 </div>
-                                <div className="rounded-3xl border border-white/80 bg-white/85 p-5 shadow-sm">
+                                <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5 sm:col-span-2">
                                     <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                                        Focus
+                                        Common locations
                                     </p>
-                                    <p className="mt-3 text-lg font-bold text-slate-900">
-                                        Product + delivery excellence
-                                    </p>
+                                    <div className="mt-4 flex flex-wrap gap-2">
+                                        {featuredLocations.length > 0 ? (
+                                            featuredLocations.map((location) => (
+                                                <span
+                                                    key={location}
+                                                    className="inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1 text-sm font-medium text-slate-600"
+                                                >
+                                                    {location}
+                                                </span>
+                                            ))
+                                        ) : (
+                                            <span className="text-sm text-slate-500">
+                                                Flexible location details are shared per role.
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </section>
                 )}
 
-                <section className="mt-8 rounded-[28px] border border-slate-200/70 bg-white/90 p-5 shadow-sm backdrop-blur">
+                <section className="mt-8 rounded-[28px] border border-slate-200/70 bg-white p-5 shadow-sm">
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                         <div>
                             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">
@@ -199,6 +230,11 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     ? 'Search your published career posts'
                                     : 'Browse opportunities by title, location, or keyword'}
                             </h2>
+                            <p className="mt-2 text-sm text-slate-500">
+                                {filteredEvents.length} result
+                                {filteredEvents.length === 1 ? '' : 's'}
+                                {filter ? ` for "${filter}"` : ''}
+                            </p>
                         </div>
 
                         <label className="flex w-full items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 lg:max-w-md">
@@ -265,16 +301,28 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             {filteredEvents.map((careerEvent) => (
                                 <article
                                     key={careerEvent._id}
-                                    className="group flex h-full flex-col rounded-[30px] border border-slate-200/70 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-200/60"
+                                    className="flex h-full flex-col rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm transition hover:border-slate-300 hover:shadow-md"
                                 >
                                     <div className="flex items-start justify-between gap-4">
                                         <div>
-                                            <p className="inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#2457a3]">
-                                                Career Opportunity
+                                            <p className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">
+                                                {managementMode
+                                                    ? 'Published Post'
+                                                    : 'Open Role'}
                                             </p>
                                             <h3 className="mt-4 text-2xl font-bold tracking-tight text-slate-900">
                                                 {careerEvent.title}
                                             </h3>
+                                            <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-sm font-medium text-slate-500">
+                                                <MapPin
+                                                    size={15}
+                                                    className="text-[#2457a3]"
+                                                />
+                                                <span>
+                                                    {careerEvent.location ||
+                                                        'Location to be confirmed'}
+                                                </span>
+                                            </div>
                                         </div>
 
                                         {managementMode && isManager && (
@@ -299,11 +347,6 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                                 </button>
                                             </div>
                                         )}
-                                    </div>
-
-                                    <div className="mt-5 flex items-center gap-2 text-sm font-medium text-slate-500">
-                                        <MapPin size={16} className="text-[#2457a3]" />
-                                        <span>{careerEvent.location || 'Location to be confirmed'}</span>
                                     </div>
 
                                     <p className="mt-5 flex-1 text-sm leading-7 text-slate-600">
@@ -342,46 +385,50 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                 </section>
 
                 {!managementMode && (
-                    <div className="mt-12 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-                        <section className="overflow-hidden rounded-[30px] border border-slate-200/70 bg-white p-6 shadow-sm">
-                            <div className="flex flex-col gap-6">
-                                <div>
+                    <>
+                        <section className="mt-12 grid gap-5 lg:grid-cols-3">
+                            {culturePrinciples.map((principle) => (
+                                <article
+                                    key={principle.title}
+                                    className="rounded-[26px] border border-slate-200 bg-white p-6 shadow-sm"
+                                >
                                     <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                                        Culture Snapshot
+                                        How We Work
                                     </p>
-                                    <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900">
-                                        Small-team ownership, clear standards, and room to grow.
-                                    </h2>
-                                </div>
-                                <div className="grid gap-4 sm:grid-cols-3">
-                                    {[Workers, worker3, worker2].map((image, index) => (
-                                        <div
-                                            key={index}
-                                            className="overflow-hidden rounded-3xl border border-slate-200/60 bg-slate-100"
-                                        >
-                                            <img
-                                                src={image}
-                                                alt="Team culture"
-                                                className="h-52 w-full object-cover"
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
+                                    <h3 className="mt-3 text-xl font-bold text-slate-900">
+                                        {principle.title}
+                                    </h3>
+                                    <p className="mt-3 text-sm leading-7 text-slate-600">
+                                        {principle.description}
+                                    </p>
+                                </article>
+                            ))}
                         </section>
 
-                        <section className="rounded-[30px] border border-slate-200/70 bg-[#0f213d] p-8 text-white shadow-xl shadow-slate-200/50">
-                            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-200">
-                                Why people stay
-                            </p>
-                            <blockquote className="mt-5 text-xl font-semibold leading-9 text-white">
-                                “The expectations are high, but they are clear. You get support, ownership, and enough trust to do serious work.”
-                            </blockquote>
-                            <p className="mt-4 text-sm text-blue-100">
-                                Teams are expected to communicate well, document decisions, and keep improving the product and the process.
-                            </p>
+                        <section className="mt-6 rounded-[28px] bg-slate-900 p-8 text-white shadow-xl shadow-slate-200/50">
+                            <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                                <div className="max-w-2xl">
+                                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-300">
+                                        Ready to talk?
+                                    </p>
+                                    <h2 className="mt-3 text-3xl font-bold tracking-tight">
+                                        Apply for a listed role or send a strong general application.
+                                    </h2>
+                                    <p className="mt-3 text-sm leading-7 text-slate-300">
+                                        If your profile fits our direction, we would rather hear from you early than wait for a perfect listing.
+                                    </p>
+                                </div>
+
+                                <Link
+                                    to="/recruitment"
+                                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
+                                >
+                                    Start Application
+                                    <ArrowRight size={16} />
+                                </Link>
+                            </div>
                         </section>
-                    </div>
+                    </>
                 )}
             </div>
 

@@ -54,6 +54,8 @@ function PayrollContent() {
         pageSize,
         totalPages,
         handlePaginationModelChange,
+        isError,
+        errorMessage,
     } = usePayrollContext()
     const [showFilters, setShowFilters] = useState(false)
     const [filterValues, setFilterValues] = useState<PayrollFilterValues>(
@@ -148,6 +150,16 @@ function PayrollContent() {
             {isPending ? (
                 <div className={style.ring}>
                     <RingLoader color="#2457A3" />
+                </div>
+            ) : isError ? (
+                <div className="rounded-2xl border border-rose-200 bg-rose-50 p-6 text-rose-700 shadow-sm">
+                    <h2 className="text-lg font-bold">
+                        Payroll failed to load
+                    </h2>
+                    <p className="mt-2 text-sm leading-6">
+                        {errorMessage ||
+                            'The payroll request failed. Please try again in a moment.'}
+                    </p>
                 </div>
             ) : (
                 <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-4 mt-5">

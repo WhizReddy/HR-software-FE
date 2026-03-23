@@ -10,6 +10,8 @@ export interface PayrollContextType {
     setYear: (year: number | undefined) => void
     fullName: string | undefined
     isPending: boolean
+    isError: boolean
+    errorMessage: string | null
     page: number
     pageSize: number
     totalPages: number

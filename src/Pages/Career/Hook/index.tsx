@@ -29,22 +29,21 @@ export const useGetAllEvents = () => {
     const [events, setEvents] = useState<EventsData[]>([])
     const [isLoading, setIsLoading] = useState(false)
 
-    const fetchEvents = () => {
+    const fetchEvents = async () => {
         setIsLoading(true)
-        AxiosInstance.get<EventsData[]>('/event/career')
-            .then((response) => {
-                console.log('Fetched gertiii:', response.data)
-                setTimeout(() => {
-                    setIsLoading(false)
-                }, 500)
-                const careerEvents = response.data.filter(
-                    (event) => event.type === 'career',
-                )
-                setEvents(careerEvents)
-            })
-            .catch((error) => {
-                console.error('Error fetching data:', error)
-            })
+        try {
+            const response = await AxiosInstance.get<EventsData[]>(
+                '/event/career',
+            )
+            const careerEvents = response.data.filter(
+                (event) => event.type === 'career',
+            )
+            setEvents(careerEvents)
+        } catch (error) {
+            console.error('Error fetching data:', error)
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     useEffect(() => {
@@ -81,13 +80,8 @@ export const useCreateEvent = (
     const createEvent = async () => {
         setCreateEventError(null)
 
-        const newEvent = { ...event }
-
-        console.log('Creating event with data:', newEvent)
-
         try {
-            const response = await AxiosInstance.post('/event', newEvent)
-            console.log('Event created successfully:', response.data)
+            const response = await AxiosInstance.post('/event', { ...event })
             setEvents((prevEvents) => [response.data, ...prevEvents])
             setEvent({
                 title: '',
@@ -163,7 +157,6 @@ export const useUpdateEvent = (
                 `/event/${editingEvent._id}`,
                 updatedEvent,
             )
-            console.log('Event updated successfully:', response.data)
             setEvents((prevEvents) =>
                 prevEvents.map((event) =>
                     event._id === editingEvent._id ? response.data : event,
@@ -210,7 +203,6 @@ export const useDeleteEvent = (
 
         try {
             await AxiosInstance.delete(`/event/${eventId}`)
-            console.log('Event deleted successfully')
             setEvents((prevEvents) =>
                 prevEvents.filter((event) => event._id !== eventId),
             )
