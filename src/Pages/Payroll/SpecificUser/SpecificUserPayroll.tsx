@@ -15,6 +15,7 @@ function SpecificUserPayrollContent() {
         page,
         pageSize,
         totalPages,
+        totalCount,
         handlePaginationModelChange,
         isPending,
         isError,
@@ -64,6 +65,7 @@ function SpecificUserPayrollContent() {
                     columns={columns}
                     getRowId={getRowId}
                     totalPages={totalPages}
+                    totalCount={totalCount}
                     page={page}
                     pageSize={pageSize}
                     onPaginationModelChange={handlePaginationModelChange}

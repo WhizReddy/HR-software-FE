@@ -24,6 +24,7 @@ export interface PayrollContextType {
     filters: Record<string, string | boolean>
     pageSize: number
     totalPages: number
+    totalCount: number
     handlePaginationModelChange: (paginationModel: PaginationModel) => void
 }
 

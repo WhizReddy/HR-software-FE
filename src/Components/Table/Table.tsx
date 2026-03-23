@@ -20,6 +20,7 @@ interface DataTableProps<TRow> {
     getRowId: (row: TRow) => number | string
     handleRowClick?: (params: RowParams<TRow>) => void
     totalPages: number
+    totalCount?: number
     page: number
     pageSize: number
     onPaginationModelChange: (model: PaginationModel) => void
@@ -37,6 +38,7 @@ function DataTable<TRow>({
     getRowId,
     handleRowClick,
     totalPages,
+    totalCount,
     page,
     pageSize,
     onPaginationModelChange,
@@ -47,9 +49,17 @@ function DataTable<TRow>({
     searchPlaceholder,
     filterNode,
 }: DataTableProps<TRow>) {
+    const normalizedTotalPages =
+        totalPages > 0
+            ? totalPages
+            : totalCount !== undefined && pageSize > 0
+              ? Math.max(1, Math.ceil(totalCount / pageSize))
+              : 1
     const canPrev = page > 0
-    const canNext = page < totalPages - 1
-    const normalizedTotalPages = totalPages || 1
+    const canNext =
+        totalCount !== undefined && pageSize > 0
+            ? (page + 1) * pageSize < totalCount
+            : page < normalizedTotalPages - 1
 
     return (
         <Card className="glass-card overflow-hidden border-none p-0 shadow-xl shadow-slate-200/35">

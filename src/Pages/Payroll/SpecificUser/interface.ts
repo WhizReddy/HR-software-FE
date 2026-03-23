@@ -15,6 +15,7 @@ export interface PayrollContextType {
     page: number
     pageSize: number
     totalPages: number
+    totalCount: number
     handlePaginationModelChange: (paginationModel: PaginationModel) => void
 }
 

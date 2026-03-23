@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { PayrollContext, PayrollRow } from '../Interface/Payroll'
 import { PaginationModel } from '@/types/table'
 import { useNavigate } from 'react-router-dom'
@@ -9,53 +9,55 @@ import { getMonthName } from '../utils/Utils'
 export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
-    const [month, setMonth] = useState<number | undefined>(undefined)
-    const [year, setYear] = useState<number | undefined>(undefined)
     const [fullName, setFullName] = useState('')
-    const [bonus, setBonus] = useState<number | undefined>(undefined)
-    const [minNetSalary, setMinNetSalary] = useState<number | undefined>(undefined)
-    const [maxNetSalary, setMaxNetSalary] = useState<number | undefined>(undefined)
-    const [workingDays, setWorkingDays] = useState<number | undefined>(undefined)
     const [netSalary, setNetSalary] = useState<number | undefined>(undefined)
     const [filters, setFilters] = useState<Record<string, string | boolean>>({})
     const [page, setPage] = useState(0)
     const [pageSize, setPageSize] = useState(5)
 
-    const applyFilterChange = <T,>(
-        setter: React.Dispatch<React.SetStateAction<T>>,
-        value: T,
-    ) => {
-        setPage(0)
-        setter(value)
-    }
+    const handleFullNameChange = useCallback((value: string) => {
+        setFullName((currentValue) => {
+            if (currentValue === value) {
+                return currentValue
+            }
 
-    const handlePaginationModelChange = (model: PaginationModel) => {
-        setPage(model.page)
-        setPageSize(model.pageSize)
-    }
+            setPage(0)
+            return value
+        })
+    }, [])
+
+    const handlePaginationModelChange = useCallback(
+        (model: PaginationModel) => {
+            setPage((currentPage) =>
+                currentPage === model.page ? currentPage : model.page,
+            )
+            setPageSize((currentPageSize) =>
+                currentPageSize === model.pageSize
+                    ? currentPageSize
+                    : model.pageSize,
+            )
+        },
+        [],
+    )
 
     const navigate = useNavigate()
 
     const fetchPayroll = async (): Promise<{
         data: PayrollRow[]
         totalPages: number
+        all: number
     }> => {
         const params = new URLSearchParams()
         const trimmedFullName = fullName.trim()
 
         params.set('limit', String(pageSize))
         params.set('page', String(page))
-        if (month !== undefined) params.set('month', String(month))
-        if (year !== undefined) params.set('year', String(year))
-        if (bonus !== undefined) params.set('bonus', String(bonus))
-        if (maxNetSalary !== undefined) params.set('maxNetSalary', String(maxNetSalary))
-        if (minNetSalary !== undefined) params.set('minNetSalary', String(minNetSalary))
-        if (workingDays !== undefined) params.set('workingDays', String(workingDays))
         if (trimmedFullName) params.set('fullName', trimmedFullName)
 
         const response = await AxiosInstance.get<{
             data: PayrollRow[]
             totalPages: number
+            all: number
         }>(`/salary?${params.toString()}`)
         return response.data
     }
@@ -65,19 +67,8 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         isPending,
         isError,
         error,
-    } = useQuery<{ data: PayrollRow[]; totalPages: number }, Error>({
-        queryKey: [
-            'payroll',
-            month,
-            year,
-            page,
-            pageSize,
-            fullName,
-            workingDays,
-            minNetSalary,
-            maxNetSalary,
-            bonus,
-        ],
+    } = useQuery<{ data: PayrollRow[]; totalPages: number; all: number }, Error>({
+        queryKey: ['payroll', page, pageSize, fullName],
         queryFn: () => fetchPayroll(),
         placeholderData: (previousData) => previousData,
     })
@@ -139,21 +130,17 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         headerTextColors,
         getRowId,
         handleRowClick,
-        setFullName: (value: string) => applyFilterChange(setFullName, value),
-        setMaxNetSalary: (value: number | undefined) =>
-            applyFilterChange(setMaxNetSalary, value),
-        setMinNetSalary: (value: number | undefined) =>
-            applyFilterChange(setMinNetSalary, value),
-        setMonth: (value: number | undefined) => applyFilterChange(setMonth, value),
-        setYear: (value: number | undefined) => applyFilterChange(setYear, value),
+        setFullName: handleFullNameChange,
+        setMaxNetSalary: () => undefined,
+        setMinNetSalary: () => undefined,
+        setMonth: () => undefined,
+        setYear: () => undefined,
         isPending,
         isError,
         errorMessage: error?.message || null,
-        setBonus: (value: number | undefined) => applyFilterChange(setBonus, value),
-        setWorkingDays: (value: number | undefined) =>
-            applyFilterChange(setWorkingDays, value),
-        // Required by PayrollContextType interface
-        setName: (value: string) => applyFilterChange(setFullName, value),
+        setBonus: () => undefined,
+        setWorkingDays: () => undefined,
+        setName: handleFullNameChange,
         netSalary,
         setNetSalary,
         filters,
@@ -161,6 +148,7 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         page,
         pageSize,
         totalPages: payrollData?.totalPages ?? 0,
+        totalCount: payrollData?.all ?? rows.length,
         handlePaginationModelChange,
     }
 

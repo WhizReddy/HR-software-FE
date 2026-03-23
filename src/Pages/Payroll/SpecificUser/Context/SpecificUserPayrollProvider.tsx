@@ -32,6 +32,7 @@ export const PayrollProviderSpecific: React.FC<{
     const fetchPayroll = async (): Promise<{
         data: PayrollRowSpecifc[]
         totalPages: number
+        all: number
     }> => {
         const params = new URLSearchParams({
             limit: String(pageSize),
@@ -49,12 +50,13 @@ export const PayrollProviderSpecific: React.FC<{
         const response = await AxiosInstance.get<{
             data: PayrollRowSpecifc[]
             totalPages: number
+            all: number
         }>(`/salary/user/${id}?${params.toString()}`)
         return response.data
     }
 
     const { data: payrollId, isPending, isError, error } = useQuery<
-        { data: PayrollRowSpecifc[]; totalPages: number },
+        { data: PayrollRowSpecifc[]; totalPages: number; all: number },
         Error
     >({
         queryKey: ['payrollId', id, month, year, page, pageSize],
@@ -124,6 +126,7 @@ export const PayrollProviderSpecific: React.FC<{
         page,
         pageSize,
         totalPages: payrollId?.totalPages ?? 0,
+        totalCount: payrollId?.all ?? rows.length,
         handlePaginationModelChange,
         fullName: employeeName,
     }

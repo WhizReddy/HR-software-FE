@@ -19,6 +19,7 @@ function PayrollContent() {
         page,
         pageSize,
         totalPages,
+        totalCount,
         handlePaginationModelChange,
         isError,
         errorMessage,
@@ -93,6 +94,7 @@ function PayrollContent() {
                             getRowId={getRowId}
                             handleRowClick={handleRowClick}
                             totalPages={totalPages}
+                            totalCount={totalCount}
                             page={page}
                             pageSize={pageSize}
                             onPaginationModelChange={
