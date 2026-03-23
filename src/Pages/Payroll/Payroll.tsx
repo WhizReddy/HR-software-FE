@@ -25,12 +25,21 @@ function PayrollContent() {
     } = usePayrollContext()
     const [searchInput, setSearchInput] = React.useState('')
     const debouncedSearch = useDebouncedValue(searchInput, 400)
+    const lastAppliedSearch = React.useRef<string | null>(null)
 
     useEffect(() => {
-        setFullName(debouncedSearch.trim())
+        const normalizedSearch = debouncedSearch.trim()
+
+        if (lastAppliedSearch.current === normalizedSearch) {
+            return
+        }
+
+        lastAppliedSearch.current = normalizedSearch
+        setFullName(normalizedSearch)
     }, [debouncedSearch, setFullName])
 
     const handleClearSearch = () => {
+        lastAppliedSearch.current = ''
         setSearchInput('')
         setFullName('')
     }
