@@ -1,30 +1,16 @@
-import React, { useState } from 'react'
+import React from 'react'
 import DataTable from '@/Components/Table/Table'
 import { PayrollProviderSpecific } from './Context/SpecificUserPayrollProvider'
 import style from '../styles/Payroll.module.css'
 import { usePayrollContextSpecific } from './Context/SpecificUserPayrollContext'
-import Input from '@/Components/Input/Index'
 import { EventsProvider } from '@/Pages/Events/Context/EventsContext'
 import { RingLoader } from 'react-spinners'
-import Button from '@/Components/Button/Button'
-import { ButtonTypes } from '@/Components/Button/ButtonTypes'
-
-const parseOptionalNumber = (value: string): number | undefined => {
-    if (!value.trim()) {
-        return undefined
-    }
-
-    const parsed = Number(value)
-    return Number.isFinite(parsed) ? parsed : undefined
-}
 
 function SpecificUserPayrollContent() {
     const {
         rows,
         columns,
         getRowId,
-        setMonth,
-        setYear,
         fullName,
         page,
         pageSize,
@@ -34,31 +20,6 @@ function SpecificUserPayrollContent() {
         isError,
         errorMessage,
     } = usePayrollContextSpecific()
-    const [monthValue, setMonthValue] = useState('')
-
-    const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const date = event.target.value
-        setMonthValue(date)
-
-        if (!date) {
-            setYear(undefined)
-            setMonth(undefined)
-            return
-        }
-
-        const [yearString, monthString] = date.split('-')
-        setYear(parseOptionalNumber(yearString))
-        const parsedMonth = parseOptionalNumber(monthString)
-        setMonth(parsedMonth !== undefined ? parsedMonth - 1 : undefined)
-    }
-
-    const handleClearFilters = () => {
-        setMonthValue('')
-        setYear(undefined)
-        setMonth(undefined)
-    }
-
-    const hasActiveFilters = monthValue.trim() !== ''
 
     if (isPending) {
         return (
@@ -90,34 +51,10 @@ function SpecificUserPayrollContent() {
                             {fullName || 'Employee payroll'}
                         </h1>
                         <p className={style.panelDescription}>
-                            Review this employee&apos;s salary history in a
-                            stable layout and filter it by month when needed.
+                            Salary history for this employee.
                         </p>
                     </div>
-                    <div className={style.panelMeta}>
-                        {hasActiveFilters
-                            ? 'Month filter applied'
-                            : 'Full payment history'}
-                    </div>
-                </div>
-
-                <div className={style.filterGridCompact}>
-                    <Input
-                        name="payroll-month"
-                        type="month"
-                        label="Month & Year"
-                        isFilter
-                        value={monthValue}
-                        onChange={handleDateChange}
-                    />
-                    <div className={style.inlineActions}>
-                        <Button
-                            btnText="Clear filter"
-                            type={ButtonTypes.SECONDARY}
-                            onClick={handleClearFilters}
-                            disabled={!hasActiveFilters}
-                        />
-                    </div>
+                    <div className={style.panelMeta}>History view</div>
                 </div>
             </section>
 

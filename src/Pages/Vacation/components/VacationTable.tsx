@@ -10,13 +10,14 @@ import { StatusBadge } from '@/Components/StatusBadge/StatusBadge'
 import Toast from '@/Components/Toast/Toast'
 import { Vacation } from '../types'
 import {
-    ensurePaginationParams,
     hasSearchParamsChanged,
     parseNumberParam,
     upsertFilterParams,
 } from '@/Helpers/urlFilters'
 import { useDebouncedValue } from '@/hooks/use-debounced-value'
 import { useState } from 'react'
+import Button from '@/Components/Button/Button'
+import { ButtonTypes } from '@/Components/Button/ButtonTypes'
 
 export const VacationTable = () => {
     const {
@@ -31,13 +32,6 @@ export const VacationTable = () => {
         searchParams.get('search') || '',
     )
     const debouncedSearch = useDebouncedValue(searchInput, 400)
-
-    useEffect(() => {
-        setSearchParams((prev) => {
-            const nextParams = ensurePaginationParams(prev)
-            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
-        })
-    }, [setSearchParams])
 
     useEffect(() => {
         setSearchInput(searchParams.get('search') || '')
@@ -57,15 +51,16 @@ export const VacationTable = () => {
     if (error) return <p>Error: {error.message}</p>
     if (isPending) return <div className="flex justify-center p-4"><div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>
 
-    const rows = data?.data.map((vacation: Vacation) => ({
-        id: vacation._id,
-        fullName: `${vacation.userId?.firstName} ${vacation.userId?.lastName}`,
-        type: vacation.type,
-        status: vacation.status,
-        startDate: vacation.startDate,
-        endDate: vacation.endDate,
-        actions: vacation._id,
-    }))
+    const rows =
+        data?.data.map((vacation: Vacation) => ({
+            id: vacation._id,
+            fullName: `${vacation.userId?.firstName} ${vacation.userId?.lastName}`,
+            type: vacation.type,
+            status: vacation.status,
+            startDate: vacation.startDate,
+            endDate: vacation.endDate,
+            actions: vacation._id,
+        })) ?? []
     const handlePaginationModelChange = (model: PaginationModel) => {
         setSearchParams((prev) => {
             const nextParams = upsertFilterParams(prev, {
@@ -132,6 +127,7 @@ export const VacationTable = () => {
     ]
 
     const getRowId = (row: { id: number | string }) => row.id
+    const hasSearch = searchInput.trim() !== ''
 
     return (
         <>
@@ -140,13 +136,37 @@ export const VacationTable = () => {
                     onPaginationModelChange={handlePaginationModelChange}
                     page={parseNumberParam(searchParams, 'page', 0)}
                     pageSize={parseNumberParam(searchParams, 'limit', 5)}
-                    totalPages={data.totalPages}
+                    totalPages={data?.totalPages ?? 0}
                     rows={rows}
                     columns={columns}
                     getRowId={getRowId}
+                    title="Vacation requests"
                     searchValue={searchInput}
                     onSearchChange={(e) => setSearchInput(e.target.value)}
-                    searchPlaceholder="Search vacations..."
+                    searchPlaceholder="Search by employee, type, or status"
+                    actions={
+                        <Button
+                            btnText="Clear"
+                            type={ButtonTypes.SECONDARY}
+                            onClick={() => {
+                                setSearchInput('')
+                                setSearchParams((prev) => {
+                                    const nextParams = upsertFilterParams(
+                                        prev,
+                                        { search: null },
+                                        { resetPage: true },
+                                    )
+                                    return hasSearchParamsChanged(
+                                        prev,
+                                        nextParams,
+                                    )
+                                        ? nextParams
+                                        : prev
+                                })
+                            }}
+                            disabled={!hasSearch}
+                        />
+                    }
                 />
             </div>
             {searchParams.get('selectedVacation') && <SelectedVacationModal />}

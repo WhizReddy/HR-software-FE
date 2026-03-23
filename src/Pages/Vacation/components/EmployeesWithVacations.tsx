@@ -15,6 +15,7 @@ export const EmployeesWithVacations = () => {
         isLoading,
         fetchNextPage,
         isFetchingNextPage,
+        hasNextPage,
     } = useGetUsersWithVacations()
 
     const { searchParams, setSearchParams } = useContext(VacationContext)
@@ -22,10 +23,10 @@ export const EmployeesWithVacations = () => {
     const { ref, inView } = useInView()
 
     useEffect(() => {
-        if (inView) {
+        if (inView && hasNextPage) {
             fetchNextPage()
         }
-    }, [fetchNextPage, inView])
+    }, [fetchNextPage, hasNextPage, inView])
 
     if (isError) return <div>Error: {error.message}</div>
     if (isLoading)
