@@ -7,10 +7,11 @@ import { Vacation } from './types'
 import { Check, X, Clock } from 'lucide-react'
 import { useContext, useEffect, useState } from 'react'
 import dayjs from 'dayjs'
-import { Button } from '@/Components/ui/button'
 import { CreateVacationForm } from './components/form/CreateVacationForm'
 import { useAuth } from '@/Context/AuthProvider'
 import { useParams } from 'react-router-dom'
+import Button from '@/Components/Button/Button'
+import { ButtonTypes } from '@/Components/Button/ButtonTypes'
 
 const UserVacationsComponent = () => {
     const { error, isError, isLoading, data } = useGetUserWithVacations()
@@ -112,10 +113,10 @@ const UserVacationsComponent = () => {
                 {isOwnVacationPage && (
                     <Button
                         onClick={createVacationToggler}
-                        className="mt-4 w-full bg-primary-blue hover:bg-primary-blue-dark text-white shadow-sm transition-colors py-2 h-auto"
-                    >
-                        Add Vacation
-                    </Button>
+                        btnText="Request Vacation"
+                        type={ButtonTypes.PRIMARY}
+                        className="mt-4 w-full"
+                    />
                 )}
             </Card>
             {searchParams.get('createVacation') && <CreateVacationForm />}

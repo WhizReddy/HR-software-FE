@@ -5,7 +5,8 @@ import { EmployeesWithVacations } from './components/EmployeesWithVacations'
 import { CreateVacationForm } from './components/form/CreateVacationForm'
 import { Plus } from 'lucide-react'
 
-import { Button } from '@/Components/ui/button'
+import Button from '@/Components/Button/Button'
+import { ButtonTypes } from '@/Components/Button/ButtonTypes'
 import { ToggleGroup, ToggleGroupItem } from '@/Components/ui/toggle-group'
 import { Card } from '@/Components/ui/card'
 
@@ -52,11 +53,11 @@ function VacationComponent() {
 
                 <Button
                     onClick={createVacationToggler}
-                    className="bg-primary-blue hover:bg-primary-blue-dark text-white rounded-lg px-6 w-full sm:w-auto flex items-center gap-2 transition-colors"
-                >
-                    <Plus size={18} />
-                    Add Vacation
-                </Button>
+                    btnText="Request Vacation"
+                    type={ButtonTypes.PRIMARY}
+                    icon={<Plus size={18} />}
+                    className="w-full sm:w-auto"
+                />
             </div>
 
             {searchParams.get('createVacation') && (

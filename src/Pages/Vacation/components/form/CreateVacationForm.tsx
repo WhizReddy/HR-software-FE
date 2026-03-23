@@ -164,7 +164,11 @@ export const CreateVacationForm = () => {
                     <div className={style.buttonsContainer}>
                         <Button
                             type={ButtonTypes.PRIMARY}
-                            btnText={`${form.state.isSubmitting ? 'Submitting' : 'Submit'}`}
+                            btnText={
+                                form.state.isSubmitting
+                                    ? 'Sending request...'
+                                    : 'Request vacation'
+                            }
                             disabled={form.state.isSubmitting}
                             isSubmit
                         />

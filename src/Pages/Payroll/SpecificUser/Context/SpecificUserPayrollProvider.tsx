@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { PayrollContextSpecific, PayrollRowSpecifc } from '../interface'
 import { PaginationModel } from '@/types/table'
 import AxiosInstance from '@/Helpers/Axios'
@@ -14,6 +14,7 @@ export const PayrollProviderSpecific: React.FC<{
     const [year, setYear] = useState<number | undefined>(undefined)
     const [page, setPage] = useState(0)
     const [pageSize, setPageSize] = useState(5)
+    const [employeeName, setEmployeeName] = useState('')
 
     const applyFilterChange = <T,>(
         setter: React.Dispatch<React.SetStateAction<T>>,
@@ -59,14 +60,23 @@ export const PayrollProviderSpecific: React.FC<{
         queryKey: ['payrollId', id, month, year, page, pageSize],
         queryFn: () => fetchPayroll(),
         enabled: Boolean(id),
+        placeholderData: (previousData) => previousData,
     })
+
+    useEffect(() => {
+        const user = payrollId?.data[0]?.userId
+
+        if (user) {
+            setEmployeeName(`${user.firstName} ${user.lastName}`)
+        }
+    }, [payrollId])
 
     const rows: PayrollRowSpecifc[] =
         payrollId?.data.map((payrollData, index) => ({
             id: page * pageSize + index + 1,
             originalId: payrollData.userId?._id ?? '',
-            netSalary: `${payrollData.netSalary}${payrollData.currency}`,
-            healthInsurance: `${payrollData.healthInsurance}${payrollData.currency}`,
+            netSalary: `${payrollData.netSalary} ${payrollData.currency}`,
+            healthInsurance: `${payrollData.healthInsurance} ${payrollData.currency}`,
             month: getMonthName(Number(payrollData.month)),
             workingDays: payrollData.workingDays,
             socialSecurity: payrollData.socialSecurity,
@@ -115,9 +125,7 @@ export const PayrollProviderSpecific: React.FC<{
         pageSize,
         totalPages: payrollId?.totalPages ?? 0,
         handlePaginationModelChange,
-        fullName: payrollId?.data[0]?.userId
-            ? `${payrollId.data[0].userId.firstName} ${payrollId.data[0].userId.lastName}`
-            : '',
+        fullName: employeeName,
     }
 
     return (

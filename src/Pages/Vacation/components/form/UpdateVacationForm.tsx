@@ -164,7 +164,11 @@ export const UpdateVacationForm: React.FC<{
                     <div className={style.buttonsContainer}>
                         <Button
                             type={ButtonTypes.PRIMARY}
-                            btnText={`${form.state.isSubmitting ? 'Submitting' : 'Submit'}`}
+                            btnText={
+                                form.state.isSubmitting
+                                    ? 'Saving...'
+                                    : 'Save changes'
+                            }
                             disabled={form.state.isSubmitting}
                             isSubmit
                         />

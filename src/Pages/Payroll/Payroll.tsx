@@ -1,13 +1,13 @@
+import React from 'react'
 import Input from '@/Components/Input/Index'
+import Button from '@/Components/Button/Button'
+import { ButtonTypes } from '@/Components/Button/ButtonTypes'
 import DataTable from '../../Components/Table/Table'
 import { usePayrollContext } from './Context/PayrollTableContext'
 import { PayrollProvider } from './Context/PayrollTableProvider'
 import style from './styles/Payroll.module.css'
 import { RingLoader } from 'react-spinners'
-import { useState } from 'react'
-import { ButtonTypes } from '@/Components/Button/ButtonTypes'
-import Button from '@/Components/Button/Button'
-import { X, Filter } from 'lucide-react'
+import { Search } from 'lucide-react'
 
 interface PayrollFilterValues {
     month: string
@@ -57,8 +57,7 @@ function PayrollContent() {
         isError,
         errorMessage,
     } = usePayrollContext()
-    const [showFilters, setShowFilters] = useState(false)
-    const [filterValues, setFilterValues] = useState<PayrollFilterValues>(
+    const [filterValues, setFilterValues] = React.useState<PayrollFilterValues>(
         DEFAULT_FILTER_VALUES,
     )
 
@@ -145,8 +144,12 @@ function PayrollContent() {
         setBonus(undefined)
     }
 
+    const hasActiveFilters = Object.values(filterValues).some(
+        (value) => value.trim() !== '',
+    )
+
     return (
-        <div className={style.payroll}>
+        <div className={style.payrollPage}>
             {isPending ? (
                 <div className={style.ring}>
                     <RingLoader color="#2457A3" />
@@ -162,96 +165,108 @@ function PayrollContent() {
                     </p>
                 </div>
             ) : (
-                <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-4 mt-5">
-                    <DataTable
-                        rows={rows}
-                        columns={columns}
-                        getRowId={getRowId}
-                        handleRowClick={handleRowClick}
-                        totalPages={totalPages}
-                        page={page}
-                        pageSize={pageSize}
-                        onPaginationModelChange={handlePaginationModelChange}
-                        filterNode={
-                            <div className="flex items-center">
-                                <Button
-                                    btnText=""
-                                    borderColor="transparent"
-                                    type={ButtonTypes.SECONDARY}
-                                    onClick={() => setShowFilters((prev) => !prev)}
-                                    icon={showFilters ? <X /> : <Filter />}
-                                />
-                                <div
-                                    className={`transition-all duration-300 overflow-hidden ml-2 ${showFilters ? 'w-auto opacity-100' : 'w-0 opacity-0'
-                                        }`}
-                                >
-                                    <div className="flex flex-wrap items-end gap-4">
-                                        <Input
-                                            width="150px"
-                                            name="Filter"
-                                            type="month"
-                                            label="Month & Year"
-                                            isFilter
-                                            value={filterValues.month}
-                                            onChange={handleDateChange}
-                                        />
-                                        <Input
-                                            width="150px"
-                                            name="fullName"
-                                            type="text"
-                                            label="Full Name"
-                                            isFilter
-                                            value={filterValues.fullName}
-                                            onChange={handleFullNameChange}
-                                        />
-                                        <Input
-                                            width="150px"
-                                            name="workingDays"
-                                            type="number"
-                                            label="Working Days"
-                                            isFilter
-                                            value={filterValues.workingDays}
-                                            onChange={handleWorkingDaysChange}
-                                        />
-                                        <Input
-                                            width="150px"
-                                            name="maxNetSalary"
-                                            type="number"
-                                            label="Max Salary"
-                                            isFilter
-                                            value={filterValues.maxNetSalary}
-                                            onChange={handleMaxSalaryChange}
-                                        />
-                                        <Input
-                                            width="150px"
-                                            name="minNetSalary"
-                                            type="number"
-                                            label="Min Salary"
-                                            isFilter
-                                            value={filterValues.minNetSalary}
-                                            onChange={handleMinSalaryChange}
-                                        />
-                                        <Input
-                                            width="150px"
-                                            name="bonus"
-                                            type="number"
-                                            label="Bonus"
-                                            isFilter
-                                            value={filterValues.bonus}
-                                            onChange={handleBonusChange}
-                                        />
-                                        <Button
-                                            btnText="Clear"
-                                            type={ButtonTypes.SECONDARY}
-                                            onClick={handleClearFilters}
-                                            className="shrink-0"
-                                        />
-                                    </div>
-                                </div>
+                <>
+                    <section className={style.panel}>
+                        <div className={style.panelHeader}>
+                            <div className={style.panelCopy}>
+                                <span className={style.panelEyebrow}>
+                                    Payroll
+                                </span>
+                                <h1 className={style.panelTitle}>
+                                    Salary records
+                                </h1>
+                                <p className={style.panelDescription}>
+                                    Filter payroll by month, employee, working
+                                    days, salary range, or bonus without the
+                                    table jumping around.
+                                </p>
                             </div>
-                        }
-                    />
-                </div>
+                            <div className={style.panelMeta}>
+                                {hasActiveFilters
+                                    ? 'Filters applied'
+                                    : 'Showing all payroll records'}
+                            </div>
+                        </div>
+
+                        <div className={style.filterGrid}>
+                            <Input
+                                name="payroll-month"
+                                type="month"
+                                label="Month & Year"
+                                isFilter
+                                value={filterValues.month}
+                                onChange={handleDateChange}
+                            />
+                            <Input
+                                name="fullName"
+                                type="text"
+                                label="Employee"
+                                isFilter
+                                value={filterValues.fullName}
+                                onChange={handleFullNameChange}
+                                icon={<Search size={16} />}
+                                iconPosition="start"
+                            />
+                            <Input
+                                name="workingDays"
+                                type="number"
+                                label="Working Days"
+                                isFilter
+                                value={filterValues.workingDays}
+                                onChange={handleWorkingDaysChange}
+                            />
+                            <Input
+                                name="minNetSalary"
+                                type="number"
+                                label="Min Salary"
+                                isFilter
+                                value={filterValues.minNetSalary}
+                                onChange={handleMinSalaryChange}
+                            />
+                            <Input
+                                name="maxNetSalary"
+                                type="number"
+                                label="Max Salary"
+                                isFilter
+                                value={filterValues.maxNetSalary}
+                                onChange={handleMaxSalaryChange}
+                            />
+                            <Input
+                                name="bonus"
+                                type="number"
+                                label="Bonus"
+                                isFilter
+                                value={filterValues.bonus}
+                                onChange={handleBonusChange}
+                            />
+                        </div>
+
+                        <div className={style.panelActions}>
+                            <Button
+                                btnText="Clear filters"
+                                type={ButtonTypes.SECONDARY}
+                                onClick={handleClearFilters}
+                                disabled={!hasActiveFilters}
+                            />
+                        </div>
+                    </section>
+
+                    <div className={style.tableSection}>
+                        <DataTable
+                            rows={rows}
+                            columns={columns}
+                            getRowId={getRowId}
+                            handleRowClick={handleRowClick}
+                            totalPages={totalPages}
+                            page={page}
+                            pageSize={pageSize}
+                            onPaginationModelChange={
+                                handlePaginationModelChange
+                            }
+                            title="Payroll table"
+                        />
+                    </div>
+                </>
             )}
         </div>
     )

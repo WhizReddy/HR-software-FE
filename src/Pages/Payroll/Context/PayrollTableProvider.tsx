@@ -41,6 +41,8 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         totalPages: number
     }> => {
         const params = new URLSearchParams()
+        const trimmedFullName = fullName.trim()
+
         params.set('limit', String(pageSize))
         params.set('page', String(page))
         if (month !== undefined) params.set('month', String(month))
@@ -49,7 +51,7 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         if (maxNetSalary !== undefined) params.set('maxNetSalary', String(maxNetSalary))
         if (minNetSalary !== undefined) params.set('minNetSalary', String(minNetSalary))
         if (workingDays !== undefined) params.set('workingDays', String(workingDays))
-        if (fullName) params.set('fullName', fullName)
+        if (trimmedFullName) params.set('fullName', trimmedFullName)
 
         const response = await AxiosInstance.get<{
             data: PayrollRow[]
@@ -77,14 +79,15 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
             bonus,
         ],
         queryFn: () => fetchPayroll(),
+        placeholderData: (previousData) => previousData,
     })
 
     const rows: PayrollRow[] =
         payrollData?.data.map((payrollItem, index) => ({
             id: page * pageSize + index + 1,
             originalId: payrollItem.userId?._id || '',
-            netSalary: `${payrollItem.netSalary}${payrollItem.currency}`,
-            healthInsurance: `${payrollItem.healthInsurance}${payrollItem.currency}`,
+            netSalary: `${payrollItem.netSalary} ${payrollItem.currency}`,
+            healthInsurance: `${payrollItem.healthInsurance} ${payrollItem.currency}`,
             month: getMonthName(payrollItem.month as number),
             workingDays: payrollItem.workingDays,
             tax: payrollItem.tax,

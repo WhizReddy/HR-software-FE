@@ -1,3 +1,4 @@
+import React, { useState } from 'react'
 import DataTable from '@/Components/Table/Table'
 import { PayrollProviderSpecific } from './Context/SpecificUserPayrollProvider'
 import style from '../styles/Payroll.module.css'
@@ -7,7 +8,6 @@ import { EventsProvider } from '@/Pages/Events/Context/EventsContext'
 import { RingLoader } from 'react-spinners'
 import Button from '@/Components/Button/Button'
 import { ButtonTypes } from '@/Components/Button/ButtonTypes'
-import { useState } from 'react'
 
 const parseOptionalNumber = (value: string): number | undefined => {
     if (!value.trim()) {
@@ -58,20 +58,15 @@ function SpecificUserPayrollContent() {
         setMonth(undefined)
     }
 
-    if (isPending)
+    const hasActiveFilters = monthValue.trim() !== ''
+
+    if (isPending) {
         return (
-            <div
-                style={{
-                    display: 'flex',
-                    fontSize: '30px',
-                    justifyContent: 'center',
-                    marginTop: '50px',
-                }}
-            >
-                {' '}
+            <div className={style.ring}>
                 <RingLoader />
             </div>
         )
+    }
 
     if (isError) {
         return (
@@ -86,53 +81,58 @@ function SpecificUserPayrollContent() {
     }
 
     return (
-        <div className={style.payroll}>
-            <div
-                style={{
-                    display: 'flex',
-                    gap: '25px',
-                    alignItems: 'center',
-                    alignSelf: 'flex-end',
-                    position: 'absolute',
-                    top: 77,
-                }}
-            >
-                <div style={{ fontSize: '20px', fontWeight: 'bold' }}>
-                    {fullName}
+        <div className={style.payrollPage}>
+            <section className={style.panel}>
+                <div className={style.panelHeader}>
+                    <div className={style.panelCopy}>
+                        <span className={style.panelEyebrow}>Payroll</span>
+                        <h1 className={style.panelTitle}>
+                            {fullName || 'Employee payroll'}
+                        </h1>
+                        <p className={style.panelDescription}>
+                            Review this employee&apos;s salary history in a
+                            stable layout and filter it by month when needed.
+                        </p>
+                    </div>
+                    <div className={style.panelMeta}>
+                        {hasActiveFilters
+                            ? 'Month filter applied'
+                            : 'Full payment history'}
+                    </div>
                 </div>
-                <Input
-                    width={250}
-                    name="Filter"
-                    type="month"
-                    label="Month & Year"
-                    IsUsername
-                    value={monthValue}
-                    onChange={handleDateChange}
-                />
-                <Button
-                    btnText="Clear"
-                    type={ButtonTypes.SECONDARY}
-                    onClick={handleClearFilters}
+
+                <div className={style.filterGridCompact}>
+                    <Input
+                        name="payroll-month"
+                        type="month"
+                        label="Month & Year"
+                        isFilter
+                        value={monthValue}
+                        onChange={handleDateChange}
+                    />
+                    <div className={style.inlineActions}>
+                        <Button
+                            btnText="Clear filter"
+                            type={ButtonTypes.SECONDARY}
+                            onClick={handleClearFilters}
+                            disabled={!hasActiveFilters}
+                        />
+                    </div>
+                </div>
+            </section>
+
+            <div className={style.tableSection}>
+                <DataTable
+                    rows={rows}
+                    columns={columns}
+                    getRowId={getRowId}
+                    totalPages={totalPages}
+                    page={page}
+                    pageSize={pageSize}
+                    onPaginationModelChange={handlePaginationModelChange}
+                    title="Payment history"
                 />
             </div>
-            <DataTable
-                rows={rows}
-                columns={columns}
-                getRowId={getRowId}
-                totalPages={totalPages}
-                page={page}
-                pageSize={pageSize}
-                onPaginationModelChange={handlePaginationModelChange}
-            />
-            <div
-                style={{
-                    width: '500px',
-                    marginTop: '30px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '20px',
-                }}
-            ></div>
         </div>
     )
 }
