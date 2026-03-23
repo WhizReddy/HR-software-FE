@@ -1,6 +1,19 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, BriefcaseBusiness, MapPin, Pencil, Plus, Search, Sparkles, Trash2 } from 'lucide-react'
+import {
+    ArrowRight,
+    ArrowUpRight,
+    BriefcaseBusiness,
+    Clock3,
+    MapPin,
+    Pencil,
+    Plus,
+    Search,
+    ShieldCheck,
+    Sparkles,
+    Trash2,
+    Users,
+} from 'lucide-react'
 import { ModalComponent } from '@/Components/Modal/Modal'
 import Button from '@/Components/Button/Button'
 import { ButtonTypes } from '@/Components/Button/ButtonTypes'
@@ -13,9 +26,20 @@ import {
 } from './Hook'
 import { useAuth } from '@/Context/AuthProvider'
 import { isAdminRole } from '@/Helpers/access'
+import Workers from '/public/Images/happy workers.webp'
+import WorkerTwo from '/public/Images/happyWorkers2.jpg'
+import WorkerThree from '/public/Images/happyWork3.jpeg'
 
 type CareersProps = {
     managementMode?: boolean
+}
+
+const truncateText = (value: string, maxLength: number) => {
+    if (value.length <= maxLength) {
+        return value
+    }
+
+    return `${value.slice(0, maxLength).trimEnd()}...`
 }
 
 export const Careers = ({ managementMode = false }: CareersProps) => {
@@ -83,26 +107,51 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
     const featuredLocations = Array.from(activeLocations)
         .filter(Boolean)
         .slice(0, 3)
+    const heroMetrics = [
+        {
+            label: 'Open roles',
+            value: String(events.length),
+            icon: BriefcaseBusiness,
+        },
+        {
+            label: 'Candidate replies',
+            value: 'Fast feedback',
+            icon: Clock3,
+        },
+        {
+            label: 'Team style',
+            value: 'Small, sharp squads',
+            icon: Users,
+        },
+    ]
     const culturePrinciples = [
         {
             title: 'Focused teams',
             description:
                 'Small squads own problems end to end, with less ceremony and clearer accountability.',
+            icon: Users,
         },
         {
             title: 'Clear expectations',
             description:
                 'People do their best work when the bar is high, explicit, and backed by good feedback.',
+            icon: ShieldCheck,
         },
         {
             title: 'Steady growth',
             description:
                 'We care about durable product decisions, clean execution, and teammates who keep improving.',
+            icon: Sparkles,
         },
+    ]
+    const candidatePromises = [
+        'Direct work with product and engineering, not layers of approval.',
+        'Role expectations that are explicit from the start.',
+        'A hiring process built around signal, not noise.',
     ]
 
     return (
-        <div className="min-h-screen bg-[#f5f7fb]">
+        <div className="min-h-screen bg-[radial-gradient(circle_at_top,#fef3c7_0%,#f8fafc_24%,#eef4ff_100%)]">
             <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
                 {managementMode ? (
                     <section className="overflow-hidden rounded-[32px] border border-slate-200/70 bg-[linear-gradient(135deg,#12345d_0%,#2457a3_48%,#80a8ff_100%)] p-8 text-white shadow-2xl shadow-blue-900/20">
@@ -139,24 +188,27 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                         </div>
                     </section>
                 ) : (
-                    <section className="rounded-[32px] border border-slate-200/80 bg-white p-6 shadow-sm sm:p-8">
-                        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
-                            <div>
-                                <p className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[#2457a3]">
+                    <section className="relative overflow-hidden rounded-[36px] border border-slate-200/80 bg-[linear-gradient(135deg,#0f213d_0%,#17345d_52%,#2457a3_100%)] p-6 text-white shadow-2xl shadow-slate-300/60 sm:p-8 lg:p-10">
+                        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,184,77,0.28),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(125,211,252,0.18),transparent_26%)]" />
+                        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/30" />
+
+                        <div className="relative grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+                            <div className="max-w-3xl">
+                                <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-amber-100">
                                     <BriefcaseBusiness size={14} />
                                     Career Board
                                 </p>
-                                <h1 className="mt-5 max-w-3xl text-4xl font-black tracking-tight text-slate-900 sm:text-[3.4rem]">
-                                    Work on a product that teams rely on every day.
+                                <h1 className="mt-6 max-w-3xl text-4xl font-black tracking-tight text-white sm:text-[3.6rem] sm:leading-[1.02]">
+                                    Join a product team that prefers clarity over noise.
                                 </h1>
-                                <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
-                                    Browse current openings, understand how we work, and send a general application if the right role is not listed yet.
+                                <p className="mt-5 max-w-2xl text-base leading-8 text-blue-100/92">
+                                    We build internal tools that people depend on daily. The work is practical, the standards are high, and strong contributors get real ownership quickly.
                                 </p>
 
-                                <div className="mt-8 flex flex-wrap gap-3">
+                                <div className="mt-8 flex flex-wrap gap-4">
                                     <Link
                                         to="/recruitment"
-                                        className="inline-flex items-center gap-2 rounded-xl bg-[#2457a3] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#1c4380]"
+                                        className="inline-flex min-h-11 items-center gap-2 rounded-2xl bg-[#ffb84d] px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-amber-900/20 transition hover:-translate-y-0.5 hover:bg-[#f5a623] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ffb84d] focus-visible:ring-offset-2 focus-visible:ring-offset-[#17345d]"
                                     >
                                         Submit General Application
                                         <ArrowRight size={16} />
@@ -164,54 +216,81 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     {isManager && (
                                         <Link
                                             to="/career-posts"
-                                            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+                                            className="inline-flex min-h-11 items-center gap-2 rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/18 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#17345d]"
                                         >
                                             Manage Career Posts
                                         </Link>
                                     )}
                                 </div>
 
-                                <p className="mt-6 text-sm text-slate-500">
-                                    Clean communication, solid execution, and steady product improvement matter more here than inflated process.
-                                </p>
+                                <div className="mt-8 grid gap-3 sm:grid-cols-3">
+                                    {heroMetrics.map(({ label, value, icon: Icon }) => (
+                                        <div
+                                            key={label}
+                                            className="rounded-[24px] border border-white/12 bg-white/8 p-4 backdrop-blur-sm"
+                                        >
+                                            <div className="flex items-center gap-2 text-blue-100">
+                                                <Icon size={16} />
+                                                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-blue-100/80">
+                                                    {label}
+                                                </p>
+                                            </div>
+                                            <p className="mt-3 text-lg font-bold text-white">
+                                                {value}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
 
-                            <div className="grid gap-4 sm:grid-cols-2">
-                                <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5">
-                                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                                        Open Roles
-                                    </p>
-                                    <p className="mt-3 text-3xl font-black text-slate-900">
-                                        {events.length}
-                                    </p>
+                            <div className="grid gap-4 md:grid-cols-[1.1fr_0.9fr]">
+                                <div className="overflow-hidden rounded-[30px] border border-white/15 bg-slate-900/20 shadow-xl shadow-slate-950/20">
+                                    <img
+                                        src={Workers}
+                                        alt="Team collaboration"
+                                        className="h-full min-h-[320px] w-full object-cover"
+                                    />
                                 </div>
-                                <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5">
-                                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                                        Locations
-                                    </p>
-                                    <p className="mt-3 text-3xl font-black text-slate-900">
-                                        {activeLocations.size}
-                                    </p>
-                                </div>
-                                <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5 sm:col-span-2">
-                                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                                        Common locations
-                                    </p>
-                                    <div className="mt-4 flex flex-wrap gap-2">
-                                        {featuredLocations.length > 0 ? (
-                                            featuredLocations.map((location) => (
-                                                <span
-                                                    key={location}
-                                                    className="inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1 text-sm font-medium text-slate-600"
-                                                >
-                                                    {location}
+                                <div className="grid gap-4">
+                                    <div className="overflow-hidden rounded-[26px] border border-white/15 bg-white/8 p-3 backdrop-blur-sm">
+                                        <img
+                                            src={WorkerTwo}
+                                            alt="Team planning session"
+                                            className="h-40 w-full rounded-[20px] object-cover"
+                                        />
+                                        <div className="mt-4 px-1 pb-1">
+                                            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-100/90">
+                                                Candidate signal
+                                            </p>
+                                            <p className="mt-2 text-base font-semibold leading-7 text-white">
+                                                We care more about sharp execution and good judgment than polished buzzwords.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="rounded-[26px] border border-white/15 bg-white/8 p-5 backdrop-blur-sm">
+                                        <div className="flex items-center justify-between gap-3">
+                                            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-blue-100/80">
+                                                Common locations
+                                            </p>
+                                            <ArrowUpRight size={16} className="text-amber-100" />
+                                        </div>
+                                        <div className="mt-4 flex flex-wrap gap-2">
+                                            {featuredLocations.length > 0 ? (
+                                                featuredLocations.map((location) => (
+                                                    <span
+                                                        key={location}
+                                                        className="inline-flex items-center rounded-full border border-white/14 bg-white/10 px-3 py-1.5 text-sm font-medium text-white"
+                                                    >
+                                                        {location}
+                                                    </span>
+                                                ))
+                                            ) : (
+                                                <span className="text-sm text-blue-100/80">
+                                                    Flexible location details are shared per role.
                                                 </span>
-                                            ))
-                                        ) : (
-                                            <span className="text-sm text-slate-500">
-                                                Flexible location details are shared per role.
-                                            </span>
-                                        )}
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -219,7 +298,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                     </section>
                 )}
 
-                <section className="mt-8 rounded-[28px] border border-slate-200/70 bg-white p-5 shadow-sm">
+                <section className="mt-8 rounded-[28px] border border-slate-200/70 bg-white p-6 shadow-sm">
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                         <div>
                             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">
@@ -237,7 +316,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             </p>
                         </div>
 
-                        <label className="flex w-full items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 lg:max-w-md">
+                        <label className="flex w-full items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 lg:max-w-md focus-within:border-[#2457a3] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#2457a3]/15">
                             <Search size={18} className="text-slate-400" />
                             <input
                                 type="text"
@@ -301,19 +380,19 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             {filteredEvents.map((careerEvent) => (
                                 <article
                                     key={careerEvent._id}
-                                    className="flex h-full flex-col rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm transition hover:border-slate-300 hover:shadow-md"
+                                    className="group flex h-full flex-col rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#2457a3]/35 hover:shadow-xl hover:shadow-slate-200/70"
                                 >
                                     <div className="flex items-start justify-between gap-4">
                                         <div>
-                                            <p className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">
+                                            <p className="inline-flex rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-amber-700">
                                                 {managementMode
                                                     ? 'Published Post'
                                                     : 'Open Role'}
                                             </p>
-                                            <h3 className="mt-4 text-2xl font-bold tracking-tight text-slate-900">
+                                            <h3 className="mt-5 text-[1.85rem] font-black leading-tight tracking-tight text-slate-900">
                                                 {careerEvent.title}
                                             </h3>
-                                            <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-sm font-medium text-slate-500">
+                                            <div className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700">
                                                 <MapPin
                                                     size={15}
                                                     className="text-[#2457a3]"
@@ -330,7 +409,8 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                                 <button
                                                     type="button"
                                                     onClick={() => handleOpenEdit(careerEvent)}
-                                                    className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-800"
+                                                    aria-label={`Edit ${careerEvent.title}`}
+                                                    className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2457a3]/30"
                                                 >
                                                     <Pencil size={16} />
                                                 </button>
@@ -341,7 +421,8 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                                             careerEvent._id,
                                                         )
                                                     }
-                                                    className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-rose-200 text-rose-500 transition hover:bg-rose-50 hover:text-rose-700"
+                                                    aria-label={`Delete ${careerEvent.title}`}
+                                                    className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-rose-200 text-rose-500 transition hover:bg-rose-50 hover:text-rose-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-200"
                                                 >
                                                     <Trash2 size={16} />
                                                 </button>
@@ -350,7 +431,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     </div>
 
                                     <p className="mt-5 flex-1 text-sm leading-7 text-slate-600">
-                                        {careerEvent.description}
+                                        {truncateText(careerEvent.description, 190)}
                                     </p>
 
                                     <div className="mt-8 flex items-center justify-between gap-3 border-t border-slate-100 pt-5">
@@ -371,7 +452,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         {!managementMode && (
                                             <Link
                                                 to="/recruitment"
-                                                className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#2457a3]"
+                                                className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#2457a3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2457a3]/30"
                                             >
                                                 Apply Now
                                                 <ArrowRight size={14} />
@@ -386,47 +467,122 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
 
                 {!managementMode && (
                     <>
-                        <section className="mt-12 grid gap-5 lg:grid-cols-3">
-                            {culturePrinciples.map((principle) => (
-                                <article
-                                    key={principle.title}
-                                    className="rounded-[26px] border border-slate-200 bg-white p-6 shadow-sm"
-                                >
-                                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                                        How We Work
-                                    </p>
-                                    <h3 className="mt-3 text-xl font-bold text-slate-900">
-                                        {principle.title}
-                                    </h3>
-                                    <p className="mt-3 text-sm leading-7 text-slate-600">
-                                        {principle.description}
-                                    </p>
+                        <section className="mt-12 grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
+                            <div className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-sm">
+                                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                                    Why join us
+                                </p>
+                                <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-900">
+                                    Serious work, calm collaboration, and standards that stay consistent.
+                                </h2>
+                                <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600">
+                                    The environment is structured enough to keep things moving and flexible enough for strong people to make a visible difference.
+                                </p>
+
+                                <div className="mt-6 grid gap-4 sm:grid-cols-3">
+                                    {culturePrinciples.map(
+                                        ({ title, description, icon: Icon }) => (
+                                            <article
+                                                key={title}
+                                                className="rounded-[24px] border border-slate-200 bg-slate-50 p-5"
+                                            >
+                                                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-[#2457a3] shadow-sm">
+                                                    <Icon size={18} />
+                                                </div>
+                                                <h3 className="mt-4 text-lg font-bold text-slate-900">
+                                                    {title}
+                                                </h3>
+                                                <p className="mt-3 text-sm leading-7 text-slate-600">
+                                                    {description}
+                                                </p>
+                                            </article>
+                                        ),
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="grid gap-5">
+                                <article className="overflow-hidden rounded-[30px] border border-slate-200 bg-white shadow-sm">
+                                    <img
+                                        src={WorkerThree}
+                                        alt="Team collaboration in the office"
+                                        className="h-56 w-full object-cover"
+                                    />
+                                    <div className="p-6">
+                                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                                            Team perspective
+                                        </p>
+                                        <blockquote className="mt-3 text-lg font-semibold leading-8 text-slate-900">
+                                            “The work is practical and the bar is clear. You know what good looks like, and you get room to deliver it.”
+                                        </blockquote>
+                                    </div>
                                 </article>
-                            ))}
+
+                                <article className="rounded-[30px] bg-slate-900 p-6 text-white shadow-xl shadow-slate-200/60">
+                                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-300">
+                                        What candidates can expect
+                                    </p>
+                                    <div className="mt-5 space-y-4">
+                                        {candidatePromises.map((promise) => (
+                                            <div
+                                                key={promise}
+                                                className="flex items-start gap-3"
+                                            >
+                                                <span className="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#ffb84d] text-slate-950">
+                                                    <ArrowRight size={14} />
+                                                </span>
+                                                <p className="text-sm leading-7 text-slate-200">
+                                                    {promise}
+                                                </p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </article>
+                            </div>
                         </section>
 
-                        <section className="mt-6 rounded-[28px] bg-slate-900 p-8 text-white shadow-xl shadow-slate-200/50">
-                            <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                        <section className="mt-6 rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
+                            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                                 <div className="max-w-2xl">
-                                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-300">
+                                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                                         Ready to talk?
                                     </p>
-                                    <h2 className="mt-3 text-3xl font-bold tracking-tight">
-                                        Apply for a listed role or send a strong general application.
+                                    <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-900">
+                                        Apply for an open role or send a strong general application.
                                     </h2>
-                                    <p className="mt-3 text-sm leading-7 text-slate-300">
+                                    <p className="mt-3 text-sm leading-7 text-slate-600">
                                         If your profile fits our direction, we would rather hear from you early than wait for a perfect listing.
                                     </p>
                                 </div>
 
                                 <Link
                                     to="/recruitment"
-                                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
+                                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-[#ffb84d] px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-[#f5a623] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
                                 >
                                     Start Application
                                     <ArrowRight size={16} />
                                 </Link>
                             </div>
+                        </section>
+
+                        <section className="mt-6 grid gap-5 lg:grid-cols-3">
+                            {culturePrinciples.map((principle) => (
+                                <article
+                                    key={`${principle.title}-summary`}
+                                    className="rounded-[26px] border border-slate-200 bg-white p-6 shadow-sm"
+                                >
+                                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                                        Candidate fit
+                                    </p>
+                                    <p className="mt-3 text-sm leading-7 text-slate-600">
+                                        {principle.title === 'Focused teams'
+                                            ? 'You are comfortable owning a problem directly and communicating without excess ceremony.'
+                                            : principle.title === 'Clear expectations'
+                                              ? 'You prefer feedback that is concrete, quick, and tied to actual output.'
+                                              : 'You want work that compounds over time instead of short-lived cosmetic tasks.'}
+                                    </p>
+                                </article>
+                            ))}
                         </section>
                     </>
                 )}
