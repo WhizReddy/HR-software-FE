@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import AxiosInstance from '@/Helpers/Axios'
+import { PublicAxiosInstance } from '@/Helpers/Axios'
 
 import { Button } from '@/Components/ui/button'
 import { Input } from '@/Components/ui/input'
@@ -30,7 +30,7 @@ const ResetPass: React.FC = () => {
 
         setIsLoading(true)
         try {
-            await AxiosInstance.post('/auth/forgot-password', { email })
+            await PublicAxiosInstance.post('/auth/forgot-password', { email })
             setSuccess('Password reset link has been sent to your email. Check your inbox.')
         } catch (err: any) {
             const msg = err.response?.data?.message || 'Failed to send reset link. Please try again.'
@@ -63,7 +63,7 @@ const ResetPass: React.FC = () => {
 
         setIsLoading(true)
         try {
-            await AxiosInstance.post('/auth/reset-password', {
+            await PublicAxiosInstance.post('/auth/reset-password', {
                 token,
                 newPassword,
             })

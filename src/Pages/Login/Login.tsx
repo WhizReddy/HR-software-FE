@@ -27,12 +27,10 @@ const LoginComponent = () => {
     const { form } = useFormLogin(setError)
 
     useEffect(() => {
-        if (localStorage.getItem('access_token')) {
-            setCheckingIsAuthenticated(false)
+        if (isAuthenticated) {
             navigate('/dashboard')
-        } else {
-            setCheckingIsAuthenticated(false)
         }
+        setCheckingIsAuthenticated(false)
     }, [isAuthenticated, navigate, setCheckingIsAuthenticated])
 
     if (checkingIsAuthenticated)
@@ -97,7 +95,7 @@ const LoginComponent = () => {
                             onSubmit={(e) => {
                                 e.preventDefault()
                                 e.stopPropagation()
-                                form.handleSubmit()
+                                void form.handleSubmit()
                             }}
                         >
                             <form.Field

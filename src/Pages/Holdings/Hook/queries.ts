@@ -29,7 +29,6 @@ export const getUserHoldings = async (
 }
 
 export const getItem = async (itemId: string): Promise<Asset> => {
-    console.log('Getting item:', itemId)
     return (await AxiosInstance.get(`/asset/${itemId}`)).data
 }
 

@@ -23,6 +23,13 @@ export const EmployeesWithHoldings = () => {
         useContext(HoldingsContext)
 
     const { ref, inView } = useInView()
+    const users = data?.pages.flatMap((page) => page.data) ?? []
+    const totalUsers = data?.pages[0]?.all ?? users.length
+    const withAssetsCount = users.filter((user) => user.assets?.length > 0).length
+    const totalAssignedAssets = users.reduce(
+        (sum, user) => sum + (user.assets?.length ?? 0),
+        0,
+    )
 
     useEffect(() => {
         if (inView) {
@@ -55,107 +62,138 @@ export const EmployeesWithHoldings = () => {
     )
 
     return (
-        <div className="flex flex-col mt-6">
-            <div className={style.tableHeader}>
-                <span>Employee</span>
-                <span>Role</span>
-                <span>Active Holdings</span>
-                <span>Status</span>
-                <span className="text-right">Action</span>
+        <div className="mt-6 space-y-5">
+            <div className={style.statsGrid}>
+                <article className={style.statCard}>
+                    <span className={style.statLabel}>People</span>
+                    <strong className={style.statValue}>{totalUsers}</strong>
+                    <p className={style.statMeta}>Matching current filter</p>
+                </article>
+                <article className={style.statCard}>
+                    <span className={style.statLabel}>With Assets</span>
+                    <strong className={style.statValue}>{withAssetsCount}</strong>
+                    <p className={style.statMeta}>Assigned right now</p>
+                </article>
+                <article className={style.statCard}>
+                    <span className={style.statLabel}>Total Holdings</span>
+                    <strong className={style.statValue}>
+                        {totalAssignedAssets}
+                    </strong>
+                    <p className={style.statMeta}>Visible in this view</p>
+                </article>
             </div>
 
             <div className="flex flex-col gap-3">
-                {data?.pages.map((page) =>
-                    page.data.map((user: UserWithHoldings) => (
-                        <div key={user._id} className={style.rowWrapper}>
-                            <SimpleCollapsableCard
-                                user={user}
-                                searchParams={searchParams}
-                                setSearchParams={setSearchParams}
-                            >
-                                {/* Custom Row Header that aligns with Table Header */}
-                                <div
-                                    className="flex items-center justify-between px-6 py-4 cursor-pointer hover:bg-slate-50/50 transition-colors"
-                                >
-                                    <div className={style.gridRow}>
-                                        <div className={style.employeeCol}>
-                                            {user.imageUrl ? (
-                                                <img
-                                                    src={user.imageUrl}
-                                                    alt={`${user.firstName} ${user.lastName}`}
-                                                    className="w-10 h-10 rounded-full object-cover border border-slate-200"
-                                                />
-                                            ) : (
-                                                <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm">
-                                                    {user.firstName[0]}{user.lastName[0]}
-                                                </div>
-                                            )}
-                                            <span className="font-semibold text-slate-800">
-                                                {user.firstName} {user.lastName}
-                                            </span>
-                                        </div>
-
-                                        <div className={style.roleCol}>
+                {users.map((user: UserWithHoldings) => (
+                    <div key={user._id} className={style.rowWrapper}>
+                        <SimpleCollapsableCard
+                            user={user}
+                            items={{
+                                type: 'Holding',
+                                itemArr: user.assets ?? [],
+                            }}
+                            searchParams={searchParams}
+                            setSearchParams={setSearchParams}
+                        >
+                            <div className={style.expandedPanel}>
+                                <div className={style.summaryGrid}>
+                                    <article className={style.summaryCard}>
+                                        <span className={style.summaryLabel}>
+                                            Role
+                                        </span>
+                                        <strong className={style.summaryValue}>
                                             {user.role || 'Employee'}
-                                        </div>
-
-                                        <div className={style.holdingsCol}>
-                                            {user.assets && user.assets.length > 0 ? (
-                                                <span className="px-2.5 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-bold border border-blue-100">
-                                                    {user.assets.length} Assets
-                                                </span>
-                                            ) : (
-                                                <span className={style.emptyState}>No assets</span>
-                                            )}
-                                        </div>
-
-                                        <div className="flex items-center">
-                                            <span className={`${style.statusBadge} ${user.assets && user.assets.length > 0 ? style.active : style.inactive}`}>
-                                                {user.assets && user.assets.length > 0 ? 'W/ ASSETS' : 'W/O ASSETS'}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    {/* Action button inside the row header for quick access */}
-                                    <div className="flex items-center gap-4">
+                                        </strong>
+                                    </article>
+                                    <article className={style.summaryCard}>
+                                        <span className={style.summaryLabel}>
+                                            Status
+                                        </span>
+                                        <span
+                                            className={`${style.statusBadge} ${
+                                                user.assets &&
+                                                user.assets.length > 0
+                                                    ? style.active
+                                                    : style.inactive
+                                            }`}
+                                        >
+                                            {user.assets &&
+                                            user.assets.length > 0
+                                                ? 'With assets'
+                                                : 'No assets'}
+                                        </span>
+                                    </article>
+                                    <article className={style.summaryCard}>
+                                        <span className={style.summaryLabel}>
+                                            Active holdings
+                                        </span>
+                                        <strong className={style.summaryValue}>
+                                            {user.assets?.length ?? 0}
+                                        </strong>
+                                    </article>
+                                    <div className={style.summaryAction}>
                                         <Button
                                             onClick={(e) => {
-                                                e.stopPropagation();
-                                                setClickedOnAssignItem(user._id);
+                                                e.stopPropagation()
+                                                setClickedOnAssignItem(user._id)
                                             }}
-                                            variant="ghost"
+                                            variant="outline"
                                             size="sm"
-                                            className="h-9 px-4 text-blue-600 hover:text-blue-700 hover:bg-blue-50 font-bold"
+                                            className="h-10 px-4 font-semibold text-blue-700 hover:bg-blue-50"
                                         >
-                                            Assign
+                                            Assign asset
                                         </Button>
                                     </div>
                                 </div>
 
-                                {/* Expanded Content (Details) */}
-                                <div className="p-6 bg-slate-50/30 border-t border-slate-100/50">
-                                    <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Inventory Details</h3>
-                                    <div className="flex flex-wrap gap-2">
-                                        {user.assets && user.assets.length > 0 ? (
-                                            user.assets.map(({ type, _id }) => (
-                                                <div
-                                                    key={_id}
-                                                    onClick={() => setClickedOnHolding(_id)}
-                                                    className={style.assetBadge}
-                                                >
-                                                    {type}
-                                                </div>
-                                            ))
-                                        ) : (
-                                            <p className="text-sm text-slate-400 italic">This employee currently has no company assets assigned.</p>
-                                        )}
+                                <div className={style.assetsSection}>
+                                    <div className={style.assetsHeader}>
+                                        <h3>Assigned items</h3>
+                                        <span>
+                                            Click an item to open the return
+                                            flow
+                                        </span>
                                     </div>
 
+                                    {user.assets && user.assets.length > 0 ? (
+                                        <div className={style.assetGrid}>
+                                            {user.assets.map(
+                                                ({
+                                                    type,
+                                                    _id,
+                                                    serialNumber,
+                                                }) => (
+                                                    <button
+                                                        key={_id}
+                                                        type="button"
+                                                        onClick={() =>
+                                                            setClickedOnHolding(
+                                                                _id,
+                                                            )
+                                                        }
+                                                        className={
+                                                            style.assetBadge
+                                                        }
+                                                    >
+                                                        <span>{type}</span>
+                                                        <small>
+                                                            {serialNumber}
+                                                        </small>
+                                                    </button>
+                                                ),
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <p className={style.emptyState}>
+                                            This employee currently has no
+                                            company assets assigned.
+                                        </p>
+                                    )}
                                 </div>
-                            </SimpleCollapsableCard>
-                        </div>
-                    )),
-                )}
+                            </div>
+                        </SimpleCollapsableCard>
+                    </div>
+                ))}
             </div>
             {searchParams.get('assignItem') && <AssignAssetModal />}
             {searchParams.get('ownedItem') && <ReturnAssetModal />}

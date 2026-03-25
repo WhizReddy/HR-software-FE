@@ -3,6 +3,10 @@ export const API_URL =
     (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/+$/, '') ||
     'https://hr-software-backend.onrender.com'
 
+export const PublicAxiosInstance = axios.create({
+    baseURL: API_URL,
+})
+
 export const resolveApiAssetUrl = (path?: string | null) => {
     if (!path) return ''
     return path.startsWith('http') ? path : `${API_URL}${path}`
@@ -27,7 +31,18 @@ AxiosInstance.interceptors.request.use(
 AxiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error?.response?.status === 401) {
+        const requestUrl =
+            typeof error?.config?.url === 'string' ? error.config.url : ''
+        const isPublicAuthRequest =
+            requestUrl.startsWith('/auth/signin') ||
+            requestUrl.startsWith('/auth/forgot-password') ||
+            requestUrl.startsWith('/auth/reset-password')
+
+        if (
+            error?.response?.status === 401 &&
+            !isPublicAuthRequest &&
+            localStorage.getItem('access_token')
+        ) {
             window.dispatchEvent(new Event('auth:logout'))
         }
         return Promise.reject(error)

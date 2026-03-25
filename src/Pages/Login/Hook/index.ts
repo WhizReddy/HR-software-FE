@@ -1,4 +1,4 @@
-import AxiosInstance from '@/Helpers/Axios'
+import { PublicAxiosInstance } from '@/Helpers/Axios'
 import { useForm } from '@tanstack/react-form'
 import { valibotValidator } from '@tanstack/valibot-form-adapter'
 import { AxiosError } from 'axios'
@@ -18,8 +18,9 @@ export const useFormLogin = (
         },
         validatorAdapter: valibotValidator(),
         onSubmit: async ({ value }) => {
+            setError(null)
             try {
-                const res = await AxiosInstance.post<AuthResponse>(
+                const res = await PublicAxiosInstance.post<AuthResponse>(
                     '/auth/signin',
                     value,
                 )
