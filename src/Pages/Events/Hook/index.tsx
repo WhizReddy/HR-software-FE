@@ -83,9 +83,7 @@ export const useCreateEvent = (
 
     const createEventMutation = useMutation({
         mutationFn: async () => {
-            console.log('Submitting Event:', event)
             if (!event.title.trim() || !event.description.trim()) {
-                console.warn('Event creation failed: Title and Description are required', { title: event.title, description: event.description })
                 throw new Error('Title and Description are required')
             }
 
@@ -122,11 +120,9 @@ export const useCreateEvent = (
                 formData.append('photo', photo)
             })
             const response = await AxiosInstance.post('/event', formData)
-            console.log('Event Creation Response:', response.data)
             return response.data
         },
-        onSuccess: (data) => {
-            console.log('Event created successfully, data:', data)
+        onSuccess: () => {
             setToastMessage('Event created successfully')
             setToastOpen(true)
             setToastSeverity('success')
@@ -134,10 +130,6 @@ export const useCreateEvent = (
             queryClient.invalidateQueries({
                 queryKey: ['events'],
                 exact: false,
-            })
-            queryClient.refetchQueries({
-                queryKey: ['events'],
-                type: 'active',
             })
 
             setEvent({
@@ -187,7 +179,6 @@ export const useCreateEvent = (
                 location: value,
             }))
         } else {
-            console.log(`Events handlechange: updating ${name} to ${value}`)
             setEvent((prevEvent) => ({
                 ...prevEvent,
                 [name]: value,
@@ -406,10 +397,6 @@ export const useUpdateEvent = (
                 queryKey: ['events'],
                 exact: false,
             })
-            queryClient.refetchQueries({
-                queryKey: ['events'],
-                type: 'active',
-            })
 
             setEditingEvent(null)
             resetEditPollState()
@@ -479,10 +466,6 @@ export const useDeleteEvent = () => {
             queryClient.invalidateQueries({
                 queryKey: ['events'],
                 exact: false,
-            })
-            queryClient.refetchQueries({
-                queryKey: ['events'],
-                type: 'active',
             })
         },
         onError: (error: Error) => {

@@ -112,7 +112,7 @@ function EventsContentAndComponents() {
                             page.data.map((event: EventsData) => (
                                 <div
                                     key={event._id}
-                                    className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col h-[400px] group"
+                                    className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col min-h-[400px] group"
                                 >
                                     {event.photo && event.photo.length > 0 ? (
                                         <div className="w-full h-40 bg-slate-100 overflow-hidden flex-shrink-0">
@@ -127,36 +127,41 @@ function EventsContentAndComponents() {
                                             <Calendar className="text-slate-300" size={40} />
                                         </div>
                                     )}
-                                    <div className="p-4 flex-1 flex flex-col">
-                                        <div className="flex justify-between items-start mb-2 gap-2">
-                                            <h3
-                                                className="text-lg font-bold text-slate-800 leading-tight"
-                                                style={clampText(1)}
-                                            >
-                                                {event.title}
-                                            </h3>
-                                            {isAdmin && (
-                                                <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    <LongMenu
-                                                        event={event}
-                                                        onEdit={() => handleOpenDrawer('edit', event)}
-                                                        onDelete={handleDeleteEventModal}
-                                                    />
-                                                </div>
-                                            )}
-                                        </div>
+                                    <div className="p-4 flex flex-1 min-h-0 flex-col">
+                                        <div className="min-h-0 flex-1">
+                                            <div className="flex justify-between items-start mb-2 gap-2">
+                                                <h3
+                                                    className="text-lg font-bold text-slate-800 leading-tight"
+                                                    style={clampText(2)}
+                                                >
+                                                    {event.title}
+                                                </h3>
+                                                {isAdmin && (
+                                                    <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        <LongMenu
+                                                            event={event}
+                                                            onEdit={() => handleOpenDrawer('edit', event)}
+                                                            onDelete={handleDeleteEventModal}
+                                                        />
+                                                    </div>
+                                                )}
+                                            </div>
 
-                                        <p
-                                            className="text-slate-500 text-sm mb-4 flex-1 min-h-[60px]"
-                                            style={clampText(3)}
-                                        >
-                                            {event.description}
-                                        </p>
+                                            <p
+                                                className="text-slate-500 text-sm mb-4 min-h-[44px]"
+                                                style={clampText(2)}
+                                            >
+                                                {event.description}
+                                            </p>
+                                        </div>
 
                                         <div className="space-y-3 mt-auto pt-4 border-t border-slate-50">
                                             <div className="flex items-center gap-2.5 text-sm text-slate-600">
                                                 <Calendar size={18} className="text-blue-500 flex-shrink-0" />
-                                                <span className="font-medium">
+                                                <span
+                                                    className="font-medium"
+                                                    style={clampText(2)}
+                                                >
                                                     {formatDate(event.startDate)} - {formatDate(event.endDate)}
                                                 </span>
                                             </div>

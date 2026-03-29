@@ -1,11 +1,13 @@
+import { Suspense, lazy } from 'react'
 import EventPoll from '../EventPoll/EventsPoll'
 import { Calendar, MapPin, X } from 'lucide-react'
 import { useAuth } from '@/Context/AuthProvider'
-import Example from '@/Components/Carosel/Carosel'
 import { useEvents } from '@/Pages/Events/Context/EventsContext'
-import MapComponent from '../GoogleMap/MapPicker'
 import { useSearchParams } from 'react-router-dom'
 import { useEffect } from 'react'
+
+const EventCarousel = lazy(() => import('@/Components/Carosel/Carosel'))
+const EventMap = lazy(() => import('../GoogleMap/MapPicker'))
 
 const SelectedEventCard = () => {
     const { currentUser } = useAuth()
@@ -13,15 +15,17 @@ const SelectedEventCard = () => {
     const [, setSearchParams] = useSearchParams()
 
     useEffect(() => {
-        console.log('Selected Event:', selectedEvent)
         if (selectedEvent?._id) {
-            setSearchParams({ event: selectedEvent._id.toString() })
+            setSearchParams(
+                { event: selectedEvent._id.toString() },
+                { replace: true },
+            )
         } else {
-            setSearchParams({})
+            setSearchParams({}, { replace: true })
         }
 
         return () => {
-            setSearchParams({})
+            setSearchParams({}, { replace: true })
         }
     }, [selectedEvent, setSearchParams])
 
@@ -33,7 +37,13 @@ const SelectedEventCard = () => {
         <div className="flex flex-col bg-white rounded-xl overflow-hidden shadow-xl max-h-[90vh] w-full">
             {selectedEvent?.photo && selectedEvent.photo.length > 0 && (
                 <div className="w-full bg-slate-900">
-                    <Example images={selectedEvent.photo} />
+                    <Suspense
+                        fallback={
+                            <div className="h-56 w-full animate-pulse bg-slate-200" />
+                        }
+                    >
+                        <EventCarousel images={selectedEvent.photo} />
+                    </Suspense>
                 </div>
             )}
 
@@ -76,11 +86,17 @@ const SelectedEventCard = () => {
 
                 {selectedEvent.location && (
                     <div className="w-full h-[300px] mb-8 rounded-xl overflow-hidden border border-slate-200">
-                        <MapComponent
-                            onLocationChange={(address, lat, lng) => console.log(address, lat, lng)}
-                            savedLocation={selectedEvent.location}
-                            showInput={false}
-                        />
+                        <Suspense
+                            fallback={
+                                <div className="h-full w-full animate-pulse bg-slate-100" />
+                            }
+                        >
+                            <EventMap
+                                onLocationChange={() => {}}
+                                savedLocation={selectedEvent.location}
+                                showInput={false}
+                            />
+                        </Suspense>
                     </div>
                 )}
 

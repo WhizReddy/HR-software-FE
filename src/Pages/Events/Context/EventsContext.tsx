@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, {
+    createContext,
+    startTransition,
+    useCallback,
+    useContext,
+    useEffect,
+    useState,
+} from 'react'
 import { EventsData, EventsContextProps } from '@/Pages/Events/Interface/Events'
 import { useCreateEvent, useUpdateEvent, useDeleteEvent } from '@/Pages/Events/Hook/index'
 import { useAuth } from '@/Context/AuthProvider'
@@ -23,26 +30,34 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
         return date.split('T')[0].replace(/-/g, '/');
     };
 
-    const handleSeeEventDetails = async (event: EventsData) => {
+    const loadEventById = useCallback(async (id: string) => {
         try {
-            const res = await AxiosInstance.get(`/event/${event._id}`)
-            console.log('res', res)
-            setSelectedEvent(res.data)
-            setShowEventModal(true)
-        } catch (err) {
-            console.log(err)
+            const res = await AxiosInstance.get(`/event/${id}`)
+            startTransition(() => {
+                setSelectedEvent(res.data)
+                setShowEventModal(true)
+            })
+        } catch {
+            // mute modal fetch errors here; card click should stay responsive
         }
-    }
+    }, [])
+
+    const handleSeeEventDetails = useCallback((event: EventsData) => {
+        startTransition(() => {
+            setSelectedEvent(event)
+            setShowEventModal(true)
+        })
+    }, [])
 
     const [searchParams] = useSearchParams()
 
     const eventId = searchParams.get('event')
 
     useEffect(() => {
-        if (eventId) {
-            handleSeeEventDetails({ _id: eventId } as unknown as EventsData)
+        if (eventId && eventId !== selectedEvent?._id) {
+            void loadEventById(eventId)
         }
-    }, [eventId])
+    }, [eventId, loadEventById, selectedEvent?._id])
 
     const handleOpenDrawer = (
         action: 'create' | 'edit',
