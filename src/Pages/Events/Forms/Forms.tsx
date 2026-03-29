@@ -1,5 +1,5 @@
-import React from 'react'
-import { X } from 'lucide-react'
+import React, { Suspense, lazy, useEffect, useState } from 'react'
+import { ChevronDown, ChevronUp, MapPinned, X } from 'lucide-react'
 import Selecter from '@/Components/Input/components/Select/Selecter'
 import Dropzone from '@/Dropzone/Dropzone'
 import DrawerComponent from '@/Components/Drawer/Drawer'
@@ -7,7 +7,8 @@ import Input from '@/Components/Input/Index'
 import Button from '@/Components/Button/Button'
 import { ButtonTypes } from '@/Components/Button/ButtonTypes'
 import { useEvents } from '@/Pages/Events/Context/EventsContext'
-import MapComponent from '../Components/GoogleMap/MapPicker'
+
+const EventMapPicker = lazy(() => import('../Components/GoogleMap/MapPicker'))
 
 export default function Forms() {
     const {
@@ -34,6 +35,8 @@ export default function Forms() {
         handleCloseDrawer,
         drawerOpen,
     } = useEvents()
+    const [showLocationPicker, setShowLocationPicker] = useState(false)
+    const [mountLocationPicker, setMountLocationPicker] = useState(false)
 
     const handleLocationChange = (address: string) => {
         if (editingEvent) {
@@ -52,6 +55,29 @@ export default function Forms() {
             } as React.ChangeEvent<HTMLInputElement>)
         }
     }
+
+    const currentLocation = editingEvent ? editingEvent.location : event.location
+
+    useEffect(() => {
+        if (!drawerOpen) {
+            setShowLocationPicker(false)
+            setMountLocationPicker(false)
+            return
+        }
+
+        if (!showLocationPicker) {
+            setMountLocationPicker(false)
+            return
+        }
+
+        const timer = window.setTimeout(() => {
+            setMountLocationPicker(true)
+        }, 180)
+
+        return () => {
+            window.clearTimeout(timer)
+        }
+    }, [drawerOpen, showLocationPicker])
 
     return (
         <DrawerComponent open={drawerOpen} onClose={handleCloseDrawer}>
@@ -123,12 +149,69 @@ export default function Forms() {
                 {/* Location Card */}
                 <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-4 hover:shadow-md transition-shadow duration-300">
                     <h3 className="text-sm font-semibold text-slate-800">Location</h3>
-                    <div className="rounded-xl overflow-hidden border border-slate-100">
-                        <MapComponent
-                            onLocationChange={handleLocationChange}
-                            savedLocation={editingEvent ? editingEvent.location : event.location}
-                            showInput={true}
-                        />
+                    <Input
+                        IsUsername
+                        label="Event location"
+                        name="location"
+                        value={currentLocation}
+                        onChange={
+                            editingEvent ? handleEditChange : handleChange
+                        }
+                        width="100%"
+                    />
+
+                    <div className="rounded-2xl border border-slate-100 bg-slate-50/70 p-4">
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <div>
+                                <p className="text-sm font-semibold text-slate-800">
+                                    Map picker
+                                </p>
+                                <p className="mt-1 text-xs leading-5 text-slate-500">
+                                    Open the map only if you want to search or
+                                    pin the location visually.
+                                </p>
+                            </div>
+
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    setShowLocationPicker((prev) => !prev)
+                                }
+                                className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100"
+                            >
+                                <MapPinned size={16} />
+                                {showLocationPicker
+                                    ? 'Hide map'
+                                    : 'Open map'}
+                                {showLocationPicker ? (
+                                    <ChevronUp size={16} />
+                                ) : (
+                                    <ChevronDown size={16} />
+                                )}
+                            </button>
+                        </div>
+
+                        {showLocationPicker && (
+                            <div className="mt-4 rounded-xl overflow-hidden border border-slate-100 bg-white">
+                                {mountLocationPicker ? (
+                                    <Suspense
+                                        fallback={
+                                            <div className="h-[400px] w-full animate-pulse bg-slate-100" />
+                                        }
+                                    >
+                                        <EventMapPicker
+                                            onLocationChange={
+                                                handleLocationChange
+                                            }
+                                            savedLocation={currentLocation}
+                                            showInput={false}
+                                        />
+                                    </Suspense>
+                                ) : (
+                                    <div className="h-[400px] w-full animate-pulse bg-slate-100" />
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
 
