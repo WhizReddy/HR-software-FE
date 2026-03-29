@@ -1,7 +1,7 @@
 import { Suspense, lazy } from 'react'
 import EventPoll from '../EventPoll/EventsPoll'
 import { Calendar, MapPin, X } from 'lucide-react'
-import { useAuth } from '@/Context/AuthProvider'
+import { useAuth } from '@/features/auth/context/AuthProvider'
 import { useEvents } from '@/Pages/Events/Context/EventsContext'
 import { useSearchParams } from 'react-router-dom'
 import { useEffect } from 'react'

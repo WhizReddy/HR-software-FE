@@ -4,8 +4,8 @@ import Button from '../../../../Components/Button/Button'
 import { ProfileProvider } from '../ProfileForm/Context/ProfileProvider'
 import { useCreatePayroll, useUpdatePayroll } from '../ProfileForm/Context/Hook'
 import Toast from '@/Components/Toast/Toast'
-import { useAuth } from '@/Context/AuthProvider'
-import { isAdminRole, isSelfUser } from '@/Helpers/access'
+import { useAuth } from '@/features/auth/context/AuthProvider'
+import { isAdminRole, isSelfUser } from '@/features/auth/lib/access'
 import { useParams } from 'react-router-dom'
 
 const ContratContent = () => {

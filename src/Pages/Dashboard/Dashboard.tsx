@@ -1,5 +1,5 @@
 import React from 'react'
-import { useAuth } from '@/Context/AuthProvider.tsx'
+import { useAuth } from '@/features/auth/context/AuthProvider'
 import Calendar from './components/calendar.tsx'
 import CardInfo from './components/card.tsx'
 import InfoSection from './components/infoSection.tsx'

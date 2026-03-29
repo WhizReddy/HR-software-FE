@@ -1,4 +1,4 @@
-import { useAuth } from '@/Context/AuthProvider'
+import { useAuth } from '@/features/auth/context/AuthProvider'
 import AxiosInstance from '@/Helpers/Axios'
 import { useEffect, useState } from 'react'
 interface Notification {

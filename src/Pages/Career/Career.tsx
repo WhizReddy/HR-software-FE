@@ -24,8 +24,8 @@ import {
     useGetAllEvents,
     useUpdateEvent,
 } from './Hook'
-import { useAuth } from '@/Context/AuthProvider'
-import { isAdminRole } from '@/Helpers/access'
+import { useAuth } from '@/features/auth/context/AuthProvider'
+import { isAdminRole } from '@/features/auth/lib/access'
 import Workers from '/public/Images/happy workers.webp'
 import WorkerTwo from '/public/Images/happyWorkers2.jpg'
 import WorkerThree from '/public/Images/happyWork3.jpeg'

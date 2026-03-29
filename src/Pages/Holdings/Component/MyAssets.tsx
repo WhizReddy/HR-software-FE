@@ -1,4 +1,4 @@
-import { useAuth } from '@/Context/AuthProvider'
+import { useAuth } from '@/features/auth/context/AuthProvider'
 import { getUserHoldings } from '../Hook/queries'
 import { useQuery } from '@tanstack/react-query'
 import { RingLoader } from 'react-spinners'

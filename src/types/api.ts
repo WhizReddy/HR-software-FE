@@ -1,4 +1,4 @@
-import { User } from '@/Context/Interface'
+import type { User } from '@/features/auth/context/auth.types'
 
 export interface AuthPayload {
     access_token: string

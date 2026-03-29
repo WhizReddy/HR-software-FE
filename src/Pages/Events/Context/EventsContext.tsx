@@ -8,7 +8,7 @@ import React, {
 } from 'react'
 import { EventsData, EventsContextProps } from '@/Pages/Events/Interface/Events'
 import { useCreateEvent, useUpdateEvent, useDeleteEvent } from '@/Pages/Events/Hook/index'
-import { useAuth } from '@/Context/AuthProvider'
+import { useAuth } from '@/features/auth/context/AuthProvider'
 import { useSearchParams } from 'react-router-dom'
 import AxiosInstance from '@/Helpers/Axios'
 

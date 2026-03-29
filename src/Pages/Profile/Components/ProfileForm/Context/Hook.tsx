@@ -1,5 +1,5 @@
-import { useAuth } from '@/Context/AuthProvider'
-import { isAdminRole } from '@/Helpers/access'
+import { useAuth } from '@/features/auth/context/AuthProvider'
+import { isAdminRole } from '@/features/auth/lib/access'
 import AxiosInstance from '@/Helpers/Axios'
 import { UserProfileData } from '@/Pages/Employees/interfaces/Employe'
 import { useQuery } from '@tanstack/react-query'

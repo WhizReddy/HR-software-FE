@@ -3,7 +3,7 @@ import { Bell } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useGetAllNotifications } from './Hook/index'
 import AxiosInstance from '@/Helpers/Axios'
-import { useAuth } from '@/Context/AuthProvider'
+import { useAuth } from '@/features/auth/context/AuthProvider'
 
 interface Notification {
     _id: number

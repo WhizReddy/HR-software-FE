@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import NotificationDropdown from '../../Pages/Notification/Notification'
-import { useAuth } from '@/Context/AuthProvider'
+import { useAuth } from '@/features/auth/context/AuthProvider'
 import { Avatar, AvatarFallback } from '@/Components/ui/avatar'
 import { SidebarTrigger } from '@/Components/ui/sidebar'
 import { ChevronDown, LogOut, User } from 'lucide-react'

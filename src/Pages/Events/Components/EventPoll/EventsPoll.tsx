@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 import AxiosInstance from '@/Helpers/Axios'
-import { useAuth } from '@/Context/AuthProvider'
+import { useAuth } from '@/features/auth/context/AuthProvider'
 import { EventPollProps, Poll, PollOption, Voter } from './Interface/Interface'
 
 const EventPoll: React.FC<EventPollProps> = ({ poll, eventId, userId }) => {
