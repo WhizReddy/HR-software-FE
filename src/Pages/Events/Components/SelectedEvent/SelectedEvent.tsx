@@ -95,6 +95,7 @@ const SelectedEventCard = () => {
                                 onLocationChange={() => {}}
                                 savedLocation={selectedEvent.location}
                                 showInput={false}
+                                containerClassName="h-full w-full"
                             />
                         </Suspense>
                     </div>

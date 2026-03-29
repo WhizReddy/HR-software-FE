@@ -10,6 +10,8 @@ interface InputProps {
     type?: string
     value?: string | number
     onChange?: (e: any) => void
+    onFocus?: (e: any) => void
+    onClick?: (e: any) => void
     placeholder?: string
     width?: number | string
     icon?: React.ReactNode
@@ -40,6 +42,8 @@ const Input: React.FC<InputProps> = ({
     type = 'text',
     value,
     onChange,
+    onFocus,
+    onClick,
     placeholder,
     width,
     icon,
@@ -109,6 +113,8 @@ const Input: React.FC<InputProps> = ({
                         name={name}
                         value={value ?? initialValue ?? ''}
                         onChange={onChange}
+                        onFocus={onFocus}
+                        onClick={onClick}
                         placeholder={computedPlaceholder}
                         required={required}
                         disabled={disabled}
@@ -124,6 +130,7 @@ const Input: React.FC<InputProps> = ({
                         value={value ?? initialValue ?? ''}
                         onChange={onChange}
                         onFocus={(e) => {
+                            onFocus?.(e)
                             if (resolvedType === 'datetime-local' && 'showPicker' in e.target) {
                                 try {
                                     (e.target as any).showPicker();
@@ -133,6 +140,7 @@ const Input: React.FC<InputProps> = ({
                             }
                         }}
                         onClick={(e) => {
+                            onClick?.(e)
                             if (resolvedType === 'datetime-local' && 'showPicker' in e.target) {
                                 try {
                                     (e.target as any).showPicker();

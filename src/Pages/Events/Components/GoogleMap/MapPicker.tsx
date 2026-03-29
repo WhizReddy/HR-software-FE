@@ -3,11 +3,6 @@ import { GoogleMap, useLoadScript, MarkerF } from '@react-google-maps/api'
 import Input from '@/Components/Input/Index'
 import { Search } from 'lucide-react'
 
-const mapContainerStyle = {
-    width: '100%',
-    height: '400px',
-}
-
 const center = {
     lat: 41.3275,
     lng: 19.8189,
@@ -24,14 +19,23 @@ interface MapComponentProps {
     onLocationChange: (address: string, lat: number, lng: number) => void
     savedLocation?: string
     showInput?: boolean
+    containerClassName?: string
 }
 
 const libraries = ['places', 'marker'] as any
+const mapOptions: google.maps.MapOptions = {
+    clickableIcons: false,
+    fullscreenControl: false,
+    mapTypeControl: false,
+    streetViewControl: false,
+    gestureHandling: 'cooperative',
+}
 
 const MapComponent: React.FC<MapComponentProps> = ({
     onLocationChange,
     savedLocation,
     showInput,
+    containerClassName = 'h-full w-full',
 }) => {
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: GOOGLE_MAPS_API_KEY || '',
@@ -180,9 +184,10 @@ const MapComponent: React.FC<MapComponentProps> = ({
                 </>
             )}
             <GoogleMap
-                mapContainerStyle={mapContainerStyle}
+                mapContainerClassName={containerClassName}
                 center={markerPosition || center}
                 zoom={12}
+                options={mapOptions}
                 onLoad={onLoad}
                 onUnmount={onUnmount}
                 onClick={handleMapClick}
@@ -191,7 +196,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
                     <MarkerF
                         position={markerPosition}
                         icon={{
-                            url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+                            url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
                         }}
                     />
                 )}

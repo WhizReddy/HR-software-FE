@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useEffect, useState } from 'react'
-import { ChevronDown, ChevronUp, MapPinned, X } from 'lucide-react'
+import { MapPinned, X } from 'lucide-react'
 import Selecter from '@/Components/Input/components/Select/Selecter'
 import Dropzone from '@/Dropzone/Dropzone'
 import DrawerComponent from '@/Components/Drawer/Drawer'
@@ -7,6 +7,7 @@ import Input from '@/Components/Input/Index'
 import Button from '@/Components/Button/Button'
 import { ButtonTypes } from '@/Components/Button/ButtonTypes'
 import { useEvents } from '@/Pages/Events/Context/EventsContext'
+import { useDebouncedValue } from '@/hooks/use-debounced-value'
 
 const EventMapPicker = lazy(() => import('../Components/GoogleMap/MapPicker'))
 
@@ -35,7 +36,7 @@ export default function Forms() {
         handleCloseDrawer,
         drawerOpen,
     } = useEvents()
-    const [showLocationPicker, setShowLocationPicker] = useState(false)
+    const [activateLocationPicker, setActivateLocationPicker] = useState(false)
     const [mountLocationPicker, setMountLocationPicker] = useState(false)
 
     const handleLocationChange = (address: string) => {
@@ -57,15 +58,23 @@ export default function Forms() {
     }
 
     const currentLocation = editingEvent ? editingEvent.location : event.location
+    const debouncedLocation = useDebouncedValue(currentLocation, 450)
+    const hasEditingLocation = Boolean(editingEvent?.location?.trim())
 
     useEffect(() => {
         if (!drawerOpen) {
-            setShowLocationPicker(false)
+            setActivateLocationPicker(false)
             setMountLocationPicker(false)
             return
         }
 
-        if (!showLocationPicker) {
+        if (hasEditingLocation) {
+            setActivateLocationPicker(true)
+        }
+    }, [drawerOpen, hasEditingLocation])
+
+    useEffect(() => {
+        if (!drawerOpen || !activateLocationPicker) {
             setMountLocationPicker(false)
             return
         }
@@ -77,7 +86,7 @@ export default function Forms() {
         return () => {
             window.clearTimeout(timer)
         }
-    }, [drawerOpen, showLocationPicker])
+    }, [activateLocationPicker, drawerOpen])
 
     return (
         <DrawerComponent open={drawerOpen} onClose={handleCloseDrawer}>
@@ -154,6 +163,7 @@ export default function Forms() {
                         label="Event location"
                         name="location"
                         value={currentLocation}
+                        onFocus={() => setActivateLocationPicker(true)}
                         onChange={
                             editingEvent ? handleEditChange : handleChange
                         }
@@ -161,57 +171,70 @@ export default function Forms() {
                     />
 
                     <div className="rounded-2xl border border-slate-100 bg-slate-50/70 p-4">
-                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="flex items-start gap-3">
+                            <div className="rounded-xl bg-white p-2 text-slate-500 shadow-sm ring-1 ring-slate-200">
+                                <MapPinned size={16} />
+                            </div>
                             <div>
                                 <p className="text-sm font-semibold text-slate-800">
                                     Map picker
                                 </p>
                                 <p className="mt-1 text-xs leading-5 text-slate-500">
-                                    Open the map only if you want to search or
-                                    pin the location visually.
+                                    Focus the location field or tap the map
+                                    area to fine-tune the event address without
+                                    slowing down the whole drawer.
                                 </p>
                             </div>
-
-                            <button
-                                type="button"
-                                onClick={() =>
-                                    setShowLocationPicker((prev) => !prev)
-                                }
-                                className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100"
-                            >
-                                <MapPinned size={16} />
-                                {showLocationPicker
-                                    ? 'Hide map'
-                                    : 'Open map'}
-                                {showLocationPicker ? (
-                                    <ChevronUp size={16} />
-                                ) : (
-                                    <ChevronDown size={16} />
-                                )}
-                            </button>
                         </div>
 
-                        {showLocationPicker && (
-                            <div className="mt-4 rounded-xl overflow-hidden border border-slate-100 bg-white">
-                                {mountLocationPicker ? (
-                                    <Suspense
-                                        fallback={
-                                            <div className="h-[400px] w-full animate-pulse bg-slate-100" />
-                                        }
-                                    >
-                                        <EventMapPicker
-                                            onLocationChange={
-                                                handleLocationChange
-                                            }
-                                            savedLocation={currentLocation}
-                                            showInput={false}
-                                        />
-                                    </Suspense>
-                                ) : (
-                                    <div className="h-[400px] w-full animate-pulse bg-slate-100" />
-                                )}
-                            </div>
-                        )}
+                        <div
+                            className="mt-4 overflow-hidden rounded-xl border border-slate-100 bg-white"
+                            role="button"
+                            tabIndex={0}
+                            onClick={() => setActivateLocationPicker(true)}
+                            onKeyDown={(event) => {
+                                if (
+                                    event.key === 'Enter' ||
+                                    event.key === ' '
+                                ) {
+                                    event.preventDefault()
+                                    setActivateLocationPicker(true)
+                                }
+                            }}
+                        >
+                            {mountLocationPicker ? (
+                                <Suspense
+                                    fallback={
+                                        <div className="flex h-[280px] w-full animate-pulse items-center justify-center bg-slate-100 md:h-[340px]" />
+                                    }
+                                >
+                                    <EventMapPicker
+                                        onLocationChange={handleLocationChange}
+                                        savedLocation={debouncedLocation}
+                                        showInput={false}
+                                        containerClassName="h-[280px] w-full md:h-[340px]"
+                                    />
+                                </Suspense>
+                            ) : (
+                                <div className="flex h-[280px] w-full flex-col items-center justify-center gap-3 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.08),_transparent_55%),linear-gradient(135deg,_rgba(248,250,252,1),_rgba(241,245,249,0.9))] px-6 text-center md:h-[340px]">
+                                    <div className="rounded-full bg-white p-3 text-slate-500 shadow-sm ring-1 ring-slate-200">
+                                        <MapPinned size={18} />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <p className="text-sm font-semibold text-slate-800">
+                                            {activateLocationPicker
+                                                ? 'Preparing the interactive map'
+                                                : 'Interactive map loads on demand'}
+                                        </p>
+                                        <p className="mx-auto max-w-md text-xs leading-5 text-slate-500">
+                                            {activateLocationPicker
+                                                ? 'The drawer stays smooth first, then the map comes in right after.'
+                                                : 'Tap anywhere in this panel or focus the location field when you want to pin the venue visually.'}
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 
