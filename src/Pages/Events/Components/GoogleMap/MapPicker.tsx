@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { GoogleMap, useLoadScript, MarkerF } from '@react-google-maps/api'
 import Input from '@/Components/Input/Index'
 import { Search } from 'lucide-react'
@@ -47,6 +47,8 @@ const MapComponent: React.FC<MapComponentProps> = ({
     const [markerPosition, setMarkerPosition] = useState<LatLngLiteral | null>(
         null,
     )
+    const lastResolvedLocation = useRef('')
+    const normalizedSavedLocation = savedLocation?.trim() || ''
 
     const onLoad = useCallback((map: MapType) => {
         setMap(map)
@@ -57,30 +59,37 @@ const MapComponent: React.FC<MapComponentProps> = ({
     }, [])
 
     useEffect(() => {
-        if (savedLocation && isLoaded) {
-            const geocoder = new google.maps.Geocoder()
-            geocoder.geocode({ address: savedLocation }, (results, status) => {
-                if (
-                    status === google.maps.GeocoderStatus.OK &&
-                    results &&
-                    results[0]
-                ) {
-                    const position = results[0].geometry.location.toJSON()
-                    setMarkerPosition(position)
-                    setSearchValue(savedLocation)
-                    if (map) {
-                        map.panTo(position)
-                        map.setZoom(15)
-                    }
-                } else {
-                    console.error(
-                        'Geocode was not successful for the following reason: ' +
-                        status,
-                    )
-                }
-            })
+        if (
+            !normalizedSavedLocation ||
+            !isLoaded ||
+            normalizedSavedLocation === lastResolvedLocation.current
+        ) {
+            return
         }
-    }, [savedLocation, map, isLoaded])
+
+        const geocoder = new google.maps.Geocoder()
+        geocoder.geocode({ address: normalizedSavedLocation }, (results, status) => {
+            if (
+                status === google.maps.GeocoderStatus.OK &&
+                results &&
+                results[0]
+            ) {
+                const position = results[0].geometry.location.toJSON()
+                setMarkerPosition(position)
+                setSearchValue(results[0].formatted_address)
+                lastResolvedLocation.current = normalizedSavedLocation
+                if (map) {
+                    map.panTo(position)
+                    map.setZoom(15)
+                }
+            } else {
+                console.error(
+                    'Geocode was not successful for the following reason: ' +
+                    status,
+                )
+            }
+        })
+    }, [normalizedSavedLocation, map, isLoaded])
 
     const handleSearch = () => {
         if (map && isLoaded) {
@@ -151,19 +160,37 @@ const MapComponent: React.FC<MapComponentProps> = ({
     }
 
     if (loadError) {
-        return <div>Error loading maps</div>
+        return (
+            <div className={containerClassName}>
+                <div className="flex h-full w-full items-center justify-center bg-slate-100 text-sm text-slate-500">
+                    Error loading map
+                </div>
+            </div>
+        )
     }
 
     if (!GOOGLE_MAPS_API_KEY) {
-        return <div>Google Maps is not configured for this environment.</div>
+        return (
+            <div className={containerClassName}>
+                <div className="flex h-full w-full items-center justify-center bg-slate-100 px-6 text-center text-sm text-slate-500">
+                    Google Maps is not configured for this environment.
+                </div>
+            </div>
+        )
     }
 
     if (!isLoaded) {
-        return <div>Loading Maps...</div>
+        return (
+            <div className={containerClassName}>
+                <div className="flex h-full w-full items-center justify-center bg-slate-100 text-sm text-slate-500">
+                    Loading map...
+                </div>
+            </div>
+        )
     }
 
     return (
-        <div>
+        <div className={showInput ? 'space-y-3' : containerClassName}>
             {showInput && (
                 <>
                     <Input
@@ -184,7 +211,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
                 </>
             )}
             <GoogleMap
-                mapContainerClassName={containerClassName}
+                mapContainerClassName={showInput ? 'h-[320px] w-full md:h-[360px]' : 'h-full w-full'}
                 center={markerPosition || center}
                 zoom={12}
                 options={mapOptions}

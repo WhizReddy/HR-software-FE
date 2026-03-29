@@ -36,7 +36,6 @@ export default function Forms() {
         handleCloseDrawer,
         drawerOpen,
     } = useEvents()
-    const [activateLocationPicker, setActivateLocationPicker] = useState(false)
     const [mountLocationPicker, setMountLocationPicker] = useState(false)
 
     const handleLocationChange = (address: string) => {
@@ -58,35 +57,22 @@ export default function Forms() {
     }
 
     const currentLocation = editingEvent ? editingEvent.location : event.location
-    const debouncedLocation = useDebouncedValue(currentLocation, 450)
-    const hasEditingLocation = Boolean(editingEvent?.location?.trim())
+    const debouncedLocation = useDebouncedValue(currentLocation, 700)
 
     useEffect(() => {
         if (!drawerOpen) {
-            setActivateLocationPicker(false)
-            setMountLocationPicker(false)
-            return
-        }
-
-        if (hasEditingLocation) {
-            setActivateLocationPicker(true)
-        }
-    }, [drawerOpen, hasEditingLocation])
-
-    useEffect(() => {
-        if (!drawerOpen || !activateLocationPicker) {
             setMountLocationPicker(false)
             return
         }
 
         const timer = window.setTimeout(() => {
             setMountLocationPicker(true)
-        }, 180)
+        }, 160)
 
         return () => {
             window.clearTimeout(timer)
         }
-    }, [activateLocationPicker, drawerOpen])
+    }, [drawerOpen])
 
     return (
         <DrawerComponent open={drawerOpen} onClose={handleCloseDrawer}>
@@ -163,7 +149,6 @@ export default function Forms() {
                         label="Event location"
                         name="location"
                         value={currentLocation}
-                        onFocus={() => setActivateLocationPicker(true)}
                         onChange={
                             editingEvent ? handleEditChange : handleChange
                         }
@@ -180,28 +165,14 @@ export default function Forms() {
                                     Map picker
                                 </p>
                                 <p className="mt-1 text-xs leading-5 text-slate-500">
-                                    Focus the location field or tap the map
-                                    area to fine-tune the event address without
-                                    slowing down the whole drawer.
+                                    Keep the address simple in the input, then
+                                    click on the map to place the event more
+                                    precisely.
                                 </p>
                             </div>
                         </div>
 
-                        <div
-                            className="mt-4 overflow-hidden rounded-xl border border-slate-100 bg-white"
-                            role="button"
-                            tabIndex={0}
-                            onClick={() => setActivateLocationPicker(true)}
-                            onKeyDown={(event) => {
-                                if (
-                                    event.key === 'Enter' ||
-                                    event.key === ' '
-                                ) {
-                                    event.preventDefault()
-                                    setActivateLocationPicker(true)
-                                }
-                            }}
-                        >
+                        <div className="mt-4 overflow-hidden rounded-xl border border-slate-100 bg-white">
                             {mountLocationPicker ? (
                                 <Suspense
                                     fallback={
@@ -222,14 +193,12 @@ export default function Forms() {
                                     </div>
                                     <div className="space-y-1">
                                         <p className="text-sm font-semibold text-slate-800">
-                                            {activateLocationPicker
-                                                ? 'Preparing the interactive map'
-                                                : 'Interactive map loads on demand'}
+                                            Preparing the interactive map
                                         </p>
                                         <p className="mx-auto max-w-md text-xs leading-5 text-slate-500">
-                                            {activateLocationPicker
-                                                ? 'The drawer stays smooth first, then the map comes in right after.'
-                                                : 'Tap anywhere in this panel or focus the location field when you want to pin the venue visually.'}
+                                            The drawer opens first, then the map
+                                            loads right after so the form stays
+                                            smoother on slower laptops.
                                         </p>
                                     </div>
                                 </div>
