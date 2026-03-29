@@ -15,6 +15,14 @@ import { useEffect } from 'react'
 import { EventsData } from './Interface/Events'
 import EventsContentLoader from '@/Components/Content/ContentLoader'
 
+const clampText = (lines: number) =>
+    ({
+        display: '-webkit-box',
+        WebkitBoxOrient: 'vertical',
+        WebkitLineClamp: lines,
+        overflow: 'hidden',
+    }) as const
+
 function EventsContentAndComponents() {
     const {
         handleDelete,
@@ -121,7 +129,10 @@ function EventsContentAndComponents() {
                                     )}
                                     <div className="p-4 flex-1 flex flex-col">
                                         <div className="flex justify-between items-start mb-2 gap-2">
-                                            <h3 className="text-lg font-bold text-slate-800 line-clamp-1 leading-tight">
+                                            <h3
+                                                className="text-lg font-bold text-slate-800 leading-tight"
+                                                style={clampText(1)}
+                                            >
                                                 {event.title}
                                             </h3>
                                             {isAdmin && (
@@ -135,7 +146,10 @@ function EventsContentAndComponents() {
                                             )}
                                         </div>
 
-                                        <p className="text-slate-500 text-sm line-clamp-3 mb-4 flex-1">
+                                        <p
+                                            className="text-slate-500 text-sm mb-4 flex-1 min-h-[60px]"
+                                            style={clampText(3)}
+                                        >
                                             {event.description}
                                         </p>
 
@@ -148,7 +162,9 @@ function EventsContentAndComponents() {
                                             </div>
                                             <div className="flex items-start gap-2.5 text-sm text-slate-600">
                                                 <MapPin size={18} className="text-blue-500 flex-shrink-0 mt-0.5" />
-                                                <span className="line-clamp-1">{event.location}</span>
+                                                <span style={clampText(1)}>
+                                                    {event.location}
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
