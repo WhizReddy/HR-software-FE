@@ -9,6 +9,7 @@ import Button from '@/Components/Button/Button'
 import { ButtonTypes } from '@/Components/Button/ButtonTypes'
 import { ToggleGroup, ToggleGroupItem } from '@/Components/ui/toggle-group'
 import { Card } from '@/Components/ui/card'
+import { upsertFilterParams } from '@/Helpers/urlFilters'
 
 function VacationComponent() {
     const { searchParams, setSearchParams, createVacationToggler } =
@@ -16,13 +17,20 @@ function VacationComponent() {
 
     const handleChange = (value: string) => {
         if (value) {
-            setSearchParams(new URLSearchParams({ vacationType: value }))
+            setSearchParams((prev) =>
+                upsertFilterParams(prev, {
+                    vacationType: value,
+                    selectedVacation: null,
+                }),
+            )
         }
     }
 
     useEffect(() => {
         if (!searchParams.get('vacationType')) {
-            setSearchParams(new URLSearchParams({ vacationType: 'requests' }))
+            setSearchParams((prev) =>
+                upsertFilterParams(prev, { vacationType: 'requests' }),
+            )
         }
     }, [searchParams, setSearchParams])
 
@@ -65,11 +73,12 @@ function VacationComponent() {
                     <CreateVacationForm />
                 </div>
             )}
-
-            <Card className="bg-white shadow-sm border border-slate-100 rounded-xl overflow-hidden mt-4">
-                {currentTab === 'requests' && <VacationTable />}
-                {currentTab === 'userLeaves' && <EmployeesWithVacations />}
-            </Card>
+            {currentTab === 'requests' && <VacationTable />}
+            {currentTab === 'userLeaves' && (
+                <Card className="bg-white shadow-sm border border-slate-100 rounded-xl overflow-hidden mt-4">
+                    <EmployeesWithVacations />
+                </Card>
+            )}
         </div>
     )
 }

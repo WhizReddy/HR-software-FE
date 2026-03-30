@@ -1,37 +1,23 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext } from 'react'
 import { HoldingsContext } from '../HoldingsContext'
 import Input from '@/Components/Input/Index'
 import { Search } from 'lucide-react'
-import {
-    hasSearchParamsChanged,
-    upsertFilterParams,
-} from '@/Helpers/urlFilters'
-import { useDebouncedValue } from '@/hooks/use-debounced-value'
+import { hasSearchParamsChanged, upsertFilterParams } from '@/Helpers/urlFilters'
+import { useUrlTableState } from '@/hooks/use-url-table-state'
+import { Button } from '@/Components/ui/button'
 
 export const HoldingsSearchFilter = () => {
     const { searchParams, setSearchParams } = useContext(HoldingsContext)
-    const [searchInput, setSearchInput] = useState(
-        searchParams.get('search') || '',
-    )
-    const debouncedSearch = useDebouncedValue(searchInput, 400)
-
-    useEffect(() => {
-        setSearchInput(searchParams.get('search') || '')
-    }, [searchParams])
-
-    useEffect(() => {
-        setSearchParams((prev) => {
-            const nextParams = upsertFilterParams(
-                prev,
-                {
-                    search: debouncedSearch.trim() || null,
-                },
-                { resetPage: true },
-            )
-
-            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
-        })
-    }, [debouncedSearch, setSearchParams])
+    const {
+        searchValue: searchInput,
+        setSearchValue: setSearchInput,
+        clearSearch,
+    } = useUrlTableState({
+        searchParams,
+        setSearchParams,
+        ensurePagination: false,
+        resetPageOnSearch: false,
+    })
 
     const handleChange = (value: string) => {
         setSearchParams((prev) => {
@@ -57,20 +43,32 @@ export const HoldingsSearchFilter = () => {
     ]
 
     const currentUserFilter = searchParams.get('users') || 'all'
+    const hasSearch = searchInput.trim() !== ''
 
     return (
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-            <div className="w-full sm:w-72">
-                <Input
-                    type="search"
-                    iconPosition="end"
-                    icon={<Search size={20} className="text-slate-400" />}
-                    IsUsername
-                    label="Search Employees"
-                    name="search"
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                />
+            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
+                <div className="w-full sm:w-72">
+                    <Input
+                        type="search"
+                        iconPosition="end"
+                        icon={<Search size={20} className="text-slate-400" />}
+                        IsUsername
+                        label="Search Employees"
+                        name="search"
+                        value={searchInput}
+                        onChange={(e) => setSearchInput(e.target.value)}
+                    />
+                </div>
+                <Button
+                    type="button"
+                    variant="outline"
+                    onClick={clearSearch}
+                    disabled={!hasSearch}
+                    className="sm:self-end"
+                >
+                    Clear
+                </Button>
             </div>
 
             <div className="flex flex-col gap-1.5 sm:items-end">

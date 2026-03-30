@@ -1,44 +1,35 @@
 import React, { useCallback, useState } from 'react'
 import { PayrollContext, PayrollRow } from '../Interface/Payroll'
-import { PaginationModel } from '@/types/table'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import AxiosInstance from '@/Helpers/Axios'
 import { useQuery } from '@tanstack/react-query'
 import { getMonthName } from '../utils/Utils'
+import { useUrlTableState } from '@/hooks/use-url-table-state'
 
 export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
-    const [fullName, setFullName] = useState('')
     const [netSalary, setNetSalary] = useState<number | undefined>(undefined)
     const [filters, setFilters] = useState<Record<string, string | boolean>>({})
-    const [page, setPage] = useState(0)
-    const [pageSize, setPageSize] = useState(5)
+    const [searchParams, setSearchParams] = useSearchParams()
+    const {
+        searchValue: search,
+        setSearchValue: setSearch,
+        searchQuery,
+        clearSearch,
+        page,
+        pageSize,
+        handlePaginationModelChange,
+    } = useUrlTableState({
+        searchParams,
+        setSearchParams,
+    })
 
     const handleFullNameChange = useCallback((value: string) => {
-        setFullName((currentValue) => {
-            if (currentValue === value) {
-                return currentValue
-            }
-
-            setPage(0)
-            return value
-        })
-    }, [])
-
-    const handlePaginationModelChange = useCallback(
-        (model: PaginationModel) => {
-            setPage((currentPage) =>
-                currentPage === model.page ? currentPage : model.page,
-            )
-            setPageSize((currentPageSize) =>
-                currentPageSize === model.pageSize
-                    ? currentPageSize
-                    : model.pageSize,
-            )
-        },
-        [],
-    )
+        setSearch((currentValue) =>
+            currentValue === value ? currentValue : value,
+        )
+    }, [setSearch])
 
     const navigate = useNavigate()
 
@@ -48,7 +39,7 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         all: number
     }> => {
         const params = new URLSearchParams()
-        const trimmedFullName = fullName.trim()
+        const trimmedFullName = searchQuery.trim()
 
         params.set('limit', String(pageSize))
         params.set('page', String(page))
@@ -68,7 +59,7 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         isError,
         error,
     } = useQuery<{ data: PayrollRow[]; totalPages: number; all: number }, Error>({
-        queryKey: ['payroll', page, pageSize, fullName],
+        queryKey: ['payroll', page, pageSize, searchQuery],
         queryFn: () => fetchPayroll(),
         placeholderData: (previousData) => previousData,
     })
@@ -141,6 +132,8 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         setBonus: () => undefined,
         setWorkingDays: () => undefined,
         setName: handleFullNameChange,
+        search,
+        clearSearch,
         netSalary,
         setNetSalary,
         filters,

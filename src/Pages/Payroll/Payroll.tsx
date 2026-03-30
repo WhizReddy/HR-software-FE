@@ -1,12 +1,9 @@
-import React, { useEffect } from 'react'
-import Button from '@/Components/Button/Button'
-import { ButtonTypes } from '@/Components/Button/ButtonTypes'
+import React from 'react'
 import DataTable from '../../Components/Table/Table'
 import { usePayrollContext } from './Context/PayrollTableContext'
 import { PayrollProvider } from './Context/PayrollTableProvider'
 import style from './styles/Payroll.module.css'
 import { RingLoader } from 'react-spinners'
-import { useDebouncedValue } from '@/hooks/use-debounced-value'
 
 function PayrollContent() {
     const {
@@ -14,7 +11,9 @@ function PayrollContent() {
         columns,
         getRowId,
         handleRowClick,
+        search,
         setFullName,
+        clearSearch,
         isPending,
         page,
         pageSize,
@@ -24,28 +23,7 @@ function PayrollContent() {
         isError,
         errorMessage,
     } = usePayrollContext()
-    const [searchInput, setSearchInput] = React.useState('')
-    const debouncedSearch = useDebouncedValue(searchInput, 400)
-    const lastAppliedSearch = React.useRef<string | null>(null)
-
-    useEffect(() => {
-        const normalizedSearch = debouncedSearch.trim()
-
-        if (lastAppliedSearch.current === normalizedSearch) {
-            return
-        }
-
-        lastAppliedSearch.current = normalizedSearch
-        setFullName(normalizedSearch)
-    }, [debouncedSearch, setFullName])
-
-    const handleClearSearch = () => {
-        lastAppliedSearch.current = ''
-        setSearchInput('')
-        setFullName('')
-    }
-
-    const hasSearch = searchInput.trim() !== ''
+    const hasSearch = search.trim() !== ''
 
     return (
         <div className={style.payrollPage}>
@@ -101,19 +79,12 @@ function PayrollContent() {
                                 handlePaginationModelChange
                             }
                             title="Payroll table"
-                            searchValue={searchInput}
+                            searchValue={search}
                             onSearchChange={(event) =>
-                                setSearchInput(event.target.value)
+                                setFullName(event.target.value)
                             }
+                            onSearchClear={clearSearch}
                             searchPlaceholder="Search by employee name"
-                            actions={
-                                <Button
-                                    btnText="Clear"
-                                    type={ButtonTypes.SECONDARY}
-                                    onClick={handleClearSearch}
-                                    disabled={!hasSearch}
-                                />
-                            }
                         />
                     </div>
                 </>

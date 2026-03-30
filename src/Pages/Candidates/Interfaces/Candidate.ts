@@ -45,6 +45,7 @@ export interface CandidateContextType {
     totalPages: number
     search: string
     setSearch: React.Dispatch<React.SetStateAction<string>>
+    clearSearch: () => void
     handlePaginationModelChange: (paginationModel: PaginationModel) => void
 }
 

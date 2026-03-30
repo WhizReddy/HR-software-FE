@@ -1,38 +1,44 @@
 import { useGetVacations } from '../Hook'
 import DataTable from '@/Components/Table/Table'
-import { PaginationModel, RenderCellParams } from '@/types/table'
+import { RenderCellParams } from '@/types/table'
 import { dateFormatter } from '@/Helpers/dateFormater'
 import style from '../style/vacationTable.module.scss'
-import { useContext, useEffect, useState } from 'react'
+import { useContext } from 'react'
 import { VacationContext } from '../VacationContext'
 import { SelectedVacationModal } from './form/SelectedVacationModal'
 import { StatusBadge } from '@/Components/StatusBadge/StatusBadge'
 import Toast from '@/Components/Toast/Toast'
 import { Vacation } from '../types'
-import { useDebouncedValue } from '@/hooks/use-debounced-value'
-import Button from '@/Components/Button/Button'
-import { ButtonTypes } from '@/Components/Button/ButtonTypes'
+import { useUrlTableState } from '@/hooks/use-url-table-state'
 
 export const VacationTable = () => {
     const {
         searchParams,
+        setSearchParams,
         handleOpenViewVacationModalOpen,
         toastConfigs,
         handleToastClose,
     } = useContext(VacationContext)
-    const [page, setPage] = useState(0)
-    const [pageSize, setPageSize] = useState(5)
-    const [searchInput, setSearchInput] = useState('')
-    const debouncedSearch = useDebouncedValue(searchInput, 400)
+    const {
+        searchValue: searchInput,
+        setSearchValue: setSearchInput,
+        searchQuery,
+        clearSearch,
+        page,
+        pageSize,
+        handlePaginationModelChange,
+    } = useUrlTableState({
+        searchParams,
+        setSearchParams,
+        searchKey: 'requestSearch',
+        pageKey: 'requestPage',
+        limitKey: 'requestLimit',
+    })
     const { data, error, isPending } = useGetVacations(
         page,
         pageSize,
-        debouncedSearch,
+        searchQuery,
     )
-
-    useEffect(() => {
-        setPage(0)
-    }, [debouncedSearch])
 
     if (error) return <p>Error: {error.message}</p>
     if (isPending) return <div className="flex justify-center p-4"><div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>
@@ -47,11 +53,6 @@ export const VacationTable = () => {
             endDate: vacation.endDate,
             actions: vacation._id,
         })) ?? []
-    const handlePaginationModelChange = (model: PaginationModel) => {
-        setPage(model.page)
-        setPageSize(model.pageSize)
-    }
-
     const columns = [
         { field: 'id', headerName: 'ID', width: 50 },
         { field: 'fullName', headerName: 'Full Name', flex: 1 },
@@ -108,36 +109,23 @@ export const VacationTable = () => {
     ]
 
     const getRowId = (row: { id: number | string }) => row.id
-    const hasSearch = searchInput.trim() !== ''
 
     return (
         <>
-            <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-4 mt-5">
-                <DataTable
-                    onPaginationModelChange={handlePaginationModelChange}
-                    page={page}
-                    pageSize={pageSize}
-                    totalPages={data?.totalPages ?? 0}
-                    rows={rows}
-                    columns={columns}
-                    getRowId={getRowId}
-                    title="Vacation requests"
-                    searchValue={searchInput}
-                    onSearchChange={(e) => setSearchInput(e.target.value)}
-                    searchPlaceholder="Search by employee, type, or status"
-                    actions={
-                        <Button
-                            btnText="Clear"
-                            type={ButtonTypes.SECONDARY}
-                            onClick={() => {
-                                setSearchInput('')
-                                setPage(0)
-                            }}
-                            disabled={!hasSearch}
-                        />
-                    }
-                />
-            </div>
+            <DataTable
+                onPaginationModelChange={handlePaginationModelChange}
+                page={page}
+                pageSize={pageSize}
+                totalPages={data?.totalPages ?? 0}
+                rows={rows}
+                columns={columns}
+                getRowId={getRowId}
+                title="Vacation requests"
+                searchValue={searchInput}
+                onSearchChange={(e) => setSearchInput(e.target.value)}
+                onSearchClear={clearSearch}
+                searchPlaceholder="Search by employee, type, or status"
+            />
             {searchParams.get('selectedVacation') && <SelectedVacationModal />}
             <Toast
                 open={toastConfigs.isOpen}

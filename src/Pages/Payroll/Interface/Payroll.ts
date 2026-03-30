@@ -19,6 +19,8 @@ export interface PayrollContextType {
     isError: boolean
     errorMessage: string | null
     netSalary: number | undefined
+    search: string
+    clearSearch: () => void
     page: number
     setFilters: React.Dispatch<React.SetStateAction<Record<string, string | boolean>>>
     filters: Record<string, string | boolean>

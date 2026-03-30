@@ -16,6 +16,7 @@ function EmployeesContent() {
         isPending,
         search,
         setSearch,
+        clearSearch,
     } = useEmployeeContext()
 
     return (
@@ -42,6 +43,7 @@ function EmployeesContent() {
                     onPaginationModelChange={handlePaginationModelChange}
                     searchValue={search}
                     onSearchChange={(e) => setSearch(e.target.value)}
+                    onSearchClear={clearSearch}
                     searchPlaceholder="Search employees..."
                 />
             )}

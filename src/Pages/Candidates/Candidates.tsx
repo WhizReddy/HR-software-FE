@@ -15,7 +15,8 @@ function CandidatesCoontext() {
         pageSize,
         isPending,
         search,
-        setSearch
+        setSearch,
+        clearSearch,
     } = useCandidateContext()
 
     return (
@@ -28,7 +29,6 @@ function CandidatesCoontext() {
                     Search and review applicants consistently across the hiring pipeline.
                 </p>
             </div>
-            <div className="glass-card overflow-hidden border-none p-0">
             {isPending ? (
                 <div className="flex justify-center items-center min-h-[60vh]">
                     <RingLoader color="var(--primary-blue)" />
@@ -45,10 +45,10 @@ function CandidatesCoontext() {
                     onPaginationModelChange={handlePaginationModelChange}
                     searchValue={search}
                     onSearchChange={(e) => setSearch(e.target.value)}
+                    onSearchClear={clearSearch}
                     searchPlaceholder="Search candidates..."
                 />
             )}
-            </div>
         </div>
     )
 }

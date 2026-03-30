@@ -1,58 +1,30 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext } from 'react'
 import { InventoryContext } from '../InventoryContext'
 import { useAllInventoryItems } from '../Hook'
 import { SingleInventoryItem } from './SingleInventoryItem'
 import { InventoryItem } from '../types'
 import { Laptop, Monitor } from 'lucide-react'
 import DataTable from '@/Components/Table/Table'
-import { PaginationModel, RenderCellParams } from '@/types/table'
+import { RenderCellParams } from '@/types/table'
 import { RingLoader } from 'react-spinners'
-import {
-    ensurePaginationParams,
-    hasSearchParamsChanged,
-    parseNumberParam,
-    upsertFilterParams,
-} from '@/Helpers/urlFilters'
-import { useDebouncedValue } from '@/hooks/use-debounced-value'
+import { useUrlTableState } from '@/hooks/use-url-table-state'
 
 export const InventoryTable = () => {
     const { isError, error, data, isPending } = useAllInventoryItems()
 
     const { handleOpenViewAssetModalOpen, searchParams, setSearchParams } =
         useContext(InventoryContext)
-    const [searchInput, setSearchInput] = useState(
-        searchParams.get('search') || '',
-    )
-    const debouncedSearch = useDebouncedValue(searchInput, 400)
-
-    useEffect(() => {
-        setSearchParams((prev) => {
-            const nextParams = ensurePaginationParams(prev)
-            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
-        })
-    }, [setSearchParams])
-
-    useEffect(() => {
-        setSearchInput(searchParams.get('search') || '')
-    }, [searchParams])
-
-    useEffect(() => {
-        const normalizedSearch = debouncedSearch.trim()
-        const currentSearch = searchParams.get('search') || ''
-
-        if (normalizedSearch === currentSearch) {
-            return
-        }
-
-        setSearchParams((prev) => {
-            const nextParams = upsertFilterParams(
-                prev,
-                { search: normalizedSearch || null },
-                { resetPage: true },
-            )
-            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
-        })
-    }, [debouncedSearch, searchParams, setSearchParams])
+    const {
+        searchValue: searchInput,
+        setSearchValue: setSearchInput,
+        clearSearch,
+        page: currentPage,
+        pageSize,
+        handlePaginationModelChange,
+    } = useUrlTableState({
+        searchParams,
+        setSearchParams,
+    })
 
     if (isError) return <div className="p-4 text-red-500">Error: {error.message}</div>
 
@@ -71,18 +43,6 @@ export const InventoryTable = () => {
         serialNumber: asset.serialNumber,
     }))
 
-    const handlePaginationModelChange = (model: PaginationModel) => {
-        setSearchParams((prev) => {
-            const nextParams = upsertFilterParams(prev, {
-                page: model.page.toString(),
-                limit: model.pageSize.toString(),
-            })
-            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
-        })
-    }
-
-    const currentPage = parseNumberParam(searchParams, 'page', 0)
-    const pageSize = parseNumberParam(searchParams, 'limit', 5)
     const resolvedTotalPages =
         typeof data.totalPages === 'number' && data.totalPages > 0
             ? data.totalPages
@@ -167,6 +127,7 @@ export const InventoryTable = () => {
                 onPaginationModelChange={handlePaginationModelChange}
                 searchValue={searchInput}
                 onSearchChange={(e) => setSearchInput(e.target.value)}
+                onSearchClear={clearSearch}
                 searchPlaceholder="Search inventory..."
             />
 

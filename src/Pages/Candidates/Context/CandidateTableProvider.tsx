@@ -1,75 +1,34 @@
 import React from 'react'
 import { CandidateContext, CandidateRow } from '../Interfaces/Candidate'
-import { PaginationModel, RenderCellParams } from '@/types/table'
+import { RenderCellParams } from '@/types/table'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { StatusBadge } from '@/Components/StatusBadge/StatusBadge'
 import AxiosInstance from '@/Helpers/Axios'
 import { useQuery } from '@tanstack/react-query'
-import {
-    ensurePaginationParams,
-    hasSearchParamsChanged,
-    parseNumberParam,
-    upsertFilterParams,
-} from '@/Helpers/urlFilters'
-import { useDebouncedValue } from '@/hooks/use-debounced-value'
+import { useUrlTableState } from '@/hooks/use-url-table-state'
 
 export const CandidateProvider: React.FC<{ children: any }> = ({ children }) => {
     const [searchParams, setSearchParams] = useSearchParams()
-    const [search, setSearch] = React.useState(searchParams.get('search') || '')
-    const debouncedSearch = useDebouncedValue(search, 400)
-
-    React.useEffect(() => {
-        setSearchParams((prev) => {
-            const nextParams = ensurePaginationParams(prev)
-            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
-        })
-    }, [setSearchParams])
-
-    React.useEffect(() => {
-        const urlSearch = searchParams.get('search') || ''
-        setSearch((prev) => (prev === urlSearch ? prev : urlSearch))
-    }, [searchParams])
-
-    React.useEffect(() => {
-        const normalizedSearch = debouncedSearch.trim()
-        const currentSearch = searchParams.get('search') || ''
-
-        if (normalizedSearch === currentSearch) {
-            return
-        }
-
-        setSearchParams((prev) => {
-            const nextParams = upsertFilterParams(
-                prev,
-                { search: normalizedSearch || null },
-                { resetPage: true },
-            )
-
-            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
-        })
-    }, [debouncedSearch, searchParams, setSearchParams])
-
-    const page = parseNumberParam(searchParams, 'page', 0)
-    const pageSize = parseNumberParam(searchParams, 'limit', 5)
-
-    const handlePaginationModelChange = (model: PaginationModel) => {
-        setSearchParams((prev) => {
-            const nextParams = upsertFilterParams(prev, {
-                page: model.page.toString(),
-                limit: model.pageSize.toString(),
-            })
-
-            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
-        })
-    }
+    const {
+        searchValue: search,
+        setSearchValue: setSearch,
+        searchQuery,
+        clearSearch,
+        page,
+        pageSize,
+        handlePaginationModelChange,
+    } = useUrlTableState({
+        searchParams,
+        setSearchParams,
+    })
 
     const fetchCandidates = async (): Promise<{ data: CandidateRow[], totalPages: number }> => {
-        const response = await AxiosInstance.get(`/applicant?page=${page}&limit=${pageSize}&search=${debouncedSearch}`)
+        const response = await AxiosInstance.get(`/applicant?page=${page}&limit=${pageSize}&search=${searchQuery}`)
         return response.data
     }
 
     const { data: applicants, isPending } = useQuery({
-        queryKey: ['applicants', page, pageSize, debouncedSearch],
+        queryKey: ['applicants', page, pageSize, searchQuery],
         queryFn: () => fetchCandidates(),
     })
 
@@ -147,6 +106,7 @@ export const CandidateProvider: React.FC<{ children: any }> = ({ children }) => 
         pageSize,
         search,
         setSearch,
+        clearSearch,
         totalPages: applicants?.totalPages ?? 0,
         isPending,
     }

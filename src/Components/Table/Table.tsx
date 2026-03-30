@@ -28,6 +28,7 @@ interface DataTableProps<TRow> {
     actions?: React.ReactNode
     searchValue?: string
     onSearchChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+    onSearchClear?: () => void
     searchPlaceholder?: string
     filterNode?: React.ReactNode
 }
@@ -46,6 +47,7 @@ function DataTable<TRow>({
     actions,
     searchValue,
     onSearchChange,
+    onSearchClear,
     searchPlaceholder,
     filterNode,
 }: DataTableProps<TRow>) {
@@ -60,6 +62,7 @@ function DataTable<TRow>({
         totalCount !== undefined && pageSize > 0
             ? (page + 1) * pageSize < totalCount
             : page < normalizedTotalPages - 1
+    const hasSearch = Boolean(searchValue?.trim())
 
     return (
         <Card className="glass-card overflow-hidden border-none p-0 shadow-xl shadow-slate-200/35">
@@ -74,19 +77,33 @@ function DataTable<TRow>({
                             </div>
                         )}
                         {onSearchChange && (
-                            <div className="w-full sm:max-w-sm">
-                                <Input
-                                    IsUsername
-                                    type="search"
-                                    name="table-search"
-                                    placeholder={searchPlaceholder}
-                                    label={undefined}
-                                    value={searchValue || ''}
-                                    onChange={onSearchChange}
-                                    iconPosition="start"
-                                    icon={<Search size={18} className="text-slate-400" />}
-                                    width="100%"
-                                />
+                            <div className="flex w-full flex-col gap-2 sm:max-w-md sm:flex-row sm:items-center">
+                                <div className="flex-1">
+                                    <Input
+                                        IsUsername
+                                        type="search"
+                                        name="table-search"
+                                        placeholder={searchPlaceholder}
+                                        label={undefined}
+                                        value={searchValue || ''}
+                                        onChange={onSearchChange}
+                                        iconPosition="start"
+                                        icon={<Search size={18} className="text-slate-400" />}
+                                        width="100%"
+                                    />
+                                </div>
+                                {onSearchClear && (
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={onSearchClear}
+                                        disabled={!hasSearch}
+                                        className="shrink-0"
+                                    >
+                                        Clear
+                                    </Button>
+                                )}
                             </div>
                         )}
                     </div>

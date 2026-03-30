@@ -22,6 +22,7 @@ export interface EmployeeContextType {
     totalPages: number
     search: string
     setSearch: React.Dispatch<React.SetStateAction<string>>
+    clearSearch: () => void
     handlePaginationModelChange: (paginationModel: PaginationModel) => void
 }
 
