@@ -28,7 +28,7 @@ const LoginPageContent = () => {
 
     useEffect(() => {
         if (isAuthenticated) {
-            navigate('/dashboard')
+            navigate('/dashboard', { replace: true })
         }
         setCheckingIsAuthenticated(false)
     }, [isAuthenticated, navigate, setCheckingIsAuthenticated])

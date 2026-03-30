@@ -13,7 +13,7 @@ const PrivateRoute = () => {
     }
 
     if (!isAuthenticated) {
-        return <Navigate to="/" />
+        return <Navigate to="/" replace />
     }
 
     return (
