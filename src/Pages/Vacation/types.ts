@@ -3,6 +3,7 @@ export type Vacation = {
     type: 'maternity' | 'personal' | 'sick' | 'vacation'
     startDate: string
     endDate: string
+    description?: string
     userId: {
         _id: string
         firstName: string

@@ -1,6 +1,6 @@
 import { Suspense, lazy } from 'react'
 import EventPoll from '../EventPoll/EventsPoll'
-import { Calendar, MapPin, X } from 'lucide-react'
+import { Calendar, MapPin } from 'lucide-react'
 import { useAuth } from '@/features/auth/context/AuthProvider'
 import { useEvents } from '@/Pages/Events/Context/EventsContext'
 import { useSearchParams } from 'react-router-dom'
@@ -11,21 +11,30 @@ const EventMap = lazy(() => import('../GoogleMap/MapPicker'))
 
 const SelectedEventCard = () => {
     const { currentUser } = useAuth()
-    const { selectedEvent, setSelectedEvent, setShowEventModal, formatDate } = useEvents()
+    const { selectedEvent, formatDate } = useEvents()
     const [, setSearchParams] = useSearchParams()
 
     useEffect(() => {
         if (selectedEvent?._id) {
-            setSearchParams(
-                { event: selectedEvent._id.toString() },
-                { replace: true },
-            )
+            setSearchParams((prev) => {
+                const next = new URLSearchParams(prev)
+                next.set('event', selectedEvent._id.toString())
+                return next
+            }, { replace: true })
         } else {
-            setSearchParams({}, { replace: true })
+            setSearchParams((prev) => {
+                const next = new URLSearchParams(prev)
+                next.delete('event')
+                return next
+            }, { replace: true })
         }
 
         return () => {
-            setSearchParams({}, { replace: true })
+            setSearchParams((prev) => {
+                const next = new URLSearchParams(prev)
+                next.delete('event')
+                return next
+            }, { replace: true })
         }
     }, [selectedEvent, setSearchParams])
 
@@ -48,19 +57,10 @@ const SelectedEventCard = () => {
             )}
 
             <div className="flex-1 overflow-y-auto p-6 md:p-8 custom-scrollbar">
-                <div className="flex justify-between items-start mb-6">
+                <div className="mb-6">
                     <h2 className="text-2xl md:text-3xl font-bold text-slate-800 leading-tight pr-4">
                         {selectedEvent.title}
                     </h2>
-                    <button
-                        onClick={() => {
-                            setSelectedEvent(null)
-                            setShowEventModal(false)
-                        }}
-                        className="p-2 -mr-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-full transition-colors flex-shrink-0"
-                    >
-                        <X size={24} />
-                    </button>
                 </div>
 
                 <div className="prose prose-slate max-w-none mb-8 text-slate-600 whitespace-pre-line leading-relaxed">

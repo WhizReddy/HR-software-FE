@@ -151,7 +151,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
     ]
 
     return (
-        <div className="min-h-screen bg-[radial-gradient(circle_at_top,#fef3c7_0%,#f8fafc_24%,#eef4ff_100%)]">
+        <div className="min-h-screen bg-[radial-gradient(circle_at_top,#dbeafe_0%,#f8fafc_24%,#eef4ff_100%)]">
             <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
                 {managementMode ? (
                     <section className="overflow-hidden rounded-[32px] border border-slate-200/70 bg-[linear-gradient(135deg,#12345d_0%,#2457a3_48%,#80a8ff_100%)] p-8 text-white shadow-2xl shadow-blue-900/20">
@@ -194,7 +194,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
 
                         <div className="relative grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
                             <div className="max-w-3xl">
-                                <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-amber-100">
+                                <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-sky-100">
                                     <BriefcaseBusiness size={14} />
                                     Career Board
                                 </p>
@@ -208,7 +208,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                 <div className="mt-8 flex flex-wrap gap-4">
                                     <Link
                                         to="/recruitment"
-                                        className="inline-flex min-h-11 items-center gap-2 rounded-2xl bg-[#ffb84d] px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-amber-900/20 transition hover:-translate-y-0.5 hover:bg-[#f5a623] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ffb84d] focus-visible:ring-offset-2 focus-visible:ring-offset-[#17345d]"
+                                        className="inline-flex min-h-11 items-center gap-2 rounded-2xl bg-[#8bd3ff] px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-sky-900/20 transition hover:-translate-y-0.5 hover:bg-[#67c5f4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8bd3ff] focus-visible:ring-offset-2 focus-visible:ring-offset-[#17345d]"
                                     >
                                         Submit General Application
                                         <ArrowRight size={16} />
@@ -259,7 +259,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                             className="h-40 w-full rounded-[20px] object-cover"
                                         />
                                         <div className="mt-4 px-1 pb-1">
-                                            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-100/90">
+                                            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sky-100/90">
                                                 Candidate signal
                                             </p>
                                             <p className="mt-2 text-base font-semibold leading-7 text-white">
@@ -273,7 +273,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-blue-100/80">
                                                 Common locations
                                             </p>
-                                            <ArrowUpRight size={16} className="text-amber-100" />
+                                            <ArrowUpRight size={16} className="text-sky-100" />
                                         </div>
                                         <div className="mt-4 flex flex-wrap gap-2">
                                             {featuredLocations.length > 0 ? (
@@ -384,7 +384,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                 >
                                     <div className="flex items-start justify-between gap-4">
                                         <div>
-                                            <p className="inline-flex rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-amber-700">
+                                            <p className="inline-flex rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">
                                                 {managementMode
                                                     ? 'Published Post'
                                                     : 'Open Role'}
@@ -528,7 +528,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                                 key={promise}
                                                 className="flex items-start gap-3"
                                             >
-                                                <span className="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#ffb84d] text-slate-950">
+                                                <span className="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#8bd3ff] text-slate-950">
                                                     <ArrowRight size={14} />
                                                 </span>
                                                 <p className="text-sm leading-7 text-slate-200">
@@ -557,7 +557,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
 
                                 <Link
                                     to="/recruitment"
-                                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-[#ffb84d] px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-[#f5a623] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
+                                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-[#2457a3] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#1c4380] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300"
                                 >
                                     Start Application
                                     <ArrowRight size={16} />

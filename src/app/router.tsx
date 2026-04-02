@@ -98,11 +98,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/vacation',
-                element: (
-                    <RoleRoute allowedRoles={[...ADMIN_ROLES]}>
-                        {withSuspense(<Vacation />)}
-                    </RoleRoute>
-                ),
+                element: withSuspense(<Vacation />),
             },
             {
                 path: '/vacation/:id',

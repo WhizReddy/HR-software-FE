@@ -2,7 +2,6 @@ import { useGetVacations } from '../Hook'
 import DataTable from '@/Components/Table/Table'
 import { RenderCellParams } from '@/types/table'
 import { dateFormatter } from '@/Helpers/dateFormater'
-import style from '../style/vacationTable.module.scss'
 import { useContext } from 'react'
 import { VacationContext } from '../VacationContext'
 import { SelectedVacationModal } from './form/SelectedVacationModal'
@@ -10,6 +9,11 @@ import { StatusBadge } from '@/Components/StatusBadge/StatusBadge'
 import Toast from '@/Components/Toast/Toast'
 import { Vacation } from '../types'
 import { useUrlTableState } from '@/hooks/use-url-table-state'
+import {
+    formatVacationType,
+    getVacationDurationDays,
+    getVacationStatusColor,
+} from '../utils'
 
 export const VacationTable = () => {
     const {
@@ -46,31 +50,43 @@ export const VacationTable = () => {
     const rows =
         data?.data.map((vacation: Vacation) => ({
             id: vacation._id,
-            fullName: `${vacation.userId?.firstName} ${vacation.userId?.lastName}`,
+            fullName:
+                `${vacation.userId?.firstName ?? ''} ${vacation.userId?.lastName ?? ''}`.trim() ||
+                'Unknown employee',
             type: vacation.type,
             status: vacation.status,
             startDate: vacation.startDate,
             endDate: vacation.endDate,
+            duration: getVacationDurationDays(
+                vacation.startDate,
+                vacation.endDate,
+            ),
+            description: vacation.description,
             actions: vacation._id,
         })) ?? []
     const columns = [
         { field: 'id', headerName: 'ID', width: 50 },
         { field: 'fullName', headerName: 'Full Name', flex: 1 },
-        { field: 'type', headerName: 'Type', flex: 1 },
+        {
+            field: 'type',
+            headerName: 'Type',
+            flex: 1,
+            renderCell: ({ value }: RenderCellParams) =>
+                formatVacationType(value as Vacation['type']),
+        },
         {
             field: 'status',
             headerName: 'Status',
             flex: 1,
             renderCell: ({ value }: RenderCellParams) => {
-                const color =
-                    value === 'pending'
-                        ? 'orange'
-                        : value === 'accepted'
-                            ? 'green'
-                            : value === 'rejected'
-                                ? 'red'
-                                : ''
-                return <StatusBadge color={color} status={value as string} />
+                return (
+                    <StatusBadge
+                        color={getVacationStatusColor(
+                            value as Vacation['status'],
+                        )}
+                        status={value as string}
+                    />
+                )
             },
         },
         {
@@ -88,21 +104,32 @@ export const VacationTable = () => {
                 dateFormatter(param.value as string),
         },
         {
+            field: 'duration',
+            headerName: 'Days',
+            width: 110,
+            renderCell: ({ value }: RenderCellParams) => (
+                <span className="font-medium text-slate-700">
+                    {value as number} day{value === 1 ? '' : 's'}
+                </span>
+            ),
+        },
+        {
             field: 'actions',
-            headerName: 'Actions',
-            flex: 1,
+            headerName: 'Details',
+            width: 120,
             renderCell: (param: RenderCellParams) => {
                 return (
-                    <span
+                    <button
+                        type="button"
                         onClick={() =>
                             handleOpenViewVacationModalOpen(
                                 param.value as string,
                             )
                         }
-                        className={style.viewButton}
+                        className="inline-flex rounded-full bg-slate-100 px-3 py-1.5 text-sm font-semibold text-[#2457a3] transition hover:bg-blue-50 hover:text-[#17345d]"
                     >
-                        View
-                    </span>
+                        Review
+                    </button>
                 )
             },
         },
@@ -120,11 +147,11 @@ export const VacationTable = () => {
                 rows={rows}
                 columns={columns}
                 getRowId={getRowId}
-                title="Vacation requests"
+                title="Vacation Request Queue"
                 searchValue={searchInput}
                 onSearchChange={(e) => setSearchInput(e.target.value)}
                 onSearchClear={clearSearch}
-                searchPlaceholder="Search by employee, type, or status"
+                searchPlaceholder="Search by employee, leave type, or status"
             />
             {searchParams.get('selectedVacation') && <SelectedVacationModal />}
             <Toast

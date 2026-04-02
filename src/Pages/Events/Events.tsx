@@ -32,6 +32,7 @@ function EventsContentAndComponents() {
         closeModal,
         showEventModal,
         setShowEventModal,
+        setSelectedEvent,
         updateToastMessage,
         updateToastOpen,
         updateToastSeverity,
@@ -224,7 +225,10 @@ function EventsContentAndComponents() {
                         width="800px"
                         padding="0"
                         open={showEventModal}
-                        handleClose={() => setShowEventModal(false)}
+                        handleClose={() => {
+                            setSelectedEvent(null)
+                            setShowEventModal(false)
+                        }}
                     >
                         <SelectedEventCard />
                     </ModalComponent>

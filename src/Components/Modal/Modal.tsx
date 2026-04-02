@@ -8,6 +8,7 @@ interface ModalComponentProps {
     width?: string
     height?: string
     padding?: string
+    showCloseButton?: boolean
 }
 
 export const ModalComponent: React.FC<ModalComponentProps> = ({
@@ -17,6 +18,7 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
     width = '500px',
     height,
     padding = '24px',
+    showCloseButton = true,
 }) => {
     return (
         <Dialog
@@ -28,6 +30,7 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
             }}
         >
             <DialogContent
+                showCloseButton={showCloseButton}
                 className="glass-modal border-none"
                 style={{ width: width === '100%' ? '100%' : '95vw', maxWidth: width, height: height || 'auto', padding }}
             >

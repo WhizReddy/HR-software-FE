@@ -65,10 +65,10 @@ export const useGetUsersWithVacations = () => {
         },
     })
 }
-export const useGetUserWithVacations = () => {
+export const useGetUserWithVacations = (userIdOverride?: string) => {
     const { searchParams } = useContext(VacationContext)
     const { id } = useParams<{ id: string }>()
-    const userId = id || searchParams.get('userId')
+    const userId = userIdOverride || id || searchParams.get('userId')
 
     return useQuery({
         queryKey: ['userWithVacations', userId],
@@ -95,7 +95,10 @@ export const useUpdateVacation = () => {
                 queryKey: ['vacation'],
             })
             queryClient.invalidateQueries({
-                queryKey: [searchParams.get('selectedVacation') as string],
+                queryKey: ['userWithVacations'],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ['usersWithVacations'],
             })
         },
     })
@@ -109,6 +112,12 @@ export const useCreateVacation = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ['vacations'],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ['userWithVacations'],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ['usersWithVacations'],
             })
         },
     })
