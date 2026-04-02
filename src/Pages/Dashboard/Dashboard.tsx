@@ -112,9 +112,6 @@ const DashboardContent: React.FC = () => {
 
                     <div className="rounded-3xl border border-white/60 bg-white/80 backdrop-blur-xl p-6 shadow-xl shadow-slate-200/40 xl:col-span-4 min-h-[500px] flex flex-col">
                         <h3 className="text-base font-bold text-slate-800 mb-4 tracking-tight">Status Overview</h3>
-                        <p className="mb-6 text-sm font-medium leading-6 text-slate-500">
-                            Built from total employees, remote work, and active leave.
-                        </p>
                         <div className="flex-1 flex items-center justify-center">
                             <PieChartComponent />
                         </div>

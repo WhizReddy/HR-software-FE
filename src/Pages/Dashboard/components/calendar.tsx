@@ -31,7 +31,7 @@ const eventTouchesMonth = (event: EventsData, month: Dayjs) => {
 }
 
 export default function Calendar() {
-    const { events, isEventsLoading } = useDashboardContext()
+    const { events } = useDashboardContext()
     const [visibleMonth, setVisibleMonth] = useState(() => dayjs().startOf('month'))
     const today = dayjs()
     const firstDay = visibleMonth.startOf('month').day()
@@ -64,11 +64,6 @@ export default function Calendar() {
                     <h3 className="text-xl font-extrabold tracking-tight text-slate-800">
                         {visibleMonth.format('MMMM YYYY')}
                     </h3>
-                    <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-slate-400">
-                        {isEventsLoading
-                            ? 'Loading events'
-                            : `${monthEvents.length} event${monthEvents.length === 1 ? '' : 's'} this month`}
-                    </p>
                 </div>
                 <div className="flex items-center gap-2">
                     <button
@@ -131,11 +126,6 @@ export default function Calendar() {
                     )
                 })}
             </div>
-            <p className="mt-5 text-sm font-medium text-slate-500">
-                {monthEvents.length > 0
-                    ? 'Numbers show how many event days fall on each date.'
-                    : 'No events are scheduled for this month.'}
-            </p>
         </div>
     )
 }

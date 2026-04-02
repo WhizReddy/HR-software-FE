@@ -41,9 +41,6 @@ const InfoSection: React.FC = () => {
                 <h2 className="text-base font-bold tracking-tight text-slate-800">
                     Upcoming Events
                 </h2>
-                <p className="mt-1 text-sm font-medium text-slate-500">
-                    Next scheduled items, sorted by the nearest start date.
-                </p>
             </div>
 
             {isEventsLoading ? (
