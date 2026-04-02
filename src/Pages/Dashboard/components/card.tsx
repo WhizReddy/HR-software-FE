@@ -1,61 +1,35 @@
 import React from 'react'
-import { User, UserX, Clock, Monitor } from 'lucide-react'
-
-type IconType = 'Present' | 'Absent' | 'On Leave' | 'Remote'
+import { StatusKey, statusConfig } from './statusConfig'
 
 interface CardProps {
-    title: string
+    title: StatusKey
     content: string
-    icon: IconType
 }
 
-const configs = {
-    Present: {
-        icon: User,
-        color: 'text-emerald-600',
-        bg: 'bg-emerald-50',
-        ring: 'ring-emerald-100',
-        gradient: 'from-emerald-500 to-green-400',
-    },
-    Absent: {
-        icon: UserX,
-        color: 'text-blue-600',
-        bg: 'bg-blue-50',
-        ring: 'ring-blue-100',
-        gradient: 'from-blue-500 to-indigo-400',
-    },
-    'On Leave': {
-        icon: Clock,
-        color: 'text-amber-600',
-        bg: 'bg-amber-50',
-        ring: 'ring-amber-100',
-        gradient: 'from-amber-500 to-orange-400',
-    },
-    Remote: {
-        icon: Monitor,
-        color: 'text-purple-600',
-        bg: 'bg-purple-50',
-        ring: 'ring-purple-100',
-        gradient: 'from-purple-500 to-violet-400',
-    },
-}
-
-const CardInfo: React.FC<CardProps> = ({ title, content, icon }) => {
-    const cfg = configs[icon]
+const CardInfo: React.FC<CardProps> = ({ title, content }) => {
+    const cfg = statusConfig[title]
     const Icon = cfg.icon
 
     return (
-        <div className="relative overflow-hidden rounded-3xl border border-white/70 bg-white/80 p-6 shadow-lg shadow-slate-200/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group">
+        <div className="group relative overflow-hidden rounded-3xl border border-white/70 bg-white/80 p-6 shadow-lg shadow-slate-200/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
             <div className="flex items-center gap-5">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 bg-gradient-to-br ${cfg.gradient} shadow-md group-hover:shadow-lg transition-shadow duration-300`}>
-                <Icon size={24} className="text-white" />
+                <div
+                    className={`flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${cfg.gradient} shadow-md transition-shadow duration-300 group-hover:shadow-lg`}
+                >
+                    <Icon size={24} className="text-white" />
                 </div>
-                <div className="flex flex-col z-10">
-                    <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.16em] mb-1">{title}</p>
-                    <p className="text-4xl font-extrabold text-slate-800 leading-none group-hover:text-transparent bg-clip-text group-hover:bg-gradient-to-r group-hover:from-slate-800 group-hover:to-slate-600 transition-all duration-300">{content}</p>
+                <div className="z-10 flex flex-col">
+                    <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                        {title}
+                    </p>
+                    <p className="bg-clip-text text-4xl font-extrabold leading-none text-slate-800 transition-all duration-300 group-hover:bg-gradient-to-r group-hover:from-slate-800 group-hover:to-slate-600 group-hover:text-transparent">
+                        {content}
+                    </p>
                 </div>
             </div>
-            <div className={`absolute -right-6 -bottom-6 w-32 h-32 rounded-full opacity-[0.08] group-hover:opacity-15 group-hover:scale-110 transition-all duration-500 bg-gradient-to-br ${cfg.gradient}`} />
+            <div
+                className={`absolute -bottom-6 -right-6 h-32 w-32 rounded-full bg-gradient-to-br ${cfg.gradient} opacity-[0.08] transition-all duration-500 group-hover:scale-110 group-hover:opacity-15`}
+            />
         </div>
     )
 }
