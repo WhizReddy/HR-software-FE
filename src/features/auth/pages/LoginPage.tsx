@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import { RingLoader } from 'react-spinners'
 import { Link, useNavigate } from 'react-router-dom'
@@ -13,7 +13,7 @@ import { LoginSchema } from '../schemas/login.schema'
 import AuthPageShell from '../components/AuthPageShell'
 
 const LoginPageContent = () => {
-    const { isAuthenticated } = useAuth()
+    const { isAuthenticated, backendStatus, refreshBackendStatus } = useAuth()
     const navigate = useNavigate()
     const {
         checkingIsAuthenticated,
@@ -25,6 +25,7 @@ const LoginPageContent = () => {
     } = useContext(LoginContext)
 
     const { form } = useLoginForm(setError)
+    const [showSlowAuthNotice, setShowSlowAuthNotice] = useState(false)
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -32,6 +33,25 @@ const LoginPageContent = () => {
         }
         setCheckingIsAuthenticated(false)
     }, [isAuthenticated, navigate, setCheckingIsAuthenticated])
+
+    useEffect(() => {
+        void refreshBackendStatus()
+    }, [refreshBackendStatus])
+
+    useEffect(() => {
+        if (!form.state.isSubmitting) {
+            setShowSlowAuthNotice(false)
+            return
+        }
+
+        const timeoutId = window.setTimeout(() => {
+            setShowSlowAuthNotice(true)
+        }, 4000)
+
+        return () => {
+            window.clearTimeout(timeoutId)
+        }
+    }, [form.state.isSubmitting])
 
     if (checkingIsAuthenticated) {
         return (
@@ -147,15 +167,34 @@ const LoginPageContent = () => {
                     )}
                 />
 
+                {(backendStatus === 'slow' || backendStatus === 'offline') &&
+                    !form.state.isSubmitting && (
+                        <div className="rounded-lg border border-amber-200 bg-amber-50/80 px-4 py-3 text-sm text-amber-900">
+                            {backendStatus === 'slow'
+                                ? 'The backend is waking up. The first login after inactivity can take up to a minute.'
+                                : 'The backend is not responding right now. Login may fail until the service comes back.'}
+                        </div>
+                    )}
+
                 <Button
                     type="submit"
                     className="w-full h-12 bg-[#2457a3] hover:bg-[#1a407a] text-white font-semibold text-base rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 active:scale-95 mt-8"
                     disabled={form.state.isSubmitting}
                 >
                     {form.state.isSubmitting
-                        ? 'Authenticating...'
+                        ? showSlowAuthNotice || backendStatus !== 'ready'
+                            ? 'Waiting for server...'
+                            : 'Authenticating...'
                         : 'Sign In'}
                 </Button>
+
+                {form.state.isSubmitting && showSlowAuthNotice && (
+                    <div className="rounded-lg border border-amber-200 bg-amber-50/80 px-4 py-3 text-sm text-amber-900">
+                        {backendStatus === 'offline'
+                            ? 'The backend is still unavailable. Please wait a bit and try again.'
+                            : 'Authentication is taking longer than usual. The deployed backend may still be waking up.'}
+                    </div>
+                )}
 
                 {error && (
                     <div className="p-3 mt-4 bg-red-50/80 backdrop-blur-md border border-red-200 rounded-lg shadow-sm">

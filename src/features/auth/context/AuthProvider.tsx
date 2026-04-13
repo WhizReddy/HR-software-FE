@@ -5,8 +5,8 @@ import React, {
     useRef,
     useState,
 } from 'react'
-import AxiosInstance from '@/Helpers/Axios'
-import type { AuthContextType, User } from './auth.types'
+import { PublicAxiosInstance } from '@/Helpers/Axios'
+import type { AuthContextType, BackendStatus, User } from './auth.types'
 
 export const AuthContext = React.createContext<AuthContextType | undefined>(
     undefined,
@@ -27,7 +27,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [userRole, setUserRole] = useState<string | null>(null)
     const [currentUser, setCurrentUser] = useState<User | null>(null)
+    const [backendStatus, setBackendStatus] =
+        useState<BackendStatus>('checking')
     const logoutTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+    const healthSlowTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+        null,
+    )
+    const backendCheckPromiseRef = useRef<Promise<void> | null>(null)
 
     const clearSession = useCallback(() => {
         localStorage.removeItem('access_token')
@@ -73,6 +79,43 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         [clearSession, getTokenExpirationMs],
     )
 
+    const refreshBackendStatus = useCallback(async () => {
+        if (backendCheckPromiseRef.current) {
+            return backendCheckPromiseRef.current
+        }
+
+        if (healthSlowTimerRef.current) {
+            clearTimeout(healthSlowTimerRef.current)
+        }
+
+        setBackendStatus((currentStatus) =>
+            currentStatus === 'ready' ? 'ready' : 'checking',
+        )
+
+        healthSlowTimerRef.current = setTimeout(() => {
+            setBackendStatus((currentStatus) =>
+                currentStatus === 'checking' ? 'slow' : currentStatus,
+            )
+        }, 3000)
+
+        backendCheckPromiseRef.current = PublicAxiosInstance.get('/health')
+            .then(() => {
+                setBackendStatus('ready')
+            })
+            .catch(() => {
+                setBackendStatus('offline')
+            })
+            .finally(() => {
+                if (healthSlowTimerRef.current) {
+                    clearTimeout(healthSlowTimerRef.current)
+                    healthSlowTimerRef.current = null
+                }
+                backendCheckPromiseRef.current = null
+            })
+
+        return backendCheckPromiseRef.current
+    }, [])
+
     useEffect(() => {
         const access_token = localStorage.getItem('access_token')
         const storedUserRole = localStorage.getItem('user_role')
@@ -100,26 +143,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         const handleLogoutEvent = () => clearSession()
         window.addEventListener('auth:logout', handleLogoutEvent)
 
-        AxiosInstance.get('/health').catch(() => {
-            /* mute errors */
-        })
+        void refreshBackendStatus()
 
         const pingInterval = setInterval(() => {
             if (localStorage.getItem('access_token')) {
-                AxiosInstance.get('/health').catch(() => {
-                    /* mute errors */
-                })
+                void refreshBackendStatus()
             }
         }, 10 * 60 * 1000)
 
         return () => {
             window.removeEventListener('auth:logout', handleLogoutEvent)
             clearInterval(pingInterval)
+            if (healthSlowTimerRef.current) {
+                clearTimeout(healthSlowTimerRef.current)
+            }
             if (logoutTimerRef.current) {
                 clearTimeout(logoutTimerRef.current)
             }
         }
-    }, [clearSession, getTokenExpirationMs, scheduleAutoLogout])
+    }, [
+        clearSession,
+        getTokenExpirationMs,
+        refreshBackendStatus,
+        scheduleAutoLogout,
+    ])
 
     const login = (access_token: string, role: string, user: User) => {
         localStorage.setItem('access_token', access_token)
@@ -142,8 +189,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
                 isAuthenticated,
                 userRole,
                 currentUser,
+                backendStatus,
                 login,
                 logout,
+                refreshBackendStatus,
             }}
         >
             {children}
