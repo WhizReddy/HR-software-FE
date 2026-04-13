@@ -17,6 +17,7 @@ import {
 import { ModalComponent } from '@/Components/Modal/Modal'
 import Button from '@/Components/Button/Button'
 import { ButtonTypes } from '@/Components/Button/ButtonTypes'
+import PageIntro from '@/Components/PageIntro/PageIntro'
 import {
     EventsData,
     useCreateEvent,
@@ -151,64 +152,91 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
     ]
 
     return (
-        <div className="min-h-screen bg-[radial-gradient(circle_at_top,#dbeafe_0%,#f8fafc_24%,#eef4ff_100%)]">
+        <div className="min-h-screen bg-slate-50">
             <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
                 {managementMode ? (
-                    <section className="overflow-hidden rounded-[32px] border border-slate-200/70 bg-[linear-gradient(135deg,#12345d_0%,#2457a3_48%,#80a8ff_100%)] p-8 text-white shadow-2xl shadow-blue-900/20">
-                        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-                            <div>
-                                <p className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-blue-100">
-                                    <Sparkles size={14} />
-                                    Internal Publishing
-                                </p>
-                                <h1 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
-                                    Career Post Studio
-                                </h1>
-                                <p className="mt-3 max-w-2xl text-sm text-blue-100/90 sm:text-base">
-                                    Publish, refine, and retire career opportunities without opening the public board editor.
-                                </p>
-                            </div>
+                    <>
+                        <PageIntro
+                            eyebrow="Internal Publishing"
+                            title="Career Post Studio"
+                            description="Publish, refine, and retire career opportunities from a cleaner workspace that matches the rest of the product."
+                            className="mb-8"
+                            actions={
+                                <>
+                                    <Link
+                                        to="/career"
+                                        className="inline-flex min-h-11 items-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                                    >
+                                        View Public Page
+                                    </Link>
+                                    <button
+                                        type="button"
+                                        onClick={handleOpenCreate}
+                                        className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#2457a3] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#1c4380]"
+                                    >
+                                        <Plus size={16} />
+                                        New Career Post
+                                    </button>
+                                </>
+                            }
+                        />
 
-                            <div className="flex flex-wrap gap-3">
-                                <Link
-                                    to="/career"
-                                    className="inline-flex items-center rounded-xl border border-white/25 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/20"
-                                >
-                                    View Public Page
-                                </Link>
-                                <button
-                                    type="button"
-                                    onClick={handleOpenCreate}
-                                    className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-[#2457a3] shadow-lg shadow-blue-950/10 transition hover:bg-slate-100"
-                                >
-                                    <Plus size={16} />
-                                    New Career Post
-                                </button>
-                            </div>
-                        </div>
-                    </section>
+                        <section className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
+                            <article className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
+                                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                                    Publishing Overview
+                                </p>
+                                <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-900">
+                                    Keep the public board clean, readable, and consistent.
+                                </h2>
+                                <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
+                                    Career posts now sit on the same lighter visual system as the rest of the app, so the board feels like part of one product instead of a separate landing page.
+                                </p>
+
+                                <div className="mt-6 grid gap-4 sm:grid-cols-3">
+                                    {heroMetrics.map(({ label, value, icon: Icon }) => (
+                                        <div
+                                            key={label}
+                                            className="rounded-[22px] border border-slate-200 bg-slate-50 p-4"
+                                        >
+                                            <div className="flex items-center gap-2 text-slate-500">
+                                                <Icon
+                                                    size={16}
+                                                    className="text-[#2457a3]"
+                                                />
+                                                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                                                    {label}
+                                                </p>
+                                            </div>
+                                            <p className="mt-3 text-lg font-bold text-slate-900">
+                                                {value}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </article>
+
+                            <article className="overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm">
+                                <img
+                                    src={Workers}
+                                    alt="Team collaboration"
+                                    className="h-full min-h-[280px] w-full object-cover"
+                                />
+                            </article>
+                        </section>
+                    </>
                 ) : (
-                    <section className="relative overflow-hidden rounded-[36px] border border-slate-200/80 bg-[linear-gradient(135deg,#0f213d_0%,#17345d_52%,#2457a3_100%)] p-6 text-white shadow-2xl shadow-slate-300/60 sm:p-8 lg:p-10">
-                        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,184,77,0.28),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(125,211,252,0.18),transparent_26%)]" />
-                        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/30" />
-
-                        <div className="relative grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-                            <div className="max-w-3xl">
-                                <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-sky-100">
-                                    <BriefcaseBusiness size={14} />
-                                    Career Board
-                                </p>
-                                <h1 className="mt-6 max-w-3xl text-4xl font-black tracking-tight text-white sm:text-[3.6rem] sm:leading-[1.02]">
-                                    Join a product team that prefers clarity over noise.
-                                </h1>
-                                <p className="mt-5 max-w-2xl text-base leading-8 text-blue-100/92">
-                                    We build internal tools that people depend on daily. The work is practical, the standards are high, and strong contributors get real ownership quickly.
-                                </p>
-
-                                <div className="mt-8 flex flex-wrap gap-4">
+                    <>
+                        <PageIntro
+                            eyebrow="Career Board"
+                            title="Join a product team that prefers clarity over noise."
+                            description="We build internal tools that people depend on daily. The work is practical, the standards are high, and strong contributors get real ownership quickly."
+                            className="mb-8"
+                            actions={
+                                <>
                                     <Link
                                         to="/recruitment"
-                                        className="inline-flex min-h-11 items-center gap-2 rounded-2xl bg-[#8bd3ff] px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-sky-900/20 transition hover:-translate-y-0.5 hover:bg-[#67c5f4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8bd3ff] focus-visible:ring-offset-2 focus-visible:ring-offset-[#17345d]"
+                                        className="inline-flex min-h-11 items-center gap-2 rounded-2xl bg-[#2457a3] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#1c4380] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300"
                                     >
                                         Submit General Application
                                         <ArrowRight size={16} />
@@ -216,86 +244,114 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     {isManager && (
                                         <Link
                                             to="/career-posts"
-                                            className="inline-flex min-h-11 items-center gap-2 rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/18 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#17345d]"
+                                            className="inline-flex min-h-11 items-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200"
                                         >
                                             Manage Career Posts
                                         </Link>
                                     )}
-                                </div>
+                                </>
+                            }
+                        />
 
-                                <div className="mt-8 grid gap-3 sm:grid-cols-3">
-                                    {heroMetrics.map(({ label, value, icon: Icon }) => (
-                                        <div
-                                            key={label}
-                                            className="rounded-[24px] border border-white/12 bg-white/8 p-4 backdrop-blur-sm"
-                                        >
-                                            <div className="flex items-center gap-2 text-blue-100">
-                                                <Icon size={16} />
-                                                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-blue-100/80">
-                                                    {label}
+                        <section className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
+                            <article className="overflow-hidden rounded-[30px] border border-slate-200 bg-white shadow-sm">
+                                <img
+                                    src={Workers}
+                                    alt="Team collaboration"
+                                    className="h-[320px] w-full object-cover"
+                                />
+                                <div className="border-t border-slate-100 p-6">
+                                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                                        Team environment
+                                    </p>
+                                    <h2 className="mt-3 text-2xl font-black tracking-tight text-slate-900">
+                                        Strong ownership, calmer collaboration, and less noise.
+                                    </h2>
+                                    <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
+                                        We keep expectations clear, ship practical work, and give capable people room to contribute without adding layers of ceremony.
+                                    </p>
+                                </div>
+                            </article>
+
+                            <div className="grid gap-5">
+                                <article className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
+                                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                                        Quick Snapshot
+                                    </p>
+                                    <div className="mt-5 grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
+                                        {heroMetrics.map(({ label, value, icon: Icon }) => (
+                                            <div
+                                                key={label}
+                                                className="rounded-[22px] border border-slate-200 bg-slate-50 p-4"
+                                            >
+                                                <div className="flex items-center gap-2 text-slate-500">
+                                                    <Icon
+                                                        size={16}
+                                                        className="text-[#2457a3]"
+                                                    />
+                                                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                                                        {label}
+                                                    </p>
+                                                </div>
+                                                <p className="mt-3 text-lg font-bold text-slate-900">
+                                                    {value}
                                                 </p>
                                             </div>
-                                            <p className="mt-3 text-lg font-bold text-white">
-                                                {value}
-                                            </p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
+                                        ))}
+                                    </div>
+                                </article>
 
-                            <div className="grid gap-4 md:grid-cols-[1.1fr_0.9fr]">
-                                <div className="overflow-hidden rounded-[30px] border border-white/15 bg-slate-900/20 shadow-xl shadow-slate-950/20">
-                                    <img
-                                        src={Workers}
-                                        alt="Team collaboration"
-                                        className="h-full min-h-[320px] w-full object-cover"
-                                    />
-                                </div>
-                                <div className="grid gap-4">
-                                    <div className="overflow-hidden rounded-[26px] border border-white/15 bg-white/8 p-3 backdrop-blur-sm">
+                                <article className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
+                                    <div className="flex items-center justify-between gap-3">
+                                        <div>
+                                            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                                                Common locations
+                                            </p>
+                                            <h3 className="mt-2 text-xl font-bold text-slate-900">
+                                                Flexible hiring, cleaner presentation
+                                            </h3>
+                                        </div>
+                                        <ArrowUpRight
+                                            size={16}
+                                            className="text-[#2457a3]"
+                                        />
+                                    </div>
+                                    <div className="mt-5 flex flex-wrap gap-2">
+                                        {featuredLocations.length > 0 ? (
+                                            featuredLocations.map((location) => (
+                                                <span
+                                                    key={location}
+                                                    className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700"
+                                                >
+                                                    {location}
+                                                </span>
+                                            ))
+                                        ) : (
+                                            <span className="text-sm text-slate-500">
+                                                Flexible location details are shared per role.
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    <div className="mt-5 overflow-hidden rounded-[22px] border border-slate-200 bg-slate-50">
                                         <img
                                             src={WorkerTwo}
                                             alt="Team planning session"
-                                            className="h-40 w-full rounded-[20px] object-cover"
+                                            className="h-36 w-full object-cover"
                                         />
-                                        <div className="mt-4 px-1 pb-1">
-                                            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sky-100/90">
+                                        <div className="p-4">
+                                            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
                                                 Candidate signal
                                             </p>
-                                            <p className="mt-2 text-base font-semibold leading-7 text-white">
+                                            <p className="mt-2 text-sm leading-7 text-slate-600">
                                                 We care more about sharp execution and good judgment than polished buzzwords.
                                             </p>
                                         </div>
                                     </div>
-
-                                    <div className="rounded-[26px] border border-white/15 bg-white/8 p-5 backdrop-blur-sm">
-                                        <div className="flex items-center justify-between gap-3">
-                                            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-blue-100/80">
-                                                Common locations
-                                            </p>
-                                            <ArrowUpRight size={16} className="text-sky-100" />
-                                        </div>
-                                        <div className="mt-4 flex flex-wrap gap-2">
-                                            {featuredLocations.length > 0 ? (
-                                                featuredLocations.map((location) => (
-                                                    <span
-                                                        key={location}
-                                                        className="inline-flex items-center rounded-full border border-white/14 bg-white/10 px-3 py-1.5 text-sm font-medium text-white"
-                                                    >
-                                                        {location}
-                                                    </span>
-                                                ))
-                                            ) : (
-                                                <span className="text-sm text-blue-100/80">
-                                                    Flexible location details are shared per role.
-                                                </span>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
+                                </article>
                             </div>
-                        </div>
-                    </section>
+                        </section>
+                    </>
                 )}
 
                 <section className="mt-8 rounded-[28px] border border-slate-200/70 bg-white p-6 shadow-sm">
@@ -518,8 +574,8 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     </div>
                                 </article>
 
-                                <article className="rounded-[30px] bg-slate-900 p-6 text-white shadow-xl shadow-slate-200/60">
-                                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-300">
+                                <article className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-sm">
+                                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                                         What candidates can expect
                                     </p>
                                     <div className="mt-5 space-y-4">
@@ -528,10 +584,10 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                                 key={promise}
                                                 className="flex items-start gap-3"
                                             >
-                                                <span className="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#8bd3ff] text-slate-950">
+                                                <span className="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-50 text-[#2457a3]">
                                                     <ArrowRight size={14} />
                                                 </span>
-                                                <p className="text-sm leading-7 text-slate-200">
+                                                <p className="text-sm leading-7 text-slate-600">
                                                     {promise}
                                                 </p>
                                             </div>
