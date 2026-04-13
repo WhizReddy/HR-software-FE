@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ADMIN_ROLES } from '@/features/auth/lib/access'
 import PrivateRoute from '@/features/auth/routing/PrivateRoute'
 import RoleRoute from '@/features/auth/routing/RoleRoute'
+import RouteErrorBoundary from './RouteErrorBoundary'
 
 const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'))
 const ResetPasswordPage = lazy(
@@ -46,30 +47,37 @@ const router = createBrowserRouter([
     {
         path: '/',
         element: withSuspense(<LoginPage />),
+        errorElement: <RouteErrorBoundary />,
     },
     {
         path: '/recruitment',
         element: withSuspense(<Recruitment />),
+        errorElement: <RouteErrorBoundary />,
     },
     {
         path: '/applicant/confirm',
         element: withSuspense(<EmailConfirmation />),
+        errorElement: <RouteErrorBoundary />,
     },
     {
         path: '/forgot-password',
         element: withSuspense(<ResetPasswordPage />),
+        errorElement: <RouteErrorBoundary />,
     },
     {
         path: '/reset-password',
         element: withSuspense(<ResetPasswordPage />),
+        errorElement: <RouteErrorBoundary />,
     },
     {
         path: '/career',
         element: withSuspense(<Career />),
+        errorElement: <RouteErrorBoundary />,
     },
     {
         path: '/',
         element: <PrivateRoute />,
+        errorElement: <RouteErrorBoundary />,
         children: [
             {
                 path: '/employees',
@@ -175,6 +183,7 @@ const router = createBrowserRouter([
     {
         path: '*',
         element: withSuspense(<NotFound />),
+        errorElement: <RouteErrorBoundary />,
     },
 ])
 

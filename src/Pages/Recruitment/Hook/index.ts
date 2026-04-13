@@ -1,7 +1,7 @@
-import AxiosInstance from '@/Helpers/Axios'
+import { PublicAxiosInstance } from '@/Helpers/Axios'
 import { useForm } from '@tanstack/react-form'
-import { AxiosError } from 'axios'
 import { useContext } from 'react'
+import { getApiErrorMessage } from '@/lib/api-error'
 import { RecruitmentContext } from '../Context/RecruitmentContext'
 
 export const useRecruitmentForm = () => {
@@ -52,7 +52,7 @@ export const useRecruitmentForm = () => {
                     JSON.stringify(value.technologiesUsed),
                 )
 
-                const response = await AxiosInstance.post(
+                const response = await PublicAxiosInstance.post(
                     '/applicant',
                     formData,
                     {
@@ -62,23 +62,15 @@ export const useRecruitmentForm = () => {
                     },
                 )
                 if ([200, 201].includes(response.status)) {
-                    console.log(true)
                     setShowModal(true)
                 }
             } catch (err: unknown) {
-                if (err instanceof AxiosError) {
-                    if (err?.response?.data?.message) {
-                        setError(err?.response?.data?.message)
-                        return
-                    }
-                    if (err.code === 'ERR_NETWORK') {
-                        setError(
-                            'No internet connection. Please try again later.',
-                        )
-                        return
-                    }
-                    setError('An error occurred while creating your applicant')
-                }
+                setError(
+                    getApiErrorMessage(
+                        err,
+                        'An error occurred while creating your applicant',
+                    ),
+                )
             }
         },
     })

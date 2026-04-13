@@ -1,139 +1,149 @@
-// import React, { useEffect, useState } from 'react';
-// import {  useNavigate, useSearchParams } from 'react-router-dom';
-// import AxiosInstance from '../../../Helpers/Axios';
+import { CheckCircle2, CircleAlert, LoaderCircle } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { PublicAxiosInstance } from '@/Helpers/Axios'
+import { getApiErrorMessage } from '@/lib/api-error'
+import { buttonVariants } from '@/Components/ui/button'
+import AuthPageShell from '@/features/auth/components/AuthPageShell'
 
-// const EmailConfirmation: React.FC = () => {
-//     const [searchParams,setSearchParams] = useSearchParams()
-//     const token = searchParams.get('token');
-//     const [status, setStatus] = useState<'confirming' | 'success' | 'error'>('confirming');
-//     const navigate = useNavigate();
-// const [shouldNavigate, setShouldNavigate] = useState(false);
+type ConfirmationStatus = 'confirming' | 'success' | 'error'
 
-// useEffect(() => {
-//     const confirm = async () => {
-//         if (token) {
-//             try {
-//                 const confirmationUrl = `http://localhost:5173/recruitment/confirm?token=${token}&status=success`;
-//                 await AxiosInstance.post(confirmationUrl, {token });
-//                 setStatus('success');
-//                 setTimeout(() => {
-//                     setShouldNavigate(true);
-//                 }, 3000);
-//             } catch (error) {
-//                 console.error('Error confirming application:', error);
-//                 setStatus('error');
-//             }
-//         } else {
-//             setStatus('error');
-//         }
-//     };
+const statusCopy: Record<
+    ConfirmationStatus,
+    {
+        description: string
+        icon: React.ComponentType<{ className?: string }>
+        iconClassName: string
+        title: string
+    }
+> = {
+    confirming: {
+        title: 'Confirming your application',
+        description:
+            'Please wait while we validate your application confirmation link.',
+        icon: LoaderCircle,
+        iconClassName: 'animate-spin text-[#2457a3]',
+    },
+    success: {
+        title: 'Application confirmed',
+        description:
+            'Your application is now active. You will be redirected to the career page shortly.',
+        icon: CheckCircle2,
+        iconClassName: 'text-emerald-500',
+    },
+    error: {
+        title: 'Confirmation failed',
+        description:
+            'This confirmation link is invalid, expired, or the server could not complete the request.',
+        icon: CircleAlert,
+        iconClassName: 'text-red-500',
+    },
+}
 
-//     confirm();
-// }, [token]);
-
-// useEffect(() => {
-//     if (shouldNavigate) {
-//         navigate('/career');
-//     }
-// }, [shouldNavigate, navigate]);
-
-//     if (status === 'confirming') {
-//         return <div>Confirming your application...</div>;
-//     }
-
-//      if (status === 'error') {
-//         return (
-//             <div>
-//                 <h1>Confirmation Failed</h1>
-//                 <p>There was an issue with confirming your application. Please try again later.</p>
-//             </div>
-//         );
-//     }
-
-//     if (status === 'success') {
-//         return (
-//             <div>
-//                 <h1>Confirmation Successful!</h1>
-//                 <p>Your application has been confirmed. You can now proceed to the recruitment page.</p>
-//             </div>
-//         );
-//     }
-
-// };
-
-// export default EmailConfirmation;
-
-import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import AxiosInstance from '../../../Helpers/Axios'
-
-const EmailConfirmation: React.FC = () => {
+export default function EmailConfirmation() {
     const { search } = useLocation()
-    const query = new URLSearchParams(search)
-    const token = query.get('token')
-    const [status, setStatus] = useState<'confirming' | 'success' | 'error'>(
-        'confirming',
-    )
     const navigate = useNavigate()
+    const token = new URLSearchParams(search).get('token')
+    const [errorMessage, setErrorMessage] = useState<string | null>(null)
+    const [status, setStatus] = useState<ConfirmationStatus>('confirming')
 
     useEffect(() => {
-        const confirm = async () => {
-            if (token) {
-                try {
-                    const confirmationUrl = `/applicant/confirm?token=${token}&status=success`
-                    const response = await AxiosInstance.get(confirmationUrl)
+        let isMounted = true
+        let redirectTimer: number | undefined
 
-                    if (response.status === 200) {
-                        navigate('/career')
-                        setStatus('success')
-                    } else {
-                        setStatus('error')
-                    }
-                } catch (error) {
-                    console.error('Error confirming application:', error)
+        const confirm = async () => {
+            if (!token) {
+                if (isMounted) {
                     setStatus('error')
+                    setErrorMessage(
+                        'The confirmation link is missing a valid token.',
+                    )
                 }
-            } else {
+                return
+            }
+
+            try {
+                await PublicAxiosInstance.get(`/applicant/confirm?token=${token}`)
+                if (!isMounted) {
+                    return
+                }
+
+                setStatus('success')
+                redirectTimer = window.setTimeout(() => {
+                    navigate('/career', { replace: true })
+                }, 2000)
+            } catch (error: unknown) {
+                if (!isMounted) {
+                    return
+                }
+
                 setStatus('error')
+                setErrorMessage(
+                    getApiErrorMessage(
+                        error,
+                        'There was an issue confirming your application. Please try again later.',
+                    ),
+                )
             }
         }
 
-        confirm()
+        void confirm()
+
+        return () => {
+            isMounted = false
+            if (redirectTimer) {
+                window.clearTimeout(redirectTimer)
+            }
+        }
     }, [navigate, token])
 
-    useEffect(() => {
-        if (status === 'success') {
-            setTimeout(() => {
-                navigate('/career')
-            }, 3000)
-        }
-    }, [status, navigate])
-
-    if (status === 'confirming') {
-        return <div>Confirming your application...</div>
-    }
-
-    if (status === 'success') {
-        return (
-            <div>
-                <h1>Confirmation Successful!</h1>
-                <p>
-                    Your application has been confirmed. You will be redirected
-                    shortly.
-                </p>
-            </div>
-        )
-    }
+    const { description, icon: StatusIcon, iconClassName, title } =
+        statusCopy[status]
 
     return (
-        <div>
-            <h1>Confirmation Failed</h1>
-            <p>
-                There was an issue with confirming your application. Please try
-                again later.
-            </p>
-        </div>
+        <AuthPageShell
+            heroTitle={
+                <>
+                    Hiring without <br />
+                    <span className="text-blue-200">guesswork.</span>
+                </>
+            }
+            heroDescription="Track applications, keep communication clear, and move candidates through a cleaner recruiting flow."
+            cardTitle={title}
+            cardDescription={description}
+        >
+            <div className="space-y-6 text-center">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-slate-100">
+                    <StatusIcon className={`h-8 w-8 ${iconClassName}`} />
+                </div>
+
+                {errorMessage && (
+                    <div className="rounded-lg border border-red-200 bg-red-50/80 p-3 text-sm font-medium text-red-600">
+                        {errorMessage}
+                    </div>
+                )}
+
+                <div className="flex flex-col gap-3">
+                    {status !== 'confirming' && (
+                        <Link
+                            to="/career"
+                            className={buttonVariants({
+                                className:
+                                    'h-12 w-full bg-[#2457a3] text-white hover:bg-[#1a407a]',
+                            })}
+                        >
+                            Return to Career Page
+                        </Link>
+                    )}
+
+                    <Link
+                        to="/"
+                        className="text-sm font-medium text-[#2457a3] transition-colors hover:text-[#1a407a] hover:underline"
+                    >
+                        Back to Login
+                    </Link>
+                </div>
+            </div>
+        </AuthPageShell>
     )
 }
-
-export default EmailConfirmation

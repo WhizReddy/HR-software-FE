@@ -1,6 +1,7 @@
 import { type FormEvent, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { PublicAxiosInstance } from '@/Helpers/Axios'
+import { getApiErrorMessage } from '@/lib/api-error'
 import { Button } from '@/Components/ui/button'
 import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
@@ -34,11 +35,13 @@ export default function ResetPasswordPage() {
             setSuccess(
                 'Password reset link has been sent to your email. Check your inbox.',
             )
-        } catch (err: any) {
-            const msg =
-                err.response?.data?.message ||
-                'Failed to send reset link. Please try again.'
-            setError(Array.isArray(msg) ? msg[0] : msg)
+        } catch (err: unknown) {
+            setError(
+                getApiErrorMessage(
+                    err,
+                    'Failed to send reset link. Please try again.',
+                ),
+            )
         } finally {
             setIsLoading(false)
         }
@@ -76,11 +79,13 @@ export default function ResetPasswordPage() {
             )
             setNewPassword('')
             setConfirmPassword('')
-        } catch (err: any) {
-            const msg =
-                err.response?.data?.message ||
-                'Failed to reset password. The link may have expired.'
-            setError(Array.isArray(msg) ? msg[0] : msg)
+        } catch (err: unknown) {
+            setError(
+                getApiErrorMessage(
+                    err,
+                    'Failed to reset password. The link may have expired.',
+                ),
+            )
         } finally {
             setIsLoading(false)
         }

@@ -1,10 +1,13 @@
 import axios from 'axios'
+import { REQUEST_TIMEOUT_MS } from '@/lib/api-error'
+
 export const API_URL =
     (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/+$/, '') ||
     'https://hr-software-backend.onrender.com'
 
 export const PublicAxiosInstance = axios.create({
     baseURL: API_URL,
+    timeout: REQUEST_TIMEOUT_MS,
 })
 
 export const resolveApiAssetUrl = (path?: string | null) => {
@@ -14,6 +17,7 @@ export const resolveApiAssetUrl = (path?: string | null) => {
 
 const AxiosInstance = axios.create({
     baseURL: API_URL,
+    timeout: REQUEST_TIMEOUT_MS,
 })
 
 AxiosInstance.interceptors.request.use(
