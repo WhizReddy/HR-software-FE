@@ -23,7 +23,6 @@ export const useGetAndUpdateUserById = () => {
         AxiosInstance.get<UserProfileData>(`/user/${id}`)
             .then((response) => {
                 setUser(response.data)
-                console.log('User fetched:', response.data)
                 setError(null)
             })
             .catch((error) => {
@@ -75,11 +74,7 @@ export const useGetAndUpdateUserById = () => {
 
         setIsLoading(true)
         try {
-            const response = await AxiosInstance.patch(
-                `/user/${id}`,
-                userToUpdate,
-            )
-            console.log('User updated successfully:', response.data)
+            await AxiosInstance.patch(`/user/${id}`, userToUpdate)
             navigate('/dashboard')
         } catch (error) {
             console.error('Error updating user:', error)
@@ -146,8 +141,7 @@ export const useCreatePayroll = () => {
         }
 
         try {
-            const response = await AxiosInstance.post('/salary', fieldsToCreate)
-            console.log('Payroll created successfully:', response.data)
+            await AxiosInstance.post('/salary', fieldsToCreate)
             setCreateToastOpen(true)
             setCreateToastMessage('Payroll created successfully')
             setCreateToastSeverity('success')
@@ -188,7 +182,7 @@ export const useUpdatePayroll = () => {
         'success',
     )
 
-    const { isLoading, error, status } = useQuery<EmployeePayroll[], Error>({
+    const { isLoading, error } = useQuery<EmployeePayroll[], Error>({
         queryKey: ['EditingPayroll', id, targetMonth, targetYear],
         queryFn: async () => {
             const url = `/salary/user/${id}?month=${targetMonth}&year=${targetYear}`
@@ -203,7 +197,6 @@ export const useUpdatePayroll = () => {
         enabled: Boolean(id),
     })
 
-    console.log(status)
     const handleUpdateChangePayroll = (
         event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     ) => {
@@ -235,13 +228,11 @@ export const useUpdatePayroll = () => {
             bonusDescription: EditingPayroll.bonusDescription,
             extraHours: EditingPayroll.extraHours,
         }
-        console.log(EditingPayroll)
         try {
-            const response = await AxiosInstance.patch(
+            await AxiosInstance.patch(
                 `/salary/${EditingPayroll._id}`,
                 fieldsToUpdate,
             )
-            console.log('Payroll updated successfully:', response.data)
             setToastMessage('Payroll updated successfully')
             setToastOpen(true)
             setToastSeverity('success')

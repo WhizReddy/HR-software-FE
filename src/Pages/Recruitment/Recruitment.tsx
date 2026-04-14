@@ -434,7 +434,6 @@ function RecruitmentBase() {
                                 btnText="Reset"
                                 width="100%"
                                 onClick={() => {
-                                    console.log('Resetting form')
                                     form.reset()
                                     setFileName(null)
                                 }}
