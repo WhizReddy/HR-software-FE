@@ -20,6 +20,11 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
     padding = '24px',
     showCloseButton = true,
 }) => {
+    const resolvedWidth =
+        width === '100%'
+            ? 'calc(100vw - 1.5rem)'
+            : `min(calc(100vw - 1.5rem), ${width})`
+
     return (
         <Dialog
             open={open}
@@ -31,10 +36,24 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
         >
             <DialogContent
                 showCloseButton={showCloseButton}
-                className="glass-modal border-none"
-                style={{ width: width === '100%' ? '100%' : '95vw', maxWidth: width, height: height || 'auto', padding }}
+                className="glass-modal overflow-hidden border-none p-0"
+                style={{
+                    width: resolvedWidth,
+                    maxWidth: 'calc(100vw - 1.5rem)',
+                    height: height || 'auto',
+                    maxHeight: 'calc(100vh - 1.5rem)',
+                }}
             >
-                {children}
+                <div
+                    style={{
+                        padding,
+                        height: height || 'auto',
+                        maxHeight: 'calc(100vh - 1.5rem)',
+                        overflowY: 'auto',
+                    }}
+                >
+                    {children}
+                </div>
             </DialogContent>
         </Dialog>
     )

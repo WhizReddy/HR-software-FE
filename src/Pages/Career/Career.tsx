@@ -184,7 +184,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             }
                         />
 
-                        <section className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
+                        <section className="grid items-start gap-5 lg:grid-cols-[1.1fr_0.9fr]">
                             <article className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
                                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                                     Publishing Overview
@@ -256,7 +256,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             }
                         />
 
-                        <section className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
+                        <section className="grid items-start gap-5 lg:grid-cols-[1.15fr_0.85fr]">
                             <article className="overflow-hidden rounded-[30px] border border-slate-200 bg-white shadow-sm">
                                 <img
                                     src={Workers}
@@ -526,7 +526,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
 
                 {!managementMode && (
                     <>
-                        <section className="mt-12 grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
+                        <section className="mt-12 grid items-start gap-5 lg:grid-cols-[1.15fr_0.85fr]">
                             <div className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-sm">
                                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                                     Why join us
@@ -654,6 +654,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                         handleClose={handleCloseForm}
                         width="560px"
                         padding="0"
+                        showCloseButton={false}
                     >
                         <div className="w-full rounded-[28px] bg-white p-6 sm:p-7">
                             <div className="flex items-start justify-between gap-4">
@@ -739,6 +740,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                         handleClose={closeModal}
                         width="460px"
                         padding="0"
+                        showCloseButton={false}
                     >
                         <div className="w-full rounded-[28px] bg-white p-6">
                             <h2 className="text-2xl font-bold text-slate-900">
