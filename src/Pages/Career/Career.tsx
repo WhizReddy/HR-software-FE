@@ -152,8 +152,11 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
     ]
 
     return (
-        <div className="min-h-screen bg-slate-50">
-            <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="relative min-h-screen overflow-hidden">
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(circle_at_top_left,_rgba(36,87,163,0.14),_transparent_55%),radial-gradient(circle_at_top_right,_rgba(14,165,233,0.10),_transparent_48%)]" />
+            <div className="pointer-events-none absolute inset-x-0 top-80 h-[320px] bg-[radial-gradient(circle_at_center,_rgba(148,163,184,0.12),_transparent_60%)]" />
+
+            <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
                 {managementMode ? (
                     <>
                         <PageIntro
@@ -354,7 +357,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                     </>
                 )}
 
-                <section className="mt-8 rounded-[28px] border border-slate-200/70 bg-white p-6 shadow-sm">
+                <section className="mt-8 rounded-[28px] border border-white/70 bg-white/78 p-6 shadow-lg shadow-slate-200/45 backdrop-blur-xl">
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                         <div>
                             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">
@@ -396,7 +399,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             ))}
                         </div>
                     ) : filteredEvents.length === 0 ? (
-                        <div className="rounded-[32px] border border-dashed border-slate-200 bg-white p-10 text-center shadow-sm">
+                        <div className="rounded-[32px] border border-dashed border-slate-200/80 bg-white/80 p-10 text-center shadow-lg shadow-slate-200/45 backdrop-blur-xl">
                             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-slate-400">
                                 <BriefcaseBusiness size={28} />
                             </div>
@@ -436,7 +439,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             {filteredEvents.map((careerEvent) => (
                                 <article
                                     key={careerEvent._id}
-                                    className="group flex h-full flex-col rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#2457a3]/35 hover:shadow-xl hover:shadow-slate-200/70"
+                                    className="group flex h-full flex-col rounded-[28px] border border-white/75 bg-white/82 p-6 shadow-lg shadow-slate-200/45 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-[#2457a3]/35 hover:shadow-2xl hover:shadow-slate-200/70"
                                 >
                                     <div className="flex items-start justify-between gap-4">
                                         <div>
@@ -646,8 +649,13 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
 
             {isManager && (
                 <>
-                    <ModalComponent open={showForm} handleClose={handleCloseForm}>
-                        <div className="w-[min(560px,92vw)] rounded-[28px] bg-white p-6">
+                    <ModalComponent
+                        open={showForm}
+                        handleClose={handleCloseForm}
+                        width="560px"
+                        padding="0"
+                    >
+                        <div className="w-full rounded-[28px] bg-white p-6 sm:p-7">
                             <div className="flex items-start justify-between gap-4">
                                 <div>
                                     <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
@@ -726,8 +734,13 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                         </div>
                     </ModalComponent>
 
-                    <ModalComponent open={showModal} handleClose={closeModal}>
-                        <div className="w-[min(460px,90vw)] rounded-[28px] bg-white p-6">
+                    <ModalComponent
+                        open={showModal}
+                        handleClose={closeModal}
+                        width="460px"
+                        padding="0"
+                    >
+                        <div className="w-full rounded-[28px] bg-white p-6">
                             <h2 className="text-2xl font-bold text-slate-900">
                                 Delete career post?
                             </h2>
