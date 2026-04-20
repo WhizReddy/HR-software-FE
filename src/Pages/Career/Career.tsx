@@ -152,11 +152,8 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
     ]
 
     return (
-        <div className="relative min-h-screen overflow-hidden">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(circle_at_top_left,_rgba(36,87,163,0.14),_transparent_55%),radial-gradient(circle_at_top_right,_rgba(14,165,233,0.10),_transparent_48%)]" />
-            <div className="pointer-events-none absolute inset-x-0 top-80 h-[320px] bg-[radial-gradient(circle_at_center,_rgba(148,163,184,0.12),_transparent_60%)]" />
-
-            <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="min-h-screen">
+            <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
                 {managementMode ? (
                     <>
                         <PageIntro
