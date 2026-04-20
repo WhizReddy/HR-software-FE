@@ -75,7 +75,7 @@ function VacationComponent() {
             )}
             {currentTab === 'requests' && <VacationTable />}
             {currentTab === 'userLeaves' && (
-                <Card className="bg-white shadow-sm border border-slate-100 rounded-xl overflow-hidden mt-4">
+                <Card className="mt-4 rounded-xl border border-slate-100 bg-white shadow-sm">
                     <EmployeesWithVacations />
                 </Card>
             )}

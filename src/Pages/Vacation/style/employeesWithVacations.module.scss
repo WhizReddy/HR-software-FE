@@ -2,6 +2,11 @@
 
 .employeesContainer {
     @include employeeContainer;
+    width: 100%;
+    min-height: 0;
+    height: auto;
+    gap: 1rem;
+    overflow: visible;
 }
 
 .loading {
@@ -31,10 +36,12 @@
 .collapseDataVacationList {
     display: flex;
     flex-direction: column;
+    gap: 0.5rem;
 
     & div {
         display: flex;
         gap: 0.5rem;
+        flex-wrap: wrap;
 
         & p {
             margin: 0;
@@ -43,6 +50,8 @@
             color: white;
             padding: 0.25rem 0.5rem;
             border-radius: 0.25rem;
+            line-height: 1.35;
+            overflow-wrap: anywhere;
         }
     }
 
@@ -50,5 +59,26 @@
         margin-bottom: 0.25rem;
         font-size: 1rem;
         color: #1a1a1a;
+    }
+}
+
+@media (max-width: 640px) {
+    .collapsedData {
+        margin-top: 0.75rem;
+    }
+
+    .collapseDataVacationList {
+        & h3 {
+            font-size: 0.95rem;
+        }
+
+        & div {
+            gap: 0.4rem;
+        }
+
+        & div p {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.45rem;
+        }
     }
 }

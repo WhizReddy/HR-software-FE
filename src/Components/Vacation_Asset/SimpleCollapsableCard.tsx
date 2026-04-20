@@ -39,10 +39,10 @@ const SimpleCollapsableCard: React.FC<SimpleCollapsableCardProps> = ({
         <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden transition-all">
             {/* Header row */}
             <div
-                className="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-slate-50 transition-colors"
+                className="flex flex-col gap-3 px-5 py-4 transition-colors hover:bg-slate-50 sm:flex-row sm:items-center sm:justify-between cursor-pointer"
                 onClick={() => setExpanded((prev) => !prev)}
             >
-                <div className="flex items-center gap-3">
+                <div className="flex min-w-0 items-center gap-3">
                     {user.imageUrl ? (
                         <img
                             src={user.imageUrl}
@@ -54,16 +54,16 @@ const SimpleCollapsableCard: React.FC<SimpleCollapsableCardProps> = ({
                             <User size={18} />
                         </div>
                     )}
-                    <div>
-                        <p className="font-semibold text-slate-800 text-sm">
+                    <div className="min-w-0">
+                        <p className="text-sm font-semibold text-slate-800 break-words">
                             {user.firstName} {user.lastName}
                         </p>
                         {user.role && (
-                            <p className="text-xs text-slate-500 capitalize">{user.role}</p>
+                            <p className="text-xs text-slate-500 capitalize break-words">{user.role}</p>
                         )}
                     </div>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 self-start sm:self-auto">
                     {items && (
                         <span className="text-xs bg-blue-100 text-blue-700 font-semibold px-2.5 py-1 rounded-full">
                             {itemCount} {items.type}
