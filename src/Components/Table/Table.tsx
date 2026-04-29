@@ -117,8 +117,8 @@ function DataTable<TRow>({
                 </div>
             )}
 
-            <div className="px-2 pb-2 sm:px-3">
-                <Table className="min-w-full text-left text-sm">
+            <div className="overflow-x-auto px-2 pb-2 sm:px-3">
+                <Table className="min-w-[760px] text-left text-sm">
                     <TableHeader>
                         <TableRow className="border-b border-slate-200/70 bg-slate-50/70 backdrop-blur-sm hover:bg-slate-50/70">
                             {columns.map((col) => (

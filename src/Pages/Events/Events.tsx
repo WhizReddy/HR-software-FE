@@ -137,7 +137,7 @@ function EventsContentAndComponents() {
                                                     {event.title}
                                                 </h3>
                                                 {isAdmin && (
-                                                    <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <div className="opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100">
                                                         <LongMenu
                                                             event={event}
                                                             onEdit={() => handleOpenDrawer('edit', event)}
