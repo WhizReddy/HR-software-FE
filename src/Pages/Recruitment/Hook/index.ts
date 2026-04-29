@@ -62,7 +62,6 @@ export const useRecruitmentForm = () => {
                     },
                 )
                 if ([200, 201].includes(response.status)) {
-                    console.log(true)
                     setShowModal(true)
                 }
             } catch (err: unknown) {

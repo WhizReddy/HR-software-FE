@@ -47,7 +47,6 @@ export const FileUploadProvider: React.FC<FileUploadProviderProps> = ({
                     },
                 },
             )
-            console.log('Image uploaded successfully:', response.data)
             if (response.data.file && userImage) {
                 setUserImage({ ...userImage, file: response.data.file })
             }
