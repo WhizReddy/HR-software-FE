@@ -1,7 +1,6 @@
 import Input from '../../../../Components/Input/Index'
 import { ButtonTypes } from '../../../../Components/Button/ButtonTypes'
 import Button from '../../../../Components/Button/Button'
-import { ProfileProvider } from '../ProfileForm/Context/ProfileProvider'
 import { useCreatePayroll, useUpdatePayroll } from '../ProfileForm/Context/Hook'
 import Toast from '@/Components/Toast/Toast'
 import { useAuth } from '@/features/auth/context/AuthProvider'
@@ -199,11 +198,7 @@ const ContratContent = () => {
 }
 
 const Contrat: React.FC = () => {
-    return (
-        <ProfileProvider>
-            <ContratContent />
-        </ProfileProvider>
-    )
+    return <ContratContent />
 }
 
 export default Contrat

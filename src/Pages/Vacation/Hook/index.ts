@@ -95,7 +95,10 @@ export const useUpdateVacation = () => {
                 queryKey: ['vacation'],
             })
             queryClient.invalidateQueries({
-                queryKey: [searchParams.get('selectedVacation') as string],
+                queryKey: ['usersWithVacations'],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ['userWithVacations'],
             })
         },
     })
@@ -109,6 +112,12 @@ export const useCreateVacation = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ['vacations'],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ['usersWithVacations'],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ['userWithVacations'],
             })
         },
     })
@@ -132,6 +141,20 @@ export const useUpdateVacationForm = (vacation: UseQueryResult<any, Error>) => {
                 createError: null,
                 updateError: null,
             })
+
+            if (dayjs(value.endDate).isBefore(dayjs(value.startDate))) {
+                const message = 'The ending date should be after the start date'
+                setToastConfigs({
+                    isOpen: true,
+                    message,
+                    severity: 'error',
+                })
+                setErrors({
+                    createError: null,
+                    updateError: message,
+                })
+                return
+            }
 
             const payload = {
                 ...value,
@@ -201,6 +224,20 @@ export const useCreateVacationForm = () => {
                 createError: null,
                 updateError: null,
             })
+
+            if (dayjs(value.endDate).isBefore(dayjs(value.startDate))) {
+                const message = 'The ending date should be after the start date'
+                setToastConfigs({
+                    isOpen: true,
+                    message,
+                    severity: 'error',
+                })
+                setErrors({
+                    createError: message,
+                    updateError: null,
+                })
+                return
+            }
 
             const payload = {
                 ...value,

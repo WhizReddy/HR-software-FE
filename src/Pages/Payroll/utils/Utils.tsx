@@ -13,5 +13,5 @@ export const getMonthName = (monthNumber: number): string => {
         'November',
         'December',
     ]
-    return monthNames[monthNumber]
+    return monthNames[monthNumber] ?? 'Unknown month'
 }

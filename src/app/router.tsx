@@ -25,7 +25,7 @@ const Vacation = lazy(() => import('@/Pages/Vacation/Vacation'))
 const SpecificUserPayroll = lazy(
     () => import('@/Pages/Payroll/SpecificUser/SpecificUserPayroll'),
 )
-const About = lazy(() => import('@/Pages/About/About'))
+const Analytics = lazy(() => import('@/Pages/Analytics/Analytics'))
 const UserVacations = lazy(() => import('@/Pages/Vacation/UserVacations'))
 const EmailConfirmation = lazy(
     () => import('@/Pages/Recruitment/Component/EmailConfirmation'),
@@ -164,7 +164,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/historic',
-                element: withSuspense(<About />),
+                element: withSuspense(<Analytics />),
             },
             {
                 path: '/inventory',

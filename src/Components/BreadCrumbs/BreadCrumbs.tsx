@@ -20,7 +20,7 @@ const routeLabels: Record<string, string> = {
     vacation: 'Vacation',
     holdings: 'Holdings',
     inventory: 'Inventory',
-    historic: 'History',
+    historic: 'Analytics',
     profile: 'Profile',
     view: 'Candidate Details',
     user: 'User Payroll',

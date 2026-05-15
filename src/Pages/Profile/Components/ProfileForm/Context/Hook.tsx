@@ -2,10 +2,24 @@ import { useAuth } from '@/features/auth/context/AuthProvider'
 import { isAdminRole } from '@/features/auth/lib/access'
 import AxiosInstance from '@/Helpers/Axios'
 import { UserProfileData } from '@/Pages/Employees/interfaces/Employe'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { EmployeePayroll, EmployePayroll } from './Interface'
+
+type PayrollResponse =
+    | EmployeePayroll[]
+    | {
+          data?: EmployeePayroll[]
+      }
+
+const normalizePayrollRows = (payload: PayrollResponse) => {
+    if (Array.isArray(payload)) {
+        return payload
+    }
+
+    return Array.isArray(payload.data) ? payload.data : []
+}
 
 export const useGetAndUpdateUserById = () => {
     const { id } = useParams<{ id: string }>()
@@ -97,6 +111,7 @@ export const useGetAndUpdateUserById = () => {
 
 export const useCreatePayroll = () => {
     const { id } = useParams<{ id: string }>()
+    const queryClient = useQueryClient()
 
     const [payroll, setPayroll] = useState<EmployePayroll>({
         workingDays: undefined,
@@ -142,6 +157,9 @@ export const useCreatePayroll = () => {
 
         try {
             await AxiosInstance.post('/salary', fieldsToCreate)
+            queryClient.invalidateQueries({ queryKey: ['EditingPayroll', id] })
+            queryClient.invalidateQueries({ queryKey: ['payroll'] })
+            queryClient.invalidateQueries({ queryKey: ['payrollId', id] })
             setCreateToastOpen(true)
             setCreateToastMessage('Payroll created successfully')
             setCreateToastSeverity('success')
@@ -170,6 +188,7 @@ export const useCreatePayroll = () => {
 
 export const useUpdatePayroll = () => {
     const { id } = useParams<{ id: string }>()
+    const queryClient = useQueryClient()
     const currentDate = new Date()
     const targetMonth = currentDate.getMonth()
     const targetYear = currentDate.getFullYear()
@@ -186,13 +205,14 @@ export const useUpdatePayroll = () => {
         queryKey: ['EditingPayroll', id, targetMonth, targetYear],
         queryFn: async () => {
             const url = `/salary/user/${id}?month=${targetMonth}&year=${targetYear}`
-            const response = await AxiosInstance.get<EmployeePayroll[]>(url)
-            if (response.data && response.data.length > 0) {
-                setEditingPayroll(response.data[0])
+            const response = await AxiosInstance.get<PayrollResponse>(url)
+            const payrollRows = normalizePayrollRows(response.data)
+            if (payrollRows.length > 0) {
+                setEditingPayroll(payrollRows[0])
             } else {
                 setEditingPayroll(null)
             }
-            return response.data
+            return payrollRows
         },
         enabled: Boolean(id),
     })
@@ -233,6 +253,9 @@ export const useUpdatePayroll = () => {
                 `/salary/${EditingPayroll._id}`,
                 fieldsToUpdate,
             )
+            queryClient.invalidateQueries({ queryKey: ['EditingPayroll', id] })
+            queryClient.invalidateQueries({ queryKey: ['payroll'] })
+            queryClient.invalidateQueries({ queryKey: ['payrollId', id] })
             setToastMessage('Payroll updated successfully')
             setToastOpen(true)
             setToastSeverity('success')
