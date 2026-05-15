@@ -31,6 +31,9 @@ interface DataTableProps<TRow> {
     onSearchClear?: () => void
     searchPlaceholder?: string
     filterNode?: React.ReactNode
+    isLoading?: boolean
+    loadingLabel?: string
+    pageSizeOptions?: number[]
 }
 
 function DataTable<TRow>({
@@ -50,6 +53,9 @@ function DataTable<TRow>({
     onSearchClear,
     searchPlaceholder,
     filterNode,
+    isLoading = false,
+    loadingLabel = 'Loading records...',
+    pageSizeOptions = [5, 10, 20],
 }: DataTableProps<TRow>) {
     const normalizedTotalPages =
         totalPages > 0
@@ -64,10 +70,15 @@ function DataTable<TRow>({
             : page < normalizedTotalPages - 1
     const hasSearch = Boolean(searchValue?.trim())
 
+    const resultLabel =
+        totalCount !== undefined
+            ? `Showing ${rows.length} of ${totalCount} ${totalCount === 1 ? 'result' : 'results'}`
+            : `Showing ${rows.length} ${rows.length === 1 ? 'result' : 'results'}`
+
     return (
-        <Card className="glass-card overflow-hidden border-none p-0 shadow-xl shadow-slate-200/35">
+        <Card className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-0 shadow-sm">
             {(title || actions || onSearchChange || filterNode) && (
-                <div className="flex flex-col gap-4 border-b border-slate-100/80 px-5 py-5 lg:flex-row lg:items-center lg:justify-between">
+                <div className="flex flex-col gap-4 border-b border-slate-200 bg-white px-5 py-5 lg:flex-row lg:items-center lg:justify-between">
                     <div className="flex w-full flex-1 flex-col gap-3 sm:flex-row sm:items-center">
                         {title && (
                             <div className="min-w-0">
@@ -117,10 +128,10 @@ function DataTable<TRow>({
                 </div>
             )}
 
-            <div className="px-2 pb-2 sm:px-3">
+            <div className="overflow-x-auto px-2 pb-2 sm:px-3">
                 <Table className="min-w-[760px] text-left text-sm">
-                    <TableHeader>
-                        <TableRow className="border-b border-slate-200/70 bg-slate-50/70 backdrop-blur-sm hover:bg-slate-50/70">
+                    <TableHeader className="sticky top-0 z-10">
+                        <TableRow className="border-b border-slate-200 bg-slate-50 hover:bg-slate-50">
                             {columns.map((col) => (
                                 <TableHead
                                     key={col.field}
@@ -133,7 +144,31 @@ function DataTable<TRow>({
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {rows.length === 0 ? (
+                        {isLoading ? (
+                            Array.from({ length: Math.max(3, Math.min(pageSize, 8)) }).map((_, rowIndex) => (
+                                <TableRow
+                                    key={`loading-row-${rowIndex}`}
+                                    className="border-b border-slate-100 last:border-0"
+                                >
+                                    {columns.map((col, colIndex) => (
+                                        <TableCell
+                                            key={`${col.field}-${rowIndex}`}
+                                            className="px-4 py-4"
+                                        >
+                                            <div
+                                                className={`h-4 animate-pulse rounded bg-slate-100 ${
+                                                    colIndex === 0
+                                                        ? 'w-12'
+                                                        : colIndex === columns.length - 1
+                                                          ? 'w-20'
+                                                          : 'w-32'
+                                                }`}
+                                            />
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            ))
+                        ) : rows.length === 0 ? (
                             <TableRow>
                                 <TableCell
                                     colSpan={columns.length}
@@ -157,11 +192,11 @@ function DataTable<TRow>({
                                     onClick={() =>
                                         handleRowClick && handleRowClick({ row })
                                     }
-                                    className={`border-b border-slate-100/50 transition-all duration-300 last:border-0 ${
+                                    className={`border-b border-slate-100 transition-colors duration-200 last:border-0 ${
                                         idx % 2 === 0 ? 'bg-white/40' : 'bg-slate-50/40'
                                     } ${
                                         handleRowClick
-                                            ? 'cursor-pointer hover:-translate-y-[1px] hover:bg-blue-50/80 hover:shadow-sm'
+                                            ? 'cursor-pointer hover:bg-blue-50/70'
                                             : 'hover:bg-slate-50/80'
                                     }`}
                                 >
@@ -186,10 +221,10 @@ function DataTable<TRow>({
                 </Table>
             </div>
 
-            <div className="flex flex-col gap-3 border-t border-slate-100/70 bg-white/50 px-5 py-4 backdrop-blur-md sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-3 border-t border-slate-200 bg-slate-50/70 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="space-y-1">
                     <p className="text-sm font-semibold text-slate-700">
-                        Showing {rows.length} {rows.length === 1 ? 'result' : 'results'}
+                        {isLoading ? loadingLabel : resultLabel}
                     </p>
                     <p className="text-xs text-slate-500" aria-live="polite">
                         Page <span className="font-semibold text-slate-700">{page + 1}</span> of{' '}
@@ -198,13 +233,35 @@ function DataTable<TRow>({
                 </div>
 
                 <Pagination className="mx-0 w-auto justify-end">
-                    <PaginationContent className="gap-2">
+                    <PaginationContent className="flex-wrap gap-2">
+                        <PaginationItem>
+                            <label className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                                Rows
+                                <select
+                                    value={pageSize}
+                                    disabled={isLoading}
+                                    onChange={(event) =>
+                                        onPaginationModelChange({
+                                            page: 0,
+                                            pageSize: Number(event.target.value),
+                                        })
+                                    }
+                                    className="h-9 rounded-lg border border-slate-200 bg-white px-2 text-sm font-semibold text-slate-700 outline-none transition-colors hover:border-slate-300 focus:border-[#2457a3] focus:ring-2 focus:ring-[#2457a3]/15 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400"
+                                >
+                                    {pageSizeOptions.map((option) => (
+                                        <option key={option} value={option}>
+                                            {option}
+                                        </option>
+                                    ))}
+                                </select>
+                            </label>
+                        </PaginationItem>
                         <PaginationItem>
                             <Button
                                 type="button"
                                 variant="outline"
                                 size="sm"
-                                disabled={!canPrev}
+                                disabled={isLoading || !canPrev}
                                 className="min-w-[92px]"
                                 onClick={() =>
                                     onPaginationModelChange({ page: page - 1, pageSize })
@@ -219,7 +276,7 @@ function DataTable<TRow>({
                                 type="button"
                                 variant="outline"
                                 size="sm"
-                                disabled={!canNext}
+                                disabled={isLoading || !canNext}
                                 className="min-w-[92px]"
                                 onClick={() =>
                                     onPaginationModelChange({ page: page + 1, pageSize })

@@ -6,7 +6,6 @@ import { InventoryItem } from '../types'
 import { Laptop, Monitor } from 'lucide-react'
 import DataTable from '@/Components/Table/Table'
 import { RenderCellParams } from '@/types/table'
-import { RingLoader } from 'react-spinners'
 import { useUrlTableState } from '@/hooks/use-url-table-state'
 
 export const InventoryTable = () => {
@@ -26,27 +25,27 @@ export const InventoryTable = () => {
         setSearchParams,
     })
 
-    if (isError) return <div className="p-4 text-red-500">Error: {error.message}</div>
+    if (isError) {
+        return (
+            <div className="rounded-2xl border border-rose-200 bg-rose-50 p-6 text-sm font-medium text-rose-700 shadow-sm">
+                Inventory failed to load: {error.message}
+            </div>
+        )
+    }
 
-    if (isPending) return (
-        <div className="flex justify-center flex-col items-center min-h-[400px]">
-            <RingLoader color="#2457A3" />
-        </div>
-    )
-
-    const rows = data.data.map((asset: InventoryItem, index: number) => ({
+    const rows = data?.data.map((asset: InventoryItem, index: number) => ({
         id: asset._id,
         displayId: (Number(searchParams.get('page')) * Number(searchParams.get('limit'))) + index + 1,
         type: asset.type[0].toUpperCase() + asset.type.slice(1),
         occupant: asset.userId,
         status: asset.status,
         serialNumber: asset.serialNumber,
-    }))
+    })) ?? []
 
     const resolvedTotalPages =
-        typeof data.totalPages === 'number' && data.totalPages > 0
+        typeof data?.totalPages === 'number' && data.totalPages > 0
             ? data.totalPages
-            : typeof data.all === 'number' && pageSize > 0
+            : typeof data?.all === 'number' && pageSize > 0
                 ? Math.max(1, Math.ceil(data.all / pageSize))
                 : 1
 
@@ -129,6 +128,9 @@ export const InventoryTable = () => {
                 onSearchChange={(e) => setSearchInput(e.target.value)}
                 onSearchClear={clearSearch}
                 searchPlaceholder="Search inventory..."
+                totalCount={data?.all}
+                isLoading={isPending}
+                loadingLabel="Loading inventory records..."
             />
 
             {searchParams.get('selectedInventoryItem') && (

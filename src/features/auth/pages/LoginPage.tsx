@@ -149,7 +149,7 @@ const LoginPageContent = () => {
 
                 <Button
                     type="submit"
-                    className="w-full h-12 bg-[#2457a3] hover:bg-[#1a407a] text-white font-semibold text-base rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 active:scale-95 mt-8"
+                    className="mt-8 h-12 w-full rounded-lg bg-[#2457a3] text-base font-semibold text-white shadow-sm transition-colors hover:bg-[#1a407a]"
                     disabled={form.state.isSubmitting}
                 >
                     {form.state.isSubmitting

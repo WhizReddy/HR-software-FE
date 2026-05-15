@@ -4,7 +4,6 @@ import { PayrollProviderSpecific } from './Context/SpecificUserPayrollProvider'
 import style from '../styles/Payroll.module.css'
 import { usePayrollContextSpecific } from './Context/SpecificUserPayrollContext'
 import { EventsProvider } from '@/Pages/Events/Context/EventsContext'
-import { RingLoader } from 'react-spinners'
 
 function SpecificUserPayrollContent() {
     const {
@@ -21,14 +20,6 @@ function SpecificUserPayrollContent() {
         isError,
         errorMessage,
     } = usePayrollContextSpecific()
-
-    if (isPending) {
-        return (
-            <div className={style.ring}>
-                <RingLoader />
-            </div>
-        )
-    }
 
     if (isError) {
         return (
@@ -70,6 +61,8 @@ function SpecificUserPayrollContent() {
                     pageSize={pageSize}
                     onPaginationModelChange={handlePaginationModelChange}
                     title="Payment history"
+                    isLoading={isPending}
+                    loadingLabel="Loading payment history..."
                 />
             </div>
         </div>

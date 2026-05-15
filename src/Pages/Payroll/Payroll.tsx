@@ -3,7 +3,6 @@ import DataTable from '../../Components/Table/Table'
 import { usePayrollContext } from './Context/PayrollTableContext'
 import { PayrollProvider } from './Context/PayrollTableProvider'
 import style from './styles/Payroll.module.css'
-import { RingLoader } from 'react-spinners'
 
 function PayrollContent() {
     const {
@@ -27,11 +26,7 @@ function PayrollContent() {
 
     return (
         <div className={style.payrollPage}>
-            {isPending ? (
-                <div className={style.ring}>
-                    <RingLoader color="#2457A3" />
-                </div>
-            ) : isError ? (
+            {isError ? (
                 <div className="rounded-2xl border border-rose-200 bg-rose-50 p-6 text-rose-700 shadow-sm">
                     <h2 className="text-lg font-bold">
                         Payroll failed to load
@@ -85,6 +80,8 @@ function PayrollContent() {
                             }
                             onSearchClear={clearSearch}
                             searchPlaceholder="Search by employee name"
+                            isLoading={isPending}
+                            loadingLabel="Loading payroll records..."
                         />
                     </div>
                 </>

@@ -10,6 +10,7 @@ import { ButtonTypes } from '@/Components/Button/ButtonTypes'
 import { ToggleGroup, ToggleGroupItem } from '@/Components/ui/toggle-group'
 import { Card } from '@/Components/ui/card'
 import { upsertFilterParams } from '@/Helpers/urlFilters'
+import PageIntro from '@/Components/PageIntro/PageIntro'
 
 function VacationComponent() {
     const { searchParams, setSearchParams, createVacationToggler } =
@@ -38,7 +39,13 @@ function VacationComponent() {
 
     return (
         <div className="p-6 max-w-7xl mx-auto w-full space-y-6">
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+            <PageIntro
+                eyebrow="People"
+                title="Vacation Management"
+                description="Review requests, inspect leave history, and create vacation entries from one workspace."
+            />
+
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-4 rounded-xl shadow-sm border border-slate-200">
                 <ToggleGroup
                     type="single"
                     value={currentTab}

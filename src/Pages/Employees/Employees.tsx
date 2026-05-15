@@ -1,4 +1,3 @@
-import { RingLoader } from 'react-spinners'
 import DataTable from '../../Components/Table/Table'
 import { useEmployeeContext } from './Context/EmployeTableContext'
 import { EmployeeProvider } from './Context/EmployeTableProvider'
@@ -27,26 +26,22 @@ function EmployeesContent() {
                 description="Manage your organization's workforce, browse profiles, and move through employee records from one consistent workspace."
                 className="mb-8"
             />
-            {isPending ? (
-                <div className="flex justify-center items-center min-h-[60vh]">
-                    <RingLoader color="#2457A3" />
-                </div>
-            ) : (
-                <DataTable
-                    rows={rows}
-                    columns={columns}
-                    getRowId={getRowId}
-                    handleRowClick={handleRowClick}
-                    totalPages={totalPages}
-                    page={page}
-                    pageSize={pageSize}
-                    onPaginationModelChange={handlePaginationModelChange}
-                    searchValue={search}
-                    onSearchChange={(e) => setSearch(e.target.value)}
-                    onSearchClear={clearSearch}
-                    searchPlaceholder="Search employees..."
-                />
-            )}
+            <DataTable
+                rows={rows}
+                columns={columns}
+                getRowId={getRowId}
+                handleRowClick={handleRowClick}
+                totalPages={totalPages}
+                page={page}
+                pageSize={pageSize}
+                onPaginationModelChange={handlePaginationModelChange}
+                searchValue={search}
+                onSearchChange={(e) => setSearch(e.target.value)}
+                onSearchClear={clearSearch}
+                searchPlaceholder="Search employees..."
+                isLoading={isPending}
+                loadingLabel="Loading employee records..."
+            />
         </div>
     )
 }

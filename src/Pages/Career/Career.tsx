@@ -354,7 +354,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                     </>
                 )}
 
-                <section className="mt-8 rounded-[28px] border border-white/70 bg-white/78 p-6 shadow-lg shadow-slate-200/45 backdrop-blur-xl">
+                <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                         <div>
                             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">
@@ -391,12 +391,12 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             {Array.from({ length: 3 }).map((_, index) => (
                                 <div
                                     key={index}
-                                    className="h-64 animate-pulse rounded-[28px] border border-slate-200/70 bg-slate-100"
+                                    className="h-64 animate-pulse rounded-2xl border border-slate-200 bg-slate-100"
                                 />
                             ))}
                         </div>
                     ) : filteredEvents.length === 0 ? (
-                        <div className="rounded-[32px] border border-dashed border-slate-200/80 bg-white/80 p-10 text-center shadow-lg shadow-slate-200/45 backdrop-blur-xl">
+                        <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-10 text-center shadow-sm">
                             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-slate-400">
                                 <BriefcaseBusiness size={28} />
                             </div>
@@ -436,7 +436,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             {filteredEvents.map((careerEvent) => (
                                 <article
                                     key={careerEvent._id}
-                                    className="group flex h-full flex-col rounded-[28px] border border-white/75 bg-white/82 p-6 shadow-lg shadow-slate-200/45 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-[#2457a3]/35 hover:shadow-2xl hover:shadow-slate-200/70"
+                                    className="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-colors duration-200 hover:border-[#2457a3]/35"
                                 >
                                     <div className="flex items-start justify-between gap-4">
                                         <div>

@@ -53,19 +53,19 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
     const variants = {
         [ButtonTypes.PRIMARY]:
-            'border border-[#2457a3] bg-[#2457a3] text-white shadow-md shadow-blue-200/70 hover:-translate-y-[1px] hover:bg-[#1b4285] hover:shadow-lg hover:shadow-blue-200/80 focus-visible:ring-[#2457a3]',
+            'border border-[#2457a3] bg-[#2457a3] text-white shadow-sm hover:bg-[#1b4285] focus-visible:ring-[#2457a3]',
         [ButtonTypes.SECONDARY]:
-            'border border-slate-200 bg-white/90 text-slate-700 shadow-sm hover:-translate-y-[1px] hover:border-slate-300 hover:bg-slate-50 hover:shadow-md focus-visible:ring-slate-300',
+            'border border-slate-200 bg-white text-slate-700 shadow-sm hover:border-slate-300 hover:bg-slate-50 focus-visible:ring-slate-300',
         [ButtonTypes.DANGER]:
-            'border border-red-600 bg-red-600 text-white shadow-md shadow-red-200/70 hover:-translate-y-[1px] hover:bg-red-700 hover:shadow-lg hover:shadow-red-200/80 focus-visible:ring-red-500',
+            'border border-red-600 bg-red-600 text-white shadow-sm hover:bg-red-700 focus-visible:ring-red-500',
         [ButtonTypes.TERTIARY]:
-            'border border-slate-200/80 bg-slate-100/90 text-slate-700 shadow-sm hover:-translate-y-[1px] hover:bg-slate-200 focus-visible:ring-slate-400',
+            'border border-slate-200/80 bg-slate-100 text-slate-700 shadow-sm hover:bg-slate-200 focus-visible:ring-slate-400',
         [ButtonTypes.SUCCESS]:
-            'border border-emerald-600 bg-emerald-600 text-white shadow-md shadow-emerald-200/70 hover:-translate-y-[1px] hover:bg-emerald-700 hover:shadow-lg hover:shadow-emerald-200/80 focus-visible:ring-emerald-500',
+            'border border-emerald-600 bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 focus-visible:ring-emerald-500',
         [ButtonTypes.WARNING]:
-            'border border-amber-500 bg-amber-500 text-slate-950 shadow-md shadow-amber-200/80 hover:-translate-y-[1px] hover:bg-amber-600 hover:shadow-lg hover:shadow-amber-200/80 focus-visible:ring-amber-400',
+            'border border-amber-500 bg-amber-500 text-slate-950 shadow-sm hover:bg-amber-600 focus-visible:ring-amber-400',
         [ButtonTypes.NEUTRAL]:
-            'border border-slate-200 bg-slate-100 text-slate-700 shadow-sm hover:-translate-y-[1px] hover:border-slate-300 hover:bg-slate-200 hover:shadow-md focus-visible:ring-slate-300',
+            'border border-slate-200 bg-slate-100 text-slate-700 shadow-sm hover:border-slate-300 hover:bg-slate-200 focus-visible:ring-slate-300',
     }
 
     const inlineStyle: React.CSSProperties = {

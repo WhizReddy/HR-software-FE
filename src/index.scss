@@ -93,8 +93,7 @@ body,
 }
 
 body {
-    background: radial-gradient(circle at top, #F8FAFC 0%, #F1F5F9 100%);
-    background-attachment: fixed;
+    background: #F3F6FA;
     color: var(--text-main);
     font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.5;
@@ -140,33 +139,33 @@ body {
 /* Global utility classes for modern cards */
 .modern-card {
     background: var(--surface-color);
-    border-radius: var(--radius-md);
-    box-shadow: var(--card-shadow);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
     border: 1px solid var(--border-color);
     padding: 24px;
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
 
 .modern-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    border-color: rgba(148, 163, 184, 0.5);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
 }
 
-/* Glassmorphism 2.0 Utilities */
+/* Shared app surfaces */
 .glass-card {
-    @apply bg-white/70 backdrop-blur-xl border border-white/60 shadow-xl shadow-slate-200/40 rounded-3xl transition-all duration-300;
+    @apply rounded-2xl border border-slate-200/80 bg-white shadow-sm transition-colors duration-200;
 }
 
 .glass-panel {
-    @apply bg-white/80 backdrop-blur-lg border border-white/60 shadow-lg shadow-slate-200/30 rounded-2xl transition-all duration-300;
+    @apply rounded-xl border border-slate-200/80 bg-white shadow-sm transition-colors duration-200;
 }
 
 .glass-modal {
-    @apply bg-white/90 backdrop-blur-2xl border border-white/60 shadow-2xl rounded-3xl;
+    @apply rounded-2xl border border-slate-200 bg-white shadow-xl;
 }
 
 .glass-active {
-    @apply bg-white border border-slate-100 shadow-md transform -translate-y-1;
+    @apply border border-slate-200 bg-white shadow-sm;
 }
 
 @theme inline {

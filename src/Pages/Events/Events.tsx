@@ -14,6 +14,7 @@ import { useInView } from 'react-intersection-observer'
 import { useEffect } from 'react'
 import { EventsData } from './Interface/Events'
 import EventsContentLoader from '@/Components/Content/ContentLoader'
+import PageIntro from '@/Components/PageIntro/PageIntro'
 
 const clampText = (lines: number) =>
     ({
@@ -74,8 +75,27 @@ function EventsContentAndComponents() {
             />
             <Forms />
 
-            {/* Header section with search and actions */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-between items-center mb-8 w-full">
+            <PageIntro
+                eyebrow="Operations"
+                title="Events"
+                description="Create, search, and review company events with voting and location details in one place."
+                className="mb-6"
+                actions={
+                    isAdmin && (
+                        <Button
+                            btnText="Create Event"
+                            padding="10px"
+                            width="150px"
+                            backgroundColor="#2469FF"
+                            border="none"
+                            type={ButtonTypes.PRIMARY}
+                            onClick={() => handleOpenDrawer('create')}
+                        />
+                    )
+                }
+            />
+
+            <div className="mb-8 flex w-full flex-col items-center justify-between gap-4 sm:flex-row">
                 <div className="w-full sm:max-w-md">
                     <Input
                         IsUsername
@@ -89,17 +109,6 @@ function EventsContentAndComponents() {
                         onChange={onSearchChange}
                     />
                 </div>
-                {isAdmin && (
-                    <Button
-                        btnText="Create Event"
-                        padding="10px"
-                        width="150px"
-                        backgroundColor="#2469FF"
-                        border="none"
-                        type={ButtonTypes.PRIMARY}
-                        onClick={() => handleOpenDrawer('create')}
-                    />
-                )}
             </div>
 
             {/* Events Grid */}

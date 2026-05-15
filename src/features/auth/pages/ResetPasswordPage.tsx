@@ -123,7 +123,7 @@ export default function ResetPasswordPage() {
 
                     <Button
                         type="submit"
-                        className="w-full h-12 bg-[#2457a3] hover:bg-[#1a407a] text-white font-semibold text-base rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 active:scale-95 mt-6"
+                        className="mt-6 h-12 w-full rounded-lg bg-[#2457a3] text-base font-semibold text-white shadow-sm transition-colors hover:bg-[#1a407a]"
                         disabled={isLoading}
                     >
                         {isLoading ? 'Sending...' : 'Send Reset Link'}
@@ -168,7 +168,7 @@ export default function ResetPasswordPage() {
 
                     <Button
                         type="submit"
-                        className="w-full h-12 bg-[#2457a3] hover:bg-[#1a407a] text-white font-semibold text-base rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 active:scale-95 mt-6"
+                        className="mt-6 h-12 w-full rounded-lg bg-[#2457a3] text-base font-semibold text-white shadow-sm transition-colors hover:bg-[#1a407a]"
                         disabled={isLoading}
                     >
                         {isLoading ? 'Resetting...' : 'Reset Password'}

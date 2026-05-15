@@ -40,8 +40,13 @@ export const VacationTable = () => {
         searchQuery,
     )
 
-    if (error) return <p>Error: {error.message}</p>
-    if (isPending) return <div className="flex justify-center p-4"><div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>
+    if (error) {
+        return (
+            <div className="rounded-2xl border border-rose-200 bg-rose-50 p-6 text-sm font-medium text-rose-700 shadow-sm">
+                Vacation requests failed to load: {error.message}
+            </div>
+        )
+    }
 
     const rows =
         data?.data.map((vacation: Vacation) => ({
@@ -125,6 +130,8 @@ export const VacationTable = () => {
                 onSearchChange={(e) => setSearchInput(e.target.value)}
                 onSearchClear={clearSearch}
                 searchPlaceholder="Search by employee, type, or status"
+                isLoading={isPending}
+                loadingLabel="Loading vacation requests..."
             />
             {searchParams.get('selectedVacation') && <SelectedVacationModal />}
             <Toast

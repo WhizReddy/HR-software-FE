@@ -14,6 +14,7 @@ import {
   Handshake,
   Megaphone,
 } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { useAuth } from '@/features/auth/context/AuthProvider'
 import { isAdminRole } from '@/features/auth/lib/access'
 
@@ -31,37 +32,81 @@ import {
   SidebarSeparator,
 } from '@/Components/ui/sidebar'
 
-const adminNavItems = [
-  { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-  { label: 'Employees', path: '/employees', icon: Users },
-  { label: 'Candidates', path: '/candidates', icon: UserCheck },
-  { label: 'Interview', path: '/interview', icon: Briefcase },
-  { label: 'Events', path: '/events', icon: Calendar },
-  { label: 'Career Posts', path: '/career-posts', icon: Megaphone },
-  { label: 'Payroll', path: '/payroll', icon: CreditCard },
-  { label: 'Vacation', path: '/vacation', icon: CalendarCheck },
-  { label: 'Holdings', path: '/holdings', icon: Handshake },
-  { label: 'Inventory', path: '/inventory', icon: Package },
-  { label: 'Stats', path: '/historic', icon: BarChart2 },
+type NavItem = {
+  label: string
+  path: string
+  icon: LucideIcon
+}
+
+type NavGroup = {
+  label: string
+  items: NavItem[]
+}
+
+const adminNavGroups: NavGroup[] = [
+  {
+    label: 'Overview',
+    items: [
+      { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+      { label: 'Analytics', path: '/historic', icon: BarChart2 },
+    ],
+  },
+  {
+    label: 'People',
+    items: [
+      { label: 'Employees', path: '/employees', icon: Users },
+      { label: 'Vacation', path: '/vacation', icon: CalendarCheck },
+      { label: 'Payroll', path: '/payroll', icon: CreditCard },
+    ],
+  },
+  {
+    label: 'Hiring',
+    items: [
+      { label: 'Candidates', path: '/candidates', icon: UserCheck },
+      { label: 'Interviews', path: '/interview', icon: Briefcase },
+      { label: 'Career Posts', path: '/career-posts', icon: Megaphone },
+    ],
+  },
+  {
+    label: 'Operations',
+    items: [
+      { label: 'Events', path: '/events', icon: Calendar },
+      { label: 'Assets', path: '/holdings', icon: Handshake },
+      { label: 'Inventory', path: '/inventory', icon: Package },
+    ],
+  },
 ]
 
-const devNavItems = [
-  { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-  { label: 'Employees', path: '/employees', icon: Users },
-  { label: 'My Assets', path: '/holdings', icon: Handshake },
-  { label: 'My Vacation', path: '/my-vacation', icon: CalendarCheck },
+const devNavGroups: NavGroup[] = [
+  {
+    label: 'Workspace',
+    items: [
+      { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+      { label: 'Employees', path: '/employees', icon: Users },
+    ],
+  },
+  {
+    label: 'Self Service',
+    items: [
+      { label: 'My Assets', path: '/holdings', icon: Handshake },
+      { label: 'My Vacation', path: '/my-vacation', icon: CalendarCheck },
+    ],
+  },
 ]
 
 export const SideBar: React.FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const { currentUser, logout } = useAuth()
-  const rawNavItems = isAdminRole(currentUser?.role) ? adminNavItems : devNavItems
-  const navItems = rawNavItems.map((item) =>
-    item.path === '/my-vacation'
-      ? { ...item, path: `/vacation/${currentUser?._id}` }
-      : item
-  )
+  const rawNavGroups = isAdminRole(currentUser?.role) ? adminNavGroups : devNavGroups
+  const navGroups = rawNavGroups.map((group) => ({
+    ...group,
+    items: group.items.map((item) =>
+      item.path === '/my-vacation'
+        ? { ...item, path: `/vacation/${currentUser?._id}` }
+        : item
+    ),
+  }))
 
   const handleLogout = () => {
     logout()
@@ -85,35 +130,37 @@ export const SideBar: React.FC = () => {
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarGroup className="px-2 pt-4">
-          <SidebarGroupLabel className="px-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-            Navigation
-          </SidebarGroupLabel>
-          <SidebarMenu>
-            {navItems.map(({ label, path, icon: Icon }) => {
-              const isActive =
-                location.pathname === path ||
-                (path !== '/dashboard' && location.pathname.startsWith(path))
-              return (
-                <SidebarMenuItem key={path}>
-                  <SidebarMenuButton
-                    isActive={isActive}
-                    tooltip={label}
-                    onClick={() => navigate(path)}
-                    className={
-                      isActive
-                        ? 'bg-gradient-to-r from-[#2457a3] to-[#3c6fc0] text-white shadow-md shadow-blue-300/40 hover:text-white'
-                        : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'
-                    }
-                  >
-                    <Icon size={18} className="shrink-0" />
-                    <span>{label}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              )
-            })}
-          </SidebarMenu>
-        </SidebarGroup>
+        {navGroups.map((group) => (
+          <SidebarGroup key={group.label} className="px-2 pt-3">
+            <SidebarGroupLabel className="px-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+              {group.label}
+            </SidebarGroupLabel>
+            <SidebarMenu>
+              {group.items.map(({ label, path, icon: Icon }) => {
+                const isActive =
+                  location.pathname === path ||
+                  (path !== '/dashboard' && location.pathname.startsWith(path))
+                return (
+                  <SidebarMenuItem key={path}>
+                    <SidebarMenuButton
+                      isActive={isActive}
+                      tooltip={label}
+                      onClick={() => navigate(path)}
+                      className={
+                        isActive
+                          ? 'bg-[#2457a3] text-white shadow-sm hover:bg-[#1f4d94] hover:text-white'
+                          : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                      }
+                    >
+                      <Icon size={18} className="shrink-0" />
+                      <span>{label}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )
+              })}
+            </SidebarMenu>
+          </SidebarGroup>
+        ))}
       </SidebarContent>
 
       <SidebarSeparator />
