@@ -58,6 +58,22 @@ export default function Forms() {
 
     const currentLocation = editingEvent ? editingEvent.location : event.location
     const debouncedLocation = useDebouncedValue(currentLocation, 700)
+    const nowInputValue = new Date().toISOString().slice(0, 16)
+    const currentStartDate = editingEvent
+        ? editingEvent.startDate
+            ? editingEvent.startDate.slice(0, 16)
+            : ''
+        : event.startDate
+    const currentEndDate = editingEvent
+        ? editingEvent.endDate
+            ? editingEvent.endDate.slice(0, 16)
+            : ''
+        : event.endDate
+    const minStartDate =
+        editingEvent && currentStartDate && currentStartDate < nowInputValue
+            ? currentStartDate
+            : nowInputValue
+    const minEndDate = currentStartDate || minStartDate
 
     useEffect(() => {
         if (!drawerOpen) {
@@ -109,10 +125,10 @@ export default function Forms() {
                             name="startDate"
                             type="datetime-local"
                             onChange={editingEvent ? handleEditChange : handleChange}
-                            value={editingEvent ? (editingEvent.startDate ? editingEvent.startDate.slice(0, 16) : '') : event.startDate}
+                            value={currentStartDate}
                             width="100%"
-                            min={new Date().toISOString().slice(0, 16)} // Cannot be further in the past than right now
-                            max="2030-12-31T23:59" // Prevent typing weird years like 20000
+                            min={minStartDate}
+                            max="2030-12-31T23:59"
                         />
                         <Input
                             IsUsername
@@ -121,9 +137,9 @@ export default function Forms() {
                             name="endDate"
                             type="datetime-local"
                             onChange={editingEvent ? handleEditChange : handleChange}
-                            value={editingEvent ? (editingEvent.endDate ? editingEvent.endDate.slice(0, 16) : '') : event.endDate}
+                            value={currentEndDate}
                             width="100%"
-                            min={event.startDate || new Date().toISOString().slice(0, 16)} // Must be after start date
+                            min={minEndDate}
                             max="2030-12-31T23:59"
                         />
                     </div>

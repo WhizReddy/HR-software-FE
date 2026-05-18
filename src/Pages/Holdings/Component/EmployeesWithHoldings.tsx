@@ -17,6 +17,7 @@ export const EmployeesWithHoldings = () => {
         isLoading,
         fetchNextPage,
         isFetchingNextPage,
+        hasNextPage,
     } = useEmployeesWithHoldings()
     const { searchParams, setSearchParams } =
         useContext(HoldingsContext)
@@ -31,10 +32,10 @@ export const EmployeesWithHoldings = () => {
     )
 
     useEffect(() => {
-        if (inView) {
+        if (inView && hasNextPage) {
             fetchNextPage()
         }
-    }, [fetchNextPage, inView])
+    }, [fetchNextPage, hasNextPage, inView])
 
     const setClickedOnHolding = (itemId: string) => {
         setSearchParams((prevParams) => {
@@ -82,132 +83,143 @@ export const EmployeesWithHoldings = () => {
                 </article>
             </div>
 
-            <div className={style.cardsList}>
-                {users.map((user: UserWithHoldings) => (
-                    <article key={user._id} className={style.employeeCard}>
-                        <div className={style.employeeHeader}>
-                            <div className={style.identityBlock}>
-                                {user.imageUrl ? (
-                                    <img
-                                        src={user.imageUrl}
-                                        alt={`${user.firstName} ${user.lastName}`}
-                                        className={style.avatar}
-                                    />
+            {users.length === 0 ? (
+                <section className={style.emptyResults}>
+                    <h2>No employees found</h2>
+                    <p>
+                        Try clearing the search or changing the selected user
+                        filter.
+                    </p>
+                </section>
+            ) : (
+                <div className={style.cardsList}>
+                    {users.map((user: UserWithHoldings) => (
+                        <article key={user._id} className={style.employeeCard}>
+                            <div className={style.employeeHeader}>
+                                <div className={style.identityBlock}>
+                                    {user.imageUrl ? (
+                                        <img
+                                            src={user.imageUrl}
+                                            alt={`${user.firstName} ${user.lastName}`}
+                                            className={style.avatar}
+                                        />
+                                    ) : (
+                                        <div className={style.avatarFallback}>
+                                            {user.firstName?.[0]}
+                                            {user.lastName?.[0]}
+                                        </div>
+                                    )}
+
+                                    <div className={style.identityText}>
+                                        <h2>
+                                            {user.firstName} {user.lastName}
+                                        </h2>
+                                        <p>{user.email}</p>
+                                        <p>{user.phone || 'No phone saved'}</p>
+                                    </div>
+                                </div>
+
+                                <div className={style.headerMeta}>
+                                    <div className={style.metaPills}>
+                                        <span className={style.metaPill}>
+                                            {user.role || 'Employee'}
+                                        </span>
+                                        <span
+                                            className={`${style.statusBadge} ${
+                                                user.assets &&
+                                                user.assets.length > 0
+                                                    ? style.active
+                                                    : style.inactive
+                                            }`}
+                                        >
+                                            {user.assets &&
+                                            user.assets.length > 0
+                                                ? 'With assets'
+                                                : 'No assets'}
+                                        </span>
+                                    </div>
+
+                                    <Button
+                                        onClick={() =>
+                                            setClickedOnAssignItem(user._id)
+                                        }
+                                        variant="outline"
+                                        size="sm"
+                                        className="h-10 px-4 font-semibold text-blue-700 hover:bg-blue-50"
+                                    >
+                                        Assign asset
+                                    </Button>
+                                </div>
+                            </div>
+
+                            <div className={style.summaryGrid}>
+                                <article className={style.summaryCard}>
+                                    <span className={style.summaryLabel}>
+                                        Active holdings
+                                    </span>
+                                    <strong className={style.summaryValue}>
+                                        {user.assets?.length ?? 0}
+                                    </strong>
+                                </article>
+                                <article className={style.summaryCard}>
+                                    <span className={style.summaryLabel}>
+                                        Primary role
+                                    </span>
+                                    <strong className={style.summaryValue}>
+                                        {user.role || 'Employee'}
+                                    </strong>
+                                </article>
+                                <article className={style.summaryCard}>
+                                    <span className={style.summaryLabel}>
+                                        Availability
+                                    </span>
+                                    <strong className={style.summaryValue}>
+                                        {user.assets?.length
+                                            ? 'Has assigned gear'
+                                            : 'Ready for assignment'}
+                                    </strong>
+                                </article>
+                            </div>
+
+                            <div className={style.assetsSection}>
+                                <div className={style.assetsHeader}>
+                                    <h3>Assigned items</h3>
+                                    <span>
+                                        Click an item to open the return flow
+                                    </span>
+                                </div>
+
+                                {user.assets && user.assets.length > 0 ? (
+                                    <div className={style.assetGrid}>
+                                        {user.assets.map(
+                                            ({ type, _id, serialNumber }) => (
+                                                <button
+                                                    key={_id}
+                                                    type="button"
+                                                    onClick={() =>
+                                                        setClickedOnHolding(_id)
+                                                    }
+                                                    className={style.assetBadge}
+                                                >
+                                                    <span>{type}</span>
+                                                    <small>{serialNumber}</small>
+                                                </button>
+                                            ),
+                                        )}
+                                    </div>
                                 ) : (
-                                    <div className={style.avatarFallback}>
-                                        {user.firstName?.[0]}
-                                        {user.lastName?.[0]}
+                                    <div className={style.emptyStatePanel}>
+                                        <p className={style.emptyState}>
+                                            This employee currently has no
+                                            company assets assigned.
+                                        </p>
                                     </div>
                                 )}
-
-                                <div className={style.identityText}>
-                                    <h2>
-                                        {user.firstName} {user.lastName}
-                                    </h2>
-                                    <p>{user.email}</p>
-                                    <p>{user.phone || 'No phone saved'}</p>
-                                </div>
                             </div>
-
-                            <div className={style.headerMeta}>
-                                <div className={style.metaPills}>
-                                    <span className={style.metaPill}>
-                                        {user.role || 'Employee'}
-                                    </span>
-                                    <span
-                                        className={`${style.statusBadge} ${
-                                            user.assets &&
-                                            user.assets.length > 0
-                                                ? style.active
-                                                : style.inactive
-                                        }`}
-                                    >
-                                        {user.assets && user.assets.length > 0
-                                            ? 'With assets'
-                                            : 'No assets'}
-                                    </span>
-                                </div>
-
-                                <Button
-                                    onClick={() =>
-                                        setClickedOnAssignItem(user._id)
-                                    }
-                                    variant="outline"
-                                    size="sm"
-                                    className="h-10 px-4 font-semibold text-blue-700 hover:bg-blue-50"
-                                >
-                                    Assign asset
-                                </Button>
-                            </div>
-                        </div>
-
-                        <div className={style.summaryGrid}>
-                            <article className={style.summaryCard}>
-                                <span className={style.summaryLabel}>
-                                    Active holdings
-                                </span>
-                                <strong className={style.summaryValue}>
-                                    {user.assets?.length ?? 0}
-                                </strong>
-                            </article>
-                            <article className={style.summaryCard}>
-                                <span className={style.summaryLabel}>
-                                    Primary role
-                                </span>
-                                <strong className={style.summaryValue}>
-                                    {user.role || 'Employee'}
-                                </strong>
-                            </article>
-                            <article className={style.summaryCard}>
-                                <span className={style.summaryLabel}>
-                                    Availability
-                                </span>
-                                <strong className={style.summaryValue}>
-                                    {user.assets?.length
-                                        ? 'Has assigned gear'
-                                        : 'Ready for assignment'}
-                                </strong>
-                            </article>
-                        </div>
-
-                        <div className={style.assetsSection}>
-                            <div className={style.assetsHeader}>
-                                <h3>Assigned items</h3>
-                                <span>
-                                    Click an item to open the return flow
-                                </span>
-                            </div>
-
-                            {user.assets && user.assets.length > 0 ? (
-                                <div className={style.assetGrid}>
-                                    {user.assets.map(
-                                        ({ type, _id, serialNumber }) => (
-                                            <button
-                                                key={_id}
-                                                type="button"
-                                                onClick={() =>
-                                                    setClickedOnHolding(_id)
-                                                }
-                                                className={style.assetBadge}
-                                            >
-                                                <span>{type}</span>
-                                                <small>{serialNumber}</small>
-                                            </button>
-                                        ),
-                                    )}
-                                </div>
-                            ) : (
-                                <div className={style.emptyStatePanel}>
-                                    <p className={style.emptyState}>
-                                        This employee currently has no company
-                                        assets assigned.
-                                    </p>
-                                </div>
-                            )}
-                        </div>
-                    </article>
-                ))}
-            </div>
+                        </article>
+                    ))}
+                </div>
+            )}
             {searchParams.get('assignItem') && <AssignAssetModal />}
             {searchParams.get('ownedItem') && <ReturnAssetModal />}
             <div ref={ref} className="text-center py-8 text-slate-400 text-sm font-medium">

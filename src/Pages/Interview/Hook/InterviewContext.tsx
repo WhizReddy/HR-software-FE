@@ -128,7 +128,9 @@ export const InterviewProvider: React.FC<{ children: React.ReactNode }> = ({
             filtered = filtered.filter((interview) =>
                 interview.firstName.toLowerCase().includes(query) ||
                 interview.lastName.toLowerCase().includes(query) ||
-                `${interview.firstName} ${interview.lastName}`.toLowerCase().includes(query)
+                `${interview.firstName} ${interview.lastName}`.toLowerCase().includes(query) ||
+                interview.email?.toLowerCase().includes(query) ||
+                interview.positionApplied?.toLowerCase().includes(query)
             )
         }
 

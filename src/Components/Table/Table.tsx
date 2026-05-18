@@ -34,6 +34,7 @@ interface DataTableProps<TRow> {
     isLoading?: boolean
     loadingLabel?: string
     pageSizeOptions?: number[]
+    showPaginationControls?: boolean
 }
 
 function DataTable<TRow>({
@@ -56,6 +57,7 @@ function DataTable<TRow>({
     isLoading = false,
     loadingLabel = 'Loading records...',
     pageSizeOptions = [5, 10, 20],
+    showPaginationControls = true,
 }: DataTableProps<TRow>) {
     const normalizedTotalPages =
         totalPages > 0
@@ -226,68 +228,72 @@ function DataTable<TRow>({
                     <p className="text-sm font-semibold text-slate-700">
                         {isLoading ? loadingLabel : resultLabel}
                     </p>
-                    <p className="text-xs text-slate-500" aria-live="polite">
-                        Page <span className="font-semibold text-slate-700">{page + 1}</span> of{' '}
-                        <span className="font-semibold text-slate-700">{normalizedTotalPages}</span>
-                    </p>
+                    {showPaginationControls && (
+                        <p className="text-xs text-slate-500" aria-live="polite">
+                            Page <span className="font-semibold text-slate-700">{page + 1}</span> of{' '}
+                            <span className="font-semibold text-slate-700">{normalizedTotalPages}</span>
+                        </p>
+                    )}
                 </div>
 
-                <Pagination className="mx-0 w-auto justify-end">
-                    <PaginationContent className="flex-wrap gap-2">
-                        <PaginationItem>
-                            <label className="flex items-center gap-2 text-xs font-semibold text-slate-500">
-                                Rows
-                                <select
-                                    value={pageSize}
-                                    disabled={isLoading}
-                                    onChange={(event) =>
-                                        onPaginationModelChange({
-                                            page: 0,
-                                            pageSize: Number(event.target.value),
-                                        })
+                {showPaginationControls && (
+                    <Pagination className="mx-0 w-auto justify-end">
+                        <PaginationContent className="flex-wrap gap-2">
+                            <PaginationItem>
+                                <label className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                                    Rows
+                                    <select
+                                        value={pageSize}
+                                        disabled={isLoading}
+                                        onChange={(event) =>
+                                            onPaginationModelChange({
+                                                page: 0,
+                                                pageSize: Number(event.target.value),
+                                            })
+                                        }
+                                        className="h-9 rounded-lg border border-slate-200 bg-white px-2 text-sm font-semibold text-slate-700 outline-none transition-colors hover:border-slate-300 focus:border-[#2457a3] focus:ring-2 focus:ring-[#2457a3]/15 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400"
+                                    >
+                                        {pageSizeOptions.map((option) => (
+                                            <option key={option} value={option}>
+                                                {option}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </label>
+                            </PaginationItem>
+                            <PaginationItem>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    disabled={isLoading || !canPrev}
+                                    className="min-w-[92px]"
+                                    onClick={() =>
+                                        onPaginationModelChange({ page: page - 1, pageSize })
                                     }
-                                    className="h-9 rounded-lg border border-slate-200 bg-white px-2 text-sm font-semibold text-slate-700 outline-none transition-colors hover:border-slate-300 focus:border-[#2457a3] focus:ring-2 focus:ring-[#2457a3]/15 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400"
                                 >
-                                    {pageSizeOptions.map((option) => (
-                                        <option key={option} value={option}>
-                                            {option}
-                                        </option>
-                                    ))}
-                                </select>
-                            </label>
-                        </PaginationItem>
-                        <PaginationItem>
-                            <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                disabled={isLoading || !canPrev}
-                                className="min-w-[92px]"
-                                onClick={() =>
-                                    onPaginationModelChange({ page: page - 1, pageSize })
-                                }
-                            >
-                                <ChevronLeft size={16} />
-                                Prev
-                            </Button>
-                        </PaginationItem>
-                        <PaginationItem>
-                            <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                disabled={isLoading || !canNext}
-                                className="min-w-[92px]"
-                                onClick={() =>
-                                    onPaginationModelChange({ page: page + 1, pageSize })
-                                }
-                            >
-                                Next
-                                <ChevronRight size={16} />
-                            </Button>
-                        </PaginationItem>
-                    </PaginationContent>
-                </Pagination>
+                                    <ChevronLeft size={16} />
+                                    Prev
+                                </Button>
+                            </PaginationItem>
+                            <PaginationItem>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    disabled={isLoading || !canNext}
+                                    className="min-w-[92px]"
+                                    onClick={() =>
+                                        onPaginationModelChange({ page: page + 1, pageSize })
+                                    }
+                                >
+                                    Next
+                                    <ChevronRight size={16} />
+                                </Button>
+                            </PaginationItem>
+                        </PaginationContent>
+                    </Pagination>
+                )}
             </div>
         </Card>
     )

@@ -35,11 +35,7 @@ function RecruitmentBase() {
     return (
         <main className="min-h-screen bg-slate-50 flex flex-col md:flex-row">
             {/* Left Panel - Branding Split */}
-            <div className="hidden md:flex flex-col flex-1 bg-gradient-to-br from-[#1a407a] to-[#2457a3] p-12 relative overflow-hidden text-white justify-center">
-                {/* Decorative Elements */}
-                <div className="absolute top-0 right-0 w-96 h-96 bg-white opacity-5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
-                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-400 opacity-10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4"></div>
-
+            <div className="hidden md:flex flex-col flex-1 bg-[#2457a3] p-12 relative overflow-hidden text-white justify-center">
                 <div className="relative z-10 max-w-xl mx-auto xl:mx-0">
                     <h1 className="text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
                         Transform Your Career at <span className="text-blue-200">CRM</span>
@@ -52,7 +48,7 @@ function RecruitmentBase() {
             </div>
 
             {/* Right Panel - Form Container */}
-            <div className="flex-1 w-full bg-slate-50/50 backdrop-blur-3xl flex items-start justify-center p-4 sm:p-8 lg:p-12 overflow-y-auto">
+            <div className="relative flex-1 w-full bg-slate-50/50 flex items-start justify-center p-4 sm:p-8 lg:p-12 overflow-y-auto">
                 <div className="absolute inset-0 z-0 bg-grid-slate-200/[0.04] bg-[bottom_1px_center] pointer-events-none"></div>
                 <div className="flex-1 w-full max-w-2xl bg-white/80 backdrop-blur-xl md:rounded-[2rem] shadow-2xl border border-white p-8 md:p-12 relative z-10 my-auto">
                     <div className="mb-8">

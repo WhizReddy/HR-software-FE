@@ -1,10 +1,39 @@
-import { Check, Trash2, CalendarRange } from 'lucide-react'
+import { useMemo, type SyntheticEvent } from 'react'
+import {
+    BriefcaseBusiness,
+    CalendarRange,
+    Check,
+    Mail,
+    Phone,
+    Trash2,
+} from 'lucide-react'
+import DataTable from '@/Components/Table/Table'
+import PageIntro from '@/Components/PageIntro/PageIntro'
+import { Button } from '@/Components/ui/button'
+import { ColDef, RenderCellParams } from '@/types/table'
 import { InterviewProvider, useInterviewContext } from './Hook/InterviewContext'
-import style from './styles/Interview.module.css'
 import RescheduleModal from './Component/ScheduleForm'
-import Input from '@/Components/Input/Index'
+import { Interview } from './interface/interface'
 
-function InterviewKanbanContent() {
+const phaseLabels: Record<string, string> = {
+    first_interview: 'First Interview',
+    second_interview: 'Second Interview',
+    rejected: 'Rejected',
+    employed: 'Employed',
+}
+
+const phaseDescriptions: Record<string, string> = {
+    first_interview: 'Candidates currently queued for the first interview stage.',
+    second_interview: 'Candidates moved forward for deeper evaluation.',
+    rejected: 'Candidates rejected from the hiring process.',
+    employed: 'Candidates accepted and moved into employment.',
+}
+
+const getPhaseLabel = (phase: string) =>
+    phaseLabels[phase] ||
+    phase.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())
+
+function InterviewContent() {
     const {
         loading,
         error,
@@ -24,179 +53,281 @@ function InterviewKanbanContent() {
         searchQuery,
         setSearchQuery,
         filteredInterviews,
+        getInterviewsByPhase,
         processingIds,
     } = useInterviewContext()
 
-    if (loading) return <div>Loading...</div>
-    if (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-        return <div>Error loading interviews: {errorMessage}</div>
-    }
-    return (
-        <main className="min-h-screen bg-slate-50/50 p-4 sm:p-6 lg:p-8">
-            <div className={`${style.kanbanBoard} max-w-7xl mx-auto backdrop-blur-sm bg-white/40 border border-white/60 shadow-xl rounded-[2rem]`}>
-                <div className={style.filterContainer}>
-                    <Input
-                        IsUsername
-                        name="searchQuery"
-                        label="Search Candidates..."
-                        type="search"
-                        value={searchQuery}
-                        width="100%"
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className={`${style.filterField} bg-white/50 backdrop-blur-sm border-white/80 shadow-sm transition-all focus:bg-white/80`}
-                    />
-                </div>
+    const isTerminalPhase = currentTab === 'employed' || currentTab === 'rejected'
+    const currentLabel = getPhaseLabel(currentTab)
+    const currentDescription = phaseDescriptions[currentTab] || 'Interview records for the selected phase.'
 
-                <div className="flex border-b border-slate-200/60 mb-8 gap-8 overflow-x-auto pb-2 custom-scrollbar px-2">
-                    {(phases as string[]).map((phase) => (
+    const columns = useMemo<ColDef<Interview>[]>(() => {
+        const baseColumns: ColDef<Interview>[] = [
+            {
+                field: 'fullName',
+                headerName: 'Candidate',
+                width: 240,
+                renderCell: ({ row }: RenderCellParams<Interview>) => (
+                    <div className="min-w-0">
                         <button
-                            key={phase}
-                            className={`pb-4 font-semibold text-sm transition-all border-b-2 whitespace-nowrap px-4 py-2 rounded-t-lg ${currentTab === phase
-                                ? 'border-[#2457a3] text-[#2457a3] bg-blue-50/50'
-                                : 'border-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-50/50 hover:border-slate-300'
-                                }`}
-                            onClick={() => handleTabChange({} as React.SyntheticEvent, phase)}
+                            type="button"
+                            onClick={(event) => {
+                                event.stopPropagation()
+                                handleNavigateToProfile(row._id.toString())
+                            }}
+                            className="block max-w-[220px] truncate text-left text-sm font-bold text-slate-900 transition-colors hover:text-[#2457a3]"
                         >
-                            {(phase as string).replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
+                            {row.firstName} {row.lastName}
                         </button>
-                    ))}
+                        {row.notes && (
+                            <p
+                                className="mt-1 max-w-[220px] truncate text-xs font-medium text-slate-400"
+                                title={row.notes}
+                            >
+                                {row.notes}
+                            </p>
+                        )}
+                    </div>
+                ),
+            },
+            {
+                field: 'positionApplied',
+                headerName: 'Position',
+                width: 210,
+                renderCell: ({ value }: RenderCellParams<Interview>) => (
+                    <span className="inline-flex max-w-[190px] items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-blue-700">
+                        <BriefcaseBusiness size={14} />
+                        <span className="truncate">{String(value || 'Not specified')}</span>
+                    </span>
+                ),
+            },
+        ]
+
+        if (!isTerminalPhase) {
+            baseColumns.push({
+                field: 'firstInterviewDate',
+                headerName: 'Interview Date',
+                width: 210,
+                renderCell: ({ row }: RenderCellParams<Interview>) => {
+                    const date =
+                        row.currentPhase === 'second_interview'
+                            ? row.secondInterviewDate
+                            : row.firstInterviewDate
+                    const formattedDate = formatDate(date)
+
+                    return (
+                        <span className="inline-flex items-center gap-2 text-sm font-medium text-slate-600">
+                            <CalendarRange size={15} className="text-[#2457a3]" />
+                            {formattedDate === 'No Date Provided'
+                                ? 'Not scheduled'
+                                : formattedDate}
+                        </span>
+                    )
+                },
+            })
+        }
+
+        baseColumns.push(
+            {
+                field: 'email',
+                headerName: 'Contact',
+                width: 280,
+                renderCell: ({ row }: RenderCellParams<Interview>) => (
+                    <div className="space-y-1 text-xs font-medium text-slate-500">
+                        <p className="flex max-w-[260px] items-center gap-2 truncate">
+                            <Mail size={14} className="shrink-0 text-slate-400" />
+                            {row.email || 'No email'}
+                        </p>
+                        <p className="flex items-center gap-2 text-slate-400">
+                            <Phone size={14} className="shrink-0" />
+                            {row.phoneNumber || 'No phone'}
+                        </p>
+                    </div>
+                ),
+            },
+            {
+                field: 'actions',
+                headerName: 'Actions',
+                width: 260,
+                renderCell: ({ row }: RenderCellParams<Interview>) => {
+                    const rowId = row._id.toString()
+                    const isProcessing = processingIds.has(rowId)
+
+                    if (isTerminalPhase) {
+                        return (
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={(event) => {
+                                    event.stopPropagation()
+                                    handleNavigateToProfile(rowId)
+                                }}
+                            >
+                                View Details
+                            </Button>
+                        )
+                    }
+
+                    return (
+                        <div className="flex flex-wrap justify-end gap-2">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                disabled={isProcessing}
+                                onClick={(event) => {
+                                    event.stopPropagation()
+                                    handleOpenModal(row, true)
+                                }}
+                            >
+                                <CalendarRange size={15} />
+                                Edit Date
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="icon-sm"
+                                disabled={isProcessing}
+                                aria-label={`Reject ${row.firstName} ${row.lastName}`}
+                                className="border-rose-200 text-rose-600 hover:bg-rose-50 hover:text-rose-700"
+                                onClick={(event) => {
+                                    event.stopPropagation()
+                                    handleCancel(row)
+                                }}
+                            >
+                                <Trash2 size={16} />
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="icon-sm"
+                                disabled={isProcessing}
+                                aria-label={
+                                    currentTab === 'second_interview'
+                                        ? `Hire ${row.firstName} ${row.lastName}`
+                                        : `Advance ${row.firstName} ${row.lastName}`
+                                }
+                                className="border-emerald-200 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
+                                onClick={(event) => {
+                                    event.stopPropagation()
+                                    handleAccept(row)
+                                }}
+                            >
+                                <Check size={16} />
+                            </Button>
+                        </div>
+                    )
+                },
+            },
+        )
+
+        return baseColumns
+    }, [
+        currentTab,
+        formatDate,
+        handleAccept,
+        handleCancel,
+        handleNavigateToProfile,
+        handleOpenModal,
+        isTerminalPhase,
+        processingIds,
+    ])
+
+    return (
+        <main className="mx-auto w-full max-w-7xl space-y-6 p-4 sm:p-6 lg:p-8">
+            <PageIntro
+                eyebrow="Hiring"
+                title="Interview Pipeline"
+                description="Review scheduled interviews, move candidates through the hiring flow, and keep every candidate action in one consistent table."
+            />
+
+            {error && (
+                <div className="rounded-2xl border border-rose-200 bg-rose-50 p-5 text-sm font-medium text-rose-700">
+                    Error loading interviews:{' '}
+                    {error instanceof Error ? error.message : 'Unknown error'}
                 </div>
+            )}
 
-                <div className="overflow-x-auto px-4 pb-8">
-                    <table className="w-full border-separate border-spacing-y-3">
-                        <thead>
-                            <tr className="text-slate-500 text-sm font-semibold text-left">
-                                <th className="px-6 py-3">Candidate</th>
-                                <th className="px-6 py-3">Position</th>
-                                {currentTab !== 'employed' && currentTab !== 'applicant' && (
-                                    <th className="px-6 py-3">Interview Date</th>
-                                )}
-                                <th className="px-6 py-3">Contact Info</th>
-                                <th className="px-6 py-3 text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredInterviews.length === 0 ? (
-                                <tr>
-                                    <td colSpan={5} className="text-center py-20 text-slate-400 bg-white/30 rounded-2xl border border-dashed border-slate-200">
-                                        No candidates found in this phase.
-                                    </td>
-                                </tr>
-                            ) : (
-                                filteredInterviews.map((interview) => (
-                                    <tr key={interview._id.toString()} className="group hover:translate-y-[-2px] transition-all duration-300">
-                                        {/* Candidate Name */}
-                                        <td className="bg-white/70 backdrop-blur-md px-6 py-4 rounded-l-2xl border-y border-l border-white/60 shadow-sm group-hover:bg-white/90 group-hover:shadow-md">
-                                            <div className="flex flex-col">
-                                                <span
-                                                    onClick={() => handleNavigateToProfile(interview._id.toString())}
-                                                    className="font-bold text-slate-800 cursor-pointer hover:text-[#2457a3] transition-colors text-base"
-                                                >
-                                                    {`${interview.firstName} ${interview.lastName}`}
-                                                </span>
-                                                {interview.notes && (
-                                                    <span className="text-xs text-slate-400 italic mt-1 line-clamp-1 truncate max-w-[200px]" title={interview.notes}>
-                                                        {interview.notes}
-                                                    </span>
-                                                )}
-                                            </div>
-                                        </td>
+            <section className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+                <div className="flex gap-2 overflow-x-auto">
+                    {phases.map((phase) => {
+                        const isActive = currentTab === phase
+                        const count = getInterviewsByPhase(phase).length
 
-                                        {/* Position */}
-                                        <td className="bg-white/70 backdrop-blur-md px-6 py-4 border-y border-white/60 shadow-sm group-hover:bg-white/90 group-hover:shadow-md">
-                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100 uppercase tracking-wider">
-                                                {interview.positionApplied}
-                                            </span>
-                                        </td>
-
-                                        {/* Interview Date */}
-                                        {currentTab !== 'employed' && currentTab !== 'applicant' && (
-                                            <td className="bg-white/70 backdrop-blur-md px-6 py-4 border-y border-white/60 shadow-sm group-hover:bg-white/90 group-hover:shadow-md">
-                                                <div className="flex items-center gap-2 text-slate-600 font-medium text-sm">
-                                                    <CalendarRange size={14} className="text-[#2457a3]" />
-                                                    {interview.currentPhase === 'second_interview'
-                                                        ? formatDate(interview.secondInterviewDate)
-                                                        : formatDate(interview.firstInterviewDate)}
-                                                </div>
-                                            </td>
-                                        )}
-
-                                        {/* Contact Info */}
-                                        <td className="bg-white/70 backdrop-blur-md px-6 py-4 border-y border-white/60 shadow-sm group-hover:bg-white/90 group-hover:shadow-md">
-                                            <div className="flex flex-col gap-0.5 text-xs">
-                                                <span className="text-slate-500 flex items-center gap-1.5">
-                                                    <span className="w-1 h-1 rounded-full bg-slate-300" />
-                                                    {interview.email}
-                                                </span>
-                                                <span className="text-slate-400 font-medium">
-                                                    {interview.phoneNumber}
-                                                </span>
-                                            </div>
-                                        </td>
-
-                                        {/* Actions */}
-                                        <td className="bg-white/70 backdrop-blur-md px-6 py-4 rounded-r-2xl border-y border-r border-white/60 shadow-sm group-hover:bg-white/90 group-hover:shadow-md">
-                                            <div className="flex justify-end items-center gap-2">
-                                                {currentTab !== 'employed' && currentTab !== 'applicant' && (
-                                                    <button
-                                                        onClick={() => handleOpenModal(interview, false)}
-                                                        disabled={processingIds.has(interview._id.toString())}
-                                                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-xl transition-colors disabled:opacity-50"
-                                                        title="Schedule Next Interview"
-                                                    >
-                                                        <CalendarRange size={18} />
-                                                    </button>
-                                                )}
-
-                                                {currentTab !== 'employed' && currentTab !== 'rejected' && (
-                                                    <button
-                                                        onClick={() => handleCancel(interview)}
-                                                        disabled={processingIds.has(interview._id.toString())}
-                                                        className="p-2 text-red-500 hover:bg-red-50 rounded-xl transition-colors disabled:opacity-50"
-                                                        title="Reject"
-                                                    >
-                                                        <Trash2 size={18} />
-                                                    </button>
-                                                )}
-
-                                                {currentTab !== 'employed' && currentTab !== 'applicant' && (
-                                                    <button
-                                                        onClick={() => handleAccept(interview)}
-                                                        disabled={processingIds.has(interview._id.toString())}
-                                                        className="p-2 text-green-600 hover:bg-green-50 rounded-xl transition-colors disabled:opacity-50"
-                                                        title="Accept"
-                                                    >
-                                                        <Check size={18} />
-                                                    </button>
-                                                )}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
+                        return (
+                            <button
+                                key={phase}
+                                type="button"
+                                onClick={() =>
+                                    handleTabChange({} as SyntheticEvent, phase)
+                                }
+                                className={`flex min-w-[170px] items-center justify-between gap-3 rounded-xl border px-4 py-3 text-left transition-colors ${
+                                    isActive
+                                        ? 'border-[#2457a3] bg-blue-50 text-[#2457a3]'
+                                        : 'border-transparent text-slate-600 hover:border-slate-200 hover:bg-slate-50'
+                                }`}
+                            >
+                                <span className="text-sm font-semibold">
+                                    {getPhaseLabel(phase)}
+                                </span>
+                                <span
+                                    className={`rounded-full px-2 py-0.5 text-xs font-bold ${
+                                        isActive
+                                            ? 'bg-white text-[#2457a3]'
+                                            : 'bg-slate-100 text-slate-500'
+                                    }`}
+                                >
+                                    {count}
+                                </span>
+                            </button>
+                        )
+                    })}
                 </div>
+            </section>
 
-                {isModalOpen && selectedInterview && (
-                    <RescheduleModal
-                        open={isModalOpen}
-                        handleClose={handleCloseModal}
-                        handleSchedule={handleSchedule}
-                        selectedInterview={selectedInterview}
-                        isReschedule={isReschedule}
-                    />
-                )}
-            </div>
+            <DataTable
+                rows={filteredInterviews}
+                columns={columns}
+                getRowId={(row) => row._id}
+                handleRowClick={({ row }) => handleNavigateToProfile(row._id.toString())}
+                totalPages={1}
+                totalCount={filteredInterviews.length}
+                page={0}
+                pageSize={Math.max(filteredInterviews.length, 5)}
+                onPaginationModelChange={() => undefined}
+                title={currentLabel}
+                searchValue={searchQuery}
+                onSearchChange={(event) => setSearchQuery(event.target.value)}
+                onSearchClear={() => setSearchQuery('')}
+                searchPlaceholder="Search candidates..."
+                filterNode={
+                    <span className="max-w-md text-sm leading-6 text-slate-500">
+                        {currentDescription}
+                    </span>
+                }
+                isLoading={loading}
+                loadingLabel="Loading interview records..."
+                showPaginationControls={false}
+            />
+
+            {isModalOpen && selectedInterview && (
+                <RescheduleModal
+                    open={isModalOpen}
+                    handleClose={handleCloseModal}
+                    handleSchedule={handleSchedule}
+                    selectedInterview={selectedInterview}
+                    isReschedule={isReschedule}
+                />
+            )}
         </main>
     )
 }
 
-const InterviewKanban = () => (
+const InterviewPage = () => (
     <InterviewProvider>
-        <InterviewKanbanContent />
+        <InterviewContent />
     </InterviewProvider>
 )
 
-export default InterviewKanban
+export default InterviewPage

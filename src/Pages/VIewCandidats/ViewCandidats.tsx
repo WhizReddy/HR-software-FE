@@ -1,14 +1,37 @@
-import Card from '../../Components/Card/Card';
-import style from './styles/ViewCandidats.module.css';
-import { useApplicantById } from './Hook';
-import Button from '../../Components/Button/Button';
-import { ButtonTypes } from '../../Components/Button/ButtonTypes';
-import { ModalComponent } from '../../Components/Modal/Modal';
-import Input from '@/Components/Input/Index';
-import { useState } from 'react';
+import { useMemo, useState } from 'react'
+import {
+    BriefcaseBusiness,
+    CalendarClock,
+    CheckCircle2,
+    FileText,
+    Send,
+    UserRound,
+    XCircle,
+} from 'lucide-react'
+import PageIntro from '@/Components/PageIntro/PageIntro'
+import { Card } from '@/Components/ui/card'
+import { Button } from '@/Components/ui/button'
+import { ModalComponent } from '../../Components/Modal/Modal'
+import Input from '@/Components/Input/Index'
+import Toast from '@/Components/Toast/Toast'
+import { resolveApiAssetUrl } from '@/Helpers/Axios'
+import { useApplicantById } from './Hook'
 
-import Toast from '@/Components/Toast/Toast';
-import { resolveApiAssetUrl } from '@/Helpers/Axios';
+const formatPhase = (phase?: string) => {
+    if (!phase) return 'Applied'
+
+    return phase
+        .replace(/_/g, ' ')
+        .replace(/\b\w/g, (letter) => letter.toUpperCase())
+}
+
+const formatList = (items?: string[] | string) => {
+    if (Array.isArray(items)) {
+        return items.length ? items.join(', ') : 'Not specified'
+    }
+
+    return items || 'Not specified'
+}
 
 export default function ViewCandidats() {
     const {
@@ -32,8 +55,9 @@ export default function ViewCandidats() {
         toastOpen,
         toastMessage,
         toastSeverity,
-        handleToastClose
+        handleToastClose,
     } = useApplicantById()
+    const [useCustomEmail, setUseCustomEmail] = useState(false)
 
     const calculateAge = (dob: string): number => {
         const birthDate = new Date(dob)
@@ -47,235 +71,339 @@ export default function ViewCandidats() {
         ) {
             age--
         }
-        return age;
-    };
-    const [useCustomEmail, setUseCustomEmail] = useState(false)
 
+        return age
+    }
+
+    const details = useMemo(
+        () => [
+            {
+                label: 'Full name',
+                value: applicant
+                    ? `${applicant.firstName} ${applicant.lastName}`
+                    : 'Loading...',
+            },
+            {
+                label: 'Email',
+                value: applicant?.email || 'Not specified',
+            },
+            {
+                label: 'Phone',
+                value: applicant?.phoneNumber
+                    ? applicant.phoneNumber.startsWith('+')
+                        ? applicant.phoneNumber
+                        : `+355${applicant.phoneNumber}`
+                    : 'Not specified',
+            },
+            {
+                label: 'Age',
+                value: applicant?.dob
+                    ? calculateAge(applicant.dob.split('T')[0])
+                    : 'N/A',
+            },
+            {
+                label: 'Applying method',
+                value: applicant?.applicationMethod || 'Not specified',
+            },
+            {
+                label: 'Experience',
+                value: applicant?.experience || 'Not specified',
+            },
+        ],
+        [applicant],
+    )
+
+    const workDetails = useMemo(
+        () => [
+            {
+                label: 'Position',
+                value: applicant?.positionApplied || 'Not specified',
+            },
+            {
+                label: 'Wage expectation',
+                value: applicant?.salaryExpectations || 'Not specified',
+            },
+            {
+                label: 'Technologies',
+                value: formatList(applicant?.technologiesUsed),
+            },
+            {
+                label: 'Current phase',
+                value: formatPhase(applicant?.currentPhase),
+            },
+        ],
+        [applicant],
+    )
+
+    const isClosed =
+        applicant?.status === 'rejected' || applicant?.status === 'employed'
+    const canSchedulePhaseOne =
+        !applicant?.currentPhase ||
+        applicant.currentPhase === 'applied' ||
+        applicant.currentPhase === 'applicant'
+    const canSchedulePhaseTwo = applicant?.currentPhase === 'first_interview'
+    const canEmploy = applicant?.currentPhase === 'second_interview'
+    const interviewLabel =
+        applicant?.currentPhase === 'first_interview'
+            ? 'Phase 2 Interview Date'
+            : 'Phase 1 Interview Date'
+    const interviewValue =
+        applicant?.currentPhase === 'first_interview'
+            ? secondInterviewDate
+            : firstInterviewDate
+    const cvUrl = applicant?.cvAttachment
+        ? resolveApiAssetUrl(applicant.cvAttachment)
+        : ''
 
     return (
-        <div className={style.container}>
-            <Card
-                flex="2"
-                borderRadius="5px"
-                padding="32px"
-                border="1px solid #ebebeb"
-            >
-                <div className={style.columContanier}>
-                    <div className={style.column}>
-                        <div className={style.section}>
-                            <div className={style.label}>First Name</div>
-                            <div className={style.value}>
-                                {applicant?.firstName}
-                            </div>
+        <main className="mx-auto w-full max-w-7xl space-y-6 p-4 sm:p-6 lg:p-8">
+            <PageIntro
+                eyebrow="Recruitment"
+                title={
+                    applicant
+                        ? `${applicant.firstName} ${applicant.lastName}`
+                        : 'Candidate Profile'
+                }
+                description="Review candidate details, schedule interview phases, and keep the hiring decision flow aligned with the interview pipeline."
+                actions={
+                    applicant && (
+                        <div className="inline-flex items-center gap-2 rounded-2xl border border-white/80 bg-white/90 px-4 py-3 shadow-sm">
+                            <span
+                                className={`h-2.5 w-2.5 rounded-full ${
+                                    applicant.status === 'employed'
+                                        ? 'bg-emerald-500'
+                                        : applicant.status === 'rejected'
+                                          ? 'bg-rose-500'
+                                          : 'bg-blue-500'
+                                }`}
+                            />
+                            <span className="text-sm font-bold capitalize text-slate-800">
+                                {applicant.status || 'active'}
+                            </span>
                         </div>
-                        <div className={style.border}></div>
+                    )
+                }
+            />
 
-                        <div className={style.section}>
-                            <div className={style.label}>Email</div>
-                            <div className={style.value}>
-                                {applicant?.email}
+            <section className="grid gap-6 xl:grid-cols-[minmax(0,1.4fr)_minmax(320px,0.8fr)]">
+                <div className="space-y-6">
+                    <Card className="rounded-2xl border-slate-200 bg-white p-6 shadow-sm">
+                        <div className="flex flex-col gap-4 border-b border-slate-100 pb-5 sm:flex-row sm:items-center sm:justify-between">
+                            <div className="flex items-center gap-3">
+                                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-[#2457a3]">
+                                    <UserRound size={22} />
+                                </div>
+                                <div>
+                                    <h2 className="text-lg font-black tracking-tight text-slate-900">
+                                        Candidate Details
+                                    </h2>
+                                    <p className="text-sm text-slate-500">
+                                        Contact and application basics.
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                        <div className={style.border}></div>
 
-                        <div className={style.section}>
-                            <div className={style.label}>Age</div>
+                        <dl className="mt-5 grid gap-4 md:grid-cols-2">
+                            {details.map((item) => (
+                                <div
+                                    key={item.label}
+                                    className="rounded-2xl border border-slate-100 bg-slate-50/70 px-4 py-3"
+                                >
+                                    <dt className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">
+                                        {item.label}
+                                    </dt>
+                                    <dd className="mt-2 break-words text-sm font-semibold text-slate-800">
+                                        {item.value}
+                                    </dd>
+                                </div>
+                            ))}
+                        </dl>
+                    </Card>
 
-                            <div className={style.value}>
-                                {applicant?.dob
-                                    ? calculateAge(applicant.dob.split('T')[0])
-                                    : 'N/A'}
+                    <Card className="rounded-2xl border-slate-200 bg-white p-6 shadow-sm">
+                        <div className="flex items-center gap-3 border-b border-slate-100 pb-5">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
+                                <BriefcaseBusiness size={22} />
+                            </div>
+                            <div>
+                                <h2 className="text-lg font-black tracking-tight text-slate-900">
+                                    Role Fit
+                                </h2>
+                                <p className="text-sm text-slate-500">
+                                    Hiring stage, expected wage, and relevant skills.
+                                </p>
                             </div>
                         </div>
-                        <div className={style.border}></div>
 
-                        <div className={style.section}>
-                            <div className={style.label}>Work Position</div>
-                            <div className={style.value}>
-                                {applicant?.positionApplied}
-                            </div>
-                        </div>
-                        <div className={style.border}></div>
-
-                        <div className={style.section}>
-                            <div className={style.label}>Experience</div>
-                            <div className={style.value}>
-                                {applicant?.experience}
-                            </div>
-                        </div>
-                        <div className={style.border}></div>
-                    </div>
-
-                    <div className={style.column}>
-                        <div className={style.section}>
-                            <div className={style.label}>Last Name</div>
-                            <div className={style.value}>
-                                {applicant?.lastName}
-                            </div>
-                        </div>
-                        <div className={style.border}></div>
-
-                        <div className={style.section}>
-                            <div className={style.label}>Phone Number</div>
-                            <div className={style.value}>
-                                {applicant?.phoneNumber ? (applicant.phoneNumber.startsWith('+') ? applicant.phoneNumber : `+355${applicant.phoneNumber}`) : 'N/A'}
-                            </div>
-                        </div>
-                        <div className={style.border}></div>
-
-                        <div className={style.section}>
-                            <div className={style.label}>Applying Method</div>
-                            <div className={style.value}>
-                                {applicant?.applicationMethod}
-                            </div>
-                        </div>
-                        <div className={style.border}></div>
-
-                        <div className={style.section}>
-                            <div className={style.label}>Wage Expectation</div>
-                            <div className={style.value}>
-                                {applicant?.salaryExpectations}
-                            </div>
-                        </div>
-                        <div className={style.border}></div>
-                        <div className={style.centerStatus}>
-                            <div className={style.label}>Status</div>
-                            <div
-                                className={`${style.value} ${applicant?.status === 'active'
-                                    ? style.statusActive
-                                    : applicant?.status === 'rejected'
-                                        ? style.statusRejected
-                                        : ''
-                                    }`}
-                            >
-                                {applicant?.status}
-                            </div>
-                        </div>
-                        <div className={style.border}></div>
-                    </div>
+                        <dl className="mt-5 grid gap-4 md:grid-cols-2">
+                            {workDetails.map((item) => (
+                                <div
+                                    key={item.label}
+                                    className="rounded-2xl border border-slate-100 bg-white px-4 py-3 shadow-sm"
+                                >
+                                    <dt className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">
+                                        {item.label}
+                                    </dt>
+                                    <dd className="mt-2 break-words text-sm font-semibold text-slate-800">
+                                        {item.value}
+                                    </dd>
+                                </div>
+                            ))}
+                        </dl>
+                    </Card>
                 </div>
-            </Card>
-            <Card
-                flex="1"
-                borderRadius="5px"
-                padding="32px"
-                border="1px solid #ebebeb"
-            >
-                <div className={style.section}>
-                    <div className={style.section}>
-                        <div className={style.label}>Technologies Used</div>
-                        <div className={style.value}>
-                            {applicant?.technologiesUsed}
-                        </div>
-                    </div>
-                    <div className={style.border}></div>{' '}
-                    <div className={style.section}>
-                        <div className={style.label}>CV</div>
-                        <div className={style.value}>
-                            {applicant?.cvAttachment && (() => {
-                                const cvUrl = resolveApiAssetUrl(applicant.cvAttachment)
-                                return (
+
+                <aside className="space-y-6">
+                    <Card className="rounded-2xl border-slate-200 bg-white p-6 shadow-sm">
+                        <h2 className="text-lg font-black tracking-tight text-slate-900">
+                            Candidate File
+                        </h2>
+                        <p className="mt-1 text-sm text-slate-500">
+                            CV and interview readiness.
+                        </p>
+
+                        <div className="mt-5 space-y-3">
+                            <div className="rounded-2xl border border-slate-100 bg-slate-50/70 p-4">
+                                <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">
+                                    CV Attachment
+                                </span>
+                                {cvUrl ? (
                                     <a
                                         href={cvUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-blue-500 hover:text-blue-700 underline flex items-center gap-1 font-medium"
+                                        className="mt-3 inline-flex items-center gap-2 text-sm font-bold text-[#2457a3] hover:text-[#1a407a]"
                                     >
+                                        <FileText size={16} />
                                         View CV
                                     </a>
-                                )
-                            })()}
+                                ) : (
+                                    <p className="mt-3 text-sm font-semibold text-slate-500">
+                                        No CV attached
+                                    </p>
+                                )}
+                            </div>
+
+                            <div className="grid gap-3">
+                                <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+                                    <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">
+                                        Hiring Phase
+                                    </span>
+                                    <p className="mt-2 text-sm font-semibold text-slate-800">
+                                        {formatPhase(applicant?.currentPhase)}
+                                    </p>
+                                </div>
+                                <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+                                    <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">
+                                        Status
+                                    </span>
+                                    <p className="mt-2 text-sm font-semibold capitalize text-slate-800">
+                                        {applicant?.status || 'active'}
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div className={style.border}></div>
-                </div>
+                    </Card>
 
-                <div
-                    style={{
-                        display: 'flex',
-                        gap: '10px',
-                        flexDirection: 'column',
-                        marginTop: '15px'
-                    }}
-                >
-                    <div className={style.label}>Actions:</div>
+                    <Card className="rounded-2xl border-slate-200 bg-white p-6 shadow-sm">
+                        <h2 className="text-lg font-black tracking-tight text-slate-900">
+                            Actions
+                        </h2>
+                        <p className="mt-1 text-sm text-slate-500">
+                            Move the candidate through the current hiring flow.
+                        </p>
 
-                    {applicant?.status !== 'rejected' && applicant?.status !== 'employed' && (
-                        <>
-                            {/* Schedule Phase 1 or 2 */}
-                            {(!applicant?.currentPhase || applicant.currentPhase === 'applied' || applicant.currentPhase === 'applicant') && (
+                        {!applicant ? (
+                            <div className="mt-5 rounded-2xl border border-slate-100 bg-slate-50/70 p-4 text-sm font-semibold text-slate-500">
+                                Loading candidate actions...
+                            </div>
+                        ) : !isClosed ? (
+                            <div className="mt-5 grid gap-3">
+                                {canSchedulePhaseOne && (
+                                    <Button
+                                        type="button"
+                                        onClick={() => handleOpenModal('active')}
+                                        className="w-full justify-start"
+                                    >
+                                        <CalendarClock size={16} />
+                                        Schedule Phase 1 Interview
+                                    </Button>
+                                )}
+
+                                {canSchedulePhaseTwo && (
+                                    <Button
+                                        type="button"
+                                        onClick={() => handleOpenModal('active')}
+                                        className="w-full justify-start"
+                                    >
+                                        <CalendarClock size={16} />
+                                        Schedule Phase 2 Interview
+                                    </Button>
+                                )}
+
+                                {canEmploy && (
+                                    <Button
+                                        type="button"
+                                        variant="success"
+                                        onClick={() => handleOpenModal('employ')}
+                                        className="w-full justify-start"
+                                    >
+                                        <CheckCircle2 size={16} />
+                                        Employ Candidate
+                                    </Button>
+                                )}
+
                                 <Button
-                                    type={ButtonTypes.PRIMARY}
-                                    btnText="Schedule Phase 1 Interview"
-                                    width="100%"
-                                    onClick={() => handleOpenModal('active')}
-                                />
-                            )}
-                            {applicant?.currentPhase === 'first_interview' && (
-                                <Button
-                                    type={ButtonTypes.PRIMARY}
-                                    btnText="Schedule Phase 2 Interview"
-                                    width="100%"
-                                    onClick={() => handleOpenModal('active')}
-                                />
-                            )}
+                                    type="button"
+                                    variant="destructive"
+                                    onClick={() => handleOpenModal('reject')}
+                                    className="w-full justify-start"
+                                >
+                                    <XCircle size={16} />
+                                    Reject Candidate
+                                </Button>
+                            </div>
+                        ) : (
+                            <div className="mt-5 rounded-2xl border border-slate-100 bg-slate-50/70 p-4 text-sm font-semibold text-slate-500">
+                                This candidate is already marked as{' '}
+                                <span className="capitalize">
+                                    {applicant?.status || 'closed'}
+                                </span>
+                                .
+                            </div>
+                        )}
+                    </Card>
+                </aside>
+            </section>
 
-                            {applicant?.currentPhase !== 'applicant' && applicant?.currentPhase !== 'applied' && (
-                                <Button
-                                    type={ButtonTypes.PRIMARY}
-                                    btnText="Employ Candidate"
-                                    width="100%"
-                                    onClick={() => handleOpenModal('employ')}
-                                />
-                            )}
-
-                            <Button
-                                type={ButtonTypes.SECONDARY}
-                                btnText="Reject Candidate"
-                                width="100%"
-                                onClick={() => handleOpenModal('reject')}
-                            />
-                        </>
-                    )}
-                </div>
-            </Card>
             {showModal && (
                 <ModalComponent open={showModal} handleClose={handleCloseModal}>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '15px',
-                        }}
-                    >
-                        <div className={style.title}>Confirm Action</div>
+                    <div className="flex max-w-md flex-col gap-4">
                         <div>
-                            {' '}
-                            {modalAction === 'active'
-                                ? 'Are you sure you want to schedule an interview with this candidate?'
-                                : modalAction === 'reject'
-                                    ? 'Are you sure you want to reject this candidate?'
-                                    : 'Are you sure you want to employ this candidate?'}
+                            <h2 className="text-lg font-black tracking-tight text-slate-900">
+                                Confirm Action
+                            </h2>
+                            <p className="mt-2 text-sm leading-6 text-slate-600">
+                                {modalAction === 'active'
+                                    ? 'Schedule the next interview step for this candidate?'
+                                    : modalAction === 'reject'
+                                      ? 'Reject this candidate from the hiring process?'
+                                      : 'Mark this candidate as employed?'}
+                            </p>
                         </div>
-                        <div
-                            style={{
-                                display: 'flex',
-                                gap: '10px',
-                                marginTop: '20px',
-                            }}
-                        >
+
+                        <div className="grid gap-3 sm:grid-cols-2">
+                            <Button type="button" onClick={handleConfirm}>
+                                Confirm
+                            </Button>
                             <Button
-                                type={ButtonTypes.PRIMARY}
-                                btnText="Confirm"
-                                width="100%"
-                                onClick={handleConfirm}
-                            />
-                            <Button
-                                type={ButtonTypes.SECONDARY}
-                                btnText="Cancel"
-                                width="100%"
+                                type="button"
+                                variant="outline"
                                 onClick={handleCloseModal}
-                            />
+                            >
+                                Cancel
+                            </Button>
                         </div>
                     </div>
                 </ModalComponent>
@@ -286,36 +414,46 @@ export default function ViewCandidats() {
                     open={showConfirmationModal}
                     handleClose={handleCloseConfirmationModal}
                 >
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '20px',
-                        }}
-                    >
-                        <div className={style.title}>Notify Applicant.</div>
+                    <div className="flex max-w-xl flex-col gap-5">
+                        <div>
+                            <h2 className="text-lg font-black tracking-tight text-slate-900">
+                                Notify Applicant
+                            </h2>
+                            <p className="mt-2 text-sm leading-6 text-slate-600">
+                                Choose the interview time and optionally add a
+                                custom email subject or message.
+                            </p>
+                        </div>
+
                         <Input
                             IsUsername
                             type="datetime-local"
                             name="interviewDate"
-                            label={applicant?.currentPhase === 'first_interview' ? 'Phase 2 Interview Date' : 'Phase 1 Interview Date'}
-                            value={applicant?.currentPhase === 'first_interview' ? secondInterviewDate : firstInterviewDate}
-                            onChange={(e: any) =>
+                            label={interviewLabel}
+                            value={interviewValue}
+                            onChange={(event: any) =>
                                 applicant?.currentPhase === 'first_interview'
-                                    ? setSecondInterviewDate(e.target.value)
-                                    : setFirstInterviewDate(e.target.value)
+                                    ? setSecondInterviewDate(event.target.value)
+                                    : setFirstInterviewDate(event.target.value)
                             }
                         />
-                        <label className="flex items-center gap-2 cursor-pointer pt-2">
+
+                        <label className="flex cursor-pointer items-center gap-2 rounded-2xl border border-slate-100 bg-slate-50/70 px-4 py-3">
                             <input
                                 type="checkbox"
                                 checked={useCustomEmail}
-                                onChange={(e) => setUseCustomEmail(e.target.checked)}
-                                className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500 cursor-pointer accent-blue-600"
+                                onChange={(event) =>
+                                    setUseCustomEmail(event.target.checked)
+                                }
+                                className="h-4 w-4 cursor-pointer rounded accent-[#2457a3] focus:ring-[#2457a3]"
                             />
-                            <span className="text-sm font-medium text-slate-700">Use custom email</span>
-                        </label>{useCustomEmail && (
-                            <>
+                            <span className="text-sm font-semibold text-slate-700">
+                                Use custom email
+                            </span>
+                        </label>
+
+                        {useCustomEmail && (
+                            <div className="grid gap-4">
                                 <Input
                                     IsUsername
                                     type="textarea"
@@ -324,7 +462,9 @@ export default function ViewCandidats() {
                                     multiline
                                     rows={1}
                                     value={customSubject}
-                                    onChange={(e: any) => setCustomSubject(e.target.value)}
+                                    onChange={(event: any) =>
+                                        setCustomSubject(event.target.value)
+                                    }
                                 />
                                 <Input
                                     IsUsername
@@ -334,30 +474,25 @@ export default function ViewCandidats() {
                                     multiline
                                     rows={3}
                                     value={customMessage}
-                                    onChange={(e: any) => setCustomMessage(e.target.value)}
+                                    onChange={(event: any) =>
+                                        setCustomMessage(event.target.value)
+                                    }
                                 />
-                            </>
+                            </div>
                         )}
-                        <div
-                            style={{
-                                display: 'flex',
-                                gap: '10px',
-                                marginTop: '20px',
-                            }}
-                        >
 
+                        <div className="grid gap-3 sm:grid-cols-2">
+                            <Button type="button" onClick={handleSend}>
+                                <Send size={16} />
+                                Send
+                            </Button>
                             <Button
-                                type={ButtonTypes.PRIMARY}
-                                btnText="Send"
-                                width="100%"
-                                onClick={handleSend}
-                            />
-                            <Button
-                                type={ButtonTypes.SECONDARY}
-                                btnText="Close"
-                                width="100%"
+                                type="button"
+                                variant="outline"
                                 onClick={handleCloseConfirmationModal}
-                            />
+                            >
+                                Close
+                            </Button>
                         </div>
                     </div>
                 </ModalComponent>
@@ -369,6 +504,6 @@ export default function ViewCandidats() {
                 severity={toastSeverity}
                 onClose={handleToastClose}
             />
-        </div>
+        </main>
     )
 }
