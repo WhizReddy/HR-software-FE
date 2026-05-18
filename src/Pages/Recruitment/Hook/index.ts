@@ -34,6 +34,7 @@ export const useRecruitmentForm = () => {
         },
         onSubmit: async ({ value }) => {
             try {
+                setError(null)
                 const formData = new FormData()
                 formData.append('applicationMethod', value.applicationMethod)
                 formData.append('dob', value.dob)
@@ -63,7 +64,9 @@ export const useRecruitmentForm = () => {
                 )
                 if ([200, 201].includes(response.status)) {
                     setShowModal(true)
+                    return
                 }
+                setError('Unexpected response while creating your applicant')
             } catch (err: unknown) {
                 if (err instanceof AxiosError) {
                     if (err?.response?.data?.message) {
@@ -77,7 +80,9 @@ export const useRecruitmentForm = () => {
                         return
                     }
                     setError('An error occurred while creating your applicant')
+                    return
                 }
+                setError('An error occurred while creating your applicant')
             }
         },
     })
