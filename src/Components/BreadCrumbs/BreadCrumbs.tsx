@@ -9,26 +9,70 @@ import {
     BreadcrumbSeparator,
 } from '@/Components/ui/breadcrumb'
 
-const routeLabels: Record<string, string> = {
-    dashboard: 'Dashboard',
-    employees: 'Employees',
-    candidates: 'Candidates',
-    interview: 'Interview',
-    events: 'Events',
-    'career-posts': 'Career Posts',
-    payroll: 'Payroll',
-    vacation: 'Vacation',
-    holdings: 'Holdings',
-    inventory: 'Inventory',
-    historic: 'Analytics',
-    profile: 'Profile',
-    view: 'Candidate Details',
-    user: 'User Payroll',
+type BreadcrumbRoute = {
+    label: string
+    to?: string
+}
+
+const staticRoutes: Record<string, string> = {
+    '/dashboard': 'Dashboard',
+    '/employees': 'Employees',
+    '/candidates': 'Candidates',
+    '/interview': 'Interview',
+    '/events': 'Events',
+    '/career-posts': 'Career Posts',
+    '/payroll': 'Payroll',
+    '/vacation': 'Vacation',
+    '/holdings': 'Holdings',
+    '/inventory': 'Inventory',
+    '/historic': 'Analytics',
+}
+
+const getBreadcrumbRoutes = (pathname: string): BreadcrumbRoute[] => {
+    const normalizedPath = pathname.replace(/\/+$/, '') || '/'
+
+    if (staticRoutes[normalizedPath]) {
+        return [{ label: staticRoutes[normalizedPath] }]
+    }
+
+    if (/^\/profile\/[^/]+$/.test(normalizedPath)) {
+        return [{ label: 'Profile' }]
+    }
+
+    if (/^\/view\/[^/]+$/.test(normalizedPath)) {
+        return [
+            { label: 'Candidates', to: '/candidates' },
+            { label: 'Candidate Details' },
+        ]
+    }
+
+    if (/^\/vacation\/[^/]+$/.test(normalizedPath)) {
+        return [
+            { label: 'Vacation', to: '/vacation' },
+            { label: 'User Vacation' },
+        ]
+    }
+
+    if (/^\/payroll\/user\/[^/]+$/.test(normalizedPath)) {
+        return [
+            { label: 'Payroll', to: '/payroll' },
+            { label: 'User Payroll' },
+        ]
+    }
+
+    return normalizedPath
+        .split('/')
+        .filter(Boolean)
+        .map((segment) => ({
+            label: decodeURIComponent(segment)
+                .replace(/-/g, ' ')
+                .replace(/\b\w/g, (letter) => letter.toUpperCase()),
+        }))
 }
 
 export const BreadcrumbComponent: React.FC = () => {
     const { pathname } = useLocation()
-    const crumbs = pathname.split('/').filter(Boolean)
+    const crumbs = getBreadcrumbRoutes(pathname)
 
     if (crumbs.length === 0) return null
 
@@ -42,23 +86,21 @@ export const BreadcrumbComponent: React.FC = () => {
                 </BreadcrumbItem>
 
                 {crumbs.map((crumb, idx) => {
-                    const path = '/' + crumbs.slice(0, idx + 1).join('/')
-                    const label = routeLabels[crumb] || crumb
                     const isLast = idx === crumbs.length - 1
 
                     return (
-                        <React.Fragment key={path}>
+                        <React.Fragment key={`${crumb.label}-${idx}`}>
                             <BreadcrumbSeparator className="text-slate-300" />
                             <BreadcrumbItem>
-                                {isLast ? (
+                                {isLast || !crumb.to ? (
                                     <BreadcrumbPage className="font-semibold capitalize text-slate-700">
-                                        {label}
+                                        {crumb.label}
                                     </BreadcrumbPage>
                                 ) : (
                                     <BreadcrumbLink
-                                        render={<Link to={path} className="capitalize hover:text-[#2457a3]" />}
+                                        render={<Link to={crumb.to} className="capitalize hover:text-[#2457a3]" />}
                                     >
-                                        {label}
+                                        {crumb.label}
                                     </BreadcrumbLink>
                                 )}
                             </BreadcrumbItem>
