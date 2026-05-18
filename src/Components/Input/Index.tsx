@@ -23,6 +23,7 @@ interface InputProps {
     max?: string | number
     step?: string | number
     className?: string
+    inputClassName?: string
     readOnly?: boolean
     multiline?: boolean
     rows?: number
@@ -55,6 +56,7 @@ const Input: React.FC<InputProps> = ({
     max,
     step,
     className = '',
+    inputClassName = '',
     readOnly,
     multiline = false,
     rows = 3,
@@ -120,7 +122,7 @@ const Input: React.FC<InputProps> = ({
                         disabled={disabled}
                         readOnly={readOnly}
                         rows={rows}
-                        className={cn('text-sm', sharedClasses)}
+                        className={cn('text-sm', sharedClasses, inputClassName)}
                     />
                 ) : (
                     <ShadcnInput
@@ -156,7 +158,12 @@ const Input: React.FC<InputProps> = ({
                         min={min}
                         max={max}
                         step={step}
-                        className={cn('text-sm', sharedClasses, isCheckBox ? 'h-4 w-4 rounded border-slate-300' : '')}
+                        className={cn(
+                            'text-sm',
+                            sharedClasses,
+                            inputClassName,
+                            isCheckBox ? 'h-4 w-4 rounded border-slate-300' : '',
+                        )}
                         style={{
                             height: height
                                 ? typeof height === 'number'

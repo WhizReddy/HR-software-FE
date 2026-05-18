@@ -279,6 +279,7 @@ function RecruitmentBase() {
                                                 name="phoneNumber"
                                                 IsUsername
                                                 value={value}
+                                                inputClassName="pl-16"
                                                 onChange={(event: any) =>
                                                     handleChange(
                                                         event.target.value,
