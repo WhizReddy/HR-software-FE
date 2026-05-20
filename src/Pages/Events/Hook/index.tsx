@@ -73,14 +73,7 @@ export const useCreateEvent = (
         photo: [],
         participants: [],
         type: 'other',
-        poll: {
-            question: '',
-            options: [],
-        },
     })
-    const [pollQuestion, setPollQuestion] = useState('')
-    const [pollOptions, setPollOptions] = useState<string[]>(['', ''])
-    const [includesPoll, setIncludesPoll] = useState(false)
     const [participants, setParticipants] = useState<string[]>([])
 
     const createEventMutation = useMutation({
@@ -105,32 +98,6 @@ export const useCreateEvent = (
                 throw new Error('Event date has passed')
             }
 
-            const normalizedPollOptions = pollOptions
-                .map((option) => option.trim())
-                .filter(Boolean)
-
-            if (includesPoll) {
-                if (!pollQuestion.trim()) {
-                    throw new Error('Poll question is required')
-                }
-
-                if (normalizedPollOptions.length < 2) {
-                    throw new Error('Poll needs at least two options')
-                }
-
-                if (normalizedPollOptions.some((option) => option.length < 2)) {
-                    throw new Error('Poll options must be at least 2 characters')
-                }
-
-                const uniqueOptions = new Set(
-                    normalizedPollOptions.map((option) => option.toLowerCase()),
-                )
-
-                if (uniqueOptions.size !== normalizedPollOptions.length) {
-                    throw new Error('Poll options must be unique')
-                }
-            }
-
             const formData = new FormData()
             formData.append('title', event.title.trim())
             formData.append('description', event.description.trim())
@@ -140,20 +107,6 @@ export const useCreateEvent = (
             if (event.endDate && !isNaN(Date.parse(event.endDate))) formData.append('endDate', new Date(event.endDate).toISOString())
             if (event.location.trim()) formData.append('location', event.location.trim())
             formData.append('type', event.type || 'other')
-            if (includesPoll) {
-                formData.append(
-                    'poll',
-                    JSON.stringify({
-                        question: pollQuestion.trim(),
-                        options: normalizedPollOptions
-                            .map((option) => ({
-                                option,
-                                votes: 0,
-                                voters: [],
-                            })),
-                    }),
-                )
-            }
             eventPhotos.forEach((photo) => {
                 formData.append('photo', photo)
             })
@@ -179,11 +132,7 @@ export const useCreateEvent = (
                 type: 'other',
                 photo: [],
                 participants: [],
-                poll: { question: '', options: [] },
             })
-            setPollQuestion('')
-            setPollOptions(['', ''])
-            setIncludesPoll(false)
             setParticipants([])
             setEventPhotos([])
             handleCloseDrawer()
@@ -207,10 +156,6 @@ export const useCreateEvent = (
         const { name, value } = e.target
         if (name === 'participants') {
             setParticipants(value.split(',').map((_id) => _id.trim()))
-        } else if (name === 'includesPoll') {
-            setIncludesPoll(e.target.checked)
-        } else if (name === 'pollQuestion') {
-            setPollQuestion(value)
         } else if (name === 'location') {
             setEvent((prevEvent) => ({
                 ...prevEvent,
@@ -232,18 +177,6 @@ export const useCreateEvent = (
         }))
     }
 
-    const handleOptionChange = (index: number, value: string) => {
-        const newOptions = [...pollOptions]
-        newOptions[index] = value
-        setPollOptions(newOptions)
-    }
-
-    const handleAddOption = () => {
-        if (pollOptions.length < 3) {
-            setPollOptions([...pollOptions, ''])
-        }
-    }
-
     const handleToastClose = () => {
         setToastOpen(false)
     }
@@ -254,11 +187,6 @@ export const useCreateEvent = (
         handleChange,
         event,
         endDate: event.endDate,
-        pollQuestion,
-        pollOptions,
-        handleOptionChange,
-        handleAddOption,
-        includesPoll,
         participants,
         setParticipants,
         type: event.type,
@@ -278,9 +206,6 @@ export const useUpdateEvent = (
     const queryClient = useQueryClient()
     const [editingEvent, setEditingEvent] = useState<EventsData | null>(null)
     const [showEditDrawer, setEditDrawer] = useState(false)
-    const [includePollInEdit, setIncludePollInEdit] = useState(false)
-    const [editPollQuestion, setEditPollQuestion] = useState('')
-    const [editPollOptions, setEditPollOptions] = useState<string[]>(['', ''])
     const [updateToastOpen, setUpdateToastOpen] = useState(false)
     const [updateToastMessage, setUpdateToastMessage] = useState('')
     const [updatedEvent, setUpdatedEvent] = useState<EventsData[]>([])
@@ -292,30 +217,12 @@ export const useUpdateEvent = (
     const toggleForm = () => {
         setEditDrawer(!showEditDrawer)
         setEditingEvent(null)
-        resetEditPollState()
-    }
-
-    const resetEditPollState = () => {
-        setIncludePollInEdit(false)
-        setEditPollQuestion('')
-        setEditPollOptions(['', ''])
     }
 
     const handleEditClick = (eventToEdit: EventsData['_id']) => {
         AxiosInstance.get(`/event/${eventToEdit}`).then((response) => {
             setEditingEvent(response.data)
             setEditType(response.data.type)
-            setIncludePollInEdit(!!response.data.poll)
-            if (response.data.poll) {
-                setEditPollQuestion(response.data.poll.question)
-                setEditPollOptions(
-                    response.data.poll.options.map(
-                        (opt: { option: string[] }) => opt.option,
-                    ),
-                )
-            } else {
-                resetEditPollState()
-            }
             setEditDrawer(true)
         })
     }
@@ -332,10 +239,6 @@ export const useUpdateEvent = (
                 ...prevEvent!,
                 [name]: value,
             }))
-        } else if (name === 'includesPoll') {
-            setIncludePollInEdit(checked)
-        } else if (name === 'pollQuestion') {
-            setEditPollQuestion(value)
         } else if (name === 'type') {
             setEditType(value)
         } else {
@@ -343,18 +246,6 @@ export const useUpdateEvent = (
                 ...prevEvent!,
                 [name]: type === 'checkbox' ? checked : value,
             }))
-        }
-    }
-
-    const handleEditOptionChange = (index: number, value: string) => {
-        const newOptions = [...editPollOptions]
-        newOptions[index] = value
-        setEditPollOptions(newOptions)
-    }
-
-    const handleAddEditOption = () => {
-        if (editPollOptions.length < 3) {
-            setEditPollOptions([...editPollOptions, ''])
         }
     }
 
@@ -393,38 +284,6 @@ export const useUpdateEvent = (
                 throw new Error('End date and time must be after the start date')
             }
 
-            const normalizedEditPollOptions = editPollOptions
-                .map((option) => option.trim())
-                .filter(Boolean)
-
-            if (includePollInEdit) {
-                if (!editPollQuestion.trim()) {
-                    throw new Error('Poll question is required')
-                }
-
-                if (normalizedEditPollOptions.length < 2) {
-                    throw new Error('Poll needs at least two options')
-                }
-
-                if (
-                    normalizedEditPollOptions.some(
-                        (option) => option.length < 2,
-                    )
-                ) {
-                    throw new Error('Poll options must be at least 2 characters')
-                }
-
-                const uniqueOptions = new Set(
-                    normalizedEditPollOptions.map((option) =>
-                        option.toLowerCase(),
-                    ),
-                )
-
-                if (uniqueOptions.size !== normalizedEditPollOptions.length) {
-                    throw new Error('Poll options must be unique')
-                }
-            }
-
             const formData = new FormData()
             if (editingEvent.title) formData.append('title', editingEvent.title.trim())
             if (editingEvent.description) formData.append('description', editingEvent.description.trim())
@@ -432,21 +291,6 @@ export const useUpdateEvent = (
             if (editingEvent.endDate && !isNaN(Date.parse(editingEvent.endDate))) formData.append('endDate', new Date(editingEvent.endDate).toISOString())
             if (editingEvent.location?.trim()) formData.append('location', editingEvent.location.trim())
             formData.append('type', editType || 'other')
-
-            if (includePollInEdit) {
-                formData.append(
-                    'poll',
-                    JSON.stringify({
-                        question: editPollQuestion.trim(),
-                        options: normalizedEditPollOptions
-                            .map((option) => ({
-                                option,
-                                votes: 0,
-                                voters: [],
-                            })),
-                    })
-                )
-            }
 
             eventPhotos.forEach((photo) => {
                 formData.append('photo', photo)
@@ -474,7 +318,6 @@ export const useUpdateEvent = (
             })
 
             setEditingEvent(null)
-            resetEditPollState()
             setEventPhotos([])
             setEditDrawer(false)
             handleCloseDrawer()
@@ -492,13 +335,8 @@ export const useUpdateEvent = (
     return {
         editingEvent,
         setEditDrawer,
-        includePollInEdit,
-        editPollQuestion,
-        editPollOptions,
         setEditingEvent,
         handleEditChange,
-        handleEditOptionChange,
-        handleAddEditOption,
         updateEvent: updateEventMutation.mutate,
         setEventForEditing,
         toggleForm,

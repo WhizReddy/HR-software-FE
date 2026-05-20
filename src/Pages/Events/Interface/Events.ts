@@ -15,15 +15,6 @@ export interface EventsData {
     photo: string[]
     participants: string[]
     totalPages: number
-    poll: {
-        question: string
-        options: {
-            option: string
-            votes: number
-            voters: { _id: string; firstName: string; lastName: string }[]
-        }[]
-        isMultipleVote: boolean
-    }
     onClose: () => void
 }
 
@@ -37,14 +28,6 @@ export interface EventsCreationData {
     participants: string[]
     photo: File[]
     type: string
-    poll: {
-        question: string
-        options: {
-            option: string
-            votes: number
-            voters: { _id: string; firstName: string; lastName: string }[]
-        }[]
-    }
 }
 
 export interface EventsContextProps {
@@ -53,18 +36,12 @@ export interface EventsContextProps {
     updateEvent: UseMutateFunction<any, Error, void, unknown>
     handleDelete: (id: string | number) => void
     handleEditChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-    handleOptionChange: (index: number, value: string) => void
-    handleAddOption: () => void
-    handleAddEditOption: () => void
     setParticipants: React.Dispatch<React.SetStateAction<string[]>>
     participants: string[]
     event: EventsCreationData
     editingEvent: EventsData | null
-    includesPoll: boolean
-    includePollInEdit: boolean
     handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
     handleEditClick: (event: EventsData['_id']) => void
-    handleEditOptionChange: (index: number, value: string) => void
     toggleForm: () => void
     handleToggleForm: () => void
     handleToastClose: () => void
@@ -79,12 +56,8 @@ export interface EventsContextProps {
     updateToastMessage: string
     updateToastOpen: boolean
     updateToastSeverity: 'success' | 'error'
-    editPollQuestion: string
     setEditParticipants: React.Dispatch<React.SetStateAction<string[]>>
-    editPollOptions: string[]
     type: string
-    pollQuestion: string
-    pollOptions: string[]
     toastOpen: boolean
     toastMessage: string
     toastSeverity: 'success' | 'error'

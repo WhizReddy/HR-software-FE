@@ -20,7 +20,9 @@ const renderEmployees = () => {
     })
 
     return render(
-        <MemoryRouter>
+        <MemoryRouter
+            future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
+        >
             <QueryClientProvider client={queryClient}>
                 <Employees />
             </QueryClientProvider>

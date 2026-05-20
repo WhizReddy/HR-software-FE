@@ -1,7 +1,5 @@
 import { Suspense, lazy, useEffect, useState } from 'react'
-import EventPoll from '../EventPoll/EventsPoll'
 import { Calendar, MapPin, X } from 'lucide-react'
-import { useAuth } from '@/features/auth/context/AuthProvider'
 import { useEvents } from '@/Pages/Events/Context/EventsContext'
 import Button from '@/Components/Button/Button'
 import { ButtonTypes } from '@/Components/Button/ButtonTypes'
@@ -10,7 +8,6 @@ const EventCarousel = lazy(() => import('@/Components/Carosel/Carosel'))
 const EventMap = lazy(() => import('../GoogleMap/MapPicker'))
 
 const SelectedEventCard = () => {
-    const { currentUser } = useAuth()
     const { selectedEvent, handleCloseEventDetails, formatDate } = useEvents()
     const [showMap, setShowMap] = useState(false)
 
@@ -109,16 +106,6 @@ const SelectedEventCard = () => {
                                 </Suspense>
                             </div>
                         )}
-                    </div>
-                )}
-
-                {selectedEvent.poll && (
-                    <div className="mt-8 pt-8 border-t border-slate-100">
-                        <EventPoll
-                            poll={selectedEvent.poll}
-                            eventId={selectedEvent._id}
-                            userId={currentUser?._id?.toString()}
-                        />
                     </div>
                 )}
             </div>

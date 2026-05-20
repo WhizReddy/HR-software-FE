@@ -29,19 +29,9 @@ const toDateTimeLocalInput = (value?: Date | string | null) => {
 export default function Forms() {
     const {
         editingEvent,
-        editPollQuestion,
-        editPollOptions,
-        handleOptionChange,
-        handleEditOptionChange,
-        handleAddOption,
-        handleAddEditOption,
         createEvent,
         isCreating,
         updateEvent,
-        pollQuestion,
-        pollOptions,
-        includePollInEdit,
-        includesPoll,
         handleChange,
         handleEditChange,
         event,
@@ -97,22 +87,6 @@ export default function Forms() {
         }
 
     }, [drawerOpen])
-
-    const handlePollToggle = (checked: boolean) => {
-        const changeEvent = {
-            target: {
-                name: 'includesPoll',
-                checked,
-                type: 'checkbox',
-            },
-        } as React.ChangeEvent<HTMLInputElement>
-
-        if (editingEvent) {
-            handleEditChange(changeEvent)
-        } else {
-            handleChange(changeEvent)
-        }
-    }
 
     return (
         <DrawerComponent open={drawerOpen} onClose={handleCloseDrawer}>
@@ -286,73 +260,6 @@ export default function Forms() {
                     <Dropzone />
                 </div>
 
-                {/* Poll Card */}
-                <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm transition-shadow duration-300">
-                    <label className="flex cursor-pointer items-center justify-between gap-4 group">
-                        <div className="flex flex-col">
-                            <h3 className="text-sm font-semibold text-slate-800 group-hover:text-primary-blue transition-colors">
-                                {editingEvent ? 'Include poll in event' : 'Add poll to event'}
-                            </h3>
-                            <p className="text-xs text-slate-500 mt-1">Allow participants to vote on options</p>
-                        </div>
-                        <input
-                            type="checkbox"
-                            checked={editingEvent ? includePollInEdit : includesPoll}
-                            onChange={(e) => handlePollToggle(e.target.checked)}
-                            name="includesPoll"
-                            className="w-5 h-5 rounded text-primary-blue focus:ring-primary-blue cursor-pointer"
-                        />
-                    </label>
-
-                    {(editingEvent ? includePollInEdit : includesPoll) && (
-                        <div className="mt-5 space-y-4 pt-5 border-t border-slate-100 animate-in fade-in slide-in-from-top-2">
-                            <Input
-                                label="Poll Question"
-                                name="pollQuestion"
-                                IsUsername
-                                value={editingEvent ? editPollQuestion : pollQuestion}
-                                onChange={editingEvent ? handleEditChange : handleChange}
-                                width="100%"
-                            />
-
-                            <div className="space-y-3">
-                                <h4 className="text-xs font-medium text-slate-500 uppercase tracking-wider">Options</h4>
-                                {(editingEvent ? editPollOptions : pollOptions).map(
-                                    (option, index) => (
-                                        <div key={index} className="flex items-center gap-2">
-                                            <div className="h-8 w-8 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center text-xs font-medium text-slate-500 shrink-0">
-                                                {index + 1}
-                                            </div>
-                                            <Input
-                                                IsUsername
-                                                label={`Option text`}
-                                                name={`option${index + 1}`}
-                                                value={option}
-                                                onChange={(e) => editingEvent ? handleEditOptionChange(index, e.target.value)
-                                                    : handleOptionChange(index, e.target.value)}
-                                                width="100%"
-                                            />
-                                        </div>
-                                    ),
-                                )}
-                            </div>
-
-                            <div className="flex justify-between items-center mt-2">
-                                <Button
-                                    onClick={editingEvent ? handleAddEditOption : handleAddOption}
-                                    btnText="Add new option"
-                                    type={ButtonTypes.SECONDARY}
-                                    color="#2457A3"
-                                    borderColor="#E2E8F0"
-                                    disabled={(editingEvent ? editPollOptions : pollOptions).length >= 3}
-                                />
-                                {(editingEvent ? editPollOptions.length >= 3 : pollOptions.length >= 3) &&
-                                    <span className="text-rose-500 text-xs font-medium bg-rose-50 px-2.5 py-1 rounded-md">Max 3 options</span>
-                                }
-                            </div>
-                        </div>
-                    )}
-                </div>
             </div>
 
             {/* Sticky Action Footer */}

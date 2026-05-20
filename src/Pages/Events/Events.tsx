@@ -191,7 +191,7 @@ function EventsContentAndComponents() {
                                             onClick={() => handleSeeEventDetails(event)}
                                             className="w-full py-2.5 px-4 rounded-xl bg-slate-50 hover:bg-blue-50 text-blue-600 font-medium text-sm transition-colors duration-200 flex items-center justify-center border border-slate-100 hover:border-blue-100"
                                         >
-                                            {isAdmin ? 'See Details' : 'Vote & Details'}
+                                            See Details
                                         </button>
                                     </div>
                                 </div>
