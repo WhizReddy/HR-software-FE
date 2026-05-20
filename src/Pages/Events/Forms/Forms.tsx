@@ -11,6 +11,21 @@ import { useDebouncedValue } from '@/hooks/use-debounced-value'
 
 const EventMapPicker = lazy(() => import('../Components/GoogleMap/MapPicker'))
 
+const toDateTimeLocalInput = (value?: Date | string | null) => {
+    if (!value) return ''
+
+    const date = value instanceof Date ? value : new Date(value)
+    if (Number.isNaN(date.getTime())) {
+        return typeof value === 'string' ? value.slice(0, 16) : ''
+    }
+
+    const pad = (number: number) => number.toString().padStart(2, '0')
+
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
+        date.getDate(),
+    )}T${pad(date.getHours())}:${pad(date.getMinutes())}`
+}
+
 export default function Forms() {
     const {
         editingEvent,
@@ -58,15 +73,15 @@ export default function Forms() {
 
     const currentLocation = editingEvent ? editingEvent.location : event.location
     const debouncedLocation = useDebouncedValue(currentLocation, 700)
-    const nowInputValue = new Date().toISOString().slice(0, 16)
+    const nowInputValue = toDateTimeLocalInput(new Date())
     const currentStartDate = editingEvent
         ? editingEvent.startDate
-            ? editingEvent.startDate.slice(0, 16)
+            ? toDateTimeLocalInput(editingEvent.startDate)
             : ''
         : event.startDate
     const currentEndDate = editingEvent
         ? editingEvent.endDate
-            ? editingEvent.endDate.slice(0, 16)
+            ? toDateTimeLocalInput(editingEvent.endDate)
             : ''
         : event.endDate
     const minStartDate =
@@ -81,14 +96,23 @@ export default function Forms() {
             return
         }
 
-        const timer = window.setTimeout(() => {
-            setMountLocationPicker(true)
-        }, 160)
-
-        return () => {
-            window.clearTimeout(timer)
-        }
     }, [drawerOpen])
+
+    const handlePollToggle = (checked: boolean) => {
+        const changeEvent = {
+            target: {
+                name: 'includesPoll',
+                checked,
+                type: 'checkbox',
+            },
+        } as React.ChangeEvent<HTMLInputElement>
+
+        if (editingEvent) {
+            handleEditChange(changeEvent)
+        } else {
+            handleChange(changeEvent)
+        }
+    }
 
     return (
         <DrawerComponent open={drawerOpen} onClose={handleCloseDrawer}>
@@ -176,7 +200,7 @@ export default function Forms() {
                             <div className="rounded-xl bg-white p-2 text-slate-500 shadow-sm ring-1 ring-slate-200">
                                 <MapPinned size={16} />
                             </div>
-                            <div>
+                            <div className="min-w-0 flex-1">
                                 <p className="text-sm font-semibold text-slate-800">
                                     Map picker
                                 </p>
@@ -186,6 +210,21 @@ export default function Forms() {
                                     precisely.
                                 </p>
                             </div>
+                            <Button
+                                icon={<MapPinned size={16} />}
+                                btnText={
+                                    mountLocationPicker
+                                        ? 'Hide map'
+                                        : 'Show map'
+                                }
+                                type={ButtonTypes.SECONDARY}
+                                color="#2457A3"
+                                borderColor="#E2E8F0"
+                                onClick={() =>
+                                    setMountLocationPicker((value) => !value)
+                                }
+                                padding="8px 12px"
+                            />
                         </div>
 
                         <div className="mt-4 overflow-hidden rounded-xl border border-slate-100 bg-white">
@@ -203,18 +242,18 @@ export default function Forms() {
                                     />
                                 </Suspense>
                             ) : (
-                                <div className="flex h-[280px] w-full flex-col items-center justify-center gap-3 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.08),_transparent_55%),linear-gradient(135deg,_rgba(248,250,252,1),_rgba(241,245,249,0.9))] px-6 text-center md:h-[340px]">
+                                <div className="flex min-h-[120px] w-full flex-col items-center justify-center gap-3 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.08),_transparent_55%),linear-gradient(135deg,_rgba(248,250,252,1),_rgba(241,245,249,0.9))] px-6 py-6 text-center">
                                     <div className="rounded-full bg-white p-3 text-slate-500 shadow-sm ring-1 ring-slate-200">
                                         <MapPinned size={18} />
                                     </div>
                                     <div className="space-y-1">
                                         <p className="text-sm font-semibold text-slate-800">
-                                            Preparing the interactive map
+                                            Map picker is optional
                                         </p>
                                         <p className="mx-auto max-w-md text-xs leading-5 text-slate-500">
-                                            The drawer opens first, then the map
-                                            loads right after so the form stays
-                                            smoother on slower laptops.
+                                            Type the location directly, or open
+                                            the map only when you need precise
+                                            placement.
                                         </p>
                                     </div>
                                 </div>
@@ -249,10 +288,7 @@ export default function Forms() {
 
                 {/* Poll Card */}
                 <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm transition-shadow duration-300">
-                    <div className="flex items-center justify-between cursor-pointer group" onClick={() => {
-                        const evt = { target: { name: 'includesPoll', checked: !(editingEvent ? includePollInEdit : includesPoll), type: 'checkbox' } }
-                        editingEvent ? handleEditChange(evt as any) : handleChange(evt as any)
-                    }}>
+                    <label className="flex cursor-pointer items-center justify-between gap-4 group">
                         <div className="flex flex-col">
                             <h3 className="text-sm font-semibold text-slate-800 group-hover:text-primary-blue transition-colors">
                                 {editingEvent ? 'Include poll in event' : 'Add poll to event'}
@@ -262,11 +298,11 @@ export default function Forms() {
                         <input
                             type="checkbox"
                             checked={editingEvent ? includePollInEdit : includesPoll}
-                            onChange={(e) => editingEvent ? handleEditChange(e as any) : handleChange(e as any)}
+                            onChange={(e) => handlePollToggle(e.target.checked)}
                             name="includesPoll"
                             className="w-5 h-5 rounded text-primary-blue focus:ring-primary-blue cursor-pointer"
                         />
-                    </div>
+                    </label>
 
                     {(editingEvent ? includePollInEdit : includesPoll) && (
                         <div className="mt-5 space-y-4 pt-5 border-t border-slate-100 animate-in fade-in slide-in-from-top-2">

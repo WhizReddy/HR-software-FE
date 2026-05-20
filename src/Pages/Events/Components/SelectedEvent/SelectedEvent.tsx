@@ -1,10 +1,11 @@
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, useEffect, useState } from 'react'
 import EventPoll from '../EventPoll/EventsPoll'
 import { Calendar, MapPin, X } from 'lucide-react'
 import { useAuth } from '@/features/auth/context/AuthProvider'
 import { useEvents } from '@/Pages/Events/Context/EventsContext'
 import { useSearchParams } from 'react-router-dom'
-import { useEffect } from 'react'
+import Button from '@/Components/Button/Button'
+import { ButtonTypes } from '@/Components/Button/ButtonTypes'
 
 const EventCarousel = lazy(() => import('@/Components/Carosel/Carosel'))
 const EventMap = lazy(() => import('../GoogleMap/MapPicker'))
@@ -13,21 +14,29 @@ const SelectedEventCard = () => {
     const { currentUser } = useAuth()
     const { selectedEvent, setSelectedEvent, setShowEventModal, formatDate } = useEvents()
     const [, setSearchParams] = useSearchParams()
+    const [showMap, setShowMap] = useState(false)
 
     useEffect(() => {
         if (selectedEvent?._id) {
-            setSearchParams(
-                { event: selectedEvent._id.toString() },
-                { replace: true },
-            )
-        } else {
-            setSearchParams({}, { replace: true })
+            setSearchParams((prev) => {
+                const next = new URLSearchParams(prev)
+                next.set('event', selectedEvent._id.toString())
+                return next
+            }, { replace: true })
         }
 
         return () => {
-            setSearchParams({}, { replace: true })
+            setSearchParams((prev) => {
+                const next = new URLSearchParams(prev)
+                next.delete('event')
+                return next
+            }, { replace: true })
         }
-    }, [selectedEvent, setSearchParams])
+    }, [selectedEvent?._id, setSearchParams])
+
+    useEffect(() => {
+        setShowMap(false)
+    }, [selectedEvent?._id])
 
     if (!selectedEvent) {
         return null
@@ -85,19 +94,44 @@ const SelectedEventCard = () => {
                 </div>
 
                 {selectedEvent.location && (
-                    <div className="w-full h-[300px] mb-8 rounded-xl overflow-hidden border border-slate-200">
-                        <Suspense
-                            fallback={
-                                <div className="h-full w-full animate-pulse bg-slate-100" />
-                            }
-                        >
-                            <EventMap
-                                onLocationChange={() => {}}
-                                savedLocation={selectedEvent.location}
-                                showInput={false}
-                                containerClassName="h-full w-full"
+                    <div className="mb-8 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <div>
+                                <p className="text-sm font-semibold text-slate-900">
+                                    Event map
+                                </p>
+                                <p className="mt-1 text-xs leading-5 text-slate-500">
+                                    Open the map when you need the exact
+                                    placement.
+                                </p>
+                            </div>
+                            <Button
+                                icon={<MapPin size={16} />}
+                                btnText={showMap ? 'Hide map' : 'Show map'}
+                                type={ButtonTypes.SECONDARY}
+                                color="#2457A3"
+                                borderColor="#E2E8F0"
+                                onClick={() => setShowMap((value) => !value)}
+                                padding="8px 12px"
                             />
-                        </Suspense>
+                        </div>
+
+                        {showMap && (
+                            <div className="mt-4 h-[300px] w-full overflow-hidden rounded-xl border border-slate-200 bg-white">
+                                <Suspense
+                                    fallback={
+                                        <div className="h-full w-full animate-pulse bg-slate-100" />
+                                    }
+                                >
+                                    <EventMap
+                                        onLocationChange={() => {}}
+                                        savedLocation={selectedEvent.location}
+                                        showInput={false}
+                                        containerClassName="h-full w-full"
+                                    />
+                                </Suspense>
+                            </div>
+                        )}
                     </div>
                 )}
 

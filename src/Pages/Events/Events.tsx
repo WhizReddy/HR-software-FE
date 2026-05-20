@@ -33,6 +33,7 @@ function EventsContentAndComponents() {
         closeModal,
         showEventModal,
         setShowEventModal,
+        setSelectedEvent,
         updateToastMessage,
         updateToastOpen,
         updateToastSeverity,
@@ -51,6 +52,7 @@ function EventsContentAndComponents() {
         data: events,
         isFetchingNextPage,
         fetchNextPage,
+        hasNextPage,
         isLoading,
         onSearchChange,
         searchEvent,
@@ -60,10 +62,15 @@ function EventsContentAndComponents() {
 
 
     useEffect(() => {
-        if (inView) {
+        if (inView && hasNextPage && !isFetchingNextPage) {
             fetchNextPage()
         }
-    }, [fetchNextPage, inView])
+    }, [fetchNextPage, hasNextPage, inView, isFetchingNextPage])
+
+    const handleCloseEventDetails = () => {
+        setSelectedEvent(null)
+        setShowEventModal(false)
+    }
 
     return (
         <div id="events-root" className="flex flex-col max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
@@ -128,6 +135,8 @@ function EventsContentAndComponents() {
                                             <img
                                                 src={event.photo[0]}
                                                 alt={event.title}
+                                                loading="lazy"
+                                                decoding="async"
                                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                             />
                                         </div>
@@ -233,7 +242,8 @@ function EventsContentAndComponents() {
                         width="800px"
                         padding="0"
                         open={showEventModal}
-                        handleClose={() => setShowEventModal(false)}
+                        handleClose={handleCloseEventDetails}
+                        showCloseButton={false}
                     >
                         <SelectedEventCard />
                     </ModalComponent>

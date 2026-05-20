@@ -5,15 +5,17 @@ import { EventsCreationData, EventsData } from '../Interface/Events'
 import { useSearchParams } from 'react-router-dom'
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { fetchEvents } from '../utils/utils'
+import { useDebouncedValue } from '@/hooks/use-debounced-value'
 
 export const useGetAllEvents = () => {
     const [searchParams, setSearchParams] = useSearchParams()
     const [searchEvent, setSearchEvent] = useState(searchParams.get('search') || '')
+    const debouncedSearchEvent = useDebouncedValue(searchEvent, 350)
 
     const query = useInfiniteQuery({
-        queryKey: ['events', searchEvent],
+        queryKey: ['events', debouncedSearchEvent],
         queryFn: ({ pageParam = 0 }) =>
-            fetchEvents(searchEvent || '', pageParam),
+            fetchEvents(debouncedSearchEvent || '', pageParam),
         initialPageParam: 0,
         getNextPageParam: (lastPage: any, allPages) => {
             if (lastPage?.data && lastPage.data.length < 6) {
@@ -70,7 +72,7 @@ export const useCreateEvent = (
         location: '',
         photo: [],
         participants: [],
-        type: '',
+        type: 'other',
         poll: {
             question: '',
             options: [],
@@ -87,27 +89,63 @@ export const useCreateEvent = (
                 throw new Error('Title and Description are required')
             }
 
+            if (event.endDate && !event.startDate) {
+                throw new Error('Start date is required when an end date is set')
+            }
+
             // Guard: endDate must be after startDate
             if (event.startDate && event.endDate && new Date(event.endDate) <= new Date(event.startDate)) {
                 throw new Error('End date and time must be after the start date')
             }
 
+            if (
+                event.startDate &&
+                new Date(event.startDate).getTime() < Date.now() - 5 * 60 * 1000
+            ) {
+                throw new Error('Event date has passed')
+            }
+
+            const normalizedPollOptions = pollOptions
+                .map((option) => option.trim())
+                .filter(Boolean)
+
+            if (includesPoll) {
+                if (!pollQuestion.trim()) {
+                    throw new Error('Poll question is required')
+                }
+
+                if (normalizedPollOptions.length < 2) {
+                    throw new Error('Poll needs at least two options')
+                }
+
+                if (normalizedPollOptions.some((option) => option.length < 2)) {
+                    throw new Error('Poll options must be at least 2 characters')
+                }
+
+                const uniqueOptions = new Set(
+                    normalizedPollOptions.map((option) => option.toLowerCase()),
+                )
+
+                if (uniqueOptions.size !== normalizedPollOptions.length) {
+                    throw new Error('Poll options must be unique')
+                }
+            }
+
             const formData = new FormData()
-            formData.append('title', event.title)
-            formData.append('description', event.description)
+            formData.append('title', event.title.trim())
+            formData.append('description', event.description.trim())
             // Only append optional fields when they have values —
             // @IsOptional() skips validation for missing keys, but NOT for empty strings
             if (event.startDate && !isNaN(Date.parse(event.startDate))) formData.append('startDate', new Date(event.startDate).toISOString())
             if (event.endDate && !isNaN(Date.parse(event.endDate))) formData.append('endDate', new Date(event.endDate).toISOString())
-            if (event.location) formData.append('location', event.location)
-            if (event.type) formData.append('type', event.type)
+            if (event.location.trim()) formData.append('location', event.location.trim())
+            formData.append('type', event.type || 'other')
             if (includesPoll) {
                 formData.append(
                     'poll',
                     JSON.stringify({
-                        question: pollQuestion,
-                        options: pollOptions
-                            .filter((option) => option.trim() !== '')
+                        question: pollQuestion.trim(),
+                        options: normalizedPollOptions
                             .map((option) => ({
                                 option,
                                 votes: 0,
@@ -138,13 +176,14 @@ export const useCreateEvent = (
                 startDate: '',
                 endDate: '',
                 location: '',
-                type: '',
+                type: 'other',
                 photo: [],
                 participants: [],
                 poll: { question: '', options: [] },
             })
             setPollQuestion('')
             setPollOptions(['', ''])
+            setIncludesPoll(false)
             setParticipants([])
             setEventPhotos([])
             handleCloseDrawer()
@@ -341,6 +380,10 @@ export const useUpdateEvent = (
                 throw new Error('Title and Description are required')
             }
 
+            if (editingEvent.endDate && !editingEvent.startDate) {
+                throw new Error('Start date is required when an end date is set')
+            }
+
             // Guard: endDate must be after startDate
             if (
                 editingEvent.startDate &&
@@ -349,21 +392,53 @@ export const useUpdateEvent = (
             ) {
                 throw new Error('End date and time must be after the start date')
             }
+
+            const normalizedEditPollOptions = editPollOptions
+                .map((option) => option.trim())
+                .filter(Boolean)
+
+            if (includePollInEdit) {
+                if (!editPollQuestion.trim()) {
+                    throw new Error('Poll question is required')
+                }
+
+                if (normalizedEditPollOptions.length < 2) {
+                    throw new Error('Poll needs at least two options')
+                }
+
+                if (
+                    normalizedEditPollOptions.some(
+                        (option) => option.length < 2,
+                    )
+                ) {
+                    throw new Error('Poll options must be at least 2 characters')
+                }
+
+                const uniqueOptions = new Set(
+                    normalizedEditPollOptions.map((option) =>
+                        option.toLowerCase(),
+                    ),
+                )
+
+                if (uniqueOptions.size !== normalizedEditPollOptions.length) {
+                    throw new Error('Poll options must be unique')
+                }
+            }
+
             const formData = new FormData()
-            if (editingEvent.title) formData.append('title', editingEvent.title)
-            if (editingEvent.description) formData.append('description', editingEvent.description)
+            if (editingEvent.title) formData.append('title', editingEvent.title.trim())
+            if (editingEvent.description) formData.append('description', editingEvent.description.trim())
             if (editingEvent.startDate && !isNaN(Date.parse(editingEvent.startDate))) formData.append('startDate', new Date(editingEvent.startDate).toISOString())
             if (editingEvent.endDate && !isNaN(Date.parse(editingEvent.endDate))) formData.append('endDate', new Date(editingEvent.endDate).toISOString())
-            if (editingEvent.location) formData.append('location', editingEvent.location)
-            if (editType) formData.append('type', editType)
+            if (editingEvent.location?.trim()) formData.append('location', editingEvent.location.trim())
+            formData.append('type', editType || 'other')
 
             if (includePollInEdit) {
                 formData.append(
                     'poll',
                     JSON.stringify({
-                        question: editPollQuestion,
-                        options: editPollOptions
-                            .filter((option) => option.trim() !== '')
+                        question: editPollQuestion.trim(),
+                        options: normalizedEditPollOptions
                             .map((option) => ({
                                 option,
                                 votes: 0,
