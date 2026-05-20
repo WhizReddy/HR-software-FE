@@ -3,7 +3,6 @@ import EventPoll from '../EventPoll/EventsPoll'
 import { Calendar, MapPin, X } from 'lucide-react'
 import { useAuth } from '@/features/auth/context/AuthProvider'
 import { useEvents } from '@/Pages/Events/Context/EventsContext'
-import { useSearchParams } from 'react-router-dom'
 import Button from '@/Components/Button/Button'
 import { ButtonTypes } from '@/Components/Button/ButtonTypes'
 
@@ -12,27 +11,8 @@ const EventMap = lazy(() => import('../GoogleMap/MapPicker'))
 
 const SelectedEventCard = () => {
     const { currentUser } = useAuth()
-    const { selectedEvent, setSelectedEvent, setShowEventModal, formatDate } = useEvents()
-    const [, setSearchParams] = useSearchParams()
+    const { selectedEvent, handleCloseEventDetails, formatDate } = useEvents()
     const [showMap, setShowMap] = useState(false)
-
-    useEffect(() => {
-        if (selectedEvent?._id) {
-            setSearchParams((prev) => {
-                const next = new URLSearchParams(prev)
-                next.set('event', selectedEvent._id.toString())
-                return next
-            }, { replace: true })
-        }
-
-        return () => {
-            setSearchParams((prev) => {
-                const next = new URLSearchParams(prev)
-                next.delete('event')
-                return next
-            }, { replace: true })
-        }
-    }, [selectedEvent?._id, setSearchParams])
 
     useEffect(() => {
         setShowMap(false)
@@ -62,10 +42,7 @@ const SelectedEventCard = () => {
                         {selectedEvent.title}
                     </h2>
                     <button
-                        onClick={() => {
-                            setSelectedEvent(null)
-                            setShowEventModal(false)
-                        }}
+                        onClick={handleCloseEventDetails}
                         className="p-2 -mr-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-full transition-colors flex-shrink-0"
                     >
                         <X size={24} />

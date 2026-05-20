@@ -32,8 +32,6 @@ function EventsContentAndComponents() {
         showModal,
         closeModal,
         showEventModal,
-        setShowEventModal,
-        setSelectedEvent,
         updateToastMessage,
         updateToastOpen,
         updateToastSeverity,
@@ -45,7 +43,8 @@ function EventsContentAndComponents() {
         handleOpenDrawer,
         formatDate,
         handleDeleteEventModal,
-        handleSeeEventDetails
+        handleSeeEventDetails,
+        handleCloseEventDetails,
     } = useEvents()
 
     const {
@@ -66,11 +65,6 @@ function EventsContentAndComponents() {
             fetchNextPage()
         }
     }, [fetchNextPage, hasNextPage, inView, isFetchingNextPage])
-
-    const handleCloseEventDetails = () => {
-        setSelectedEvent(null)
-        setShowEventModal(false)
-    }
 
     return (
         <div id="events-root" className="flex flex-col max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">

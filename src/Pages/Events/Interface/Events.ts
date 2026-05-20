@@ -94,6 +94,7 @@ export interface EventsContextProps {
     allEmails: string[]
     eventToDeleteId: string | number
     handleSeeEventDetails: (event: EventsData) => void
+    handleCloseEventDetails: () => void
     drawerOpen: boolean
     handleOpenDrawer: (action: 'create' | 'edit', event?: EventsData) => void
     editParticipants: string[]

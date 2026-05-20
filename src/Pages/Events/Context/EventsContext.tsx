@@ -4,6 +4,7 @@ import React, {
     useCallback,
     useContext,
     useEffect,
+    useRef,
     useState,
 } from 'react'
 import { EventsData, EventsContextProps } from '@/Pages/Events/Interface/Events'
@@ -19,6 +20,7 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
     const [showEventModal, setShowEventModal] = useState<boolean>(false)
     const [selectedEvent, setSelectedEvent] = useState<EventsData | null>(null)
+    const closingEventIdRef = useRef<string | null>(null)
     const [drawerOpen, setDrawerOpen] = useState(false)
     const [drawerAction, setDrawerAction] = useState<'create' | 'edit'>('create')
     const { currentUser } = useAuth()
@@ -42,19 +44,45 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
         }
     }, [])
 
+    const [searchParams, setSearchParams] = useSearchParams()
+
+    const eventId = searchParams.get('event')
+
     const handleSeeEventDetails = useCallback((event: EventsData) => {
+        closingEventIdRef.current = null
+        setSearchParams((prev) => {
+            const next = new URLSearchParams(prev)
+            next.set('event', event._id.toString())
+            return next
+        }, { replace: true })
         startTransition(() => {
             setSelectedEvent(event)
             setShowEventModal(true)
         })
-    }, [])
+    }, [setSearchParams])
 
-    const [searchParams] = useSearchParams()
-
-    const eventId = searchParams.get('event')
+    const handleCloseEventDetails = useCallback(() => {
+        closingEventIdRef.current = selectedEvent?._id || eventId
+        setSearchParams((prev) => {
+            const next = new URLSearchParams(prev)
+            next.delete('event')
+            return next
+        }, { replace: true })
+        setSelectedEvent(null)
+        setShowEventModal(false)
+    }, [eventId, selectedEvent?._id, setSearchParams])
 
     useEffect(() => {
-        if (eventId && eventId !== selectedEvent?._id) {
+        if (!eventId) {
+            closingEventIdRef.current = null
+            return
+        }
+
+        if (
+            eventId &&
+            eventId !== selectedEvent?._id &&
+            eventId !== closingEventIdRef.current
+        ) {
             void loadEventById(eventId)
         }
     }, [eventId, loadEventById, selectedEvent?._id])
@@ -179,6 +207,7 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
                 typesofEvent,
                 eventToDeleteId,
                 handleSeeEventDetails,
+                handleCloseEventDetails,
                 drawerOpen,
                 handleOpenDrawer,
                 handleCloseDrawer,
