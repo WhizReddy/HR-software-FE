@@ -14,6 +14,8 @@ function CandidatesCoontext() {
         page,
         pageSize,
         isPending,
+        isError,
+        error,
         search,
         setSearch,
         clearSearch,
@@ -27,6 +29,11 @@ function CandidatesCoontext() {
                 description="Search and review applicants consistently across the hiring pipeline."
                 className="mb-8"
             />
+            {isError && (
+                <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                    Failed to load candidates: {error?.message ?? 'Unknown error'}
+                </div>
+            )}
             <DataTable
                 getRowId={getRowId}
                 columns={columns}

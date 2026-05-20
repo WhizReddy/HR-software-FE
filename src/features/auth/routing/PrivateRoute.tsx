@@ -1,4 +1,5 @@
 import { Navigate, Outlet } from 'react-router-dom'
+import { RingLoader } from 'react-spinners'
 import { BreadcrumbComponent } from '@/Components/BreadCrumbs/BreadCrumbs'
 import Header from '@/Components/Header/header'
 import { SideBar } from '@/Components/SideBar/sidebar'
@@ -9,7 +10,11 @@ const PrivateRoute = () => {
     const { isAuthenticated, isInitializing } = useAuth()
 
     if (isInitializing) {
-        return null
+        return (
+            <div className="flex min-h-screen items-center justify-center bg-slate-50">
+                <RingLoader color="#2457A3" />
+            </div>
+        )
     }
 
     if (!isAuthenticated) {

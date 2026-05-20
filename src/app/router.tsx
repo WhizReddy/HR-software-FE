@@ -68,7 +68,6 @@ const router = createBrowserRouter([
         element: withSuspense(<Career />),
     },
     {
-        path: '/',
         element: <PrivateRoute />,
         children: [
             {

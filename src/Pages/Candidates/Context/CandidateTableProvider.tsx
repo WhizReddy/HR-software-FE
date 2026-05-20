@@ -27,7 +27,7 @@ export const CandidateProvider: React.FC<{ children: any }> = ({ children }) => 
         return response.data
     }
 
-    const { data: applicants, isPending } = useQuery({
+    const { data: applicants, isPending, isError, error } = useQuery({
         queryKey: ['applicants', page, pageSize, searchQuery],
         queryFn: () => fetchCandidates(),
     })
@@ -109,6 +109,8 @@ export const CandidateProvider: React.FC<{ children: any }> = ({ children }) => 
         clearSearch,
         totalPages: applicants?.totalPages ?? 0,
         isPending,
+        isError,
+        error: error ?? null,
     }
 
     return (

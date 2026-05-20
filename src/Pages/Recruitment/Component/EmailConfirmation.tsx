@@ -84,7 +84,6 @@ const EmailConfirmation: React.FC = () => {
                     const response = await AxiosInstance.get(confirmationUrl)
 
                     if (response.status === 200) {
-                        navigate('/career')
                         setStatus('success')
                     } else {
                         setStatus('error')

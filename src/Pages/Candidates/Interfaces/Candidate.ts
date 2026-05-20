@@ -40,6 +40,8 @@ export interface CandidateContextType {
     getRowId: (row: CandidateRow) => number
     handleRowClick: (params: RowParams<CandidateRow>) => void
     isPending: boolean
+    isError: boolean
+    error: Error | null
     page: number
     pageSize: number
     totalPages: number

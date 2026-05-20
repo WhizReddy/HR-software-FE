@@ -29,7 +29,7 @@ const EventPoll: React.FC<EventPollProps> = ({ poll, eventId, userId }) => {
         try {
             if (existingVotedOption && existingVotedOption.option !== option) {
                 await AxiosInstance.delete(`/event/${eventId}/vote`, {
-                    data: { option: existingVotedOption.option, userId },
+                    data: { option: existingVotedOption.option },
                 })
 
                 setLocalPoll((prevPoll) => ({
@@ -51,7 +51,6 @@ const EventPoll: React.FC<EventPollProps> = ({ poll, eventId, userId }) => {
 
             await AxiosInstance.post(`/event/${eventId}/vote`, {
                 option,
-                userId,
             })
 
             setLocalPoll((prevPoll) => ({

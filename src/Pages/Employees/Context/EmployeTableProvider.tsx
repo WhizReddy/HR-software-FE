@@ -28,7 +28,7 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
         return response.data
     }
 
-    const { data: users, isPending } = useQuery<{ data: UserProfileData[]; totalPages: number }, Error>({
+    const { data: users, isPending, isError, error } = useQuery<{ data: UserProfileData[]; totalPages: number }, Error>({
         queryKey: ['users', page, pageSize, searchQuery],
         queryFn: () => fetchEmployes(),
     })
@@ -79,6 +79,8 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
         handleRowClick,
         handlePaginationModelChange,
         isPending,
+        isError,
+        error: error ?? null,
         page,
         pageSize,
         search,

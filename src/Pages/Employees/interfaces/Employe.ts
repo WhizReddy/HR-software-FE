@@ -15,6 +15,8 @@ export interface EmployeeContextType {
     rows: EmployeeRow[]
     columns: ColDef<EmployeeRow>[]
     isPending: boolean
+    isError: boolean
+    error: Error | null
     getRowId: (row: EmployeeRow) => number
     handleRowClick: (params: RowParams<EmployeeRow>) => void
     page: number

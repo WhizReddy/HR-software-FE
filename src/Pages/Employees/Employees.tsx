@@ -13,6 +13,8 @@ function EmployeesContent() {
         pageSize,
         totalPages,
         isPending,
+        isError,
+        error,
         search,
         setSearch,
         clearSearch,
@@ -26,6 +28,11 @@ function EmployeesContent() {
                 description="Manage your organization's workforce, browse profiles, and move through employee records from one consistent workspace."
                 className="mb-8"
             />
+            {isError && (
+                <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                    Failed to load employees: {error?.message ?? 'Unknown error'}
+                </div>
+            )}
             <DataTable
                 rows={rows}
                 columns={columns}
