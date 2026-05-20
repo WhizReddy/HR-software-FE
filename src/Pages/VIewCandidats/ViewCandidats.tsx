@@ -4,6 +4,7 @@ import {
     CalendarClock,
     CheckCircle2,
     FileText,
+    MessageSquareText,
     Send,
     UserRound,
     XCircle,
@@ -142,7 +143,8 @@ export default function ViewCandidats() {
         applicant.currentPhase === 'applied' ||
         applicant.currentPhase === 'applicant'
     const canSchedulePhaseTwo = applicant?.currentPhase === 'first_interview'
-    const canEmploy = applicant?.currentPhase === 'second_interview'
+    const canEmploy = Boolean(applicant)
+    const interviewNotes = applicant?.notes?.trim()
     const interviewLabel =
         applicant?.currentPhase === 'first_interview'
             ? 'Phase 2 Interview Date'
@@ -251,6 +253,34 @@ export default function ViewCandidats() {
                                 </div>
                             ))}
                         </dl>
+                    </Card>
+
+                    <Card className="rounded-2xl border-slate-200 bg-white p-6 shadow-sm">
+                        <div className="flex items-center gap-3 border-b border-slate-100 pb-5">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-amber-600">
+                                <MessageSquareText size={22} />
+                            </div>
+                            <div>
+                                <h2 className="text-lg font-black tracking-tight text-slate-900">
+                                    Interview Notes
+                                </h2>
+                                <p className="text-sm text-slate-500">
+                                    Notes saved while scheduling or rescheduling interviews.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="mt-5 rounded-2xl border border-slate-100 bg-slate-50/70 p-4">
+                            {interviewNotes ? (
+                                <p className="whitespace-pre-wrap text-sm leading-6 text-slate-700">
+                                    {interviewNotes}
+                                </p>
+                            ) : (
+                                <p className="text-sm font-semibold text-slate-500">
+                                    No interview notes have been added yet.
+                                </p>
+                            )}
+                        </div>
                     </Card>
                 </div>
 

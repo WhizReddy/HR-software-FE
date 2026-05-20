@@ -16,6 +16,7 @@ export interface CandidateView {
     currentPhase?: string
     firstInterviewDate?: string
     secondInterviewDate?: string
+    notes?: string
 }
 
 export type ModalAction = 'active' | 'reject' | 'employ'
