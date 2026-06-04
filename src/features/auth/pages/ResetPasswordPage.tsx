@@ -107,7 +107,7 @@ export default function ResetPasswordPage() {
                     <div className="space-y-2">
                         <Label
                             htmlFor="email"
-                            className="text-slate-700 font-bold text-xs uppercase tracking-wider"
+                            className="text-xs font-semibold uppercase text-slate-600"
                         >
                             Email Address
                         </Label>
@@ -117,13 +117,13 @@ export default function ResetPasswordPage() {
                             placeholder="name@company.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="h-12 bg-white/70"
+                            className="h-12 bg-white"
                         />
                     </div>
 
                     <Button
                         type="submit"
-                        className="mt-6 h-12 w-full rounded-lg bg-[#2457a3] text-base font-semibold text-white shadow-sm transition-colors hover:bg-[#1a407a]"
+                        className="mt-6 h-12 w-full rounded-md bg-[#2457a3] text-base font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.08)] transition-colors hover:bg-[#1a407a]"
                         disabled={isLoading}
                     >
                         {isLoading ? 'Sending...' : 'Send Reset Link'}
@@ -134,7 +134,7 @@ export default function ResetPasswordPage() {
                     <div className="space-y-2">
                         <Label
                             htmlFor="newPassword"
-                            className="text-slate-700 font-bold text-xs uppercase tracking-wider"
+                            className="text-xs font-semibold uppercase text-slate-600"
                         >
                             New Password
                         </Label>
@@ -144,13 +144,13 @@ export default function ResetPasswordPage() {
                             placeholder="••••••••"
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
-                            className="h-12 bg-white/70"
+                            className="h-12 bg-white"
                         />
                     </div>
                     <div className="space-y-2">
                         <Label
                             htmlFor="confirmPassword"
-                            className="text-slate-700 font-bold text-xs uppercase tracking-wider"
+                            className="text-xs font-semibold uppercase text-slate-600"
                         >
                             Confirm Password
                         </Label>
@@ -162,13 +162,13 @@ export default function ResetPasswordPage() {
                             onChange={(e) =>
                                 setConfirmPassword(e.target.value)
                             }
-                            className="h-12 bg-white/70"
+                            className="h-12 bg-white"
                         />
                     </div>
 
                     <Button
                         type="submit"
-                        className="mt-6 h-12 w-full rounded-lg bg-[#2457a3] text-base font-semibold text-white shadow-sm transition-colors hover:bg-[#1a407a]"
+                        className="mt-6 h-12 w-full rounded-md bg-[#2457a3] text-base font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.08)] transition-colors hover:bg-[#1a407a]"
                         disabled={isLoading}
                     >
                         {isLoading ? 'Resetting...' : 'Reset Password'}

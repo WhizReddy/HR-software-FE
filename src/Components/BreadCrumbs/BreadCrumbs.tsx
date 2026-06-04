@@ -77,8 +77,8 @@ export const BreadcrumbComponent: React.FC = () => {
     if (crumbs.length === 0) return null
 
     return (
-        <Breadcrumb className="mb-5">
-            <BreadcrumbList className="inline-flex rounded-full border border-white/80 bg-white/80 px-3 py-1.5 text-xs text-slate-500 shadow-sm backdrop-blur">
+        <Breadcrumb className="mb-4">
+            <BreadcrumbList className="inline-flex rounded-md border border-slate-200/80 bg-white px-3 py-1.5 text-xs text-slate-500 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
                 <BreadcrumbItem>
                     <BreadcrumbLink render={<Link to="/dashboard" className="hover:text-[#2457a3]" />}>
                         Home

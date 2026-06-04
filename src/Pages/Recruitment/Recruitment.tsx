@@ -59,15 +59,15 @@ function RecruitmentBase() {
     }
 
     return (
-        <main className="min-h-screen bg-slate-50">
+        <main className="min-h-screen bg-[#f5f7fb]">
             <section className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-5 sm:px-6 lg:grid-cols-[minmax(320px,0.88fr)_minmax(0,1.12fr)] lg:px-8 lg:py-8">
                 <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
-                    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-[#2457a3] text-white shadow-sm">
+                    <div className="overflow-hidden rounded-lg border border-slate-200/80 bg-[#2457a3] text-white shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
                         <div className="p-6 sm:p-7">
-                            <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-100">
+                            <p className="text-xs font-semibold uppercase text-blue-100">
                                 Careers
                             </p>
-                            <h1 className="mt-3 max-w-xl text-3xl font-black leading-tight tracking-tight sm:text-4xl">
+                            <h1 className="mt-3 max-w-xl text-3xl font-semibold leading-tight sm:text-4xl">
                                 Apply to join the CRM team
                             </h1>
                             <p className="mt-4 max-w-xl text-sm leading-6 text-blue-50 sm:text-base">
@@ -103,18 +103,18 @@ function RecruitmentBase() {
                         />
                     </div>
 
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">
+                    <div className="rounded-lg border border-slate-200/80 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
+                        <p className="text-[11px] font-semibold uppercase text-slate-400">
                             Contact Fields
                         </p>
                         <div className="mt-4 grid gap-3">
-                            <div className="flex items-center gap-3 rounded-xl bg-slate-50 px-4 py-3">
+                            <div className="flex items-center gap-3 rounded-md bg-slate-50 px-4 py-3">
                                 <Mail size={16} className="text-[#2457a3]" />
                                 <span className="text-sm font-semibold text-slate-700">
                                     Email confirmation enabled
                                 </span>
                             </div>
-                            <div className="flex items-center gap-3 rounded-xl bg-slate-50 px-4 py-3">
+                            <div className="flex items-center gap-3 rounded-md bg-slate-50 px-4 py-3">
                                 <Phone size={16} className="text-[#2457a3]" />
                                 <span className="text-sm font-semibold text-slate-700">
                                     Albania mobile format
@@ -124,13 +124,13 @@ function RecruitmentBase() {
                     </div>
                 </aside>
 
-                <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7 lg:p-8">
+                <section className="rounded-lg border border-slate-200/80 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:p-7 lg:p-8">
                     <div className="flex flex-col gap-4 border-b border-slate-100 pb-6 sm:flex-row sm:items-start sm:justify-between">
                         <div>
-                            <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-400">
+                            <p className="text-xs font-semibold uppercase text-slate-400">
                                 Application Form
                             </p>
-                            <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-900">
+                            <h2 className="mt-2 text-2xl font-semibold text-slate-950">
                                 Candidate Details
                             </h2>
                             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
@@ -139,7 +139,7 @@ function RecruitmentBase() {
                                 application correctly.
                             </p>
                         </div>
-                        <div className="inline-flex w-fit items-center gap-2 rounded-xl border border-blue-100 bg-blue-50 px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-[#2457a3]">
+                        <div className="inline-flex w-fit items-center gap-2 rounded-md border border-blue-100 bg-blue-50 px-3 py-2 text-xs font-semibold uppercase text-[#2457a3]">
                             <BriefcaseBusiness size={15} />
                             CRM Hiring
                         </div>
@@ -530,8 +530,8 @@ function RecruitmentBase() {
                                     handleChange,
                                 }) => (
                                     <FieldFrame errors={errors}>
-                                        <label className="flex min-h-[150px] w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-center transition-colors hover:border-[#2457a3] hover:bg-blue-50/60">
-                                            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-[#2457a3] shadow-sm ring-1 ring-slate-200">
+                                        <label className="flex min-h-[150px] w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-center transition-colors hover:border-[#2457a3] hover:bg-blue-50/60">
+                                            <span className="flex h-12 w-12 items-center justify-center rounded-md bg-white text-[#2457a3] shadow-sm ring-1 ring-slate-200">
                                                 <UploadCloud size={22} />
                                             </span>
                                             <span className="font-bold text-slate-800">
@@ -566,7 +566,7 @@ function RecruitmentBase() {
                         </FormSection>
 
                         {error && (
-                            <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
+                            <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
                                 {error}
                             </div>
                         )}
@@ -578,7 +578,7 @@ function RecruitmentBase() {
                                 width="100%"
                                 onClick={resetForm}
                                 icon={<RotateCcw size={16} />}
-                                className="justify-center rounded-xl py-3"
+                                className="justify-center rounded-md py-3"
                             />
                             <MyButton
                                 type={ButtonTypes.PRIMARY}
@@ -591,7 +591,7 @@ function RecruitmentBase() {
                                 isSubmit
                                 width="100%"
                                 icon={<Send size={16} />}
-                                className="justify-center rounded-xl py-3"
+                                className="justify-center rounded-md py-3"
                             />
                         </div>
                     </form>
@@ -625,13 +625,13 @@ const InfoCard = ({
     title: string
     text: string
 }) => (
-    <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <article className="rounded-lg border border-slate-200/80 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
         <div className="flex items-start gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-[#2457a3]">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-blue-50 text-[#2457a3]">
                 {icon}
             </div>
             <div>
-                <h2 className="text-sm font-bold text-slate-900">{title}</h2>
+                <h2 className="text-sm font-semibold text-slate-900">{title}</h2>
                 <p className="mt-1 text-sm leading-5 text-slate-500">{text}</p>
             </div>
         </div>
@@ -649,7 +649,7 @@ const FormSection = ({
 }) => (
     <section className="border-t border-slate-100 pt-6 first:border-t-0 first:pt-0">
         <div className="mb-5">
-            <h3 className="text-base font-black tracking-tight text-slate-900">
+            <h3 className="text-base font-semibold text-slate-950">
                 {title}
             </h3>
             <p className="mt-1 text-sm leading-5 text-slate-500">

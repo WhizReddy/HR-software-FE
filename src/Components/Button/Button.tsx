@@ -53,13 +53,13 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
     const variants = {
         [ButtonTypes.PRIMARY]:
-            'border border-[#2457a3] bg-[#2457a3] text-white shadow-sm hover:bg-[#1b4285] focus-visible:ring-[#2457a3]',
+            'border border-[#2457a3] bg-[#2457a3] text-white shadow-[0_1px_2px_rgba(15,23,42,0.08)] hover:bg-[#1b4285] focus-visible:ring-[#2457a3]',
         [ButtonTypes.SECONDARY]:
-            'border border-slate-200 bg-white text-slate-700 shadow-sm hover:border-slate-300 hover:bg-slate-50 focus-visible:ring-slate-300',
+            'border border-slate-200 bg-white text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)] hover:border-slate-300 hover:bg-slate-50 focus-visible:ring-slate-300',
         [ButtonTypes.DANGER]:
             'border border-red-600 bg-red-600 text-white shadow-sm hover:bg-red-700 focus-visible:ring-red-500',
         [ButtonTypes.TERTIARY]:
-            'border border-slate-200/80 bg-slate-100 text-slate-700 shadow-sm hover:bg-slate-200 focus-visible:ring-slate-400',
+            'border border-slate-200/80 bg-slate-100 text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)] hover:bg-slate-200 focus-visible:ring-slate-400',
         [ButtonTypes.SUCCESS]:
             'border border-emerald-600 bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 focus-visible:ring-emerald-500',
         [ButtonTypes.WARNING]:
@@ -92,7 +92,7 @@ const Button: React.FC<ButtonProps> = ({
             onClick={onClick}
             disabled={disabled}
             className={cn(
-                'min-h-10 rounded-xl px-4 text-sm font-semibold ring-offset-white transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:translate-y-0 disabled:shadow-none disabled:opacity-55',
+                'min-h-10 rounded-md px-4 text-sm font-semibold ring-offset-white transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:translate-y-0 disabled:shadow-none disabled:opacity-55',
                 variantClass,
                 className,
             )}

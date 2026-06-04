@@ -116,14 +116,14 @@ export const SideBar: React.FC = () => {
   return (
     <Sidebar
       collapsible="icon"
-      className="border-r border-slate-200/70 bg-white/85 backdrop-blur-xl supports-[backdrop-filter]:bg-white/70"
+      className="border-r border-slate-200 bg-white"
     >
-      <SidebarHeader className="h-16 justify-center border-b border-slate-100/80 px-3">
+      <SidebarHeader className="h-16 justify-center border-b border-slate-100 px-3">
         <div className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#2457a3] via-[#2f67ba] to-[#5d8add] text-sm font-bold text-white shadow-md shadow-blue-300/40">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#2457a3] text-sm font-bold text-white shadow-sm">
             E
           </div>
-          <span className="truncate text-base font-bold tracking-tight text-slate-800 group-data-[collapsible=icon]:hidden">
+          <span className="truncate text-base font-semibold text-slate-900 group-data-[collapsible=icon]:hidden">
             PEOPLE <span className="text-[#2457a3]">HUB</span>
           </span>
         </div>
@@ -132,7 +132,7 @@ export const SideBar: React.FC = () => {
       <SidebarContent>
         {navGroups.map((group) => (
           <SidebarGroup key={group.label} className="px-2 pt-3">
-            <SidebarGroupLabel className="px-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+            <SidebarGroupLabel className="px-2 text-[10px] font-semibold uppercase text-slate-400">
               {group.label}
             </SidebarGroupLabel>
             <SidebarMenu>
@@ -148,8 +148,8 @@ export const SideBar: React.FC = () => {
                       onClick={() => navigate(path)}
                       className={
                         isActive
-                          ? 'bg-[#2457a3] text-white shadow-sm hover:bg-[#1f4d94] hover:text-white'
-                          : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                          ? 'bg-blue-50 text-[#2457a3] shadow-none hover:bg-blue-50 hover:text-[#2457a3]'
+                          : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                       }
                     >
                       <Icon size={18} className="shrink-0" />

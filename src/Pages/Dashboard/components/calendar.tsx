@@ -61,10 +61,10 @@ export default function Calendar() {
         <div className="w-full">
             <div className="mb-5 flex items-center justify-between gap-3 px-1">
                 <div>
-                    <h3 className="text-xl font-extrabold tracking-tight text-slate-800">
+                    <h3 className="text-xl font-semibold text-slate-950">
                         {visibleMonth.format('MMMM YYYY')}
                     </h3>
-                    <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-slate-400">
+                    <p className="mt-1 text-xs font-medium uppercase text-slate-400">
                         {isEventsLoading
                             ? 'Loading events'
                             : `${monthEvents.length} event${monthEvents.length === 1 ? '' : 's'} this month`}
@@ -74,7 +74,7 @@ export default function Calendar() {
                     <button
                         type="button"
                         onClick={() => setVisibleMonth((currentMonth) => currentMonth.subtract(1, 'month'))}
-                        className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 transition hover:border-slate-300 hover:text-slate-700"
+                        className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-500 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-700"
                         aria-label="Previous month"
                     >
                         <ChevronLeft size={16} />
@@ -82,21 +82,21 @@ export default function Calendar() {
                     <button
                         type="button"
                         onClick={() => setVisibleMonth((currentMonth) => currentMonth.add(1, 'month'))}
-                        className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 transition hover:border-slate-300 hover:text-slate-700"
+                        className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-500 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-700"
                         aria-label="Next month"
                     >
                         <ChevronRight size={16} />
                     </button>
                 </div>
             </div>
-            <div className="mb-3 grid grid-cols-7 gap-1 text-center text-xs font-medium uppercase tracking-wider text-slate-400">
+            <div className="mb-3 grid grid-cols-7 gap-1 text-center text-xs font-medium uppercase text-slate-400">
                 {weekDays.map((day) => (
                     <div key={day}>{day}</div>
                 ))}
             </div>
             <div className="grid grid-cols-7 gap-x-1 gap-y-2 text-center text-sm">
                 {Array.from({ length: firstDay }).map((_, index) => (
-                    <div key={`empty-${index}`} className="h-10 rounded-2xl" />
+                    <div key={`empty-${index}`} className="h-10 rounded-lg" />
                 ))}
                 {Array.from({ length: daysInMonth }).map((_, index) => {
                     const date = index + 1
@@ -107,7 +107,7 @@ export default function Calendar() {
                     return (
                         <div
                             key={date}
-                            className={`relative mx-auto flex h-10 w-10 items-center justify-center rounded-2xl font-medium transition-colors ${
+                            className={`relative mx-auto flex h-10 w-10 items-center justify-center rounded-lg font-medium transition-colors ${
                                 isToday
                                     ? 'bg-blue-600 text-white shadow-md shadow-blue-200'
                                     : eventCount > 0

@@ -23,14 +23,12 @@ const PrivateRoute = () => {
 
     return (
         <SidebarProvider defaultOpen>
-            <div className="relative flex h-svh w-full overflow-hidden bg-slate-100">
-                <div className="pointer-events-none absolute -top-40 right-[-8rem] h-[32rem] w-[32rem] rounded-full bg-[radial-gradient(circle_at_center,_rgba(56,189,248,0.26),_transparent_65%)]" />
-                <div className="pointer-events-none absolute bottom-[-10rem] left-[-8rem] h-[28rem] w-[28rem] rounded-full bg-[radial-gradient(circle_at_center,_rgba(37,99,235,0.18),_transparent_70%)]" />
+            <div className="relative flex h-svh w-full overflow-hidden bg-[#f5f7fb]">
                 <SideBar />
                 <SidebarInset className="flex h-svh min-w-0 flex-col overflow-hidden bg-transparent">
                     <Header />
-                    <main className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-6">
-                        <div className="mx-auto max-w-[1500px]">
+                    <main className="min-h-0 flex-1 overflow-y-auto px-4 py-5 sm:px-6 lg:px-8">
+                        <div className="mx-auto max-w-[1440px]">
                             <BreadcrumbComponent />
                             <Outlet />
                         </div>

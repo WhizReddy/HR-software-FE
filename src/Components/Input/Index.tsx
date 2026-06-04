@@ -72,7 +72,7 @@ const Input: React.FC<InputProps> = ({
     const resolvedType = isPassword ? 'password' : type
 
     const sharedClasses = cn(
-        'border-slate-200 bg-white/90 text-slate-700 placeholder:text-slate-400 focus-visible:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-offset-0 hover:border-slate-300 hover:bg-white',
+        'border-slate-200 bg-white text-slate-700 placeholder:text-slate-400 focus-visible:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-500/30 focus-visible:ring-offset-0 hover:border-slate-300',
         icon && iconPosition === 'start' ? 'pl-10' : '',
         icon && iconPosition === 'end' ? 'pr-10' : '',
         resolvedType === 'datetime-local' ? 'block w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-100' : '',
@@ -98,7 +98,7 @@ const Input: React.FC<InputProps> = ({
                 <Label
                     htmlFor={name}
                     className={cn(
-                        'text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500',
+                        'text-[11px] font-semibold uppercase text-slate-500',
                         isFilter ? 'text-[10px]' : '',
                     )}
                 >

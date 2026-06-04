@@ -57,11 +57,11 @@ export const Header: React.FC = () => {
   }
 
   return (
-    <header className="sticky top-0 z-20 mx-3 mt-3 flex h-16 items-center justify-between rounded-2xl border border-white/70 bg-white/80 px-4 shadow-[0_10px_30px_rgba(15,23,42,0.08)] backdrop-blur-xl sm:mx-4 sm:mt-4 sm:px-5">
+    <header className="sticky top-0 z-20 mx-4 mt-4 flex h-16 items-center justify-between rounded-lg border border-slate-200/80 bg-white px-4 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:mx-6 sm:px-5 lg:mx-8">
       <div className="flex items-center gap-3">
-        <SidebarTrigger className="rounded-xl border border-transparent p-2 text-slate-500 transition-colors hover:border-slate-200 hover:bg-white hover:text-slate-700" />
+        <SidebarTrigger className="rounded-md border border-transparent p-2 text-slate-500 transition-colors hover:border-slate-200 hover:bg-slate-50 hover:text-slate-700" />
         <div className="hidden md:block">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+          <p className="text-[11px] font-semibold uppercase text-slate-400">
             Workspace
           </p>
           <p className="text-sm font-semibold text-slate-700">People Operations Hub</p>
@@ -77,7 +77,7 @@ export const Header: React.FC = () => {
             aria-expanded={isProfileOpen}
             aria-haspopup="menu"
             aria-label="Open profile menu"
-            className="flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/90 p-1 pr-3 shadow-sm transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30"
+            className="flex items-center gap-2 rounded-lg border border-slate-200/80 bg-white p-1 pr-3 shadow-sm transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30"
           >
             <Avatar className="h-8 w-8 cursor-pointer bg-gradient-to-br from-[#2457a3] to-[#4A7BCD] text-white shadow-sm">
               <AvatarFallback className="bg-transparent text-xs font-bold text-white">
@@ -88,7 +88,7 @@ export const Header: React.FC = () => {
               <p className="max-w-[140px] truncate text-sm font-semibold text-slate-700">
                 {currentUser?.firstName} {currentUser?.lastName}
               </p>
-              <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-slate-400">
+              <p className="text-[11px] font-medium uppercase text-slate-400">
                 {currentUser?.role ?? 'user'}
               </p>
             </div>
@@ -99,7 +99,7 @@ export const Header: React.FC = () => {
             <div
               role="menu"
               aria-label="Profile options"
-              className="absolute right-0 z-50 mt-2 w-64 overflow-hidden rounded-2xl border border-slate-200/90 bg-white/95 shadow-xl shadow-slate-200/70 backdrop-blur"
+              className="absolute right-0 z-50 mt-2 w-64 overflow-hidden rounded-lg border border-slate-200/90 bg-white shadow-xl shadow-slate-200/70"
             >
               <div className="border-b border-slate-100 px-4 py-3">
                 <p className="truncate text-sm font-semibold text-slate-800">

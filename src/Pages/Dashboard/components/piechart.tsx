@@ -33,9 +33,9 @@ const PieChartComponent = () => {
                             : 'linear-gradient(135deg, rgba(148,163,184,0.2), rgba(226,232,240,0.6))',
                 }}
             >
-                <div className="absolute inset-4 flex flex-col items-center justify-center rounded-full bg-white/80 shadow-inner backdrop-blur-md">
-                    <span className="text-3xl font-extrabold text-slate-800">{total}</span>
-                    <span className="mt-0.5 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                <div className="absolute inset-4 flex flex-col items-center justify-center rounded-full bg-white/90 shadow-inner">
+                    <span className="text-3xl font-semibold text-slate-950">{total}</span>
+                    <span className="mt-0.5 text-xs font-semibold uppercase text-slate-500">
                         Team Size
                     </span>
                 </div>
@@ -58,7 +58,7 @@ const PieChartComponent = () => {
                                     {status}
                                 </span>
                             </div>
-                            <span className="font-bold text-slate-800">
+                            <span className="font-semibold text-slate-800">
                                 {value} ({percentage.toFixed(0)}%)
                             </span>
                         </div>

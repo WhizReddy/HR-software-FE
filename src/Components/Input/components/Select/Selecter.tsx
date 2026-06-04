@@ -49,7 +49,7 @@ const Selecter: React.FC<SelecterProps> = ({
             style={{ width: width ? (typeof width === 'number' ? `${width}px` : width) : '100%' }}
         >
             {label && (
-                <Label htmlFor={name} className="text-xs font-semibold uppercase tracking-wider text-slate-600">
+                <Label htmlFor={name} className="text-[11px] font-semibold uppercase text-slate-500">
                     {label}
                 </Label>
             )}
@@ -62,9 +62,9 @@ const Selecter: React.FC<SelecterProps> = ({
                 value={selectedValue}
                 onChange={handleChange}
                 className={cn(
-                    'w-full rounded-lg border border-slate-200 bg-white/80 backdrop-blur-sm px-3 text-sm text-slate-800 shadow-sm hover:shadow-md transition-all duration-300',
+                    'w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-800 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-colors duration-200 hover:border-slate-300',
                     multiple ? 'min-h-[120px] py-1' : 'h-10 py-2',
-                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-0',
+                    'focus-visible:border-blue-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30 focus-visible:ring-offset-0',
                     'disabled:cursor-not-allowed disabled:opacity-50',
                 )}
             >

@@ -78,19 +78,19 @@ function DataTable<TRow>({
             : `Showing ${rows.length} ${rows.length === 1 ? 'result' : 'results'}`
 
     return (
-        <Card className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-0 shadow-sm">
+        <Card className="overflow-hidden rounded-lg border border-slate-200/80 bg-white p-0 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
             {(title || actions || onSearchChange || filterNode) && (
-                <div className="flex flex-col gap-4 border-b border-slate-200 bg-white px-5 py-5 lg:flex-row lg:items-center lg:justify-between">
+                <div className="grid gap-4 border-b border-slate-200/80 bg-white px-5 py-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
                     <div className="flex w-full flex-1 flex-col gap-3 sm:flex-row sm:items-center">
                         {title && (
                             <div className="min-w-0">
-                                <h2 className="truncate text-lg font-bold tracking-tight text-slate-800">
+                                <h2 className="truncate text-base font-semibold text-slate-900">
                                     {title}
                                 </h2>
                             </div>
                         )}
                         {onSearchChange && (
-                            <div className="flex w-full flex-col gap-2 sm:max-w-md sm:flex-row sm:items-center">
+                            <div className="flex w-full flex-col gap-2 sm:max-w-lg sm:flex-row sm:items-center">
                                 <div className="flex-1">
                                     <Input
                                         IsUsername
@@ -103,6 +103,7 @@ function DataTable<TRow>({
                                         iconPosition="start"
                                         icon={<Search size={18} className="text-slate-400" />}
                                         width="100%"
+                                        height={40}
                                     />
                                 </div>
                                 {onSearchClear && (
@@ -112,7 +113,7 @@ function DataTable<TRow>({
                                         size="sm"
                                         onClick={onSearchClear}
                                         disabled={!hasSearch}
-                                        className="shrink-0"
+                                        className="h-10 shrink-0 rounded-md"
                                     >
                                         Clear
                                     </Button>
@@ -130,14 +131,14 @@ function DataTable<TRow>({
                 </div>
             )}
 
-            <div className="overflow-x-auto px-2 pb-2 sm:px-3">
-                <Table className="min-w-[760px] text-left text-sm">
+            <div className="overflow-x-auto">
+                <Table className="min-w-[860px] text-left text-sm">
                     <TableHeader className="sticky top-0 z-10">
                         <TableRow className="border-b border-slate-200 bg-slate-50 hover:bg-slate-50">
                             {columns.map((col) => (
                                 <TableHead
                                     key={col.field}
-                                    className="whitespace-nowrap px-4 py-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500"
+                                    className="h-11 whitespace-nowrap px-5 py-3 text-xs font-semibold uppercase text-slate-500"
                                     style={col.width ? { width: col.width } : undefined}
                                 >
                                     {col.headerName}
@@ -150,12 +151,12 @@ function DataTable<TRow>({
                             Array.from({ length: Math.max(3, Math.min(pageSize, 8)) }).map((_, rowIndex) => (
                                 <TableRow
                                     key={`loading-row-${rowIndex}`}
-                                    className="border-b border-slate-100 last:border-0"
+                                    className="h-14 border-b border-slate-100 last:border-0"
                                 >
                                     {columns.map((col, colIndex) => (
                                         <TableCell
                                             key={`${col.field}-${rowIndex}`}
-                                            className="px-4 py-4"
+                                            className="px-5 py-3"
                                         >
                                             <div
                                                 className={`h-4 animate-pulse rounded bg-slate-100 ${
@@ -194,18 +195,18 @@ function DataTable<TRow>({
                                     onClick={() =>
                                         handleRowClick && handleRowClick({ row })
                                     }
-                                    className={`border-b border-slate-100 transition-colors duration-200 last:border-0 ${
-                                        idx % 2 === 0 ? 'bg-white/40' : 'bg-slate-50/40'
+                                    className={`h-14 border-b border-slate-100 transition-colors duration-200 last:border-0 ${
+                                        idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/40'
                                     } ${
                                         handleRowClick
-                                            ? 'cursor-pointer hover:bg-blue-50/70'
-                                            : 'hover:bg-slate-50/80'
+                                            ? 'cursor-pointer hover:bg-blue-50/60'
+                                            : 'hover:bg-slate-50'
                                     }`}
                                 >
                                     {columns.map((col) => (
                                         <TableCell
                                             key={col.field}
-                                            className="whitespace-nowrap px-4 py-4 align-middle text-sm text-slate-700"
+                                            className="whitespace-nowrap px-5 py-3 align-middle text-sm text-slate-700"
                                         >
                                             {col.renderCell
                                                 ? col.renderCell({
@@ -223,7 +224,7 @@ function DataTable<TRow>({
                 </Table>
             </div>
 
-            <div className="flex flex-col gap-3 border-t border-slate-200 bg-slate-50/70 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-3 border-t border-slate-200/80 bg-white px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="space-y-1">
                     <p className="text-sm font-semibold text-slate-700">
                         {isLoading ? loadingLabel : resultLabel}
@@ -251,7 +252,7 @@ function DataTable<TRow>({
                                                 pageSize: Number(event.target.value),
                                             })
                                         }
-                                        className="h-9 rounded-lg border border-slate-200 bg-white px-2 text-sm font-semibold text-slate-700 outline-none transition-colors hover:border-slate-300 focus:border-[#2457a3] focus:ring-2 focus:ring-[#2457a3]/15 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400"
+                                        className="h-9 rounded-md border border-slate-200 bg-white px-2 text-sm font-semibold text-slate-700 outline-none transition-colors hover:border-slate-300 focus:border-[#2457a3] focus:ring-2 focus:ring-[#2457a3]/15 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400"
                                     >
                                         {pageSizeOptions.map((option) => (
                                             <option key={option} value={option}>
@@ -267,7 +268,7 @@ function DataTable<TRow>({
                                     variant="outline"
                                     size="sm"
                                     disabled={isLoading || !canPrev}
-                                    className="min-w-[92px]"
+                                    className="min-w-[92px] rounded-md"
                                     onClick={() =>
                                         onPaginationModelChange({ page: page - 1, pageSize })
                                     }
@@ -282,7 +283,7 @@ function DataTable<TRow>({
                                     variant="outline"
                                     size="sm"
                                     disabled={isLoading || !canNext}
-                                    className="min-w-[92px]"
+                                    className="min-w-[92px] rounded-md"
                                     onClick={() =>
                                         onPaginationModelChange({ page: page + 1, pageSize })
                                     }

@@ -25,6 +25,10 @@ const LoginPageContent = () => {
     } = useContext(LoginContext)
 
     const { form } = useLoginForm(setError)
+    const renderFieldErrors = (errors: unknown[] | null | undefined) =>
+        Array.isArray(errors) && errors.length > 0 ? (
+            <ErrorText>{errors.join(', ')}</ErrorText>
+        ) : null
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -68,7 +72,7 @@ const LoginPageContent = () => {
                         <div className="space-y-2">
                             <Label
                                 htmlFor="email"
-                                className="text-slate-700 font-bold text-xs uppercase tracking-wider"
+                                className="text-xs font-semibold uppercase text-slate-600"
                             >
                                 Email Address
                             </Label>
@@ -80,13 +84,9 @@ const LoginPageContent = () => {
                                 onChange={(e) =>
                                     field.handleChange(e.target.value)
                                 }
-                                className="h-12 bg-white/70"
+                                className="h-12 bg-white"
                             />
-                            {field.state.meta.errors && (
-                                <ErrorText>
-                                    {field.state.meta.errors.join(', ')}
-                                </ErrorText>
-                            )}
+                            {renderFieldErrors(field.state.meta.errors)}
                         </div>
                     )}
                 />
@@ -99,7 +99,7 @@ const LoginPageContent = () => {
                             <div className="flex items-center justify-between">
                                 <Label
                                     htmlFor="password"
-                                    className="text-slate-700 font-bold text-xs uppercase tracking-wider"
+                                    className="text-xs font-semibold uppercase text-slate-600"
                                 >
                                     Password
                                 </Label>
@@ -119,7 +119,7 @@ const LoginPageContent = () => {
                                     onChange={(e) =>
                                         field.handleChange(e.target.value)
                                     }
-                                    className="h-12 pr-10 bg-white/70"
+                                    className="h-12 bg-white pr-10"
                                 />
                                 <button
                                     type="button"
@@ -140,16 +140,14 @@ const LoginPageContent = () => {
                                     )}
                                 </button>
                             </div>
-                            {field.state.meta.errors && (
-                                <ErrorText>{field.state.meta.errors}</ErrorText>
-                            )}
+                            {renderFieldErrors(field.state.meta.errors)}
                         </div>
                     )}
                 />
 
                 <Button
                     type="submit"
-                    className="mt-8 h-12 w-full rounded-lg bg-[#2457a3] text-base font-semibold text-white shadow-sm transition-colors hover:bg-[#1a407a]"
+                    className="mt-8 h-12 w-full rounded-md bg-[#2457a3] text-base font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.08)] transition-colors hover:bg-[#1a407a]"
                     disabled={form.state.isSubmitting}
                 >
                     {form.state.isSubmitting

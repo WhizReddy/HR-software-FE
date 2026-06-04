@@ -20,15 +20,15 @@ const DashboardContent: React.FC = () => {
 
     return (
         <div className="relative overflow-x-hidden">
-            <div className="relative z-10 mx-auto max-w-[1400px] space-y-6 p-2 sm:p-4 lg:p-6">
-                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7">
+            <div className="relative z-10 mx-auto max-w-[1400px] space-y-5 p-2 sm:p-4 lg:p-6">
+                <div className="overflow-hidden rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:p-7">
                     <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
                         <div>
-                            <p className="mb-2 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#2457a3]">
+                            <p className="mb-2 inline-flex items-center gap-2 text-xs font-semibold uppercase text-[#2457a3]">
                                 <Sparkles size={12} />
                                 Daily Snapshot
                             </p>
-                            <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+                            <h1 className="text-2xl font-semibold text-slate-950 sm:text-3xl">
                                 {greeter()}, {userName}
                             </h1>
                             {isAdmin && (
@@ -40,7 +40,7 @@ const DashboardContent: React.FC = () => {
                         <button
                             type="button"
                             onClick={() => navigate('/employees')}
-                            className="inline-flex items-center gap-2 self-start rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:border-slate-300 hover:bg-slate-50"
+                            className="inline-flex items-center gap-2 self-start rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-colors hover:border-slate-300 hover:bg-slate-50"
                         >
                             Open Team Directory
                             <ArrowUpRight size={16} />
@@ -49,7 +49,7 @@ const DashboardContent: React.FC = () => {
                 </div>
 
                 {hasError && (
-                    <div className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800">
+                    <div className="flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800">
                         <AlertCircle size={18} className="mt-0.5 flex-shrink-0" />
                         <p>
                             Some dashboard metrics could not be loaded, so this view is
@@ -97,19 +97,19 @@ const DashboardContent: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm xl:col-span-4">
-                        <h3 className="text-base font-bold text-slate-800 mb-4 tracking-tight">Calendar</h3>
+                    <div className="flex h-full flex-col rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] xl:col-span-4">
+                        <h3 className="mb-4 text-base font-semibold text-slate-900">Calendar</h3>
                         <div className="flex-1">
                             <Calendar />
                         </div>
                     </div>
 
-                    <div className="flex min-h-[500px] flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm xl:col-span-4">
+                    <div className="flex min-h-[500px] flex-col rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] xl:col-span-4">
                         <InfoSection />
                     </div>
 
-                    <div className="flex min-h-[500px] flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm xl:col-span-4">
-                        <h3 className="text-base font-bold text-slate-800 mb-4 tracking-tight">Status Overview</h3>
+                    <div className="flex min-h-[500px] flex-col rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] xl:col-span-4">
+                        <h3 className="mb-4 text-base font-semibold text-slate-900">Status Overview</h3>
                         <p className="mb-6 text-sm font-medium leading-6 text-slate-500">
                             Built from total employees, remote work, and active leave.
                         </p>
@@ -118,14 +118,14 @@ const DashboardContent: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm xl:col-span-12">
-                        <h3 className="text-base font-bold text-slate-800 mb-6 tracking-tight">Team Directory</h3>
+                    <div className="rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] xl:col-span-12">
+                        <h3 className="mb-6 text-base font-semibold text-slate-900">Team Directory</h3>
                         {isUsersLoading ? (
-                            <div className="flex min-h-[180px] items-center justify-center rounded-3xl border border-dashed border-slate-200 bg-slate-50/70 px-6 text-center text-sm font-medium text-slate-400">
+                            <div className="flex min-h-[180px] items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50/70 px-6 text-center text-sm font-medium text-slate-400">
                                 Loading team directory...
                             </div>
                         ) : users.length === 0 ? (
-                            <div className="flex min-h-[180px] items-center justify-center rounded-3xl border border-dashed border-slate-200 bg-slate-50/70 px-6 text-center text-sm font-medium text-slate-400">
+                            <div className="flex min-h-[180px] items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50/70 px-6 text-center text-sm font-medium text-slate-400">
                                 No employees were returned for the team directory.
                             </div>
                         ) : (
@@ -133,7 +133,7 @@ const DashboardContent: React.FC = () => {
                                 {users.map((employee) => (
                                     <div
                                         key={employee._id}
-                                        className="group flex cursor-pointer flex-col items-center gap-3 rounded-2xl border border-transparent p-3 transition-colors duration-200 hover:border-slate-200 hover:bg-slate-50"
+                                        className="group flex cursor-pointer flex-col items-center gap-3 rounded-lg border border-transparent p-3 transition-colors duration-200 hover:border-slate-200 hover:bg-slate-50"
                                         onClick={() => navigate(`/profile/${employee._id}`)}
                                     >
                                         <div className="relative h-16 w-16">

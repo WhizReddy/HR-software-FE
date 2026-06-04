@@ -38,7 +38,7 @@ const InfoSection: React.FC = () => {
     return (
         <div className="flex h-full flex-col">
             <div className="mb-5">
-                <h2 className="text-base font-bold tracking-tight text-slate-800">
+                <h2 className="text-base font-semibold text-slate-900">
                     Upcoming Events
                 </h2>
                 <p className="mt-1 text-sm font-medium text-slate-500">
@@ -47,11 +47,11 @@ const InfoSection: React.FC = () => {
             </div>
 
             {isEventsLoading ? (
-                <div className="flex flex-1 items-center justify-center rounded-3xl border border-dashed border-slate-200 bg-slate-50/70 px-6 text-center text-sm font-medium text-slate-400">
+                <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50/70 px-6 text-center text-sm font-medium text-slate-400">
                     Loading upcoming events...
                 </div>
             ) : visibleEvents.length === 0 ? (
-                <div className="flex flex-1 items-center justify-center rounded-3xl border border-dashed border-slate-200 bg-slate-50/70 px-6 text-center text-sm font-medium text-slate-400">
+                <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50/70 px-6 text-center text-sm font-medium text-slate-400">
                     No upcoming events are scheduled right now.
                 </div>
             ) : (
@@ -59,11 +59,11 @@ const InfoSection: React.FC = () => {
                     {visibleEvents.map((event) => (
                         <li
                             key={event._id}
-                            className="group rounded-2xl border border-transparent bg-white/60 px-4 py-4 transition-all duration-300 hover:border-slate-100 hover:shadow-sm"
+                            className="group rounded-lg border border-transparent bg-white px-4 py-4 transition-colors duration-200 hover:border-slate-200 hover:bg-slate-50"
                         >
                             <div className="flex items-start justify-between gap-3">
                                 <div className="min-w-0">
-                                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-500">
+                                    <p className="text-xs font-semibold uppercase text-blue-500">
                                         {getTimelineLabel(event.startDate, event.endDate)}
                                     </p>
                                     <h3 className="mt-1 text-[15px] font-semibold leading-tight text-slate-800 transition-colors group-hover:text-blue-600">
