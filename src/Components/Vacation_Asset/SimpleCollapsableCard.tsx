@@ -36,10 +36,12 @@ const SimpleCollapsableCard: React.FC<SimpleCollapsableCardProps> = ({
     const itemCount = items?.itemArr?.length ?? 0
 
     return (
-        <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden transition-all">
+        <div className="overflow-hidden rounded-lg border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06)] transition-all">
             {/* Header row */}
-            <div
-                className="flex flex-col gap-3 px-5 py-4 transition-colors hover:bg-slate-50 sm:flex-row sm:items-center sm:justify-between cursor-pointer"
+            <button
+                type="button"
+                aria-expanded={expanded}
+                className="flex w-full cursor-pointer flex-col gap-3 px-5 py-4 text-left transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2457a3]/25 sm:flex-row sm:items-center sm:justify-between"
                 onClick={() => setExpanded((prev) => !prev)}
             >
                 <div className="flex min-w-0 items-center gap-3">
@@ -47,10 +49,10 @@ const SimpleCollapsableCard: React.FC<SimpleCollapsableCardProps> = ({
                         <img
                             src={user.imageUrl}
                             alt={`${user.firstName} ${user.lastName}`}
-                            className="w-9 h-9 rounded-full object-cover border border-slate-200"
+                            className="h-9 w-9 rounded-md border border-slate-200 object-cover"
                         />
                     ) : (
-                        <div className="w-9 h-9 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-md bg-blue-100 text-blue-700">
                             <User size={18} />
                         </div>
                     )}
@@ -65,7 +67,7 @@ const SimpleCollapsableCard: React.FC<SimpleCollapsableCardProps> = ({
                 </div>
                 <div className="flex items-center gap-3 self-start sm:self-auto">
                     {items && (
-                        <span className="text-xs bg-blue-100 text-blue-700 font-semibold px-2.5 py-1 rounded-full">
+                        <span className="rounded-md bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700">
                             {itemCount} {items.type}
                             {itemCount !== 1 ? 's' : ''}
                         </span>
@@ -74,7 +76,7 @@ const SimpleCollapsableCard: React.FC<SimpleCollapsableCardProps> = ({
                         {expanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                     </div>
                 </div>
-            </div>
+            </button>
 
             {/* Expanded content */}
             {expanded && children && (

@@ -29,13 +29,14 @@ export const EmployeesWithVacationsSearchFilter = () => {
             <div className="flex-1">
                 <Input
                     type="search"
-                    iconPosition="end"
-                    icon={<Search size={20} className="text-slate-400" />}
+                    iconPosition="start"
+                    icon={<Search size={18} className="text-slate-400" />}
                     IsUsername
                     label="Search Employees"
                     name="search"
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
+                    height={40}
                 />
             </div>
             <Button
@@ -43,6 +44,7 @@ export const EmployeesWithVacationsSearchFilter = () => {
                 variant="outline"
                 onClick={clearSearch}
                 disabled={!hasSearch}
+                className="h-10 rounded-md"
             >
                 Clear
             </Button>

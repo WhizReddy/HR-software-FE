@@ -27,8 +27,8 @@ function PayrollContent() {
     return (
         <div className={style.payrollPage}>
             {isError ? (
-                <div className="rounded-2xl border border-rose-200 bg-rose-50 p-6 text-rose-700 shadow-sm">
-                    <h2 className="text-lg font-bold">
+                <div className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-rose-700 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
+                    <h2 className="text-base font-semibold">
                         Payroll failed to load
                     </h2>
                     <p className="mt-2 text-sm leading-6">

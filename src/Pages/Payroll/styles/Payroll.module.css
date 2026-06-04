@@ -3,6 +3,7 @@
     flex-direction: column;
     width: 100%;
     gap: 24px;
+    padding: 1rem;
 }
 
 .panel {
@@ -10,12 +11,10 @@
     flex-direction: column;
     gap: 20px;
     padding: 24px;
-    border: 1px solid #e2e8f0;
-    border-radius: 24px;
-    background:
-        radial-gradient(circle at top right, rgba(36, 87, 163, 0.08), transparent 36%),
-        linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
-    box-shadow: 0 18px 50px rgba(15, 23, 42, 0.06);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 0.5rem;
+    background: #ffffff;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
 }
 
 .panelHeader {
@@ -35,22 +34,24 @@
 
 .panelEyebrow {
     font-size: 11px;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.18em;
-    color: #64748b;
+    color: #2457a3;
 }
 
 .panelTitle {
     margin: 0;
-    font-size: clamp(1.75rem, 4vw, 2.4rem);
-    line-height: 1.1;
+    font-size: 1.875rem;
+    line-height: 1.2;
+    font-weight: 600;
     color: #0f172a;
 }
 
 .panelDescription {
     margin: 0;
-    color: #475569;
+    max-width: 42rem;
+    color: #64748b;
+    font-size: 0.875rem;
     line-height: 1.6;
 }
 
@@ -59,11 +60,12 @@
     align-items: center;
     min-height: 40px;
     padding: 0 14px;
-    border-radius: 999px;
-    background: rgba(36, 87, 163, 0.1);
+    border: 1px solid #dbeafe;
+    border-radius: 0.375rem;
+    background: #eff6ff;
     color: #2457a3;
     font-size: 13px;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .filterGrid {
@@ -103,9 +105,17 @@
 }
 
 @media (max-width: 768px) {
+    .payrollPage {
+        padding: 1rem;
+    }
+
     .panel {
         padding: 20px;
-        border-radius: 20px;
+        border-radius: 0.5rem;
+    }
+
+    .panelTitle {
+        font-size: 1.5rem;
     }
 
     .filterGridCompact {
@@ -115,5 +125,17 @@
     .panelActions,
     .inlineActions {
         justify-content: flex-start;
+    }
+}
+
+@media (min-width: 640px) {
+    .payrollPage {
+        padding: 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .payrollPage {
+        padding: 2rem;
     }
 }

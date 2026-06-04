@@ -38,29 +38,29 @@ function VacationComponent() {
     const currentTab = searchParams.get('vacationType') || 'requests'
 
     return (
-        <div className="p-6 max-w-7xl mx-auto w-full space-y-6">
+        <div className="mx-auto w-full max-w-7xl space-y-6 p-4 sm:p-6 lg:p-8">
             <PageIntro
                 eyebrow="People"
                 title="Vacation Management"
                 description="Review requests, inspect leave history, and create vacation entries from one workspace."
             />
 
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+            <div className="flex flex-col items-stretch justify-between gap-4 rounded-lg border border-slate-200/80 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:flex-row sm:items-center">
                 <ToggleGroup
                     type="single"
                     value={currentTab}
                     onValueChange={handleChange}
-                    className="justify-start bg-slate-100/50 p-1 rounded-lg"
+                    className="justify-start rounded-md bg-slate-100 p-1"
                 >
                     <ToggleGroupItem
                         value="requests"
-                        className="px-6 data-[state=on]:bg-white data-[state=on]:text-primary-blue data-[state=on]:shadow-sm transition-all"
+                        className="rounded-md px-6 text-sm font-semibold transition-all data-[state=on]:bg-white data-[state=on]:text-[#2457a3] data-[state=on]:shadow-sm"
                     >
                         Requests
                     </ToggleGroupItem>
                     <ToggleGroupItem
                         value="userLeaves"
-                        className="px-6 data-[state=on]:bg-white data-[state=on]:text-primary-blue data-[state=on]:shadow-sm transition-all"
+                        className="rounded-md px-6 text-sm font-semibold transition-all data-[state=on]:bg-white data-[state=on]:text-[#2457a3] data-[state=on]:shadow-sm"
                     >
                         User Leaves
                     </ToggleGroupItem>
@@ -82,7 +82,7 @@ function VacationComponent() {
             )}
             {currentTab === 'requests' && <VacationTable />}
             {currentTab === 'userLeaves' && (
-                <Card className="mt-4 rounded-xl border border-slate-100 bg-white shadow-sm">
+                <Card className="mt-4 rounded-lg border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
                     <EmployeesWithVacations />
                 </Card>
             )}
