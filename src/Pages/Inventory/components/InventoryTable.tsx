@@ -27,7 +27,7 @@ export const InventoryTable = () => {
 
     if (isError) {
         return (
-            <div className="rounded-2xl border border-rose-200 bg-rose-50 p-6 text-sm font-medium text-rose-700 shadow-sm">
+            <div className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
                 Inventory failed to load: {error.message}
             </div>
         )

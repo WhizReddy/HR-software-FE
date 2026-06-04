@@ -20,7 +20,7 @@ const SelectedEventCard = () => {
     }
 
     return (
-        <div className="flex flex-col bg-white rounded-xl overflow-hidden shadow-xl max-h-[90vh] w-full">
+        <div className="flex max-h-[90vh] w-full flex-col overflow-hidden rounded-lg bg-white shadow-xl">
             {selectedEvent?.photo && selectedEvent.photo.length > 0 && (
                 <div className="w-full bg-slate-900">
                     <Suspense
@@ -34,32 +34,33 @@ const SelectedEventCard = () => {
             )}
 
             <div className="flex-1 overflow-y-auto p-6 md:p-8 custom-scrollbar">
-                <div className="flex justify-between items-start mb-6">
-                    <h2 className="text-2xl md:text-3xl font-bold text-slate-800 leading-tight pr-4">
+                <div className="mb-6 flex items-start justify-between gap-4">
+                    <h2 className="pr-4 text-2xl font-semibold leading-tight text-slate-950 md:text-3xl">
                         {selectedEvent.title}
                     </h2>
                     <button
                         onClick={handleCloseEventDetails}
-                        className="p-2 -mr-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-full transition-colors flex-shrink-0"
+                        aria-label="Close event details"
+                        className="-mr-2 flex-shrink-0 rounded-md p-2 text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-700"
                     >
                         <X size={24} />
                     </button>
                 </div>
 
-                <div className="prose prose-slate max-w-none mb-8 text-slate-600 whitespace-pre-line leading-relaxed">
+                <div className="prose prose-slate mb-8 max-w-none whitespace-pre-line leading-7 text-slate-600">
                     {selectedEvent.description}
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 p-5 bg-slate-50 rounded-xl border border-slate-100">
+                <div className="mb-8 grid grid-cols-1 gap-4 rounded-lg border border-slate-200/80 bg-slate-50 p-5 sm:grid-cols-2">
                     <div className="flex items-start gap-3 text-slate-700">
-                        <Calendar className="mt-0.5 text-blue-500" size={20} />
+                        <Calendar className="mt-0.5 text-[#2457a3]" size={20} />
                         <div>
                             <div className="text-sm font-semibold text-slate-900 mb-0.5">Date & Time</div>
                             <div className="text-sm">{formatDate(selectedEvent.startDate)} - {formatDate(selectedEvent.endDate)}</div>
                         </div>
                     </div>
                     <div className="flex items-start gap-3 text-slate-700">
-                        <MapPin className="mt-0.5 text-blue-500" size={20} />
+                        <MapPin className="mt-0.5 text-[#2457a3]" size={20} />
                         <div>
                             <div className="text-sm font-semibold text-slate-900 mb-0.5">Location</div>
                             <div className="text-sm line-clamp-2">{selectedEvent.location}</div>
@@ -68,7 +69,7 @@ const SelectedEventCard = () => {
                 </div>
 
                 {selectedEvent.location && (
-                    <div className="mb-8 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <div className="mb-8 rounded-lg border border-slate-200 bg-white p-4">
                         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                             <div>
                                 <p className="text-sm font-semibold text-slate-900">
@@ -91,7 +92,7 @@ const SelectedEventCard = () => {
                         </div>
 
                         {showMap && (
-                            <div className="mt-4 h-[300px] w-full overflow-hidden rounded-xl border border-slate-200 bg-white">
+                            <div className="mt-4 h-[300px] w-full overflow-hidden rounded-lg border border-slate-200 bg-white">
                                 <Suspense
                                     fallback={
                                         <div className="h-full w-full animate-pulse bg-slate-100" />

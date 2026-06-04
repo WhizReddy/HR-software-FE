@@ -67,7 +67,7 @@ function EventsContentAndComponents() {
     }, [fetchNextPage, hasNextPage, inView, isFetchingNextPage])
 
     return (
-        <div id="events-root" className="flex flex-col max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+        <div id="events-root" className="mx-auto flex w-full max-w-7xl flex-col px-4 py-8 sm:px-6 lg:px-8">
             <Toast
                 severity={toastOpen ? toastSeverity : updateToastSeverity}
                 open={toastOpen || updateToastOpen}
@@ -85,10 +85,8 @@ function EventsContentAndComponents() {
                     isAdmin && (
                         <Button
                             btnText="Create Event"
-                            padding="10px"
+                            padding="10px 16px"
                             width="150px"
-                            backgroundColor="#2469FF"
-                            border="none"
                             type={ButtonTypes.PRIMARY}
                             onClick={() => handleOpenDrawer('create')}
                         />
@@ -96,54 +94,56 @@ function EventsContentAndComponents() {
                 }
             />
 
-            <div className="mb-8 flex w-full flex-col items-center justify-between gap-4 sm:flex-row">
-                <div className="w-full sm:max-w-md">
+            <div className="mb-6 rounded-lg border border-slate-200/80 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
+                <div className="w-full sm:max-w-lg">
                     <Input
                         IsUsername
                         type="search"
-                        label="Search events..."
+                        label="Search events"
+                        placeholder="Search by title or location..."
                         name="Search"
                         width="100%"
-                        iconPosition="end"
-                        icon={<Search size={20} className="text-slate-400" />}
+                        iconPosition="start"
+                        icon={<Search size={18} className="text-slate-400" />}
                         value={searchEvent}
                         onChange={onSearchChange}
+                        height={40}
                     />
                 </div>
             </div>
 
             {/* Events Grid */}
-            <div className="flex-1 w-full">
+            <div className="w-full flex-1">
                 {isLoading ? (
                     <EventsContentLoader />
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {events?.pages.map((page: any) =>
                             page.data.map((event: EventsData) => (
                                 <div
                                     key={event._id}
-                                    className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col min-h-[400px] group"
+                                    className="group flex min-h-[400px] flex-col overflow-hidden rounded-lg border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06)] transition-all duration-200 hover:border-[#2457a3]/30 hover:shadow-[0_12px_30px_rgba(15,23,42,0.08)]"
                                 >
                                     {event.photo && event.photo.length > 0 ? (
-                                        <div className="w-full h-40 bg-slate-100 overflow-hidden flex-shrink-0">
+                                        <div className="h-40 w-full flex-shrink-0 overflow-hidden bg-slate-100">
                                             <img
                                                 src={event.photo[0]}
                                                 alt={event.title}
                                                 loading="lazy"
                                                 decoding="async"
-                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                                             />
                                         </div>
                                     ) : (
-                                        <div className="w-full h-40 bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center flex-shrink-0">
-                                            <Calendar className="text-slate-300" size={40} />
+                                        <div className="flex h-40 w-full flex-shrink-0 items-center justify-center border-b border-slate-100 bg-slate-50">
+                                            <Calendar className="text-slate-300" size={38} />
                                         </div>
                                     )}
-                                    <div className="p-4 flex flex-1 min-h-0 flex-col">
-                                        <div className="min-h-0 flex-1">
-                                            <div className="flex justify-between items-start mb-2 gap-2">
+                                    <div className="flex min-h-0 flex-1 flex-col p-4">
+                                        <div className="min-h-0 flex-1 space-y-3">
+                                            <div className="flex items-start justify-between gap-3">
                                                 <h3
-                                                    className="text-lg font-bold text-slate-800 leading-tight"
+                                                    className="text-base font-semibold leading-tight text-slate-950"
                                                     style={clampText(2)}
                                                 >
                                                     {event.title}
@@ -160,16 +160,16 @@ function EventsContentAndComponents() {
                                             </div>
 
                                             <p
-                                                className="text-slate-500 text-sm mb-4 min-h-[44px]"
+                                                className="min-h-[44px] text-sm leading-6 text-slate-500"
                                                 style={clampText(2)}
                                             >
                                                 {event.description}
                                             </p>
                                         </div>
 
-                                        <div className="space-y-3 mt-auto pt-4 border-t border-slate-50">
+                                        <div className="mt-auto space-y-3 border-t border-slate-100 pt-4">
                                             <div className="flex items-center gap-2.5 text-sm text-slate-600">
-                                                <Calendar size={18} className="text-blue-500 flex-shrink-0" />
+                                                <Calendar size={17} className="flex-shrink-0 text-[#2457a3]" />
                                                 <span
                                                     className="font-medium"
                                                     style={clampText(2)}
@@ -178,7 +178,7 @@ function EventsContentAndComponents() {
                                                 </span>
                                             </div>
                                             <div className="flex items-start gap-2.5 text-sm text-slate-600">
-                                                <MapPin size={18} className="text-blue-500 flex-shrink-0 mt-0.5" />
+                                                <MapPin size={17} className="mt-0.5 flex-shrink-0 text-[#2457a3]" />
                                                 <span style={clampText(1)}>
                                                     {event.location}
                                                 </span>
@@ -189,7 +189,7 @@ function EventsContentAndComponents() {
                                     <div className="px-5 pb-5 pt-2">
                                         <button
                                             onClick={() => handleSeeEventDetails(event)}
-                                            className="w-full py-2.5 px-4 rounded-xl bg-slate-50 hover:bg-blue-50 text-blue-600 font-medium text-sm transition-colors duration-200 flex items-center justify-center border border-slate-100 hover:border-blue-100"
+                                            className="flex w-full items-center justify-center rounded-md border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-[#2457a3] transition-colors duration-200 hover:border-[#2457a3]/25 hover:bg-[#2457a3]/5"
                                         >
                                             See Details
                                         </button>
@@ -204,9 +204,9 @@ function EventsContentAndComponents() {
                 {showModal && (
                     <ModalComponent open={showModal} handleClose={closeModal}>
                         <div className="p-6 text-center">
-                            <h3 className="text-xl font-bold text-slate-800 mb-2">Confirm Action</h3>
-                            <p className="text-slate-500 mb-8">Are you sure you want to delete this event?</p>
-                            <div className="flex gap-4">
+                            <h3 className="mb-2 text-lg font-semibold text-slate-950">Confirm Action</h3>
+                            <p className="mb-8 text-sm leading-6 text-slate-500">Are you sure you want to delete this event?</p>
+                            <div className="flex gap-3">
                                 <Button
                                     type={ButtonTypes.SECONDARY}
                                     btnText="Cancel"
