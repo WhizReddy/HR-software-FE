@@ -41,13 +41,13 @@ const ProfileFormContext = () => {
     ]
 
     return (
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
 
             {/* Left Column - Photo & Status Card */}
-            <div className="xl:col-span-1 space-y-6">
-                <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm flex flex-col items-center justify-center text-center space-y-4">
+            <div className="space-y-6 xl:col-span-1">
+                <div className="flex flex-col items-center justify-center space-y-4 rounded-lg border border-slate-200/80 bg-white p-6 text-center shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:p-8">
                     <div className="relative group">
-                        <div className="relative z-10 flex h-32 w-32 items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-sm">
+                        <div className="relative z-10 flex h-32 w-32 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-slate-50 shadow-sm">
                             {profileImage ? (
                                 <img
                                     src={profileImage}
@@ -55,7 +55,7 @@ const ProfileFormContext = () => {
                                     alt={fullName || 'Profile'}
                                 />
                             ) : (
-                                <div className="flex h-full w-full items-center justify-center bg-blue-50 text-3xl font-black text-[#2457a3]">
+                                <div className="flex h-full w-full items-center justify-center bg-blue-50 text-3xl font-semibold text-[#2457a3]">
                                     {initials || <UserRound size={36} />}
                                 </div>
                             )}
@@ -68,17 +68,17 @@ const ProfileFormContext = () => {
                     </div>
 
                     <div>
-                        <h2 className="text-xl font-bold text-slate-800">{fullName}</h2>
+                        <h2 className="text-xl font-semibold text-slate-950">{fullName}</h2>
                         <p className="break-all text-sm font-medium text-slate-500">{user.auth.email}</p>
                     </div>
 
-                    <div className="w-full pt-4 border-t border-slate-100/50">
+                    <div className="w-full border-t border-slate-100 pt-4">
                         {isAdmin ? (
                             <Button
                                 onClick={handleUpdate}
                                 type={ButtonTypes.PRIMARY}
                                 btnText="Save Changes"
-                                className="w-full bg-[#2457a3] hover:bg-[#1a407a] text-white transition-all shadow-md active:scale-95 py-2.5 rounded-lg font-medium"
+                                className="w-full"
                             />
                         ) : (
                             isCurrentUser && (
@@ -94,7 +94,7 @@ const ProfileFormContext = () => {
                                         onClick={() => fileInputRef.current?.click()}
                                         type={ButtonTypes.PRIMARY}
                                         btnText="Upload New Picture"
-                                        className="w-full bg-[#2457a3] hover:bg-[#1a407a] text-white transition-all shadow-md active:scale-95 py-2.5 rounded-lg font-medium"
+                                        className="w-full"
                                     />
                                 </>
                             )
@@ -102,13 +102,13 @@ const ProfileFormContext = () => {
                     </div>
                 </div>
 
-                <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+                <div className="space-y-4 rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
                     <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-[#2457a3]">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-[#2457a3]">
                             <ShieldCheck size={18} />
                         </div>
                         <div>
-                            <h3 className="text-sm font-bold uppercase tracking-[0.16em] text-slate-500">
+                            <h3 className="text-sm font-semibold uppercase text-slate-500">
                                 Account Status
                             </h3>
                             <p className="text-sm text-slate-500">
@@ -120,9 +120,9 @@ const ProfileFormContext = () => {
                         {statusCards.map((item) => (
                             <div
                                 key={item.label}
-                                className="rounded-2xl border border-slate-100 bg-slate-50/70 px-4 py-3"
+                                className="rounded-lg border border-slate-100 bg-slate-50 px-4 py-3"
                             >
-                                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">
+                                <p className="text-[11px] font-semibold uppercase text-slate-400">
                                     {item.label}
                                 </p>
                                 <p className="mt-2 text-sm font-semibold text-slate-800">
@@ -136,10 +136,10 @@ const ProfileFormContext = () => {
 
             {/* Right Column - Personal Information Card */}
             <div className="xl:col-span-2">
-                <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm h-full">
-                    <h3 className="text-lg font-bold text-[#2457a3] mb-6 border-b border-slate-100 pb-4">Personal Details</h3>
+                <div className="h-full rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:p-8">
+                    <h3 className="mb-6 border-b border-slate-100 pb-4 text-lg font-semibold text-[#2457a3]">Personal Details</h3>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                    <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
                         <div className="space-y-1">
                             <Input
                                 IsUsername

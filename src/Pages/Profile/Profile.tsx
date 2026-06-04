@@ -2,7 +2,6 @@ import Contrat from './Components/Contrat/Contrat'
 import ProfileForm from './Components/ProfileForm/ProfileForm'
 import ChangePass from './Components/ChangePass/ChangePass'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Components/ui/tabs'
-import { Card } from '@/Components/ui/card'
 import { useAuth } from '@/features/auth/context/AuthProvider'
 import { isAdminRole, isSelfUser } from '@/features/auth/lib/access'
 import { useParams } from 'react-router-dom'
@@ -15,20 +14,23 @@ export default function Profile() {
     const canViewSecurity = isSelfUser(currentUser?._id, id)
 
     return (
-        <Card className="glass-card w-full shadow-sm border-none overflow-hidden mt-5">
-            <div className="p-6">
-                <Tabs defaultValue="profile" className="flex flex-col md:flex-row gap-8">
-                    <TabsList className="flex md:flex-col h-auto bg-slate-50/50 backdrop-blur-sm border md:border-r-0 border-slate-200/50 justify-start items-start gap-1 p-2 rounded-2xl w-full md:w-64 overflow-x-auto shadow-inner">
+        <main className="w-full flex-1 p-4 sm:p-6 lg:p-8">
+            <div className="w-full overflow-hidden rounded-lg border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
+                <Tabs
+                    defaultValue="profile"
+                    className="flex flex-col gap-6 p-4 md:flex-row md:p-6"
+                >
+                    <TabsList className="flex h-auto w-full justify-start gap-1 overflow-x-auto rounded-lg border border-slate-200 bg-slate-100 p-1 md:w-64 md:flex-col md:items-stretch">
                         <TabsTrigger
                             value="profile"
-                            className="w-full justify-start py-3 px-4 font-medium text-slate-600 transition-all data-[state=active]:bg-white data-[state=active]:text-[#2457a3] data-[state=active]:shadow-sm hover:bg-white/50 rounded-xl"
+                            className="w-full justify-start rounded-md px-4 py-3 text-sm font-semibold text-slate-600 transition-all hover:bg-white/70 data-[state=active]:bg-white data-[state=active]:text-[#2457a3] data-[state=active]:shadow-sm"
                         >
                             Profile details
                         </TabsTrigger>
                         {canViewPayroll && (
                             <TabsTrigger
                                 value="payroll"
-                                className="w-full justify-start py-3 px-4 font-medium text-slate-600 transition-all data-[state=active]:bg-white data-[state=active]:text-[#2457a3] data-[state=active]:shadow-sm hover:bg-white/50 rounded-xl"
+                                className="w-full justify-start rounded-md px-4 py-3 text-sm font-semibold text-slate-600 transition-all hover:bg-white/70 data-[state=active]:bg-white data-[state=active]:text-[#2457a3] data-[state=active]:shadow-sm"
                             >
                                 Payroll & Contracts
                             </TabsTrigger>
@@ -36,14 +38,14 @@ export default function Profile() {
                         {canViewSecurity && (
                             <TabsTrigger
                                 value="security"
-                                className="w-full justify-start py-3 px-4 font-medium text-slate-600 transition-all data-[state=active]:bg-white data-[state=active]:text-[#2457a3] data-[state=active]:shadow-sm hover:bg-white/50 rounded-xl"
+                                className="w-full justify-start rounded-md px-4 py-3 text-sm font-semibold text-slate-600 transition-all hover:bg-white/70 data-[state=active]:bg-white data-[state=active]:text-[#2457a3] data-[state=active]:shadow-sm"
                             >
                                 Security
                             </TabsTrigger>
                         )}
                     </TabsList>
 
-                    <div className="flex-1 min-h-[500px]">
+                    <div className="min-h-[500px] flex-1">
                         <TabsContent value="profile" className="m-0 focus-visible:outline-none focus-visible:ring-0">
                             <ProfileForm />
                         </TabsContent>
@@ -62,6 +64,6 @@ export default function Profile() {
                     </div>
                 </Tabs>
             </div>
-        </Card>
+        </main>
     )
 }

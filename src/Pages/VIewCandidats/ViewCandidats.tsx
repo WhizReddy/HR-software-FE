@@ -169,7 +169,7 @@ export default function ViewCandidats() {
                 description="Review candidate details, schedule interview phases, and keep the hiring decision flow aligned with the interview pipeline."
                 actions={
                     applicant && (
-                        <div className="inline-flex items-center gap-2 rounded-2xl border border-white/80 bg-white/90 px-4 py-3 shadow-sm">
+                        <div className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-4 py-3 shadow-sm">
                             <span
                                 className={`h-2.5 w-2.5 rounded-full ${
                                     applicant.status === 'employed'
@@ -179,7 +179,7 @@ export default function ViewCandidats() {
                                           : 'bg-blue-500'
                                 }`}
                             />
-                            <span className="text-sm font-bold capitalize text-slate-800">
+                            <span className="text-sm font-semibold capitalize text-slate-800">
                                 {applicant.status || 'active'}
                             </span>
                         </div>
@@ -189,14 +189,14 @@ export default function ViewCandidats() {
 
             <section className="grid gap-6 xl:grid-cols-[minmax(0,1.4fr)_minmax(320px,0.8fr)]">
                 <div className="space-y-6">
-                    <Card className="rounded-2xl border-slate-200 bg-white p-6 shadow-sm">
+                    <Card className="rounded-lg border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
                         <div className="flex flex-col gap-4 border-b border-slate-100 pb-5 sm:flex-row sm:items-center sm:justify-between">
                             <div className="flex items-center gap-3">
-                                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-[#2457a3]">
+                                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-50 text-[#2457a3]">
                                     <UserRound size={22} />
                                 </div>
                                 <div>
-                                    <h2 className="text-lg font-black tracking-tight text-slate-900">
+                                    <h2 className="text-lg font-semibold tracking-tight text-slate-950">
                                         Candidate Details
                                     </h2>
                                     <p className="text-sm text-slate-500">
@@ -210,9 +210,9 @@ export default function ViewCandidats() {
                             {details.map((item) => (
                                 <div
                                     key={item.label}
-                                    className="rounded-2xl border border-slate-100 bg-slate-50/70 px-4 py-3"
+                                    className="rounded-lg border border-slate-100 bg-slate-50 px-4 py-3"
                                 >
-                                    <dt className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">
+                                    <dt className="text-[11px] font-semibold uppercase text-slate-400">
                                         {item.label}
                                     </dt>
                                     <dd className="mt-2 break-words text-sm font-semibold text-slate-800">
@@ -223,13 +223,13 @@ export default function ViewCandidats() {
                         </dl>
                     </Card>
 
-                    <Card className="rounded-2xl border-slate-200 bg-white p-6 shadow-sm">
+                    <Card className="rounded-lg border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
                         <div className="flex items-center gap-3 border-b border-slate-100 pb-5">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
                                 <BriefcaseBusiness size={22} />
                             </div>
                             <div>
-                                <h2 className="text-lg font-black tracking-tight text-slate-900">
+                                <h2 className="text-lg font-semibold tracking-tight text-slate-950">
                                     Role Fit
                                 </h2>
                                 <p className="text-sm text-slate-500">
@@ -242,9 +242,9 @@ export default function ViewCandidats() {
                             {workDetails.map((item) => (
                                 <div
                                     key={item.label}
-                                    className="rounded-2xl border border-slate-100 bg-white px-4 py-3 shadow-sm"
+                                    className="rounded-lg border border-slate-100 bg-white px-4 py-3 shadow-sm"
                                 >
-                                    <dt className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">
+                                    <dt className="text-[11px] font-semibold uppercase text-slate-400">
                                         {item.label}
                                     </dt>
                                     <dd className="mt-2 break-words text-sm font-semibold text-slate-800">
@@ -255,13 +255,13 @@ export default function ViewCandidats() {
                         </dl>
                     </Card>
 
-                    <Card className="rounded-2xl border-slate-200 bg-white p-6 shadow-sm">
+                    <Card className="rounded-lg border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
                         <div className="flex items-center gap-3 border-b border-slate-100 pb-5">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-amber-600">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
                                 <MessageSquareText size={22} />
                             </div>
                             <div>
-                                <h2 className="text-lg font-black tracking-tight text-slate-900">
+                                <h2 className="text-lg font-semibold tracking-tight text-slate-950">
                                     Interview Notes
                                 </h2>
                                 <p className="text-sm text-slate-500">
@@ -270,7 +270,7 @@ export default function ViewCandidats() {
                             </div>
                         </div>
 
-                        <div className="mt-5 rounded-2xl border border-slate-100 bg-slate-50/70 p-4">
+                        <div className="mt-5 rounded-lg border border-slate-100 bg-slate-50 p-4">
                             {interviewNotes ? (
                                 <p className="whitespace-pre-wrap text-sm leading-6 text-slate-700">
                                     {interviewNotes}
@@ -285,8 +285,8 @@ export default function ViewCandidats() {
                 </div>
 
                 <aside className="space-y-6">
-                    <Card className="rounded-2xl border-slate-200 bg-white p-6 shadow-sm">
-                        <h2 className="text-lg font-black tracking-tight text-slate-900">
+                    <Card className="rounded-lg border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
+                        <h2 className="text-lg font-semibold tracking-tight text-slate-950">
                             Candidate File
                         </h2>
                         <p className="mt-1 text-sm text-slate-500">
@@ -294,8 +294,8 @@ export default function ViewCandidats() {
                         </p>
 
                         <div className="mt-5 space-y-3">
-                            <div className="rounded-2xl border border-slate-100 bg-slate-50/70 p-4">
-                                <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">
+                            <div className="rounded-lg border border-slate-100 bg-slate-50 p-4">
+                                <span className="text-[11px] font-semibold uppercase text-slate-400">
                                     CV Attachment
                                 </span>
                                 {cvUrl ? (
@@ -303,7 +303,7 @@ export default function ViewCandidats() {
                                         href={cvUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="mt-3 inline-flex items-center gap-2 text-sm font-bold text-[#2457a3] hover:text-[#1a407a]"
+                                        className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-[#2457a3] hover:text-[#1a407a]"
                                     >
                                         <FileText size={16} />
                                         View CV
@@ -316,16 +316,16 @@ export default function ViewCandidats() {
                             </div>
 
                             <div className="grid gap-3">
-                                <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
-                                    <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">
+                                <div className="rounded-lg border border-slate-100 bg-white p-4 shadow-sm">
+                                    <span className="text-[11px] font-semibold uppercase text-slate-400">
                                         Hiring Phase
                                     </span>
                                     <p className="mt-2 text-sm font-semibold text-slate-800">
                                         {formatPhase(applicant?.currentPhase)}
                                     </p>
                                 </div>
-                                <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
-                                    <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">
+                                <div className="rounded-lg border border-slate-100 bg-white p-4 shadow-sm">
+                                    <span className="text-[11px] font-semibold uppercase text-slate-400">
                                         Status
                                     </span>
                                     <p className="mt-2 text-sm font-semibold capitalize text-slate-800">
@@ -336,8 +336,8 @@ export default function ViewCandidats() {
                         </div>
                     </Card>
 
-                    <Card className="rounded-2xl border-slate-200 bg-white p-6 shadow-sm">
-                        <h2 className="text-lg font-black tracking-tight text-slate-900">
+                    <Card className="rounded-lg border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
+                        <h2 className="text-lg font-semibold tracking-tight text-slate-950">
                             Actions
                         </h2>
                         <p className="mt-1 text-sm text-slate-500">
@@ -345,7 +345,7 @@ export default function ViewCandidats() {
                         </p>
 
                         {!applicant ? (
-                            <div className="mt-5 rounded-2xl border border-slate-100 bg-slate-50/70 p-4 text-sm font-semibold text-slate-500">
+                            <div className="mt-5 rounded-lg border border-slate-100 bg-slate-50 p-4 text-sm font-semibold text-slate-500">
                                 Loading candidate actions...
                             </div>
                         ) : !isClosed ? (
@@ -395,7 +395,7 @@ export default function ViewCandidats() {
                                 </Button>
                             </div>
                         ) : (
-                            <div className="mt-5 rounded-2xl border border-slate-100 bg-slate-50/70 p-4 text-sm font-semibold text-slate-500">
+                            <div className="mt-5 rounded-lg border border-slate-100 bg-slate-50 p-4 text-sm font-semibold text-slate-500">
                                 This candidate is already marked as{' '}
                                 <span className="capitalize">
                                     {applicant?.status || 'closed'}
@@ -411,7 +411,7 @@ export default function ViewCandidats() {
                 <ModalComponent open={showModal} handleClose={handleCloseModal}>
                     <div className="flex max-w-md flex-col gap-4">
                         <div>
-                            <h2 className="text-lg font-black tracking-tight text-slate-900">
+                            <h2 className="text-lg font-semibold tracking-tight text-slate-950">
                                 Confirm Action
                             </h2>
                             <p className="mt-2 text-sm leading-6 text-slate-600">
@@ -446,7 +446,7 @@ export default function ViewCandidats() {
                 >
                     <div className="flex max-w-xl flex-col gap-5">
                         <div>
-                            <h2 className="text-lg font-black tracking-tight text-slate-900">
+                            <h2 className="text-lg font-semibold tracking-tight text-slate-950">
                                 Notify Applicant
                             </h2>
                             <p className="mt-2 text-sm leading-6 text-slate-600">
@@ -468,7 +468,7 @@ export default function ViewCandidats() {
                             }
                         />
 
-                        <label className="flex cursor-pointer items-center gap-2 rounded-2xl border border-slate-100 bg-slate-50/70 px-4 py-3">
+                        <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-slate-100 bg-slate-50 px-4 py-3">
                             <input
                                 type="checkbox"
                                 checked={useCustomEmail}

@@ -35,8 +35,8 @@ const ContratContent = () => {
 
     if (!canViewPayroll) {
         return (
-            <div className="glass-card p-8 shadow-sm border border-slate-100/50 bg-white/70">
-                <h3 className="text-lg font-bold text-slate-800">Payroll access restricted</h3>
+            <div className="rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:p-8">
+                <h3 className="text-lg font-semibold text-slate-950">Payroll access restricted</h3>
                 <p className="mt-2 text-sm text-slate-500">
                     Payroll details are only available for your own profile or HR/Admin users.
                 </p>
@@ -45,7 +45,7 @@ const ContratContent = () => {
     }
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
+        <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-2">
             <Toast
                 severity={EditingPayroll ? toastSeverity : createToastSeverity}
                 open={EditingPayroll ? toastOpen : createToastOpen}
@@ -56,10 +56,10 @@ const ContratContent = () => {
             />
 
             {/* Left Column - Payroll Information Card */}
-            <div className="glass-card p-8 shadow-sm border border-slate-100/50 bg-white/70 h-full flex flex-col">
-                <h3 className="text-lg font-bold text-[#2457a3] mb-6 border-b border-slate-100/50 pb-4">Payroll Information</h3>
+            <div className="flex h-full flex-col rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:p-8">
+                <h3 className="mb-6 border-b border-slate-100 pb-4 text-lg font-semibold text-[#2457a3]">Payroll Information</h3>
 
-                <div className="space-y-6 flex-1">
+                <div className="flex-1 space-y-6">
                     <div className="space-y-1">
                         <Input
                             IsUsername
@@ -102,7 +102,7 @@ const ContratContent = () => {
                         />
                     </div>
                 </div>
-                <div className="space-y-6 flex-1 mt-6">
+                <div className="mt-6 flex-1 space-y-6">
                     <div className="space-y-1">
                         <Input
                             IsUsername
@@ -128,9 +128,9 @@ const ContratContent = () => {
             </div>
 
             {/* Right Column - Bonus Card */}
-            <div className="glass-card p-8 shadow-sm border border-slate-100/50 bg-white/70 h-full flex flex-col justify-between">
+            <div className="flex h-full flex-col justify-between rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:p-8">
                 <div>
-                    <h3 className="text-lg font-bold text-emerald-600 mb-6 border-b border-slate-100/50 pb-4">Additional Bonus</h3>
+                    <h3 className="mb-6 border-b border-slate-100 pb-4 text-lg font-semibold text-emerald-600">Additional Bonus</h3>
 
                     <div className="space-y-6">
                         <div className="space-y-1">
@@ -178,13 +178,13 @@ const ContratContent = () => {
                     </div>
                 </div>
 
-                <div className="pt-8 mt-auto">
+                <div className="mt-auto pt-8">
                     {canManagePayroll ? (
                         <Button
                             type={ButtonTypes.PRIMARY}
                             btnText={EditingPayroll ? 'Update Payroll' : 'Create Payroll'}
                             onClick={EditingPayroll ? handleUpdatePayroll : handleCreatePayroll}
-                            className="w-full bg-[#2457a3] hover:bg-[#1a407a] text-white transition-all shadow-md active:scale-95 py-2.5 rounded-lg font-medium"
+                            className="w-full"
                         />
                     ) : (
                         <p className="text-sm text-slate-500">
