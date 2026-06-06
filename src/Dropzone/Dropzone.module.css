@@ -1,19 +1,18 @@
 /* Dropzone.module.css */
 .dropzone {
     width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
 }
 
 .dropzoneContent {
-    border: 2px dashed #0087f7;
-    border-radius: 4px;
-    padding: 20px;
+    min-width: 0;
+    border: 1px dashed #94a3b8;
+    border-radius: 8px;
+    padding: 18px;
     text-align: center;
-    background-color: #f6f8fa;
+    background-color: #f8fafc;
     transition: all 0.3s ease;
     cursor: pointer;
-    min-height: 100px;
+    min-height: 132px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -21,64 +20,90 @@
 }
 
 .dropzoneContent:hover {
-    background-color: #e1e8ed;
+    border-color: #2457a3;
+    background-color: #f1f5f9;
 }
 
 .fileIcon {
-    font-size: 48px;
-    color: #0087f7;
+    width: 42px;
+    height: 42px;
+    color: #2457a3;
     margin-bottom: 10px;
 }
 
 .dropzoneContent p {
     margin: 0;
-    font-size: 16px;
-    color: #333;
+    width: 100%;
+    max-width: 100%;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #475569;
+    overflow-wrap: anywhere;
 }
 
 .previewGrid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+    gap: 12px;
     width: 100%;
 }
 
 .previewItem {
     position: relative;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 10px;
+    min-width: 0;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 8px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100px;
+    background-color: #ffffff;
+}
+
+.previewImage {
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    border-radius: 6px;
+    object-fit: cover;
+    background-color: #e2e8f0;
 }
 
 .fileName {
     font-size: 12px;
-    margin-top: 5px;
-    max-width: 30%;
+    line-height: 1.4;
+    margin-top: 6px;
+    width: 100%;
+    max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    color: #475569;
 }
 
 .removeButton {
     position: absolute;
-    top: 2px;
-    right: 2px;
-    background-color: rgba(255, 255, 255, 0.7);
+    top: 6px;
+    right: 6px;
+    display: inline-flex;
+    width: 24px;
+    height: 24px;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.92);
     border: none;
     border-radius: 50%;
-    padding: 2px;
+    color: #334155;
     cursor: pointer;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.18);
 }
 
 .controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
     margin-top: 10px;
+    flex-wrap: wrap;
 }
 
 .removeAllButton {
@@ -93,5 +118,5 @@
 .fileCount {
     margin: 0;
     font-size: 14px;
-    color: #333;
+    color: #475569;
 }

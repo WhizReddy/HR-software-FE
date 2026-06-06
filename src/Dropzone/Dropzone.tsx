@@ -54,7 +54,7 @@ const Dropzone: React.FC<DropzoneProps> = ({ className }) => {
     }
 
     return (
-        <div className={`${styles.dropzone} ${className}`}>
+        <div className={[styles.dropzone, className].filter(Boolean).join(' ')}>
             <div {...getRootProps()} className={styles.dropzoneContent}>
                 <input {...getInputProps()} />
                 {previewFiles.length === 0 ? (
@@ -70,24 +70,29 @@ const Dropzone: React.FC<DropzoneProps> = ({ className }) => {
                     </>
                 ) : (
                     <div className={styles.previewGrid}>
-                        {previewFiles.map((file, i) => (
-                            <div key={file.name + i} className={styles.previewItem}>
-                                <FileText
-                                    className={styles.fileIcon}
+                        {previewFiles.map((file) => (
+                            <div
+                                key={file.preview}
+                                className={styles.previewItem}
+                            >
+                                <img
+                                    className={styles.previewImage}
+                                    src={file.preview}
+                                    alt={file.name}
                                 />
                                 <div className={styles.fileName}>
                                     {file.name}
                                 </div>
                                 <button
+                                    type="button"
                                     onClick={(e) => {
                                         e.stopPropagation()
                                         removeFile(file.name)
                                     }}
+                                    aria-label={`Remove ${file.name}`}
                                     className={styles.removeButton}
                                 >
-                                    <X
-                                        size={15}
-                                    />
+                                    <X size={15} />
                                 </button>
                             </div>
                         ))}

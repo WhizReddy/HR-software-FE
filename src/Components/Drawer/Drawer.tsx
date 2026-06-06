@@ -25,10 +25,14 @@ const DrawerComponent: React.FC<DrawerProps> = ({
     anchor = 'right',
 }) => {
     return (
-        <Drawer open={open} onOpenChange={(value) => !value && onClose()} direction={anchor}>
+        <Drawer
+            open={open}
+            onOpenChange={(value) => !value && onClose()}
+            direction={anchor}
+        >
             <DrawerContent
-                className="max-w-none border-slate-200 bg-white"
-                style={{ width, maxWidth: width }}
+                className="max-w-none overflow-hidden border-slate-200 bg-white"
+                style={{ width: 'calc(100vw - 16px)', maxWidth: width }}
                 onCloseAutoFocus={(e) => {
                     e.preventDefault()
                     if (document.activeElement instanceof HTMLElement) {
@@ -36,17 +40,23 @@ const DrawerComponent: React.FC<DrawerProps> = ({
                     }
                 }}
             >
-                <DrawerHeader className="border-b border-slate-100 px-5 py-4">
-                    {title ? (
+                {title ? (
+                    <DrawerHeader className="border-b border-slate-100 px-5 py-4">
                         <DrawerTitle>{title}</DrawerTitle>
-                    ) : (
-                        <>
-                            <DrawerTitle className="sr-only">Drawer Menu</DrawerTitle>
-                            <DrawerDescription className="sr-only">Menu Description</DrawerDescription>
-                        </>
-                    )}
-                </DrawerHeader>
-                <div className="flex-1 overflow-y-auto p-5">{children}</div>
+                    </DrawerHeader>
+                ) : (
+                    <>
+                        <DrawerTitle className="sr-only">
+                            Drawer Menu
+                        </DrawerTitle>
+                        <DrawerDescription className="sr-only">
+                            Menu Description
+                        </DrawerDescription>
+                    </>
+                )}
+                <div className="custom-scrollbar min-h-0 flex-1 overflow-x-hidden overflow-y-auto p-5">
+                    {children}
+                </div>
             </DrawerContent>
         </Drawer>
     )
