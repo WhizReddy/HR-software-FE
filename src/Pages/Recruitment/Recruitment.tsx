@@ -1,9 +1,11 @@
 import { useContext, type ReactNode } from 'react'
+import { Link } from 'react-router-dom'
 import {
     BriefcaseBusiness,
     CheckCircle2,
     Clock3,
     FileText,
+    LogIn,
     Mail,
     Phone,
     RotateCcw,
@@ -60,6 +62,22 @@ function RecruitmentBase() {
 
     return (
         <main className="min-h-screen bg-[#f5f7fb]">
+            <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 pt-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+                <Link
+                    to="/career"
+                    className="inline-flex min-h-10 w-full items-center justify-center rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:bg-slate-50 sm:w-auto"
+                >
+                    Career Board
+                </Link>
+                <Link
+                    to="/"
+                    className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-md bg-[#2457a3] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[#1b4285] sm:w-auto"
+                >
+                    <LogIn size={16} />
+                    Login
+                </Link>
+            </div>
+
             <section className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-5 sm:px-6 lg:grid-cols-[minmax(320px,0.88fr)_minmax(0,1.12fr)] lg:px-8 lg:py-8">
                 <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
                     <div className="overflow-hidden rounded-lg border border-slate-200/80 bg-[#2457a3] text-white shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
@@ -578,7 +596,7 @@ function RecruitmentBase() {
                                 width="100%"
                                 onClick={resetForm}
                                 icon={<RotateCcw size={16} />}
-                                className="justify-center rounded-md py-3"
+                                className="justify-center whitespace-nowrap rounded-md py-3"
                             />
                             <MyButton
                                 type={ButtonTypes.PRIMARY}
@@ -591,7 +609,7 @@ function RecruitmentBase() {
                                 isSubmit
                                 width="100%"
                                 icon={<Send size={16} />}
-                                className="justify-center rounded-md py-3"
+                                className="justify-center whitespace-nowrap rounded-md py-3"
                             />
                         </div>
                     </form>

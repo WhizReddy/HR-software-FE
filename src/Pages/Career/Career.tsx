@@ -5,6 +5,7 @@ import {
     ArrowUpRight,
     BriefcaseBusiness,
     Clock3,
+    LogIn,
     MapPin,
     Pencil,
     Plus,
@@ -236,15 +237,22 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                 <>
                                     <Link
                                         to="/recruitment"
-                                        className="inline-flex min-h-11 items-center gap-2 rounded-md bg-[#2457a3] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#1c4380] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300"
+                                        className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-[#2457a3] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#1c4380] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 sm:w-auto"
                                     >
                                         Submit General Application
                                         <ArrowRight size={16} />
                                     </Link>
+                                    <Link
+                                        to="/"
+                                        className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 sm:w-auto"
+                                    >
+                                        <LogIn size={16} />
+                                        Login
+                                    </Link>
                                     {isManager && (
                                         <Link
                                             to="/career-posts"
-                                            className="inline-flex min-h-11 items-center gap-2 rounded-md border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200"
+                                            className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 sm:w-auto"
                                         >
                                             Manage Career Posts
                                         </Link>
@@ -414,7 +422,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                 {!managementMode && (
                                     <Link
                                         to="/recruitment"
-                                        className="inline-flex items-center rounded-md bg-[#2457a3] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#1c4380]"
+                                        className="inline-flex min-h-11 w-full items-center justify-center rounded-md bg-[#2457a3] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#1c4380] sm:w-auto"
                                     >
                                         Apply Anyway
                                     </Link>
@@ -508,7 +516,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         {!managementMode && (
                                             <Link
                                                 to="/recruitment"
-                                                className="inline-flex min-h-11 items-center gap-2 rounded-md bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#2457a3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2457a3]/30"
+                                                className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#2457a3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2457a3]/30"
                                             >
                                                 Apply Now
                                                 <ArrowRight size={14} />
@@ -613,7 +621,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
 
                                 <Link
                                     to="/recruitment"
-                                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-[#2457a3] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#1c4380] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300"
+                                    className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-[#2457a3] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#1c4380] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 sm:w-auto"
                                 >
                                     Start Application
                                     <ArrowRight size={16} />
