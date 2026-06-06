@@ -28,9 +28,9 @@ import {
 } from './Hook'
 import { useAuth } from '@/features/auth/context/AuthProvider'
 import { isAdminRole } from '@/features/auth/lib/access'
-import Workers from '/Images/happy workers.webp'
-import WorkerTwo from '/Images/happyWorkers2.jpg'
-import WorkerThree from '/Images/happyWork3.jpeg'
+import Workers from '/Images/career-workspace-hero.jpg'
+import WorkerTwo from '/Images/career-planning-table.jpg'
+import WorkerThree from '/Images/career-meeting-room.jpg'
 
 type CareersProps = {
     managementMode?: boolean
