@@ -137,8 +137,8 @@ export const useCreatePayroll = () => {
                 name === 'bonusDescription'
                     ? value
                     : value === ''
-                        ? undefined
-                        : Number(value),
+                      ? undefined
+                      : Number(value),
         }))
     }
 
@@ -204,7 +204,11 @@ export const useUpdatePayroll = () => {
     const { isLoading, error } = useQuery<EmployeePayroll[], Error>({
         queryKey: ['EditingPayroll', id, targetMonth, targetYear],
         queryFn: async () => {
-            const url = `/salary/user/${id}?month=${targetMonth}&year=${targetYear}`
+            const params = new URLSearchParams({
+                month: String(targetMonth),
+                year: String(targetYear),
+            })
+            const url = `/salary/user/${id}?${params.toString()}`
             const response = await AxiosInstance.get<PayrollResponse>(url)
             const payrollRows = normalizePayrollRows(response.data)
             if (payrollRows.length > 0) {
@@ -229,8 +233,8 @@ export const useUpdatePayroll = () => {
                     name === 'bonusDescription'
                         ? value
                         : value === ''
-                            ? undefined
-                            : Number(value),
+                          ? undefined
+                          : Number(value),
             }
         })
     }

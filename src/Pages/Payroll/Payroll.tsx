@@ -19,6 +19,10 @@ function PayrollContent() {
         totalPages,
         totalCount,
         handlePaginationModelChange,
+        month,
+        year,
+        setMonth,
+        setYear,
         isError,
         errorMessage,
     } = usePayrollContext()
@@ -80,6 +84,61 @@ function PayrollContent() {
                             }
                             onSearchClear={clearSearch}
                             searchPlaceholder="Search by employee name"
+                            filterNode={
+                                <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+                                    <label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-slate-500 sm:w-40">
+                                        Month
+                                        <select
+                                            value={month ?? ''}
+                                            onChange={(event) =>
+                                                setMonth(
+                                                    event.target.value
+                                                        ? Number(
+                                                              event.target
+                                                                  .value,
+                                                          )
+                                                        : undefined,
+                                                )
+                                            }
+                                            className="h-10 rounded-md border border-slate-200 bg-white px-3 text-sm font-medium normal-case tracking-normal text-slate-700 shadow-sm focus:border-[#2457a3] focus:outline-none focus:ring-2 focus:ring-[#2457a3]/20"
+                                        >
+                                            <option value="">All months</option>
+                                            {Array.from(
+                                                { length: 12 },
+                                                (_, index) => (
+                                                    <option
+                                                        key={index + 1}
+                                                        value={index + 1}
+                                                    >
+                                                        {index + 1}
+                                                    </option>
+                                                ),
+                                            )}
+                                        </select>
+                                    </label>
+                                    <label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-slate-500 sm:w-40">
+                                        Year
+                                        <input
+                                            type="number"
+                                            min="2000"
+                                            max="2100"
+                                            value={year ?? ''}
+                                            onChange={(event) =>
+                                                setYear(
+                                                    event.target.value
+                                                        ? Number(
+                                                              event.target
+                                                                  .value,
+                                                          )
+                                                        : undefined,
+                                                )
+                                            }
+                                            placeholder="All years"
+                                            className="h-10 rounded-md border border-slate-200 bg-white px-3 text-sm font-medium normal-case tracking-normal text-slate-700 shadow-sm focus:border-[#2457a3] focus:outline-none focus:ring-2 focus:ring-[#2457a3]/20"
+                                        />
+                                    </label>
+                                </div>
+                            }
                             isLoading={isPending}
                             loadingLabel="Loading payroll records..."
                         />

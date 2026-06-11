@@ -5,6 +5,19 @@ import AxiosInstance from '@/Helpers/Axios'
 import { useQuery } from '@tanstack/react-query'
 import { getMonthName } from '../utils/Utils'
 import { useUrlTableState } from '@/hooks/use-url-table-state'
+import {
+    hasSearchParamsChanged,
+    upsertFilterParams,
+} from '@/Helpers/urlFilters'
+
+const parseOptionalNumberParam = (value: string | null) => {
+    if (!value) {
+        return undefined
+    }
+
+    const parsed = Number(value)
+    return Number.isFinite(parsed) ? parsed : undefined
+}
 
 export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
@@ -24,12 +37,36 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         searchParams,
         setSearchParams,
     })
+    const month = parseOptionalNumberParam(searchParams.get('month'))
+    const year = parseOptionalNumberParam(searchParams.get('year'))
 
-    const handleFullNameChange = useCallback((value: string) => {
-        setSearch((currentValue) =>
-            currentValue === value ? currentValue : value,
-        )
-    }, [setSearch])
+    const updateNumberFilter = useCallback(
+        (key: 'month' | 'year', value: number | undefined) => {
+            setSearchParams((prev) => {
+                const nextParams = upsertFilterParams(
+                    prev,
+                    {
+                        [key]: value,
+                    },
+                    { resetPage: true },
+                )
+
+                return hasSearchParamsChanged(prev, nextParams)
+                    ? nextParams
+                    : prev
+            })
+        },
+        [setSearchParams],
+    )
+
+    const handleFullNameChange = useCallback(
+        (value: string) => {
+            setSearch((currentValue) =>
+                currentValue === value ? currentValue : value,
+            )
+        },
+        [setSearch],
+    )
 
     const navigate = useNavigate()
 
@@ -44,6 +81,8 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         params.set('limit', String(pageSize))
         params.set('page', String(page))
         if (trimmedFullName) params.set('fullName', trimmedFullName)
+        if (month) params.set('month', String(month))
+        if (year) params.set('year', String(year))
 
         const response = await AxiosInstance.get<{
             data: PayrollRow[]
@@ -58,8 +97,11 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         isPending,
         isError,
         error,
-    } = useQuery<{ data: PayrollRow[]; totalPages: number; all: number }, Error>({
-        queryKey: ['payroll', page, pageSize, searchQuery],
+    } = useQuery<
+        { data: PayrollRow[]; totalPages: number; all: number },
+        Error
+    >({
+        queryKey: ['payroll', page, pageSize, searchQuery, month, year],
         queryFn: () => fetchPayroll(),
         placeholderData: (previousData) => previousData,
     })
@@ -124,14 +166,18 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         setFullName: handleFullNameChange,
         setMaxNetSalary: () => undefined,
         setMinNetSalary: () => undefined,
-        setMonth: () => undefined,
-        setYear: () => undefined,
+        setMonth: (value: number | undefined) =>
+            updateNumberFilter('month', value),
+        setYear: (value: number | undefined) =>
+            updateNumberFilter('year', value),
         isPending,
         isError,
         errorMessage: error?.message || null,
         setBonus: () => undefined,
         setWorkingDays: () => undefined,
         setName: handleFullNameChange,
+        month,
+        year,
         search,
         clearSearch,
         netSalary,

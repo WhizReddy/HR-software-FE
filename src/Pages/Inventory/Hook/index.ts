@@ -18,12 +18,16 @@ export const useAllInventoryItems = () => {
             searchParams.get('page') || '0',
             searchParams.get('limit') || '5',
             searchParams.get('search') || '',
+            searchParams.get('status') || '',
+            searchParams.get('type') || '',
         ],
         queryFn: () =>
             getAllInventoryItems(
                 searchParams.get('page') || '0',
                 searchParams.get('limit') || '5',
                 searchParams.get('search') || '',
+                searchParams.get('status') || '',
+                searchParams.get('type') || '',
             ),
     })
 }

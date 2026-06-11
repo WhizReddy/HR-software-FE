@@ -3,30 +3,59 @@ import { PayrollContextSpecific, PayrollRowSpecifc } from '../interface'
 import { PaginationModel } from '@/types/table'
 import AxiosInstance from '@/Helpers/Axios'
 import { useQuery } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 import { getMonthName } from '../../utils/Utils'
+import {
+    ensurePaginationParams,
+    hasSearchParamsChanged,
+    parseNumberParam,
+    upsertFilterParams,
+} from '@/Helpers/urlFilters'
 
 export const PayrollProviderSpecific: React.FC<{
     children: React.ReactNode
 }> = ({ children }) => {
     const { id } = useParams()
-    const [month, setMonth] = useState<number | undefined>(undefined)
-    const [year, setYear] = useState<number | undefined>(undefined)
-    const [page, setPage] = useState(0)
-    const [pageSize, setPageSize] = useState(5)
+    const [searchParams, setSearchParams] = useSearchParams()
+    const page = parseNumberParam(searchParams, 'page', 0)
+    const pageSize = parseNumberParam(searchParams, 'limit', 5)
+    const month = searchParams.get('month')
+        ? parseNumberParam(searchParams, 'month', 0)
+        : undefined
+    const year = searchParams.get('year')
+        ? parseNumberParam(searchParams, 'year', 0)
+        : undefined
     const [employeeName, setEmployeeName] = useState('')
 
-    const applyFilterChange = <T,>(
-        setter: React.Dispatch<React.SetStateAction<T>>,
-        value: T,
-    ) => {
-        setPage(0)
-        setter(value)
+    useEffect(() => {
+        setSearchParams((prev) => {
+            const nextParams = ensurePaginationParams(prev)
+
+            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
+        })
+    }, [setSearchParams])
+
+    const setUrlFilter = (key: 'month' | 'year', value: number | undefined) => {
+        setSearchParams((prev) => {
+            const nextParams = upsertFilterParams(
+                prev,
+                { [key]: value },
+                { resetPage: true },
+            )
+
+            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
+        })
     }
 
     const handlePaginationModelChange = (model: PaginationModel) => {
-        setPage(model.page)
-        setPageSize(model.pageSize)
+        setSearchParams((prev) => {
+            const nextParams = upsertFilterParams(prev, {
+                page: model.page,
+                limit: model.pageSize,
+            })
+
+            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
+        })
     }
 
     const fetchPayroll = async (): Promise<{
@@ -55,7 +84,12 @@ export const PayrollProviderSpecific: React.FC<{
         return response.data
     }
 
-    const { data: payrollId, isPending, isError, error } = useQuery<
+    const {
+        data: payrollId,
+        isPending,
+        isError,
+        error,
+    } = useQuery<
         { data: PayrollRowSpecifc[]; totalPages: number; all: number },
         Error
     >({
@@ -118,8 +152,10 @@ export const PayrollProviderSpecific: React.FC<{
         columns,
         headerTextColors,
         getRowId,
-        setMonth: (value: number | undefined) => applyFilterChange(setMonth, value),
-        setYear: (value: number | undefined) => applyFilterChange(setYear, value),
+        month,
+        year,
+        setMonth: (value: number | undefined) => setUrlFilter('month', value),
+        setYear: (value: number | undefined) => setUrlFilter('year', value),
         isPending,
         isError,
         errorMessage: error?.message || null,

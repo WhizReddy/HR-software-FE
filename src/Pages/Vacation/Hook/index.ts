@@ -23,11 +23,23 @@ import { valibotValidator } from '@tanstack/valibot-form-adapter'
 import { useParams } from 'react-router-dom'
 import { getVacationErrorMessage } from '../errorMessage'
 
-export const useGetVacations = (page: number, limit: number, search = '') => {
+export const useGetVacations = (
+    page: number,
+    limit: number,
+    search = '',
+    status = '',
+    type = '',
+) => {
     return useQuery({
-        queryKey: ['vacations', page, limit, search],
+        queryKey: ['vacations', page, limit, search, status, type],
         queryFn: () =>
-            getAllVacations(String(page), String(limit), search.trim()),
+            getAllVacations(
+                String(page),
+                String(limit),
+                search.trim(),
+                status,
+                type,
+            ),
         placeholderData: (previousData) => previousData,
     })
 }

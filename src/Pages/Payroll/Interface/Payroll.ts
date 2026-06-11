@@ -22,15 +22,21 @@ export interface PayrollContextType {
     search: string
     clearSearch: () => void
     page: number
-    setFilters: React.Dispatch<React.SetStateAction<Record<string, string | boolean>>>
+    setFilters: React.Dispatch<
+        React.SetStateAction<Record<string, string | boolean>>
+    >
     filters: Record<string, string | boolean>
     pageSize: number
     totalPages: number
     totalCount: number
     handlePaginationModelChange: (paginationModel: PaginationModel) => void
+    month: number | undefined
+    year: number | undefined
 }
 
-export const PayrollContext = React.createContext<PayrollContextType | undefined>(undefined)
+export const PayrollContext = React.createContext<
+    PayrollContextType | undefined
+>(undefined)
 
 export interface PayrollRow {
     id: number

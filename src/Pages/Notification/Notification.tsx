@@ -6,7 +6,7 @@ import AxiosInstance from '@/Helpers/Axios'
 import { useAuth } from '@/features/auth/context/AuthProvider'
 
 interface Notification {
-    _id: number
+    _id: string | number
     title: string
     type: string
     typeId: string
@@ -22,7 +22,7 @@ const NotificationDropdown: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false)
     const { notifications, setNotifications } = useGetAllNotifications() ?? {
         notifications: [],
-        setNotifications: () => { },
+        setNotifications: () => {},
     }
     const unreadCount = useMemo(
         () => notifications.filter((n) => !n.isRead).length,
@@ -31,7 +31,10 @@ const NotificationDropdown: React.FC = () => {
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target as Node)
+            ) {
                 setIsOpen(false)
             }
         }
@@ -44,14 +47,16 @@ const NotificationDropdown: React.FC = () => {
     const handleToggleDropdown = () => setIsOpen((prev) => !prev)
 
     const removeNotification = async (notification: Notification) => {
-        if (notification.isRead) {
+        if (notification.isRead || !currentUser?._id) {
             return
         }
 
         try {
-            await AxiosInstance.patch(`notification/${notification._id}/user/${currentUser?._id}`)
-            const updatedNotifications = notifications.map(n =>
-                n._id === notification._id ? { ...n, isRead: true } : n
+            await AxiosInstance.patch(
+                `notification/${notification._id}/user/${currentUser._id}`,
+            )
+            const updatedNotifications = notifications.map((n) =>
+                n._id === notification._id ? { ...n, isRead: true } : n,
             )
             setNotifications(updatedNotifications)
         } catch (error) {
@@ -65,16 +70,25 @@ const NotificationDropdown: React.FC = () => {
     const getRouteByType = (notification: Notification) => {
         switch (notification.type) {
             case 'events':
-                return `/events?event=${notification.typeId}`
+                return `/events?${new URLSearchParams({
+                    event: notification.typeId,
+                    page: '0',
+                    limit: '6',
+                }).toString()}`
             case 'vacation':
-                return `/vacation?vacationType=requests&selectedVacation=${notification.typeId}`
+                return `/vacation?${new URLSearchParams({
+                    vacationType: 'requests',
+                    selectedVacation: notification.typeId,
+                    page: '0',
+                    limit: '5',
+                }).toString()}`
             case 'candidates':
                 return `/view/${notification.typeId}`
             case 'allVacation':
                 return '/vacation?vacationType=requests&page=0&limit=5'
             case 'allCandidates':
             case 'allApplication':
-                return '/candidates'
+                return '/candidates?page=0&limit=5'
             default:
                 return null
         }
@@ -114,18 +128,31 @@ const NotificationDropdown: React.FC = () => {
     }
 
     const markAllAsRead = async () => {
+        if (!currentUser?._id) {
+            return
+        }
+
         try {
-            const unreadNotifications = notifications.filter((notification) => !notification.isRead)
+            const unreadNotifications = notifications.filter(
+                (notification) => !notification.isRead,
+            )
+            if (unreadNotifications.length === 0) {
+                return
+            }
+
             await Promise.all(
                 unreadNotifications.map((notification) =>
-                    AxiosInstance.patch(`notification/${notification._id}/user/${currentUser?._id}`),
+                    AxiosInstance.patch(
+                        `notification/${notification._id}/user/${currentUser._id}`,
+                    ),
                 ),
             )
 
-            if (unreadNotifications.length > 0) {
-                const updatedNotifications = notifications.map((n) => ({ ...n, isRead: true }))
-                setNotifications(updatedNotifications)
-            }
+            const updatedNotifications = notifications.map((n) => ({
+                ...n,
+                isRead: true,
+            }))
+            setNotifications(updatedNotifications)
         } catch (error) {
             console.error('Error marking all as read:', error)
         }
@@ -137,8 +164,9 @@ const NotificationDropdown: React.FC = () => {
         }
 
         try {
+            const params = new URLSearchParams({ period: 'week' })
             const result = await AxiosInstance.get(
-                `notification/user/${currentUser?._id}?period=week`,
+                `notification/user/${currentUser._id}?${params.toString()}`,
             )
             setNotifications(result.data)
         } catch (error) {
@@ -182,9 +210,14 @@ const NotificationDropdown: React.FC = () => {
                                 className="mb-2 cursor-pointer rounded-md border border-slate-100 bg-white shadow-sm transition-colors hover:bg-slate-50"
                                 style={{
                                     borderBottomWidth: '4px',
-                                    borderBottomColor: getColorByType(notification.type, notification.isRead),
+                                    borderBottomColor: getColorByType(
+                                        notification.type,
+                                        notification.isRead,
+                                    ),
                                 }}
-                                onClick={() => handleNotificationClick(notification)}
+                                onClick={() =>
+                                    handleNotificationClick(notification)
+                                }
                             >
                                 <div className="flex items-start justify-between gap-2 p-3">
                                     <div className="min-w-0">
@@ -197,15 +230,24 @@ const NotificationDropdown: React.FC = () => {
                                     </div>
                                     <button
                                         type="button"
-                                        aria-label={notification.isRead ? 'Notification already read' : 'Mark notification as read'}
+                                        aria-label={
+                                            notification.isRead
+                                                ? 'Notification already read'
+                                                : 'Mark notification as read'
+                                        }
                                         onClick={(e) => {
                                             e.stopPropagation()
                                             removeNotification(notification)
                                         }}
-                                        className={`shrink-0 text-xs font-medium ${notification.isRead ? 'text-slate-400' : 'text-blue-600 hover:text-blue-800'
-                                            }`}
+                                        className={`shrink-0 text-xs font-medium ${
+                                            notification.isRead
+                                                ? 'text-slate-400'
+                                                : 'text-blue-600 hover:text-blue-800'
+                                        }`}
                                     >
-                                        {notification.isRead ? 'Read' : 'Mark as read'}
+                                        {notification.isRead
+                                            ? 'Read'
+                                            : 'Mark as read'}
                                     </button>
                                 </div>
                             </div>
@@ -215,6 +257,7 @@ const NotificationDropdown: React.FC = () => {
                     <div className="flex items-center justify-between border-t border-slate-100 px-4 py-2">
                         {unreadCount > 0 && (
                             <button
+                                type="button"
                                 className="text-sm text-slate-500 transition-colors hover:text-blue-600"
                                 onClick={markAllAsRead}
                             >
@@ -223,6 +266,7 @@ const NotificationDropdown: React.FC = () => {
                         )}
 
                         <button
+                            type="button"
                             className="ml-auto text-sm text-slate-500 transition-colors hover:text-blue-600"
                             onClick={showAll}
                         >

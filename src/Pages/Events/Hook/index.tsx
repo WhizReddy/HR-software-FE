@@ -1,41 +1,88 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import AxiosInstance from '@/Helpers/Axios'
 import { AxiosError } from 'axios'
 import { EventsCreationData, EventsData } from '../Interface/Events'
 import { useSearchParams } from 'react-router-dom'
-import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import {
+    useInfiniteQuery,
+    useMutation,
+    useQueryClient,
+} from '@tanstack/react-query'
 import { fetchEvents } from '../utils/utils'
 import { useDebouncedValue } from '@/hooks/use-debounced-value'
+import {
+    ensurePaginationParams,
+    hasSearchParamsChanged,
+    parseNumberParam,
+    upsertFilterParams,
+} from '@/Helpers/urlFilters'
+
+const EVENT_PAGE_SIZE = 6
 
 export const useGetAllEvents = () => {
     const [searchParams, setSearchParams] = useSearchParams()
-    const [searchEvent, setSearchEvent] = useState(searchParams.get('search') || '')
+    const [searchEvent, setSearchEvent] = useState(
+        searchParams.get('search') || '',
+    )
     const debouncedSearchEvent = useDebouncedValue(searchEvent, 350)
+    const currentPage = parseNumberParam(searchParams, 'page', 0)
+    const currentLimit = parseNumberParam(
+        searchParams,
+        'limit',
+        EVENT_PAGE_SIZE,
+    )
+    const loadedFromPageRef = useRef(currentPage)
+
+    useEffect(() => {
+        setSearchParams((prev) => {
+            const nextParams = ensurePaginationParams(prev, {
+                defaultPage: '0',
+                defaultLimit: String(EVENT_PAGE_SIZE),
+            })
+
+            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
+        })
+    }, [setSearchParams])
+
+    useEffect(() => {
+        loadedFromPageRef.current = parseNumberParam(
+            new URLSearchParams(window.location.search),
+            'page',
+            0,
+        )
+    }, [currentLimit, debouncedSearchEvent])
 
     const query = useInfiniteQuery({
-        queryKey: ['events', debouncedSearchEvent],
+        queryKey: ['events', debouncedSearchEvent, currentLimit],
         queryFn: ({ pageParam = 0 }) =>
-            fetchEvents(debouncedSearchEvent || '', pageParam),
-        initialPageParam: 0,
-        getNextPageParam: (lastPage: any, allPages) => {
-            if (lastPage?.data && lastPage.data.length < 6) {
+            fetchEvents(debouncedSearchEvent || '', pageParam, currentLimit),
+        initialPageParam: currentPage,
+        getNextPageParam: (lastPage: any, _allPages, lastPageParam) => {
+            if (lastPage?.data && lastPage.data.length < currentLimit) {
                 return undefined
             }
-            return allPages.length
+            return Number(lastPageParam) + 1
         },
     })
 
-    const search = ((value: string) => {
+    const search = (value: string) => {
         setSearchParams((prev: URLSearchParams) => {
-            const newParams = new URLSearchParams(prev)
-            if (value) {
-                newParams.set('search', value)
-            } else {
-                newParams.delete('search')
-            }
-            return newParams
+            const nextParams = upsertFilterParams(
+                prev,
+                {
+                    search: value.trim() || null,
+                    page: '0',
+                    limit: String(EVENT_PAGE_SIZE),
+                },
+                {
+                    defaultPage: '0',
+                    defaultLimit: String(EVENT_PAGE_SIZE),
+                },
+            )
+
+            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
         })
-    })
+    }
 
     const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchEvent(e.target.value)
@@ -46,23 +93,46 @@ export const useGetAllEvents = () => {
         setSearchEvent(searchParams.get('search') || '')
     }, [searchParams])
 
+    useEffect(() => {
+        const loadedPageIndex =
+            loadedFromPageRef.current +
+            Math.max(query.data?.pages.length ?? 1, 1) -
+            1
+
+        if (loadedPageIndex === currentPage) {
+            return
+        }
+
+        setSearchParams((prev) => {
+            const nextParams = upsertFilterParams(prev, {
+                page: String(loadedPageIndex),
+                limit: String(currentLimit),
+            })
+
+            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
+        })
+    }, [currentLimit, currentPage, query.data?.pages.length, setSearchParams])
 
     return {
         ...query,
         searchEvent,
         onSearchChange,
+        page: currentPage,
+        limit: currentLimit,
     }
 }
 
 export const useCreateEvent = (
-    handleCloseDrawer: () => void = () => { },
+    handleCloseDrawer: () => void = () => {},
     eventPhotos: File[] = [],
-    setEventPhotos: React.Dispatch<React.SetStateAction<File[]>> = () => { }
+    setEventPhotos: React.Dispatch<React.SetStateAction<File[]>> = () => {},
 ) => {
     const queryClient = useQueryClient()
     const [toastOpen, setToastOpen] = useState(false)
     const [toastMessage, setToastMessage] = useState('')
-    const [toastSeverity, setToastSeverity] = useState<'success' | 'error'>('success')
+    const [toastSeverity, setToastSeverity] = useState<'success' | 'error'>(
+        'success',
+    )
 
     const [event, setEvent] = useState<EventsCreationData>({
         title: '',
@@ -83,12 +153,20 @@ export const useCreateEvent = (
             }
 
             if (event.endDate && !event.startDate) {
-                throw new Error('Start date is required when an end date is set')
+                throw new Error(
+                    'Start date is required when an end date is set',
+                )
             }
 
             // Guard: endDate must be after startDate
-            if (event.startDate && event.endDate && new Date(event.endDate) <= new Date(event.startDate)) {
-                throw new Error('End date and time must be after the start date')
+            if (
+                event.startDate &&
+                event.endDate &&
+                new Date(event.endDate) <= new Date(event.startDate)
+            ) {
+                throw new Error(
+                    'End date and time must be after the start date',
+                )
             }
 
             if (
@@ -103,9 +181,18 @@ export const useCreateEvent = (
             formData.append('description', event.description.trim())
             // Only append optional fields when they have values —
             // @IsOptional() skips validation for missing keys, but NOT for empty strings
-            if (event.startDate && !isNaN(Date.parse(event.startDate))) formData.append('startDate', new Date(event.startDate).toISOString())
-            if (event.endDate && !isNaN(Date.parse(event.endDate))) formData.append('endDate', new Date(event.endDate).toISOString())
-            if (event.location.trim()) formData.append('location', event.location.trim())
+            if (event.startDate && !isNaN(Date.parse(event.startDate)))
+                formData.append(
+                    'startDate',
+                    new Date(event.startDate).toISOString(),
+                )
+            if (event.endDate && !isNaN(Date.parse(event.endDate)))
+                formData.append(
+                    'endDate',
+                    new Date(event.endDate).toISOString(),
+                )
+            if (event.location.trim())
+                formData.append('location', event.location.trim())
             formData.append('type', event.type || 'other')
             eventPhotos.forEach((photo) => {
                 formData.append('photo', photo)
@@ -139,12 +226,15 @@ export const useCreateEvent = (
         },
         onError: (error: Error | AxiosError) => {
             console.error('Error creating event', error)
-            const errorMsg = error instanceof AxiosError ? error.response?.data?.message : error.message
+            const errorMsg =
+                error instanceof AxiosError
+                    ? error.response?.data?.message
+                    : error.message
             const normalizedMessage = Array.isArray(errorMsg)
                 ? errorMsg[0]
                 : typeof errorMsg === 'string'
-                    ? errorMsg
-                    : JSON.stringify(errorMsg)
+                  ? errorMsg
+                  : JSON.stringify(errorMsg)
             const finalMessage = normalizedMessage || 'Error creating event'
             setToastMessage(finalMessage)
             setToastSeverity('error')
@@ -199,9 +289,9 @@ export const useCreateEvent = (
 }
 
 export const useUpdateEvent = (
-    handleCloseDrawer: () => void = () => { },
+    handleCloseDrawer: () => void = () => {},
     eventPhotos: File[] = [],
-    setEventPhotos: React.Dispatch<React.SetStateAction<File[]>> = () => { }
+    setEventPhotos: React.Dispatch<React.SetStateAction<File[]>> = () => {},
 ) => {
     const queryClient = useQueryClient()
     const [editingEvent, setEditingEvent] = useState<EventsData | null>(null)
@@ -252,8 +342,14 @@ export const useUpdateEvent = (
     const setEventForEditing = (event: EventsData) => {
         setEditingEvent({
             ...event,
-            startDate: event.startDate && !isNaN(Date.parse(event.startDate)) ? new Date(event.startDate).toISOString().slice(0, 16) : '',
-            endDate: event.endDate && !isNaN(Date.parse(event.endDate)) ? new Date(event.endDate).toISOString().slice(0, 16) : '',
+            startDate:
+                event.startDate && !isNaN(Date.parse(event.startDate))
+                    ? new Date(event.startDate).toISOString().slice(0, 16)
+                    : '',
+            endDate:
+                event.endDate && !isNaN(Date.parse(event.endDate))
+                    ? new Date(event.endDate).toISOString().slice(0, 16)
+                    : '',
         })
         setEditType(event.type)
     }
@@ -267,29 +363,54 @@ export const useUpdateEvent = (
                 throw new Error('No event selected for editing')
             }
 
-            if (!editingEvent.title.trim() || !editingEvent.description.trim()) {
+            if (
+                !editingEvent.title.trim() ||
+                !editingEvent.description.trim()
+            ) {
                 throw new Error('Title and Description are required')
             }
 
             if (editingEvent.endDate && !editingEvent.startDate) {
-                throw new Error('Start date is required when an end date is set')
+                throw new Error(
+                    'Start date is required when an end date is set',
+                )
             }
 
             // Guard: endDate must be after startDate
             if (
                 editingEvent.startDate &&
                 editingEvent.endDate &&
-                new Date(editingEvent.endDate) <= new Date(editingEvent.startDate)
+                new Date(editingEvent.endDate) <=
+                    new Date(editingEvent.startDate)
             ) {
-                throw new Error('End date and time must be after the start date')
+                throw new Error(
+                    'End date and time must be after the start date',
+                )
             }
 
             const formData = new FormData()
-            if (editingEvent.title) formData.append('title', editingEvent.title.trim())
-            if (editingEvent.description) formData.append('description', editingEvent.description.trim())
-            if (editingEvent.startDate && !isNaN(Date.parse(editingEvent.startDate))) formData.append('startDate', new Date(editingEvent.startDate).toISOString())
-            if (editingEvent.endDate && !isNaN(Date.parse(editingEvent.endDate))) formData.append('endDate', new Date(editingEvent.endDate).toISOString())
-            if (editingEvent.location?.trim()) formData.append('location', editingEvent.location.trim())
+            if (editingEvent.title)
+                formData.append('title', editingEvent.title.trim())
+            if (editingEvent.description)
+                formData.append('description', editingEvent.description.trim())
+            if (
+                editingEvent.startDate &&
+                !isNaN(Date.parse(editingEvent.startDate))
+            )
+                formData.append(
+                    'startDate',
+                    new Date(editingEvent.startDate).toISOString(),
+                )
+            if (
+                editingEvent.endDate &&
+                !isNaN(Date.parse(editingEvent.endDate))
+            )
+                formData.append(
+                    'endDate',
+                    new Date(editingEvent.endDate).toISOString(),
+                )
+            if (editingEvent.location?.trim())
+                formData.append('location', editingEvent.location.trim())
             formData.append('type', editType || 'other')
 
             eventPhotos.forEach((photo) => {
@@ -324,8 +445,13 @@ export const useUpdateEvent = (
         },
         onError: (error: Error | AxiosError) => {
             console.error('Error updating event:', error)
-            const errorMsg = error instanceof AxiosError ? error.response?.data?.message : error.message
-            const finalMessage = Array.isArray(errorMsg) ? errorMsg[0] : (errorMsg || 'Error updating event')
+            const errorMsg =
+                error instanceof AxiosError
+                    ? error.response?.data?.message
+                    : error.message
+            const finalMessage = Array.isArray(errorMsg)
+                ? errorMsg[0]
+                : errorMsg || 'Error updating event'
             setUpdateToastMessage(finalMessage)
             setUpdateToastOpen(true)
             setUpdateToastSeverity('error')

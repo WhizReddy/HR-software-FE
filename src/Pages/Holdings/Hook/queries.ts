@@ -12,9 +12,20 @@ export const getHoldings = async ({
     users: string
     search: string
 }): Promise<UsersWithHoldings> => {
-    const response = await AxiosInstance.get(
-        `/asset/user?users=${users}&search=${search}&page=${pageParam}&limit=${LIMIT}`,
-    )
+    const params = new URLSearchParams({
+        page: String(pageParam),
+        limit: String(LIMIT),
+    })
+
+    if (users) {
+        params.set('users', users)
+    }
+
+    if (search) {
+        params.set('search', search)
+    }
+
+    const response = await AxiosInstance.get(`/asset/user?${params.toString()}`)
     return {
         data: response.data.data,
         totalPages: response.data.totalPages,

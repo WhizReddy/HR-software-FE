@@ -8,7 +8,6 @@ import { Plus } from 'lucide-react'
 import Button from '@/Components/Button/Button'
 import { ButtonTypes } from '@/Components/Button/ButtonTypes'
 import { ToggleGroup, ToggleGroupItem } from '@/Components/ui/toggle-group'
-import { Card } from '@/Components/ui/card'
 import { upsertFilterParams } from '@/Helpers/urlFilters'
 import PageIntro from '@/Components/PageIntro/PageIntro'
 
@@ -81,11 +80,7 @@ function VacationComponent() {
                 </div>
             )}
             {currentTab === 'requests' && <VacationTable />}
-            {currentTab === 'userLeaves' && (
-                <Card className="mt-4 rounded-lg border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
-                    <EmployeesWithVacations />
-                </Card>
-            )}
+            {currentTab === 'userLeaves' && <EmployeesWithVacations />}
         </div>
     )
 }

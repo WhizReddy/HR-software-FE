@@ -1,10 +1,18 @@
 import React from 'react'
 import { RenderCellParams } from '@/types/table'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { EmployeeContext, EmployeeRow, UserProfileData } from '../interfaces/Employe'
+import {
+    EmployeeContext,
+    EmployeeRow,
+    UserProfileData,
+} from '../interfaces/Employe'
 import AxiosInstance from '@/Helpers/Axios'
 import { useQuery } from '@tanstack/react-query'
 import { useUrlTableState } from '@/hooks/use-url-table-state'
+import {
+    hasSearchParamsChanged,
+    upsertFilterParams,
+} from '@/Helpers/urlFilters'
 
 export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
@@ -22,14 +30,55 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
         searchParams,
         setSearchParams,
     })
+    const roleFilter = searchParams.get('role') || 'all'
+
+    const setRoleFilter = React.useCallback(
+        (role: string) => {
+            setSearchParams((prev) => {
+                const nextParams = upsertFilterParams(
+                    prev,
+                    {
+                        role: role === 'all' ? null : role,
+                    },
+                    { resetPage: true },
+                )
+
+                return hasSearchParamsChanged(prev, nextParams)
+                    ? nextParams
+                    : prev
+            })
+        },
+        [setSearchParams],
+    )
 
     const fetchEmployes = async () => {
-        const response = await AxiosInstance.get<{ data: UserProfileData[], totalPages: number }>(`/user?page=${page}&limit=${pageSize}&search=${searchQuery}`)
+        const params = new URLSearchParams({
+            page: String(page),
+            limit: String(pageSize),
+        })
+
+        if (searchQuery) {
+            params.set('search', searchQuery)
+        }
+
+        if (roleFilter !== 'all') {
+            params.set('role', roleFilter)
+        }
+
+        const response = await AxiosInstance.get<{
+            data: UserProfileData[]
+            totalPages: number
+        }>(`/user?${params.toString()}`)
         return response.data
     }
 
-    const { data: users, isPending, isError, error } = useQuery<{ data: UserProfileData[]; totalPages: number }, Error>({
-        queryKey: ['users', page, pageSize, searchQuery],
+    const {
+        data: users,
+        isPending,
+        isError,
+        error,
+    } = useQuery<{ data: UserProfileData[]; totalPages: number }, Error>({
+        queryKey: ['users', page, pageSize, searchQuery, roleFilter],
         queryFn: () => fetchEmployes(),
     })
 
@@ -41,7 +90,11 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
             originalId: user._id,
             imageUrl: user.imageUrl,
             role: user.role,
-            phone: user.phone ? (user.phone.startsWith('+') ? user.phone : `+355${user.phone}`) : 'N/A',
+            phone: user.phone
+                ? user.phone.startsWith('+')
+                    ? user.phone
+                    : `+355${user.phone}`
+                : 'N/A',
             email: user.auth?.email || '',
             fullName: `${user.firstName} ${user.lastName}`,
         })) || []
@@ -86,6 +139,8 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
         search,
         setSearch,
         clearSearch,
+        roleFilter,
+        setRoleFilter,
         totalPages: users?.totalPages ?? 0,
     }
 

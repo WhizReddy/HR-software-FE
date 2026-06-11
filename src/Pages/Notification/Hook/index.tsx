@@ -2,7 +2,7 @@ import { useAuth } from '@/features/auth/context/AuthProvider'
 import AxiosInstance from '@/Helpers/Axios'
 import { useEffect, useState } from 'react'
 interface Notification {
-    _id: number
+    _id: string | number
     title: string
     type: string
     typeId: string
@@ -16,8 +16,9 @@ export const useGetAllNotifications = () => {
     const [notifications, setNotifications] = useState<Notification[]>([])
     const fetchNotifications = async (userId: string) => {
         try {
+            const params = new URLSearchParams({ period: 'today' })
             const response = await AxiosInstance.get(
-                `notification/user/${userId}?period=today`,
+                `notification/user/${userId}?${params.toString()}`,
             )
             setNotifications(response.data)
         } catch (error) {

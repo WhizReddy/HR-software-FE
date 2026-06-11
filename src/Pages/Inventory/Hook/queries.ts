@@ -5,6 +5,8 @@ export const getAllInventoryItems = async (
     page: string = '0',
     limit: string = '5',
     search?: string,
+    status?: string,
+    type?: string,
 ): Promise<{ data: InventoryItem[]; totalPages?: number; all?: number }> => {
     const params = new URLSearchParams({
         page,
@@ -13,6 +15,14 @@ export const getAllInventoryItems = async (
 
     if (search) {
         params.set('search', search)
+    }
+
+    if (status) {
+        params.set('status', status)
+    }
+
+    if (type) {
+        params.set('type', type)
     }
 
     const res = await AxiosInstance.get(`/asset?${params.toString()}`)

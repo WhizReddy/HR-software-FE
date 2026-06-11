@@ -6,6 +6,8 @@ export interface PayrollContextType {
     columns: ColDef<PayrollRowSpecifc>[]
     headerTextColors: { [key: string]: string }
     getRowId: (row: PayrollRowSpecifc) => number
+    month: number | undefined
+    year: number | undefined
     setMonth: (month: number | undefined) => void
     setYear: (year: number | undefined) => void
     fullName: string | undefined

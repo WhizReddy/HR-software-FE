@@ -18,6 +18,8 @@ function EmployeesContent() {
         search,
         setSearch,
         clearSearch,
+        roleFilter,
+        setRoleFilter,
     } = useEmployeeContext()
 
     return (
@@ -30,7 +32,8 @@ function EmployeesContent() {
             />
             {isError && (
                 <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                    Failed to load employees: {error?.message ?? 'Unknown error'}
+                    Failed to load employees:{' '}
+                    {error?.message ?? 'Unknown error'}
                 </div>
             )}
             <DataTable
@@ -46,6 +49,23 @@ function EmployeesContent() {
                 onSearchChange={(e) => setSearch(e.target.value)}
                 onSearchClear={clearSearch}
                 searchPlaceholder="Search employees..."
+                filterNode={
+                    <label className="flex w-full flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-slate-500 sm:w-44">
+                        Role
+                        <select
+                            value={roleFilter}
+                            onChange={(event) =>
+                                setRoleFilter(event.target.value)
+                            }
+                            className="h-10 rounded-md border border-slate-200 bg-white px-3 text-sm font-medium normal-case tracking-normal text-slate-700 shadow-sm focus:border-[#2457a3] focus:outline-none focus:ring-2 focus:ring-[#2457a3]/20"
+                        >
+                            <option value="all">All roles</option>
+                            <option value="admin">Admin</option>
+                            <option value="hr">HR</option>
+                            <option value="dev">Developer</option>
+                        </select>
+                    </label>
+                }
                 isLoading={isPending}
                 loadingLabel="Loading employee records..."
             />
