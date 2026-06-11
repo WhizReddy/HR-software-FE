@@ -1,4 +1,3 @@
-
 import { Calendar, MapPin, Search } from 'lucide-react'
 import { ButtonTypes } from '@/Components/Button/ButtonTypes'
 import Input from '@/Components/Input/Index'
@@ -59,7 +58,6 @@ function EventsContentAndComponents() {
 
     const { ref, inView } = useInView()
 
-
     useEffect(() => {
         if (inView && hasNextPage && !isFetchingNextPage) {
             fetchNextPage()
@@ -67,7 +65,10 @@ function EventsContentAndComponents() {
     }, [fetchNextPage, hasNextPage, inView, isFetchingNextPage])
 
     return (
-        <div id="events-root" className="mx-auto flex w-full max-w-7xl flex-col px-4 py-8 sm:px-6 lg:px-8">
+        <div
+            id="events-root"
+            className="mx-auto flex w-full max-w-7xl flex-col pb-6"
+        >
             <Toast
                 severity={toastOpen ? toastSeverity : updateToastSeverity}
                 open={toastOpen || updateToastOpen}
@@ -136,7 +137,10 @@ function EventsContentAndComponents() {
                                         </div>
                                     ) : (
                                         <div className="flex h-40 w-full flex-shrink-0 items-center justify-center border-b border-slate-100 bg-slate-50">
-                                            <Calendar className="text-slate-300" size={38} />
+                                            <Calendar
+                                                className="text-slate-300"
+                                                size={38}
+                                            />
                                         </div>
                                     )}
                                     <div className="flex min-h-0 flex-1 flex-col p-4">
@@ -152,8 +156,15 @@ function EventsContentAndComponents() {
                                                     <div className="opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100">
                                                         <LongMenu
                                                             event={event}
-                                                            onEdit={() => handleOpenDrawer('edit', event)}
-                                                            onDelete={handleDeleteEventModal}
+                                                            onEdit={() =>
+                                                                handleOpenDrawer(
+                                                                    'edit',
+                                                                    event,
+                                                                )
+                                                            }
+                                                            onDelete={
+                                                                handleDeleteEventModal
+                                                            }
                                                         />
                                                     </div>
                                                 )}
@@ -169,16 +180,26 @@ function EventsContentAndComponents() {
 
                                         <div className="mt-auto space-y-3 border-t border-slate-100 pt-4">
                                             <div className="flex items-center gap-2.5 text-sm text-slate-600">
-                                                <Calendar size={17} className="flex-shrink-0 text-[#2457a3]" />
+                                                <Calendar
+                                                    size={17}
+                                                    className="flex-shrink-0 text-[#2457a3]"
+                                                />
                                                 <span
                                                     className="font-medium"
                                                     style={clampText(2)}
                                                 >
-                                                    {formatDate(event.startDate)} - {formatDate(event.endDate)}
+                                                    {formatDate(
+                                                        event.startDate,
+                                                    )}{' '}
+                                                    -{' '}
+                                                    {formatDate(event.endDate)}
                                                 </span>
                                             </div>
                                             <div className="flex items-start gap-2.5 text-sm text-slate-600">
-                                                <MapPin size={17} className="mt-0.5 flex-shrink-0 text-[#2457a3]" />
+                                                <MapPin
+                                                    size={17}
+                                                    className="mt-0.5 flex-shrink-0 text-[#2457a3]"
+                                                />
                                                 <span style={clampText(1)}>
                                                     {event.location}
                                                 </span>
@@ -188,14 +209,16 @@ function EventsContentAndComponents() {
 
                                     <div className="px-5 pb-5 pt-2">
                                         <button
-                                            onClick={() => handleSeeEventDetails(event)}
+                                            onClick={() =>
+                                                handleSeeEventDetails(event)
+                                            }
                                             className="flex w-full items-center justify-center rounded-md border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-[#2457a3] transition-colors duration-200 hover:border-[#2457a3]/25 hover:bg-[#2457a3]/5"
                                         >
                                             See Details
                                         </button>
                                     </div>
                                 </div>
-                            ))
+                            )),
                         )}
                     </div>
                 )}
@@ -204,8 +227,12 @@ function EventsContentAndComponents() {
                 {showModal && (
                     <ModalComponent open={showModal} handleClose={closeModal}>
                         <div className="p-6 text-center">
-                            <h3 className="mb-2 text-lg font-semibold text-slate-950">Confirm Action</h3>
-                            <p className="mb-8 text-sm leading-6 text-slate-500">Are you sure you want to delete this event?</p>
+                            <h3 className="mb-2 text-lg font-semibold text-slate-950">
+                                Confirm Action
+                            </h3>
+                            <p className="mb-8 text-sm leading-6 text-slate-500">
+                                Are you sure you want to delete this event?
+                            </p>
                             <div className="flex gap-3">
                                 <Button
                                     type={ButtonTypes.SECONDARY}

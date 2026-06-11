@@ -105,7 +105,9 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
         }
     }
 
-    const activeLocations = new Set(events.map((careerEvent) => careerEvent.location))
+    const activeLocations = new Set(
+        events.map((careerEvent) => careerEvent.location),
+    )
     const featuredLocations = Array.from(activeLocations)
         .filter(Boolean)
         .slice(0, 3)
@@ -154,7 +156,13 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
 
     return (
         <div className="min-h-screen overflow-x-hidden">
-            <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+            <div
+                className={
+                    managementMode
+                        ? 'mx-auto w-full max-w-7xl pb-6'
+                        : 'mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8'
+                }
+            >
                 {managementMode ? (
                     <>
                         <PageIntro
@@ -188,32 +196,38 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     Publishing Overview
                                 </p>
                                 <h2 className="mt-3 text-3xl font-semibold text-slate-950">
-                                    Keep the public board clean, readable, and consistent.
+                                    Keep the public board clean, readable, and
+                                    consistent.
                                 </h2>
                                 <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-                                    Career posts now sit on the same lighter visual system as the rest of the app, so the board feels like part of one product instead of a separate landing page.
+                                    Career posts now sit on the same lighter
+                                    visual system as the rest of the app, so the
+                                    board feels like part of one product instead
+                                    of a separate landing page.
                                 </p>
 
                                 <div className="mt-6 grid gap-4 sm:grid-cols-3">
-                                    {heroMetrics.map(({ label, value, icon: Icon }) => (
-                                        <div
-                                            key={label}
-                                            className="rounded-lg border border-slate-200 bg-slate-50 p-4"
-                                        >
-                                            <div className="flex items-center gap-2 text-slate-500">
-                                                <Icon
-                                                    size={16}
-                                                    className="text-[#2457a3]"
-                                                />
-                                                <p className="text-[11px] font-semibold uppercase text-slate-500">
-                                                    {label}
+                                    {heroMetrics.map(
+                                        ({ label, value, icon: Icon }) => (
+                                            <div
+                                                key={label}
+                                                className="rounded-lg border border-slate-200 bg-slate-50 p-4"
+                                            >
+                                                <div className="flex items-center gap-2 text-slate-500">
+                                                    <Icon
+                                                        size={16}
+                                                        className="text-[#2457a3]"
+                                                    />
+                                                    <p className="text-[11px] font-semibold uppercase text-slate-500">
+                                                        {label}
+                                                    </p>
+                                                </div>
+                                                <p className="mt-3 text-lg font-bold text-slate-900">
+                                                    {value}
                                                 </p>
                                             </div>
-                                            <p className="mt-3 text-lg font-bold text-slate-900">
-                                                {value}
-                                            </p>
-                                        </div>
-                                    ))}
+                                        ),
+                                    )}
                                 </div>
                             </article>
 
@@ -273,10 +287,14 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         Team environment
                                     </p>
                                     <h2 className="mt-3 text-2xl font-semibold text-slate-950">
-                                        Strong ownership, calmer collaboration, and less noise.
+                                        Strong ownership, calmer collaboration,
+                                        and less noise.
                                     </h2>
                                     <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-                                        We keep expectations clear, ship practical work, and give capable people room to contribute without adding layers of ceremony.
+                                        We keep expectations clear, ship
+                                        practical work, and give capable people
+                                        room to contribute without adding layers
+                                        of ceremony.
                                     </p>
                                 </div>
                             </article>
@@ -287,25 +305,27 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         Quick Snapshot
                                     </p>
                                     <div className="mt-5 grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
-                                        {heroMetrics.map(({ label, value, icon: Icon }) => (
-                                            <div
-                                                key={label}
-                                                className="rounded-lg border border-slate-200 bg-slate-50 p-4"
-                                            >
-                                                <div className="flex items-center gap-2 text-slate-500">
-                                                    <Icon
-                                                        size={16}
-                                                        className="text-[#2457a3]"
-                                                    />
-                                                    <p className="text-[11px] font-semibold uppercase text-slate-500">
-                                                        {label}
+                                        {heroMetrics.map(
+                                            ({ label, value, icon: Icon }) => (
+                                                <div
+                                                    key={label}
+                                                    className="rounded-lg border border-slate-200 bg-slate-50 p-4"
+                                                >
+                                                    <div className="flex items-center gap-2 text-slate-500">
+                                                        <Icon
+                                                            size={16}
+                                                            className="text-[#2457a3]"
+                                                        />
+                                                        <p className="text-[11px] font-semibold uppercase text-slate-500">
+                                                            {label}
+                                                        </p>
+                                                    </div>
+                                                    <p className="mt-3 text-lg font-bold text-slate-900">
+                                                        {value}
                                                     </p>
                                                 </div>
-                                                <p className="mt-3 text-lg font-bold text-slate-900">
-                                                    {value}
-                                                </p>
-                                            </div>
-                                        ))}
+                                            ),
+                                        )}
                                     </div>
                                 </article>
 
@@ -316,7 +336,8 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                                 Common locations
                                             </p>
                                             <h3 className="mt-2 text-xl font-semibold text-slate-950">
-                                                Flexible hiring, cleaner presentation
+                                                Flexible hiring, cleaner
+                                                presentation
                                             </h3>
                                         </div>
                                         <ArrowUpRight
@@ -326,17 +347,20 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     </div>
                                     <div className="mt-5 flex flex-wrap gap-2">
                                         {featuredLocations.length > 0 ? (
-                                            featuredLocations.map((location) => (
-                                                <span
-                                                    key={location}
-                                                    className="inline-flex items-center rounded-md border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700"
-                                                >
-                                                    {location}
-                                                </span>
-                                            ))
+                                            featuredLocations.map(
+                                                (location) => (
+                                                    <span
+                                                        key={location}
+                                                        className="inline-flex items-center rounded-md border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700"
+                                                    >
+                                                        {location}
+                                                    </span>
+                                                ),
+                                            )
                                         ) : (
                                             <span className="text-sm text-slate-500">
-                                                Flexible location details are shared per role.
+                                                Flexible location details are
+                                                shared per role.
                                             </span>
                                         )}
                                     </div>
@@ -352,7 +376,9 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                                 Candidate signal
                                             </p>
                                             <p className="mt-2 text-sm leading-7 text-slate-600">
-                                                We care more about sharp execution and good judgment than polished buzzwords.
+                                                We care more about sharp
+                                                execution and good judgment than
+                                                polished buzzwords.
                                             </p>
                                         </div>
                                     </div>
@@ -366,7 +392,9 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                         <div>
                             <p className="text-sm font-semibold uppercase text-slate-400">
-                                {managementMode ? 'Filter Posts' : 'Find a Role'}
+                                {managementMode
+                                    ? 'Filter Posts'
+                                    : 'Find a Role'}
                             </p>
                             <h2 className="mt-1 text-xl font-semibold text-slate-950">
                                 {managementMode
@@ -472,7 +500,11 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                             <div className="flex items-center gap-2">
                                                 <button
                                                     type="button"
-                                                    onClick={() => handleOpenEdit(careerEvent)}
+                                                    onClick={() =>
+                                                        handleOpenEdit(
+                                                            careerEvent,
+                                                        )
+                                                    }
                                                     aria-label={`Edit ${careerEvent.title}`}
                                                     className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-slate-200 text-slate-500 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2457a3]/30"
                                                 >
@@ -495,7 +527,10 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     </div>
 
                                     <p className="mt-5 flex-1 text-sm leading-7 text-slate-600">
-                                        {truncateText(careerEvent.description, 190)}
+                                        {truncateText(
+                                            careerEvent.description,
+                                            190,
+                                        )}
                                     </p>
 
                                     <div className="mt-8 flex items-center justify-between gap-3 border-t border-slate-100 pt-5">
@@ -537,15 +572,22 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     Why join us
                                 </p>
                                 <h2 className="mt-3 text-3xl font-semibold text-slate-950">
-                                    Serious work, calm collaboration, and standards that stay consistent.
+                                    Serious work, calm collaboration, and
+                                    standards that stay consistent.
                                 </h2>
                                 <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600">
-                                    The environment is structured enough to keep things moving and flexible enough for strong people to make a visible difference.
+                                    The environment is structured enough to keep
+                                    things moving and flexible enough for strong
+                                    people to make a visible difference.
                                 </p>
 
                                 <div className="mt-6 grid gap-4 sm:grid-cols-3">
                                     {culturePrinciples.map(
-                                        ({ title, description, icon: Icon }) => (
+                                        ({
+                                            title,
+                                            description,
+                                            icon: Icon,
+                                        }) => (
                                             <article
                                                 key={title}
                                                 className="rounded-lg border border-slate-200 bg-slate-50 p-5"
@@ -577,7 +619,10 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                             Team perspective
                                         </p>
                                         <blockquote className="mt-3 text-lg font-semibold leading-8 text-slate-900">
-                                            “The work is practical and the bar is clear. You know what good looks like, and you get room to deliver it.”
+                                            “The work is practical and the bar
+                                            is clear. You know what good looks
+                                            like, and you get room to deliver
+                                            it.”
                                         </blockquote>
                                     </div>
                                 </article>
@@ -612,10 +657,13 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         Ready to talk?
                                     </p>
                                     <h2 className="mt-3 text-3xl font-semibold text-slate-950">
-                                        Apply for an open role or send a strong general application.
+                                        Apply for an open role or send a strong
+                                        general application.
                                     </h2>
                                     <p className="mt-3 text-sm leading-7 text-slate-600">
-                                        If your profile fits our direction, we would rather hear from you early than wait for a perfect listing.
+                                        If your profile fits our direction, we
+                                        would rather hear from you early than
+                                        wait for a perfect listing.
                                     </p>
                                 </div>
 
@@ -641,7 +689,8 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     <p className="mt-3 text-sm leading-7 text-slate-600">
                                         {principle.title === 'Focused teams'
                                             ? 'You are comfortable owning a problem directly and communicating without excess ceremony.'
-                                            : principle.title === 'Clear expectations'
+                                            : principle.title ===
+                                                'Clear expectations'
                                               ? 'You prefer feedback that is concrete, quick, and tied to actual output.'
                                               : 'You want work that compounds over time instead of short-lived cosmetic tasks.'}
                                     </p>
@@ -668,7 +717,9 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         Career Publishing
                                     </p>
                                     <h2 className="mt-2 text-2xl font-semibold text-slate-950">
-                                        {editingEvent ? 'Edit Career Post' : 'Create Career Post'}
+                                        {editingEvent
+                                            ? 'Edit Career Post'
+                                            : 'Create Career Post'}
                                     </h2>
                                 </div>
                             </div>
@@ -681,8 +732,16 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     <input
                                         type="text"
                                         name="title"
-                                        value={editingEvent ? editingEvent.title : event.title}
-                                        onChange={editingEvent ? handleEditChange : handleChange}
+                                        value={
+                                            editingEvent
+                                                ? editingEvent.title
+                                                : event.title
+                                        }
+                                        onChange={
+                                            editingEvent
+                                                ? handleEditChange
+                                                : handleChange
+                                        }
                                         placeholder="Frontend Developer"
                                         className="w-full rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#2457a3] focus:bg-white"
                                     />
@@ -695,8 +754,16 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     <input
                                         type="text"
                                         name="location"
-                                        value={editingEvent ? editingEvent.location : event.location}
-                                        onChange={editingEvent ? handleEditChange : handleChange}
+                                        value={
+                                            editingEvent
+                                                ? editingEvent.location
+                                                : event.location
+                                        }
+                                        onChange={
+                                            editingEvent
+                                                ? handleEditChange
+                                                : handleChange
+                                        }
                                         placeholder="Tirane / Hybrid"
                                         className="w-full rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#2457a3] focus:bg-white"
                                     />
@@ -708,8 +775,16 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     </span>
                                     <textarea
                                         name="description"
-                                        value={editingEvent ? editingEvent.description : event.description}
-                                        onChange={editingEvent ? handleEditChange : handleChange}
+                                        value={
+                                            editingEvent
+                                                ? editingEvent.description
+                                                : event.description
+                                        }
+                                        onChange={
+                                            editingEvent
+                                                ? handleEditChange
+                                                : handleChange
+                                        }
                                         placeholder="Describe the role, expectations, and why someone should apply."
                                         rows={6}
                                         className="w-full rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-7 text-slate-700 outline-none transition focus:border-[#2457a3] focus:bg-white"
@@ -725,7 +800,11 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
 
                             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                                 <Button
-                                    btnText={editingEvent ? 'Update Post' : 'Publish Post'}
+                                    btnText={
+                                        editingEvent
+                                            ? 'Update Post'
+                                            : 'Publish Post'
+                                    }
                                     type={ButtonTypes.PRIMARY}
                                     width="100%"
                                     onClick={handleSubmitForm}
@@ -752,7 +831,9 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                 Delete career post?
                             </h2>
                             <p className="mt-3 text-sm leading-6 text-slate-500">
-                                This removes the post from the public career page. You can publish a replacement immediately after.
+                                This removes the post from the public career
+                                page. You can publish a replacement immediately
+                                after.
                             </p>
                             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                                 <Button
@@ -761,7 +842,9 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     borderColor="#d32f2f"
                                     btnText="Delete Post"
                                     width="100%"
-                                    onClick={() => handleDelete(eventToDeleteId)}
+                                    onClick={() =>
+                                        handleDelete(eventToDeleteId)
+                                    }
                                 />
                                 <Button
                                     btnText="Cancel"

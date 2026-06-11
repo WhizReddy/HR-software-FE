@@ -28,8 +28,8 @@ const PrivateRoute = () => {
                 <SidebarInset className="flex h-svh min-w-0 flex-col overflow-hidden bg-transparent">
                     <Header />
                     <main className="min-h-0 flex-1 overflow-y-auto">
-                        <div className="mx-auto max-w-[1440px]">
-                            <div className="px-4 pt-4 sm:px-6 lg:px-8">
+                        <div className="mx-auto w-full max-w-[1440px] px-3 pb-6 sm:px-4 lg:px-6">
+                            <div>
                                 <BreadcrumbComponent />
                             </div>
                             <Outlet />
