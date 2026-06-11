@@ -9,7 +9,7 @@ import PageIntro from '@/Components/PageIntro/PageIntro'
 
 function HoldingsComponent() {
     return (
-        <main className={`${style.main} w-full flex-1 p-4 sm:p-6 lg:p-8`}>
+        <main className={`${style.main} w-full flex-1 pb-6`}>
             <PageIntro
                 eyebrow="Equipment"
                 title="Holdings"

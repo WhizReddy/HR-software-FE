@@ -20,7 +20,7 @@ const DashboardContent: React.FC = () => {
 
     return (
         <div className="relative overflow-x-hidden">
-            <div className="relative z-10 mx-auto max-w-[1400px] space-y-5 p-2 sm:p-4 lg:p-6">
+            <div className="relative z-10 mx-auto max-w-[1400px] space-y-5 pb-6">
                 <div className="overflow-hidden rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:p-7">
                     <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
                         <div>
@@ -33,7 +33,9 @@ const DashboardContent: React.FC = () => {
                             </h1>
                             {isAdmin && (
                                 <p className="mt-2 max-w-xl text-sm font-medium text-slate-500 sm:text-base">
-                                    Review your team health, approvals, and activity from one streamlined command center.
+                                    Review your team health, approvals, and
+                                    activity from one streamlined command
+                                    center.
                                 </p>
                             )}
                         </div>
@@ -50,16 +52,19 @@ const DashboardContent: React.FC = () => {
 
                 {hasError && (
                     <div className="flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800">
-                        <AlertCircle size={18} className="mt-0.5 flex-shrink-0" />
+                        <AlertCircle
+                            size={18}
+                            className="mt-0.5 flex-shrink-0"
+                        />
                         <p>
-                            Some dashboard metrics could not be loaded, so this view is
-                            showing the safest available fallback values.
+                            Some dashboard metrics could not be loaded, so this
+                            view is showing the safest available fallback
+                            values.
                         </p>
                     </div>
                 )}
 
                 <div className="grid grid-cols-1 gap-6 xl:grid-cols-12 auto-rows-min">
-
                     <div className="xl:col-span-12 w-full">
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 w-full">
                             <CardInfo
@@ -98,7 +103,9 @@ const DashboardContent: React.FC = () => {
                     </div>
 
                     <div className="flex h-full flex-col rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] xl:col-span-4">
-                        <h3 className="mb-4 text-base font-semibold text-slate-900">Calendar</h3>
+                        <h3 className="mb-4 text-base font-semibold text-slate-900">
+                            Calendar
+                        </h3>
                         <div className="flex-1">
                             <Calendar />
                         </div>
@@ -109,9 +116,12 @@ const DashboardContent: React.FC = () => {
                     </div>
 
                     <div className="flex min-h-[500px] flex-col rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] xl:col-span-4">
-                        <h3 className="mb-4 text-base font-semibold text-slate-900">Status Overview</h3>
+                        <h3 className="mb-4 text-base font-semibold text-slate-900">
+                            Status Overview
+                        </h3>
                         <p className="mb-6 text-sm font-medium leading-6 text-slate-500">
-                            Built from total employees, remote work, and active leave.
+                            Built from total employees, remote work, and active
+                            leave.
                         </p>
                         <div className="flex-1 flex items-center justify-center">
                             <PieChartComponent />
@@ -119,14 +129,17 @@ const DashboardContent: React.FC = () => {
                     </div>
 
                     <div className="rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] xl:col-span-12">
-                        <h3 className="mb-6 text-base font-semibold text-slate-900">Team Directory</h3>
+                        <h3 className="mb-6 text-base font-semibold text-slate-900">
+                            Team Directory
+                        </h3>
                         {isUsersLoading ? (
                             <div className="flex min-h-[180px] items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50/70 px-6 text-center text-sm font-medium text-slate-400">
                                 Loading team directory...
                             </div>
                         ) : users.length === 0 ? (
                             <div className="flex min-h-[180px] items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50/70 px-6 text-center text-sm font-medium text-slate-400">
-                                No employees were returned for the team directory.
+                                No employees were returned for the team
+                                directory.
                             </div>
                         ) : (
                             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10">
@@ -134,7 +147,9 @@ const DashboardContent: React.FC = () => {
                                     <div
                                         key={employee._id}
                                         className="group flex cursor-pointer flex-col items-center gap-3 rounded-lg border border-transparent p-3 transition-colors duration-200 hover:border-slate-200 hover:bg-slate-50"
-                                        onClick={() => navigate(`/profile/${employee._id}`)}
+                                        onClick={() =>
+                                            navigate(`/profile/${employee._id}`)
+                                        }
                                     >
                                         <div className="relative h-16 w-16">
                                             {employee.imageUrl ? (
@@ -145,14 +160,19 @@ const DashboardContent: React.FC = () => {
                                                 />
                                             ) : (
                                                 <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-blue-500 text-xl font-bold text-white ring-4 ring-white shadow-sm transition-all duration-300 group-hover:ring-blue-100">
-                                                    {employee.firstName?.charAt(0)}
-                                                    {employee.lastName?.charAt(0)}
+                                                    {employee.firstName?.charAt(
+                                                        0,
+                                                    )}
+                                                    {employee.lastName?.charAt(
+                                                        0,
+                                                    )}
                                                 </div>
                                             )}
                                         </div>
                                         <div className="w-full px-1 text-center">
                                             <p className="truncate text-sm font-semibold leading-tight text-slate-800 transition-colors group-hover:text-blue-600">
-                                                {employee.firstName} {employee.lastName}
+                                                {employee.firstName}{' '}
+                                                {employee.lastName}
                                             </p>
                                             <p className="mt-1 truncate text-xs font-medium capitalize text-slate-500">
                                                 {employee.role || 'Employee'}

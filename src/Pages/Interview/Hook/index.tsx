@@ -25,11 +25,13 @@ import { useQuery } from '@tanstack/react-query'
 export const useGetAllInterviews = () => {
     const fetchApplicants = async () => {
         const response = await AxiosInstance.get('/applicant')
-        return response.data
+        return Array.isArray(response.data)
+            ? response.data
+            : (response.data?.data ?? [])
     }
 
     const { data, error, isLoading } = useQuery({
-        queryKey: ['applicant'],
+        queryKey: ['interviews'],
         queryFn: fetchApplicants,
     })
 

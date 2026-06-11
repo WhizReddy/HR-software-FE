@@ -23,7 +23,7 @@ function EmployeesContent() {
     } = useEmployeeContext()
 
     return (
-        <div className="w-full flex-1 p-4 sm:p-6 lg:p-8">
+        <div className="w-full flex-1 pb-6">
             <PageIntro
                 eyebrow="People"
                 title="Employee Directory"

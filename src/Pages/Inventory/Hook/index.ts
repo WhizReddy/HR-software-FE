@@ -9,26 +9,71 @@ import {
 import { valibotValidator } from '@tanstack/valibot-form-adapter'
 import { useForm } from '@tanstack/react-form'
 import { AxiosError } from 'axios'
+import {
+    fetchAllPaginatedData,
+    matchesSearchText,
+    normalizeFilterText,
+    paginateClientRows,
+} from '@/Helpers/clientTableFiltering'
+import { InventoryItem } from '../types'
 
 export const useAllInventoryItems = () => {
     const { searchParams } = useContext(InventoryContext)
+    const page = searchParams.get('page') || '0'
+    const limit = searchParams.get('limit') || '5'
+    const search = searchParams.get('search') || ''
+    const status = searchParams.get('status') || ''
+    const type = searchParams.get('type') || ''
+
     return useQuery({
-        queryKey: [
-            'allInventoryItems',
-            searchParams.get('page') || '0',
-            searchParams.get('limit') || '5',
-            searchParams.get('search') || '',
-            searchParams.get('status') || '',
-            searchParams.get('type') || '',
-        ],
-        queryFn: () =>
-            getAllInventoryItems(
-                searchParams.get('page') || '0',
-                searchParams.get('limit') || '5',
-                searchParams.get('search') || '',
-                searchParams.get('status') || '',
-                searchParams.get('type') || '',
-            ),
+        queryKey: ['allInventoryItems', page, limit, search, status, type],
+        queryFn: async () => {
+            const shouldFilterClientSide =
+                search.trim() !== '' || status !== '' || type !== ''
+
+            if (!shouldFilterClientSide) {
+                return getAllInventoryItems(page, limit)
+            }
+
+            const allItems = await fetchAllPaginatedData<InventoryItem>(
+                (pageToFetch, limitToFetch) =>
+                    getAllInventoryItems(
+                        String(pageToFetch),
+                        String(limitToFetch),
+                    ),
+            )
+            const filteredItems = allItems.filter((item) => {
+                const occupant = item.userId
+                    ? `${item.userId.firstName} ${item.userId.lastName}`
+                    : ''
+                const matchesStatus =
+                    !status ||
+                    normalizeFilterText(item.status) ===
+                        normalizeFilterText(status)
+                const matchesType =
+                    !type ||
+                    normalizeFilterText(item.type) === normalizeFilterText(type)
+
+                return (
+                    matchesStatus &&
+                    matchesType &&
+                    matchesSearchText(search, [
+                        item.type,
+                        item.status,
+                        item.serialNumber,
+                        occupant,
+                        item.userId?.firstName,
+                        item.userId?.lastName,
+                    ])
+                )
+            })
+
+            return paginateClientRows(
+                filteredItems,
+                Number(page) || 0,
+                Number(limit) || 5,
+            )
+        },
     })
 }
 

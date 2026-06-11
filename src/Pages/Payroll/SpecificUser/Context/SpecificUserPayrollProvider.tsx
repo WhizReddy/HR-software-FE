@@ -11,6 +11,11 @@ import {
     parseNumberParam,
     upsertFilterParams,
 } from '@/Helpers/urlFilters'
+import {
+    fetchAllPaginatedData,
+    paginateClientRows,
+    PaginatedResponse,
+} from '@/Helpers/clientTableFiltering'
 
 export const PayrollProviderSpecific: React.FC<{
     children: React.ReactNode
@@ -58,23 +63,14 @@ export const PayrollProviderSpecific: React.FC<{
         })
     }
 
-    const fetchPayroll = async (): Promise<{
-        data: PayrollRowSpecifc[]
-        totalPages: number
-        all: number
-    }> => {
+    const fetchPayrollPage = async (
+        pageToFetch: number,
+        limitToFetch: number,
+    ): Promise<Required<PaginatedResponse<PayrollRowSpecifc>>> => {
         const params = new URLSearchParams({
-            limit: String(pageSize),
-            page: String(page),
+            limit: String(limitToFetch),
+            page: String(pageToFetch),
         })
-
-        if (month !== undefined) {
-            params.set('month', String(month))
-        }
-
-        if (year !== undefined) {
-            params.set('year', String(year))
-        }
 
         const response = await AxiosInstance.get<{
             data: PayrollRowSpecifc[]
@@ -84,15 +80,35 @@ export const PayrollProviderSpecific: React.FC<{
         return response.data
     }
 
+    const fetchPayroll = async (): Promise<
+        Required<PaginatedResponse<PayrollRowSpecifc>>
+    > => {
+        const shouldFilterClientSide = month !== undefined || year !== undefined
+
+        if (!shouldFilterClientSide) {
+            return fetchPayrollPage(page, pageSize)
+        }
+
+        const allPayrollRows =
+            await fetchAllPaginatedData<PayrollRowSpecifc>(fetchPayrollPage)
+        const filteredPayrollRows = allPayrollRows.filter((payrollItem) => {
+            const matchesMonth =
+                month === undefined || Number(payrollItem.month) === month
+            const matchesYear =
+                year === undefined || Number(payrollItem.year) === year
+
+            return matchesMonth && matchesYear
+        })
+
+        return paginateClientRows(filteredPayrollRows, page, pageSize)
+    }
+
     const {
         data: payrollId,
         isPending,
         isError,
         error,
-    } = useQuery<
-        { data: PayrollRowSpecifc[]; totalPages: number; all: number },
-        Error
-    >({
+    } = useQuery<Required<PaginatedResponse<PayrollRowSpecifc>>, Error>({
         queryKey: ['payrollId', id, month, year, page, pageSize],
         queryFn: () => fetchPayroll(),
         enabled: Boolean(id),

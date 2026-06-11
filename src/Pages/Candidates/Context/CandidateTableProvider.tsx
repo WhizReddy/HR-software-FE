@@ -10,6 +10,14 @@ import {
     hasSearchParamsChanged,
     upsertFilterParams,
 } from '@/Helpers/urlFilters'
+import {
+    fetchAllPaginatedData,
+    matchesSearchText,
+    normalizeFilterText,
+    normalizePaginatedResponse,
+    paginateClientRows,
+    PaginatedResponse,
+} from '@/Helpers/clientTableFiltering'
 
 export const CandidateProvider: React.FC<{ children: any }> = ({
     children,
@@ -48,27 +56,64 @@ export const CandidateProvider: React.FC<{ children: any }> = ({
         [setSearchParams],
     )
 
-    const fetchCandidates = async (): Promise<{
-        data: CandidateRow[]
-        totalPages: number
-    }> => {
+    const fetchCandidatesPage = async (
+        pageToFetch: number,
+        limitToFetch: number,
+    ): Promise<PaginatedResponse<CandidateRow>> => {
         const params = new URLSearchParams({
-            page: String(page),
-            limit: String(pageSize),
+            page: String(pageToFetch),
+            limit: String(limitToFetch),
         })
-
-        if (searchQuery) {
-            params.set('search', searchQuery)
-        }
-
-        if (statusFilter !== 'all') {
-            params.set('status', statusFilter)
-        }
 
         const response = await AxiosInstance.get(
             `/applicant?${params.toString()}`,
         )
-        return response.data
+        return normalizePaginatedResponse(response.data)
+    }
+
+    const matchesCandidateFilters = (candidate: CandidateRow) => {
+        const fullName = `${candidate.firstName} ${candidate.lastName}`
+        const matchesStatus =
+            statusFilter === 'all' ||
+            normalizeFilterText(candidate.status) ===
+                normalizeFilterText(statusFilter)
+
+        return (
+            matchesStatus &&
+            matchesSearchText(searchQuery, [
+                fullName,
+                candidate.firstName,
+                candidate.lastName,
+                candidate.email,
+                candidate.phoneNumber,
+                candidate.positionApplied,
+                candidate.status,
+                candidate.experience,
+                candidate.applicationMethod,
+            ])
+        )
+    }
+
+    const fetchCandidates = async (): Promise<
+        Required<PaginatedResponse<CandidateRow>>
+    > => {
+        const shouldFilterClientSide =
+            searchQuery.trim() !== '' || statusFilter !== 'all'
+
+        if (!shouldFilterClientSide) {
+            const response = await fetchCandidatesPage(page, pageSize)
+            return {
+                data: response.data,
+                totalPages: response.totalPages ?? 1,
+                all: response.all ?? response.data.length,
+            }
+        }
+
+        const allCandidates =
+            await fetchAllPaginatedData<CandidateRow>(fetchCandidatesPage)
+        const filteredCandidates = allCandidates.filter(matchesCandidateFilters)
+
+        return paginateClientRows(filteredCandidates, page, pageSize)
     }
 
     const {

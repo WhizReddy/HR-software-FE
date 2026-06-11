@@ -23,7 +23,8 @@ const phaseLabels: Record<string, string> = {
 }
 
 const phaseDescriptions: Record<string, string> = {
-    first_interview: 'Candidates currently queued for the first interview stage.',
+    first_interview:
+        'Candidates currently queued for the first interview stage.',
     second_interview: 'Candidates moved forward for deeper evaluation.',
     rejected: 'Candidates rejected from the hiring process.',
     employed: 'Candidates accepted and moved into employment.',
@@ -57,9 +58,12 @@ function InterviewContent() {
         processingIds,
     } = useInterviewContext()
 
-    const isTerminalPhase = currentTab === 'employed' || currentTab === 'rejected'
+    const isTerminalPhase =
+        currentTab === 'employed' || currentTab === 'rejected'
     const currentLabel = getPhaseLabel(currentTab)
-    const currentDescription = phaseDescriptions[currentTab] || 'Interview records for the selected phase.'
+    const currentDescription =
+        phaseDescriptions[currentTab] ||
+        'Interview records for the selected phase.'
 
     const columns = useMemo<ColDef<Interview>[]>(() => {
         const baseColumns: ColDef<Interview>[] = [
@@ -97,7 +101,9 @@ function InterviewContent() {
                 renderCell: ({ value }: RenderCellParams<Interview>) => (
                     <span className="inline-flex max-w-[190px] items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-blue-700">
                         <BriefcaseBusiness size={14} />
-                        <span className="truncate">{String(value || 'Not specified')}</span>
+                        <span className="truncate">
+                            {String(value || 'Not specified')}
+                        </span>
                     </span>
                 ),
             },
@@ -117,7 +123,10 @@ function InterviewContent() {
 
                     return (
                         <span className="inline-flex items-center gap-2 text-sm font-medium text-slate-600">
-                            <CalendarRange size={15} className="text-[#2457a3]" />
+                            <CalendarRange
+                                size={15}
+                                className="text-[#2457a3]"
+                            />
                             {formattedDate === 'No Date Provided'
                                 ? 'Not scheduled'
                                 : formattedDate}
@@ -135,7 +144,10 @@ function InterviewContent() {
                 renderCell: ({ row }: RenderCellParams<Interview>) => (
                     <div className="space-y-1 text-xs font-medium text-slate-500">
                         <p className="flex max-w-[260px] items-center gap-2 truncate">
-                            <Mail size={14} className="shrink-0 text-slate-400" />
+                            <Mail
+                                size={14}
+                                className="shrink-0 text-slate-400"
+                            />
                             {row.email || 'No email'}
                         </p>
                         <p className="flex items-center gap-2 text-slate-400">
@@ -235,7 +247,7 @@ function InterviewContent() {
     ])
 
     return (
-        <main className="mx-auto w-full max-w-7xl space-y-6 p-4 sm:p-6 lg:p-8">
+        <main className="mx-auto w-full max-w-7xl space-y-6 pb-6">
             <PageIntro
                 eyebrow="Hiring"
                 title="Interview Pipeline"
@@ -290,7 +302,9 @@ function InterviewContent() {
                 rows={filteredInterviews}
                 columns={columns}
                 getRowId={(row) => row._id}
-                handleRowClick={({ row }) => handleNavigateToProfile(row._id.toString())}
+                handleRowClick={({ row }) =>
+                    handleNavigateToProfile(row._id.toString())
+                }
                 totalPages={1}
                 totalCount={filteredInterviews.length}
                 page={0}

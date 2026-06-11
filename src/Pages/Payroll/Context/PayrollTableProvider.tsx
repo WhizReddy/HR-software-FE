@@ -9,6 +9,12 @@ import {
     hasSearchParamsChanged,
     upsertFilterParams,
 } from '@/Helpers/urlFilters'
+import {
+    fetchAllPaginatedData,
+    matchesSearchText,
+    paginateClientRows,
+    PaginatedResponse,
+} from '@/Helpers/clientTableFiltering'
 
 const parseOptionalNumberParam = (value: string | null) => {
     if (!value) {
@@ -70,19 +76,14 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const navigate = useNavigate()
 
-    const fetchPayroll = async (): Promise<{
-        data: PayrollRow[]
-        totalPages: number
-        all: number
-    }> => {
+    const fetchPayrollPage = async (
+        pageToFetch: number,
+        limitToFetch: number,
+    ): Promise<Required<PaginatedResponse<PayrollRow>>> => {
         const params = new URLSearchParams()
-        const trimmedFullName = searchQuery.trim()
 
-        params.set('limit', String(pageSize))
-        params.set('page', String(page))
-        if (trimmedFullName) params.set('fullName', trimmedFullName)
-        if (month) params.set('month', String(month))
-        if (year) params.set('year', String(year))
+        params.set('limit', String(limitToFetch))
+        params.set('page', String(pageToFetch))
 
         const response = await AxiosInstance.get<{
             data: PayrollRow[]
@@ -92,15 +93,49 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         return response.data
     }
 
+    const matchesPayrollFilters = (payrollItem: PayrollRow) => {
+        const fullName = payrollItem.userId
+            ? `${payrollItem.userId.firstName} ${payrollItem.userId.lastName}`
+            : ''
+        const matchesMonth = !month || Number(payrollItem.month) === month
+        const matchesYear = !year || Number(payrollItem.year) === year
+
+        return (
+            matchesMonth &&
+            matchesYear &&
+            matchesSearchText(searchQuery, [
+                fullName,
+                payrollItem.userId?.firstName,
+                payrollItem.userId?.lastName,
+                payrollItem.currency,
+                payrollItem.bonusDescription,
+            ])
+        )
+    }
+
+    const fetchPayroll = async (): Promise<
+        Required<PaginatedResponse<PayrollRow>>
+    > => {
+        const shouldFilterClientSide =
+            searchQuery.trim() !== '' || Boolean(month) || Boolean(year)
+
+        if (!shouldFilterClientSide) {
+            return fetchPayrollPage(page, pageSize)
+        }
+
+        const allPayrollRows =
+            await fetchAllPaginatedData<PayrollRow>(fetchPayrollPage)
+        const filteredPayrollRows = allPayrollRows.filter(matchesPayrollFilters)
+
+        return paginateClientRows(filteredPayrollRows, page, pageSize)
+    }
+
     const {
         data: payrollData,
         isPending,
         isError,
         error,
-    } = useQuery<
-        { data: PayrollRow[]; totalPages: number; all: number },
-        Error
-    >({
+    } = useQuery<Required<PaginatedResponse<PayrollRow>>, Error>({
         queryKey: ['payroll', page, pageSize, searchQuery, month, year],
         queryFn: () => fetchPayroll(),
         placeholderData: (previousData) => previousData,

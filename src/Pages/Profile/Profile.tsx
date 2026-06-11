@@ -10,11 +10,12 @@ export default function Profile() {
     const { currentUser, userRole } = useAuth()
     const { id } = useParams<{ id: string }>()
 
-    const canViewPayroll = isAdminRole(userRole) || isSelfUser(currentUser?._id, id)
+    const canViewPayroll =
+        isAdminRole(userRole) || isSelfUser(currentUser?._id, id)
     const canViewSecurity = isSelfUser(currentUser?._id, id)
 
     return (
-        <main className="w-full flex-1 p-4 sm:p-6 lg:p-8">
+        <main className="w-full flex-1 pb-6">
             <div className="w-full overflow-hidden rounded-lg border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
                 <Tabs
                     defaultValue="profile"
@@ -46,18 +47,27 @@ export default function Profile() {
                     </TabsList>
 
                     <div className="min-h-[500px] flex-1">
-                        <TabsContent value="profile" className="m-0 focus-visible:outline-none focus-visible:ring-0">
+                        <TabsContent
+                            value="profile"
+                            className="m-0 focus-visible:outline-none focus-visible:ring-0"
+                        >
                             <ProfileForm />
                         </TabsContent>
 
                         {canViewPayroll && (
-                            <TabsContent value="payroll" className="m-0 focus-visible:outline-none focus-visible:ring-0">
+                            <TabsContent
+                                value="payroll"
+                                className="m-0 focus-visible:outline-none focus-visible:ring-0"
+                            >
                                 <Contrat />
                             </TabsContent>
                         )}
 
                         {canViewSecurity && (
-                            <TabsContent value="security" className="m-0 focus-visible:outline-none focus-visible:ring-0">
+                            <TabsContent
+                                value="security"
+                                className="m-0 focus-visible:outline-none focus-visible:ring-0"
+                            >
                                 <ChangePass />
                             </TabsContent>
                         )}

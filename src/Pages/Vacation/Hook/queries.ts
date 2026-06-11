@@ -7,6 +7,13 @@ import {
     Vacation,
     Vacations,
 } from '../types'
+import {
+    fetchAllPaginatedData,
+    matchesSearchText,
+    normalizePaginatedResponse,
+    paginateClientRows,
+    PaginatedResponse,
+} from '@/Helpers/clientTableFiltering'
 
 const LIMIT = 5
 
@@ -46,26 +53,63 @@ export const getUsersWithVacations = async ({
     search: string
     users: string
 }): Promise<UsersWithVacations> => {
-    const params = new URLSearchParams({
-        page: String(pageParam),
-        limit: String(LIMIT),
-    })
+    const fetchUsersPage = async (
+        page: number,
+        limit: number,
+    ): Promise<PaginatedResponse<UserWithVacation>> => {
+        const params = new URLSearchParams({
+            page: String(page),
+            limit: String(limit),
+        })
 
-    if (search) {
-        params.set('search', search)
+        const response = await AxiosInstance.get(
+            `/vacation/user?${params.toString()}`,
+        )
+        return normalizePaginatedResponse(response.data)
     }
 
-    if (users) {
-        params.set('users', users)
+    const shouldFilterClientSide = search.trim() !== '' || users !== ''
+
+    if (shouldFilterClientSide) {
+        const allUsers =
+            await fetchAllPaginatedData<UserWithVacation>(fetchUsersPage)
+        const filteredUsers = allUsers.filter((user) => {
+            const vacationCount = user.vacations?.length ?? 0
+            const matchesUserFilter =
+                !users ||
+                (users === 'with' && vacationCount > 0) ||
+                (users === 'without' && vacationCount === 0)
+
+            return (
+                matchesUserFilter &&
+                matchesSearchText(search, [
+                    `${user.firstName} ${user.lastName}`,
+                    user.firstName,
+                    user.lastName,
+                    user.email,
+                    user.phone,
+                    user.role,
+                ])
+            )
+        })
+        const paginatedUsers = paginateClientRows(
+            filteredUsers,
+            pageParam,
+            LIMIT,
+        )
+
+        return {
+            data: paginatedUsers.data,
+            totalPages: paginatedUsers.totalPages,
+            all: paginatedUsers.all,
+        }
     }
 
-    const response = await AxiosInstance.get(
-        `/vacation/user?${params.toString()}`,
-    )
+    const response = await fetchUsersPage(pageParam, LIMIT)
     return {
-        data: response.data.data,
-        totalPages: response.data.totalPages,
-        all: response.data.all,
+        data: response.data,
+        totalPages: response.totalPages ?? 1,
+        all: response.all ?? response.data.length,
     }
 }
 

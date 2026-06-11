@@ -13,6 +13,14 @@ import {
     hasSearchParamsChanged,
     upsertFilterParams,
 } from '@/Helpers/urlFilters'
+import {
+    fetchAllPaginatedData,
+    matchesSearchText,
+    normalizeFilterText,
+    normalizePaginatedResponse,
+    paginateClientRows,
+    PaginatedResponse,
+} from '@/Helpers/clientTableFiltering'
 
 export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
@@ -51,25 +59,62 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
         [setSearchParams],
     )
 
-    const fetchEmployes = async () => {
+    const fetchEmployeesPage = async (
+        pageToFetch: number,
+        limitToFetch: number,
+    ): Promise<PaginatedResponse<UserProfileData>> => {
         const params = new URLSearchParams({
-            page: String(page),
-            limit: String(pageSize),
+            page: String(pageToFetch),
+            limit: String(limitToFetch),
         })
-
-        if (searchQuery) {
-            params.set('search', searchQuery)
-        }
-
-        if (roleFilter !== 'all') {
-            params.set('role', roleFilter)
-        }
 
         const response = await AxiosInstance.get<{
             data: UserProfileData[]
             totalPages: number
+            all?: number
         }>(`/user?${params.toString()}`)
-        return response.data
+        return normalizePaginatedResponse(response.data)
+    }
+
+    const matchesEmployeeFilters = (user: UserProfileData) => {
+        const fullName = `${user.firstName} ${user.lastName}`
+        const matchesRole =
+            roleFilter === 'all' ||
+            normalizeFilterText(user.role) === normalizeFilterText(roleFilter)
+
+        return (
+            matchesRole &&
+            matchesSearchText(searchQuery, [
+                fullName,
+                user.firstName,
+                user.lastName,
+                user.auth?.email,
+                user.phone,
+                user.role,
+            ])
+        )
+    }
+
+    const fetchEmployes = async (): Promise<
+        Required<PaginatedResponse<UserProfileData>>
+    > => {
+        const shouldFilterClientSide =
+            searchQuery.trim() !== '' || roleFilter !== 'all'
+
+        if (!shouldFilterClientSide) {
+            const response = await fetchEmployeesPage(page, pageSize)
+            return {
+                data: response.data,
+                totalPages: response.totalPages ?? 1,
+                all: response.all ?? response.data.length,
+            }
+        }
+
+        const allEmployees =
+            await fetchAllPaginatedData<UserProfileData>(fetchEmployeesPage)
+        const filteredEmployees = allEmployees.filter(matchesEmployeeFilters)
+
+        return paginateClientRows(filteredEmployees, page, pageSize)
     }
 
     const {
@@ -77,7 +122,7 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
         isPending,
         isError,
         error,
-    } = useQuery<{ data: UserProfileData[]; totalPages: number }, Error>({
+    } = useQuery<Required<PaginatedResponse<UserProfileData>>, Error>({
         queryKey: ['users', page, pageSize, searchQuery, roleFilter],
         queryFn: () => fetchEmployes(),
     })

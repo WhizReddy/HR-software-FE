@@ -158,7 +158,7 @@ export default function ViewCandidats() {
         : ''
 
     return (
-        <main className="mx-auto w-full max-w-7xl space-y-6 p-4 sm:p-6 lg:p-8">
+        <main className="mx-auto w-full max-w-7xl space-y-6 pb-6">
             <PageIntro
                 eyebrow="Recruitment"
                 title={
@@ -233,7 +233,8 @@ export default function ViewCandidats() {
                                     Role Fit
                                 </h2>
                                 <p className="text-sm text-slate-500">
-                                    Hiring stage, expected wage, and relevant skills.
+                                    Hiring stage, expected wage, and relevant
+                                    skills.
                                 </p>
                             </div>
                         </div>
@@ -265,7 +266,8 @@ export default function ViewCandidats() {
                                     Interview Notes
                                 </h2>
                                 <p className="text-sm text-slate-500">
-                                    Notes saved while scheduling or rescheduling interviews.
+                                    Notes saved while scheduling or rescheduling
+                                    interviews.
                                 </p>
                             </div>
                         </div>
@@ -353,7 +355,9 @@ export default function ViewCandidats() {
                                 {canSchedulePhaseOne && (
                                     <Button
                                         type="button"
-                                        onClick={() => handleOpenModal('active')}
+                                        onClick={() =>
+                                            handleOpenModal('active')
+                                        }
                                         className="w-full justify-start"
                                     >
                                         <CalendarClock size={16} />
@@ -364,7 +368,9 @@ export default function ViewCandidats() {
                                 {canSchedulePhaseTwo && (
                                     <Button
                                         type="button"
-                                        onClick={() => handleOpenModal('active')}
+                                        onClick={() =>
+                                            handleOpenModal('active')
+                                        }
                                         className="w-full justify-start"
                                     >
                                         <CalendarClock size={16} />
@@ -376,7 +382,9 @@ export default function ViewCandidats() {
                                     <Button
                                         type="button"
                                         variant="success"
-                                        onClick={() => handleOpenModal('employ')}
+                                        onClick={() =>
+                                            handleOpenModal('employ')
+                                        }
                                         className="w-full justify-start"
                                     >
                                         <CheckCircle2 size={16} />

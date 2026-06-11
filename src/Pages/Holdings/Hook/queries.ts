@@ -1,5 +1,12 @@
 import AxiosInstance from '@/Helpers/Axios'
 import { Asset, UsersWithHoldings, UserWithHoldings } from '../TAsset'
+import {
+    fetchAllPaginatedData,
+    matchesSearchText,
+    normalizePaginatedResponse,
+    paginateClientRows,
+    PaginatedResponse,
+} from '@/Helpers/clientTableFiltering'
 
 const LIMIT = 5
 
@@ -12,24 +19,63 @@ export const getHoldings = async ({
     users: string
     search: string
 }): Promise<UsersWithHoldings> => {
-    const params = new URLSearchParams({
-        page: String(pageParam),
-        limit: String(LIMIT),
-    })
+    const fetchHoldingsPage = async (
+        page: number,
+        limit: number,
+    ): Promise<PaginatedResponse<UserWithHoldings>> => {
+        const params = new URLSearchParams({
+            page: String(page),
+            limit: String(limit),
+        })
 
-    if (users) {
-        params.set('users', users)
+        const response = await AxiosInstance.get(
+            `/asset/user?${params.toString()}`,
+        )
+        return normalizePaginatedResponse(response.data)
     }
 
-    if (search) {
-        params.set('search', search)
+    const shouldFilterClientSide = search.trim() !== '' || users !== ''
+
+    if (shouldFilterClientSide) {
+        const allUsers =
+            await fetchAllPaginatedData<UserWithHoldings>(fetchHoldingsPage)
+        const filteredUsers = allUsers.filter((user) => {
+            const assetCount = user.assets?.length ?? 0
+            const matchesUserFilter =
+                !users ||
+                (users === 'with' && assetCount > 0) ||
+                (users === 'without' && assetCount === 0)
+
+            return (
+                matchesUserFilter &&
+                matchesSearchText(search, [
+                    `${user.firstName} ${user.lastName}`,
+                    user.firstName,
+                    user.lastName,
+                    user.email,
+                    user.phone,
+                    user.role,
+                ])
+            )
+        })
+        const paginatedUsers = paginateClientRows(
+            filteredUsers,
+            pageParam,
+            LIMIT,
+        )
+
+        return {
+            data: paginatedUsers.data,
+            totalPages: paginatedUsers.totalPages,
+            all: paginatedUsers.all,
+        }
     }
 
-    const response = await AxiosInstance.get(`/asset/user?${params.toString()}`)
+    const response = await fetchHoldingsPage(pageParam, LIMIT)
     return {
-        data: response.data.data,
-        totalPages: response.data.totalPages,
-        all: response.data.all,
+        data: response.data,
+        totalPages: response.totalPages ?? 1,
+        all: response.all ?? response.data.length,
     }
 }
 

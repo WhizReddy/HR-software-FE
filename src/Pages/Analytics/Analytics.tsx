@@ -1,8 +1,14 @@
 import dayjs from 'dayjs'
 import { AlertCircle, CalendarDays, Clock3, Monitor, Users } from 'lucide-react'
 import PageIntro from '@/Components/PageIntro/PageIntro'
-import { DashboardProvider, useDashboardContext } from '@/Pages/Dashboard/context/hook'
-import { statusConfig, statusOrder } from '@/Pages/Dashboard/components/statusConfig'
+import {
+    DashboardProvider,
+    useDashboardContext,
+} from '@/Pages/Dashboard/context/hook'
+import {
+    statusConfig,
+    statusOrder,
+} from '@/Pages/Dashboard/components/statusConfig'
 
 const formatPercent = (value: number, total: number) => {
     if (total <= 0) return '0%'
@@ -33,7 +39,7 @@ const AnalyticsContent = () => {
     const nextEvents = upcomingEvents.slice(0, 3)
 
     return (
-        <div className="mx-auto w-full max-w-7xl space-y-5 p-4 sm:p-6 lg:p-8">
+        <div className="mx-auto w-full max-w-7xl space-y-5 pb-6">
             <PageIntro
                 eyebrow="Analytics"
                 title="Workforce Analytics"
@@ -135,13 +141,19 @@ const AnalyticsContent = () => {
                     <div className="space-y-4">
                         {statusMetrics.map(({ status, value }) => {
                             const Icon = statusConfig[status].icon
-                            const percent = formatPercent(value, employeeData.total)
+                            const percent = formatPercent(
+                                value,
+                                employeeData.total,
+                            )
 
                             return (
                                 <div key={status}>
                                     <div className="mb-2 flex items-center justify-between gap-3 text-sm">
                                         <div className="flex items-center gap-2 font-semibold text-slate-700">
-                                            <Icon size={16} className="text-slate-400" />
+                                            <Icon
+                                                size={16}
+                                                className="text-slate-400"
+                                            />
                                             {status}
                                         </div>
                                         <span className="font-semibold text-slate-950">
@@ -152,7 +164,9 @@ const AnalyticsContent = () => {
                                         <div
                                             className={`h-full rounded-full ${statusConfig[status].badgeClassName}`}
                                             style={{
-                                                width: isStatsLoading ? '18%' : percent,
+                                                width: isStatsLoading
+                                                    ? '18%'
+                                                    : percent,
                                             }}
                                         />
                                     </div>
@@ -196,9 +210,14 @@ const AnalyticsContent = () => {
                                         {event.title}
                                     </p>
                                     <p className="mt-2 inline-flex items-center gap-2 text-sm font-medium text-slate-500">
-                                        <CalendarDays size={15} className="text-[#2457a3]" />
+                                        <CalendarDays
+                                            size={15}
+                                            className="text-[#2457a3]"
+                                        />
                                         {dayjs(event.startDate).isValid()
-                                            ? dayjs(event.startDate).format('DD MMM YYYY')
+                                            ? dayjs(event.startDate).format(
+                                                  'DD MMM YYYY',
+                                              )
                                             : 'Date pending'}
                                     </p>
                                 </article>

@@ -60,12 +60,8 @@ export const InterviewProvider: React.FC<{ children: React.ReactNode }> = ({
     const [isReschedule, setIsReschedule] = useState(false)
     const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams()
-    const [searchQuery, setSearchQuery] = useState<string>(
-        searchParams.get('search') || '',
-    )
-    const [currentTab, setCurrentTab] = useState<string>(
-        getValidInterviewPhase(searchParams.get('phase')),
-    )
+    const searchQuery = searchParams.get('search') || ''
+    const currentTab = getValidInterviewPhase(searchParams.get('phase'))
     // Per-interview processing flag to prevent double-clicks
     const [processingIds, setProcessingIds] = useState<Set<string>>(new Set())
 
@@ -80,27 +76,51 @@ export const InterviewProvider: React.FC<{ children: React.ReactNode }> = ({
     )
 
     useEffect(() => {
-        const nextSearch = searchParams.get('search') || ''
-        const nextPhase = getValidInterviewPhase(searchParams.get('phase'))
+        const requestedPhase = searchParams.get('phase')
 
-        setSearchQuery((currentValue) =>
-            currentValue === nextSearch ? currentValue : nextSearch,
+        if (requestedPhase === currentTab) {
+            return
+        }
+
+        setSearchParams(
+            (prev) => {
+                const nextParams = upsertFilterParams(prev, {
+                    phase: currentTab,
+                })
+
+                return hasSearchParamsChanged(prev, nextParams)
+                    ? nextParams
+                    : prev
+            },
+            { replace: true },
         )
-        setCurrentTab((currentValue) =>
-            currentValue === nextPhase ? currentValue : nextPhase,
-        )
-    }, [searchParams])
+    }, [currentTab, searchParams, setSearchParams])
 
-    useEffect(() => {
-        setSearchParams((prev) => {
-            const nextParams = upsertFilterParams(prev, {
-                search: searchQuery.trim() || null,
-                phase: currentTab,
-            })
+    const setSearchQuery = useCallback<
+        React.Dispatch<React.SetStateAction<string>>
+    >(
+        (nextValue) => {
+            const resolvedValue =
+                typeof nextValue === 'function'
+                    ? nextValue(searchQuery)
+                    : nextValue
 
-            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
-        })
-    }, [currentTab, searchQuery, setSearchParams])
+            setSearchParams(
+                (prev) => {
+                    const nextParams = upsertFilterParams(prev, {
+                        search: resolvedValue.trim() || null,
+                        phase: currentTab,
+                    })
+
+                    return hasSearchParamsChanged(prev, nextParams)
+                        ? nextParams
+                        : prev
+                },
+                { replace: true },
+            )
+        },
+        [currentTab, searchQuery, setSearchParams],
+    )
 
     // ── helpers ─────────────────────────────────────────────────────────────
     const setProcessing = (id: string, on: boolean) => {
@@ -191,7 +211,20 @@ export const InterviewProvider: React.FC<{ children: React.ReactNode }> = ({
         _event: React.SyntheticEvent,
         newValue: string,
     ) => {
-        setCurrentTab(getValidInterviewPhase(newValue))
+        const nextPhase = getValidInterviewPhase(newValue)
+
+        setSearchParams(
+            (prev) => {
+                const nextParams = upsertFilterParams(prev, {
+                    phase: nextPhase,
+                })
+
+                return hasSearchParamsChanged(prev, nextParams)
+                    ? nextParams
+                    : prev
+            },
+            { replace: true },
+        )
     }
 
     const handleOpenModal = (interview: Interview, isReschedule = false) => {

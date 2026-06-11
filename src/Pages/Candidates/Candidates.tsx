@@ -24,7 +24,7 @@ function CandidatesCoontext() {
     } = useCandidateContext()
 
     return (
-        <div className="w-full flex-1 p-4 sm:p-6 lg:p-8">
+        <div className="w-full flex-1 pb-6">
             <PageIntro
                 eyebrow="Hiring"
                 title="Candidate Pipeline"

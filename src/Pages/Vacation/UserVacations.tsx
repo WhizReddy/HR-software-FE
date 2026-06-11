@@ -3,7 +3,15 @@ import style from './style/userVacations.module.scss'
 import { VacationContext, VacationProvider } from './VacationContext'
 import { useGetUserWithVacations } from './Hook'
 import { Vacation } from './types'
-import { CalendarDays, Check, Clock, Mail, Phone, UserRound, X } from 'lucide-react'
+import {
+    CalendarDays,
+    Check,
+    Clock,
+    Mail,
+    Phone,
+    UserRound,
+    X,
+} from 'lucide-react'
 import { useContext, useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import { CreateVacationForm } from './components/form/CreateVacationForm'
@@ -66,19 +74,19 @@ const UserVacationsComponent = () => {
                     total: number,
                     item: {
                         endDate:
-                        | string
-                        | number
-                        | Date
-                        | dayjs.Dayjs
-                        | null
-                        | undefined
+                            | string
+                            | number
+                            | Date
+                            | dayjs.Dayjs
+                            | null
+                            | undefined
                         startDate:
-                        | string
-                        | number
-                        | Date
-                        | dayjs.Dayjs
-                        | null
-                        | undefined
+                            | string
+                            | number
+                            | Date
+                            | dayjs.Dayjs
+                            | null
+                            | undefined
                     },
                 ) => {
                     if ((item as Vacation).status !== 'accepted') {
@@ -98,7 +106,7 @@ const UserVacationsComponent = () => {
 
     if (isError) {
         return (
-            <main className="w-full flex-1 p-4 sm:p-6 lg:p-8">
+            <main className="w-full flex-1 pb-6">
                 <div className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
                     Vacation requests failed to load: {error.message}
                 </div>
@@ -108,8 +116,10 @@ const UserVacationsComponent = () => {
 
     if (isLoading) {
         return (
-            <main className="w-full flex-1 p-4 sm:p-6 lg:p-8">
-                <div className={style.loading}>Loading vacation requests...</div>
+            <main className="w-full flex-1 pb-6">
+                <div className={style.loading}>
+                    Loading vacation requests...
+                </div>
             </main>
         )
     }
@@ -120,7 +130,7 @@ const UserVacationsComponent = () => {
     const hasVacations = data.vacations.length > 0
 
     return (
-        <main className="w-full flex-1 p-4 sm:p-6 lg:p-8">
+        <main className="w-full flex-1 pb-6">
             <section className="mx-auto w-full max-w-7xl space-y-6">
                 <div className="rounded-lg border border-slate-200/80 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:p-6">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -184,7 +194,10 @@ const UserVacationsComponent = () => {
                         </div>
                         <div className="rounded-lg border border-slate-100 bg-slate-50 px-4 py-3">
                             <div className="flex items-center gap-2 text-slate-500">
-                                <CalendarDays size={16} className="text-[#2457a3]" />
+                                <CalendarDays
+                                    size={16}
+                                    className="text-[#2457a3]"
+                                />
                                 <p className="text-[11px] font-semibold uppercase">
                                     Used leave
                                 </p>
@@ -217,43 +230,65 @@ const UserVacationsComponent = () => {
                                     <thead>
                                         <tr className="border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase text-slate-500">
                                             <th className="px-5 py-3">Type</th>
-                                            <th className="px-5 py-3">Start date</th>
-                                            <th className="px-5 py-3">End date</th>
-                                            <th className="px-5 py-3">Duration</th>
-                                            <th className="px-5 py-3">Status</th>
+                                            <th className="px-5 py-3">
+                                                Start date
+                                            </th>
+                                            <th className="px-5 py-3">
+                                                End date
+                                            </th>
+                                            <th className="px-5 py-3">
+                                                Duration
+                                            </th>
+                                            <th className="px-5 py-3">
+                                                Status
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {data.vacations.map((item: Vacation) => {
-                                            const status = getStatusConfig(item.status)
-                                            const StatusIcon = status.icon
+                                        {data.vacations.map(
+                                            (item: Vacation) => {
+                                                const status = getStatusConfig(
+                                                    item.status,
+                                                )
+                                                const StatusIcon = status.icon
 
-                                            return (
-                                                <tr
-                                                    key={item._id}
-                                                    className="border-b border-slate-100 last:border-0"
-                                                >
-                                                    <td className="px-5 py-4 font-semibold capitalize text-slate-800">
-                                                        {item.type}
-                                                    </td>
-                                                    <td className="px-5 py-4 text-slate-600">
-                                                        {formatVacationDate(item.startDate)}
-                                                    </td>
-                                                    <td className="px-5 py-4 text-slate-600">
-                                                        {formatVacationDate(item.endDate)}
-                                                    </td>
-                                                    <td className="px-5 py-4 text-slate-600">
-                                                        {getVacationDays(item)}
-                                                    </td>
-                                                    <td className="px-5 py-4">
-                                                        <span className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-semibold ${status.className}`}>
-                                                            <StatusIcon size={14} />
-                                                            {status.label}
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                            )
-                                        })}
+                                                return (
+                                                    <tr
+                                                        key={item._id}
+                                                        className="border-b border-slate-100 last:border-0"
+                                                    >
+                                                        <td className="px-5 py-4 font-semibold capitalize text-slate-800">
+                                                            {item.type}
+                                                        </td>
+                                                        <td className="px-5 py-4 text-slate-600">
+                                                            {formatVacationDate(
+                                                                item.startDate,
+                                                            )}
+                                                        </td>
+                                                        <td className="px-5 py-4 text-slate-600">
+                                                            {formatVacationDate(
+                                                                item.endDate,
+                                                            )}
+                                                        </td>
+                                                        <td className="px-5 py-4 text-slate-600">
+                                                            {getVacationDays(
+                                                                item,
+                                                            )}
+                                                        </td>
+                                                        <td className="px-5 py-4">
+                                                            <span
+                                                                className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-semibold ${status.className}`}
+                                                            >
+                                                                <StatusIcon
+                                                                    size={14}
+                                                                />
+                                                                {status.label}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            },
+                                        )}
                                     </tbody>
                                 </table>
                             </div>
@@ -277,7 +312,9 @@ const UserVacationsComponent = () => {
                                                         {item.type}
                                                     </h3>
                                                 </div>
-                                                <span className={`inline-flex shrink-0 items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-semibold ${status.className}`}>
+                                                <span
+                                                    className={`inline-flex shrink-0 items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-semibold ${status.className}`}
+                                                >
                                                     <StatusIcon size={14} />
                                                     {status.label}
                                                 </span>
@@ -289,7 +326,9 @@ const UserVacationsComponent = () => {
                                                         Start
                                                     </dt>
                                                     <dd className="text-sm font-medium text-slate-700">
-                                                        {formatVacationDate(item.startDate)}
+                                                        {formatVacationDate(
+                                                            item.startDate,
+                                                        )}
                                                     </dd>
                                                 </div>
                                                 <div className="grid grid-cols-[92px_minmax(0,1fr)] gap-2">
@@ -297,7 +336,9 @@ const UserVacationsComponent = () => {
                                                         End
                                                     </dt>
                                                     <dd className="text-sm font-medium text-slate-700">
-                                                        {formatVacationDate(item.endDate)}
+                                                        {formatVacationDate(
+                                                            item.endDate,
+                                                        )}
                                                     </dd>
                                                 </div>
                                                 <div className="grid grid-cols-[92px_minmax(0,1fr)] gap-2">

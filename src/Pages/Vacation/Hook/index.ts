@@ -22,6 +22,13 @@ import dayjs from 'dayjs'
 import { valibotValidator } from '@tanstack/valibot-form-adapter'
 import { useParams } from 'react-router-dom'
 import { getVacationErrorMessage } from '../errorMessage'
+import {
+    fetchAllPaginatedData,
+    matchesSearchText,
+    normalizeFilterText,
+    paginateClientRows,
+} from '@/Helpers/clientTableFiltering'
+import { Vacation } from '../types'
 
 export const useGetVacations = (
     page: number,
@@ -32,14 +39,44 @@ export const useGetVacations = (
 ) => {
     return useQuery({
         queryKey: ['vacations', page, limit, search, status, type],
-        queryFn: () =>
-            getAllVacations(
-                String(page),
-                String(limit),
-                search.trim(),
-                status,
-                type,
-            ),
+        queryFn: async () => {
+            const shouldFilterClientSide =
+                search.trim() !== '' || status !== '' || type !== ''
+
+            if (!shouldFilterClientSide) {
+                return getAllVacations(String(page), String(limit))
+            }
+
+            const allVacations = await fetchAllPaginatedData<Vacation>(
+                (pageToFetch, limitToFetch) =>
+                    getAllVacations(String(pageToFetch), String(limitToFetch)),
+            )
+            const filteredVacations = allVacations.filter((vacation) => {
+                const fullName = `${vacation.userId?.firstName ?? ''} ${vacation.userId?.lastName ?? ''}`
+                const matchesStatus =
+                    !status ||
+                    normalizeFilterText(vacation.status) ===
+                        normalizeFilterText(status)
+                const matchesType =
+                    !type ||
+                    normalizeFilterText(vacation.type) ===
+                        normalizeFilterText(type)
+
+                return (
+                    matchesStatus &&
+                    matchesType &&
+                    matchesSearchText(search, [
+                        fullName,
+                        vacation.userId?.firstName,
+                        vacation.userId?.lastName,
+                        vacation.type,
+                        vacation.status,
+                    ])
+                )
+            })
+
+            return paginateClientRows(filteredVacations, page, limit)
+        },
         placeholderData: (previousData) => previousData,
     })
 }
