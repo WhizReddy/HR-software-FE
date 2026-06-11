@@ -158,7 +158,7 @@ export default function ViewCandidats() {
         : ''
 
     return (
-        <main className="mx-auto w-full max-w-7xl space-y-6 pb-6">
+        <main className="mx-auto w-full max-w-full space-y-6">
             <PageIntro
                 eyebrow="Recruitment"
                 title={

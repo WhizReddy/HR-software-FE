@@ -15,7 +15,7 @@ export default function Profile() {
     const canViewSecurity = isSelfUser(currentUser?._id, id)
 
     return (
-        <main className="w-full flex-1 pb-6">
+        <main className="w-full flex-1">
             <div className="w-full overflow-hidden rounded-lg border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
                 <Tabs
                     defaultValue="profile"

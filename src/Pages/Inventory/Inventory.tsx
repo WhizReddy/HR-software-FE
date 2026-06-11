@@ -15,7 +15,7 @@ function InventoryBaseComponent() {
         handleCloseCreateModalOpen,
     } = useContext(InventoryContext)
     return (
-        <main className={`${style.main} w-full flex-1 pb-6`}>
+        <main className={`${style.main} w-full flex-1`}>
             <ModalComponent
                 open={createModalOpen}
                 handleClose={handleCloseCreateModalOpen}

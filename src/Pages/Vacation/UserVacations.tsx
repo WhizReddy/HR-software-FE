@@ -106,7 +106,7 @@ const UserVacationsComponent = () => {
 
     if (isError) {
         return (
-            <main className="w-full flex-1 pb-6">
+            <main className="w-full flex-1">
                 <div className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
                     Vacation requests failed to load: {error.message}
                 </div>
@@ -116,7 +116,7 @@ const UserVacationsComponent = () => {
 
     if (isLoading) {
         return (
-            <main className="w-full flex-1 pb-6">
+            <main className="w-full flex-1">
                 <div className={style.loading}>
                     Loading vacation requests...
                 </div>
@@ -130,8 +130,8 @@ const UserVacationsComponent = () => {
     const hasVacations = data.vacations.length > 0
 
     return (
-        <main className="w-full flex-1 pb-6">
-            <section className="mx-auto w-full max-w-7xl space-y-6">
+        <main className="w-full flex-1">
+            <section className="mx-auto w-full max-w-full space-y-6">
                 <div className="rounded-lg border border-slate-200/80 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:p-6">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex min-w-0 items-center gap-4">

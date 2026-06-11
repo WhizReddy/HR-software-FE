@@ -20,7 +20,7 @@ const DashboardContent: React.FC = () => {
 
     return (
         <div className="relative overflow-x-hidden">
-            <div className="relative z-10 mx-auto max-w-[1400px] space-y-5 pb-6">
+            <div className="relative z-10 mx-auto w-full max-w-full space-y-5">
                 <div className="overflow-hidden rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:p-7">
                     <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
                         <div>

@@ -3,7 +3,7 @@
     flex-direction: column;
     width: 100%;
     gap: 24px;
-    padding: 0 0 1.5rem;
+    padding: 0;
 }
 
 .panel {
@@ -106,7 +106,7 @@
 
 @media (max-width: 768px) {
     .payrollPage {
-        padding: 0 0 1.5rem;
+        padding: 0;
     }
 
     .panel {
@@ -130,12 +130,12 @@
 
 @media (min-width: 640px) {
     .payrollPage {
-        padding: 0 0 1.5rem;
+        padding: 0;
     }
 }
 
 @media (min-width: 1024px) {
     .payrollPage {
-        padding: 0 0 1.5rem;
+        padding: 0;
     }
 }

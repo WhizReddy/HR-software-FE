@@ -39,7 +39,7 @@ const AnalyticsContent = () => {
     const nextEvents = upcomingEvents.slice(0, 3)
 
     return (
-        <div className="mx-auto w-full max-w-7xl space-y-5 pb-6">
+        <div className="mx-auto w-full max-w-full space-y-5">
             <PageIntro
                 eyebrow="Analytics"
                 title="Workforce Analytics"

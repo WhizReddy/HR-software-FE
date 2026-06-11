@@ -159,7 +159,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
             <div
                 className={
                     managementMode
-                        ? 'mx-auto w-full max-w-7xl pb-6'
+                        ? 'mx-auto w-full max-w-full'
                         : 'mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8'
                 }
             >

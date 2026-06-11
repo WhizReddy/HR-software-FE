@@ -37,7 +37,7 @@ function VacationComponent() {
     const currentTab = searchParams.get('vacationType') || 'requests'
 
     return (
-        <div className="mx-auto w-full max-w-7xl space-y-6 pb-6">
+        <div className="mx-auto w-full max-w-full space-y-6">
             <PageIntro
                 eyebrow="People"
                 title="Vacation Management"

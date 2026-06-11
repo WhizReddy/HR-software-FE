@@ -67,7 +67,7 @@ function EventsContentAndComponents() {
     return (
         <div
             id="events-root"
-            className="mx-auto flex w-full max-w-7xl flex-col pb-6"
+            className="mx-auto flex w-full max-w-full flex-col"
         >
             <Toast
                 severity={toastOpen ? toastSeverity : updateToastSeverity}
