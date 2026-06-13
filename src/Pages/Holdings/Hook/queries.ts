@@ -28,6 +28,14 @@ export const getHoldings = async ({
             limit: String(limit),
         })
 
+        if (search.trim()) {
+            params.set('search', search)
+        }
+
+        if (users && users !== 'all') {
+            params.set('users', users)
+        }
+
         const response = await AxiosInstance.get(
             `/asset/user?${params.toString()}`,
         )

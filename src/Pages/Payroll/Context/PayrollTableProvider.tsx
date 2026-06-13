@@ -85,6 +85,18 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         params.set('limit', String(limitToFetch))
         params.set('page', String(pageToFetch))
 
+        if (searchQuery.trim()) {
+            params.set('search', searchQuery)
+        }
+
+        if (month !== undefined) {
+            params.set('month', String(month))
+        }
+
+        if (year !== undefined) {
+            params.set('year', String(year))
+        }
+
         const response = await AxiosInstance.get<{
             data: PayrollRow[]
             totalPages: number
@@ -97,8 +109,10 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         const fullName = payrollItem.userId
             ? `${payrollItem.userId.firstName} ${payrollItem.userId.lastName}`
             : ''
-        const matchesMonth = !month || Number(payrollItem.month) === month
-        const matchesYear = !year || Number(payrollItem.year) === year
+        const matchesMonth =
+            month === undefined || Number(payrollItem.month) === month
+        const matchesYear =
+            year === undefined || Number(payrollItem.year) === year
 
         return (
             matchesMonth &&
@@ -117,7 +131,9 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         Required<PaginatedResponse<PayrollRow>>
     > => {
         const shouldFilterClientSide =
-            searchQuery.trim() !== '' || Boolean(month) || Boolean(year)
+            searchQuery.trim() !== '' ||
+            month !== undefined ||
+            year !== undefined
 
         if (!shouldFilterClientSide) {
             return fetchPayrollPage(page, pageSize)

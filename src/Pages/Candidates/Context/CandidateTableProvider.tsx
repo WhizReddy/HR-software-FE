@@ -65,6 +65,14 @@ export const CandidateProvider: React.FC<{ children: any }> = ({
             limit: String(limitToFetch),
         })
 
+        if (searchQuery.trim()) {
+            params.set('search', searchQuery)
+        }
+
+        if (statusFilter !== 'all') {
+            params.set('status', statusFilter)
+        }
+
         const response = await AxiosInstance.get(
             `/applicant?${params.toString()}`,
         )

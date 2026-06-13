@@ -40,6 +40,9 @@ export const useAllInventoryItems = () => {
                     getAllInventoryItems(
                         String(pageToFetch),
                         String(limitToFetch),
+                        search,
+                        status,
+                        type,
                     ),
             )
             const filteredItems = allItems.filter((item) => {

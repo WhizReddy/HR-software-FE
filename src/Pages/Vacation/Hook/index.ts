@@ -49,7 +49,13 @@ export const useGetVacations = (
 
             const allVacations = await fetchAllPaginatedData<Vacation>(
                 (pageToFetch, limitToFetch) =>
-                    getAllVacations(String(pageToFetch), String(limitToFetch)),
+                    getAllVacations(
+                        String(pageToFetch),
+                        String(limitToFetch),
+                        search,
+                        status,
+                        type,
+                    ),
             )
             const filteredVacations = allVacations.filter((vacation) => {
                 const fullName = `${vacation.userId?.firstName ?? ''} ${vacation.userId?.lastName ?? ''}`

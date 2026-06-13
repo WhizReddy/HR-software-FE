@@ -68,6 +68,14 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
             limit: String(limitToFetch),
         })
 
+        if (searchQuery.trim()) {
+            params.set('search', searchQuery)
+        }
+
+        if (roleFilter !== 'all') {
+            params.set('role', roleFilter)
+        }
+
         const response = await AxiosInstance.get<{
             data: UserProfileData[]
             totalPages: number
