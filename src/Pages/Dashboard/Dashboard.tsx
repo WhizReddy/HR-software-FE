@@ -7,16 +7,83 @@ import PieChartComponent from './components/piechart.tsx'
 import { DashboardProvider, useDashboardContext } from './context/hook.tsx'
 import { greeter } from '@/Helpers/Greeter.tsx'
 import { useNavigate } from 'react-router-dom'
-import { AlertCircle, ArrowUpRight, Sparkles } from 'lucide-react'
+import {
+    AlertCircle,
+    ArrowUpRight,
+    CalendarClock,
+    ClipboardCheck,
+    PackageSearch,
+    Sparkles,
+    UserRoundCheck,
+} from 'lucide-react'
+
+const formatAttentionCount = (
+    value: number | null,
+    isLoading: boolean,
+) => {
+    if (isLoading) return '...'
+    if (value === null) return '-'
+    return String(value)
+}
 
 const DashboardContent: React.FC = () => {
-    const { employeeData, users, hasError, isStatsLoading, isUsersLoading } =
-        useDashboardContext()
+    const {
+        employeeData,
+        users,
+        upcomingEvents,
+        needsAttention,
+        hasError,
+        isStatsLoading,
+        isUsersLoading,
+    } = useDashboardContext()
     const { currentUser } = useAuth()
     const navigate = useNavigate()
 
     const userName = currentUser ? currentUser.firstName : 'User'
     const isAdmin = currentUser?.role === 'admin' || currentUser?.role === 'hr'
+    const attentionItems = [
+        {
+            label: 'Pending vacation',
+            value: formatAttentionCount(
+                needsAttention.pendingVacations,
+                needsAttention.isLoading,
+            ),
+            hint: 'Awaiting HR action',
+            icon: ClipboardCheck,
+            to: '/vacation?vacationType=requests&requestStatus=pending&requestPage=0&requestLimit=5',
+            restricted: true,
+        },
+        {
+            label: 'Active candidates',
+            value: formatAttentionCount(
+                needsAttention.activeCandidates,
+                needsAttention.isLoading,
+            ),
+            hint: 'Open hiring records',
+            icon: UserRoundCheck,
+            to: '/candidates?status=active&page=0&limit=5',
+            restricted: true,
+        },
+        {
+            label: 'Broken assets',
+            value: formatAttentionCount(
+                needsAttention.brokenAssets,
+                needsAttention.isLoading,
+            ),
+            hint: 'Need repair or return',
+            icon: PackageSearch,
+            to: '/inventory?status=broken&page=0&limit=5',
+            restricted: true,
+        },
+        {
+            label: 'Upcoming events',
+            value: String(upcomingEvents.length),
+            hint: 'Scheduled from today onward',
+            icon: CalendarClock,
+            to: '/events?page=0&limit=6',
+            restricted: false,
+        },
+    ].filter((item) => !item.restricted || needsAttention.canViewRestrictedItems)
 
     return (
         <div className="relative overflow-x-hidden">
@@ -60,6 +127,49 @@ const DashboardContent: React.FC = () => {
                             view is showing the safest available fallback
                             values.
                         </p>
+                    </div>
+                )}
+
+                {attentionItems.length > 0 && (
+                    <div className="rounded-lg border border-slate-200/80 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
+                        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                            <div>
+                                <h2 className="text-base font-semibold text-slate-900">
+                                    Needs attention
+                                </h2>
+                                <p className="mt-1 text-sm font-medium text-slate-500">
+                                    Work that may need a follow-up today.
+                                </p>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                            {attentionItems.map((item) => {
+                                const Icon = item.icon
+                                return (
+                                    <button
+                                        key={item.label}
+                                        type="button"
+                                        onClick={() => navigate(item.to)}
+                                        className="group flex min-h-[112px] items-center justify-between gap-4 rounded-lg border border-slate-200 bg-white p-4 text-left transition-colors hover:border-[#2457a3]/30 hover:bg-blue-50/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2457a3]/20"
+                                    >
+                                        <div className="min-w-0">
+                                            <p className="text-xs font-semibold uppercase text-slate-500">
+                                                {item.label}
+                                            </p>
+                                            <p className="mt-2 text-3xl font-semibold leading-none text-slate-950">
+                                                {item.value}
+                                            </p>
+                                            <p className="mt-2 truncate text-sm font-medium text-slate-500">
+                                                {item.hint}
+                                            </p>
+                                        </div>
+                                        <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-slate-100 text-[#2457a3] transition-colors group-hover:bg-white">
+                                            <Icon size={20} />
+                                        </span>
+                                    </button>
+                                )
+                            })}
+                        </div>
                     </div>
                 )}
 

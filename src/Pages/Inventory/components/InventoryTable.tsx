@@ -163,6 +163,8 @@ export const InventoryTable = () => {
                 onSearchChange={(e) => setSearchInput(e.target.value)}
                 onSearchClear={clearSearch}
                 searchPlaceholder="Search inventory..."
+                exportFileName="inventory"
+                exportTitle="Inventory records"
                 filterNode={
                     <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
                         <label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-slate-500 sm:w-40">

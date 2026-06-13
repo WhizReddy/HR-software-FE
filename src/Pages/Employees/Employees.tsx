@@ -49,6 +49,8 @@ function EmployeesContent() {
                 onSearchChange={(e) => setSearch(e.target.value)}
                 onSearchClear={clearSearch}
                 searchPlaceholder="Search employees..."
+                exportFileName="employees"
+                exportTitle="Employee Directory"
                 filterNode={
                     <label className="flex w-full flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-slate-500 sm:w-44">
                         Role

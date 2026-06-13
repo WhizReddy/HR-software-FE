@@ -1,5 +1,12 @@
 import React from 'react'
-import { ChevronLeft, ChevronRight, Inbox, Search } from 'lucide-react'
+import {
+    ChevronLeft,
+    ChevronRight,
+    Download,
+    Inbox,
+    Printer,
+    Search,
+} from 'lucide-react'
 import { ColDef, PaginationModel, RowParams } from '@/types/table'
 import Input from '@/Components/Input/Index'
 import {
@@ -35,7 +42,59 @@ interface DataTableProps<TRow> {
     loadingLabel?: string
     pageSizeOptions?: number[]
     showPaginationControls?: boolean
+    exportFileName?: string
+    exportTitle?: string
 }
+
+const normalizeExportValue = (value: unknown): string => {
+    if (value === null || value === undefined) {
+        return ''
+    }
+
+    if (value instanceof Date) {
+        return value.toISOString()
+    }
+
+    if (Array.isArray(value)) {
+        return value.map(normalizeExportValue).join('; ')
+    }
+
+    if (typeof value === 'object') {
+        const objectValue = value as Record<string, unknown>
+        if (objectValue.firstName || objectValue.lastName) {
+            return [objectValue.firstName, objectValue.lastName]
+                .filter(Boolean)
+                .join(' ')
+        }
+
+        return JSON.stringify(value)
+    }
+
+    return String(value)
+}
+
+const escapeCsvCell = (value: string) => {
+    const escaped = value.replace(/"/g, '""')
+    return /[",\n\r]/.test(escaped) ? `"${escaped}"` : escaped
+}
+
+const escapeHtml = (value: string) =>
+    value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;')
+
+const getExportColumns = <TRow,>(columns: ColDef<TRow>[]) =>
+    columns.filter((column) => column.field !== 'actions')
+
+const getExportRows = <TRow,>(rows: TRow[], columns: ColDef<TRow>[]) =>
+    rows.map((row) =>
+        columns.map((column) =>
+            normalizeExportValue((row as Record<string, unknown>)[column.field]),
+        ),
+    )
 
 function DataTable<TRow>({
     rows,
@@ -58,6 +117,8 @@ function DataTable<TRow>({
     loadingLabel = 'Loading records...',
     pageSizeOptions = [5, 10, 20],
     showPaginationControls = true,
+    exportFileName,
+    exportTitle,
 }: DataTableProps<TRow>) {
     const normalizedTotalPages =
         totalPages > 0
@@ -71,15 +132,120 @@ function DataTable<TRow>({
             ? (page + 1) * pageSize < totalCount
             : page < normalizedTotalPages - 1
     const hasSearch = Boolean(searchValue?.trim())
+    const canExport = Boolean(exportFileName) && rows.length > 0
+    const exportedColumns = getExportColumns(columns)
+    const resolvedExportTitle = exportTitle || title || 'Table export'
 
     const resultLabel =
         totalCount !== undefined
             ? `Showing ${rows.length} of ${totalCount} ${totalCount === 1 ? 'result' : 'results'}`
             : `Showing ${rows.length} ${rows.length === 1 ? 'result' : 'results'}`
 
+    const handleCsvExport = () => {
+        if (!canExport) return
+
+        const headerRow = exportedColumns.map((column) =>
+            escapeCsvCell(column.headerName),
+        )
+        const bodyRows = getExportRows(rows, exportedColumns).map((row) =>
+            row.map(escapeCsvCell),
+        )
+        const csv = [headerRow, ...bodyRows]
+            .map((row) => row.join(','))
+            .join('\n')
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = `${exportFileName}.csv`
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        URL.revokeObjectURL(url)
+    }
+
+    const handlePrintExport = () => {
+        if (!canExport) return
+
+        const printWindow = window.open('', '_blank', 'width=960,height=720')
+        if (!printWindow) return
+
+        const headerCells = exportedColumns
+            .map(
+                (column) =>
+                    `<th>${escapeHtml(column.headerName)}</th>`,
+            )
+            .join('')
+        const bodyRows = getExportRows(rows, exportedColumns)
+            .map(
+                (row) =>
+                    `<tr>${row
+                        .map((cell) => `<td>${escapeHtml(cell)}</td>`)
+                        .join('')}</tr>`,
+            )
+            .join('')
+
+        printWindow.document.write(`
+            <!doctype html>
+            <html>
+                <head>
+                    <title>${escapeHtml(resolvedExportTitle)}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; color: #0f172a; margin: 24px; }
+                        h1 { font-size: 20px; margin: 0 0 16px; }
+                        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+                        th, td { border: 1px solid #e2e8f0; padding: 8px; text-align: left; vertical-align: top; }
+                        th { background: #f8fafc; color: #475569; text-transform: uppercase; font-size: 11px; }
+                    </style>
+                </head>
+                <body>
+                    <h1>${escapeHtml(resolvedExportTitle)}</h1>
+                    <table>
+                        <thead><tr>${headerCells}</tr></thead>
+                        <tbody>${bodyRows}</tbody>
+                    </table>
+                </body>
+            </html>
+        `)
+        printWindow.document.close()
+        printWindow.focus()
+        printWindow.print()
+    }
+
+    const exportControls = exportFileName ? (
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+            <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleCsvExport}
+                disabled={!canExport || isLoading}
+                className="h-10 rounded-md"
+            >
+                <Download size={16} />
+                CSV
+            </Button>
+            <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handlePrintExport}
+                disabled={!canExport || isLoading}
+                className="h-10 rounded-md"
+            >
+                <Printer size={16} />
+                PDF
+            </Button>
+        </div>
+    ) : null
+
     return (
         <Card className="overflow-hidden rounded-lg border border-slate-200/80 bg-white p-0 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
-            {(title || actions || onSearchChange || filterNode) && (
+            {(title ||
+                actions ||
+                onSearchChange ||
+                filterNode ||
+                exportControls) && (
                 <div className="grid gap-4 border-b border-slate-200/80 bg-white px-5 py-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
                     <div className="flex w-full flex-1 flex-col gap-3 sm:flex-row sm:items-center">
                         {title && (
@@ -122,9 +288,10 @@ function DataTable<TRow>({
                         )}
                     </div>
 
-                    {(filterNode || actions) && (
+                    {(filterNode || actions || exportControls) && (
                         <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-end lg:w-auto">
                             {filterNode}
+                            {exportControls}
                             {actions}
                         </div>
                     )}

@@ -160,6 +160,8 @@ export const VacationTable = () => {
                 onSearchChange={(e) => setSearchInput(e.target.value)}
                 onSearchClear={clearSearch}
                 searchPlaceholder="Search by employee, type, or status"
+                exportFileName="vacation-requests"
+                exportTitle="Vacation requests"
                 filterNode={
                     <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
                         <label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-slate-500 sm:w-40">
