@@ -57,7 +57,9 @@ export const AssignAssetModal = () => {
             handleClose={handleClose}
         >
             <div className="p-6 max-w-md w-full mx-auto bg-white rounded-xl shadow-lg relative">
-                <h3 className="text-xl font-bold text-slate-800 mb-6 text-center">Assign Item</h3>
+                <h3 className="text-xl font-bold text-slate-800 mb-6 text-center">
+                    Assign Item
+                </h3>
 
                 <form
                     onSubmit={(e) => {
@@ -75,35 +77,50 @@ export const AssignAssetModal = () => {
                         validators={{
                             onChange: pipe(
                                 string('Asset is required'),
-                                nonEmpty('Please select an asset')
+                                nonEmpty('Please select an asset'),
                             ),
                         }}
                         children={(field) => (
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-sm font-medium text-slate-700">Available Items</label>
+                                <label className="text-sm font-medium text-slate-700">
+                                    Available Items
+                                </label>
                                 <div className="relative">
                                     <select
                                         className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-blue/30 focus:border-primary-blue appearance-none"
                                         value={autocompleteValue?._id || ''}
                                         onChange={(e) => {
                                             const selectedId = e.target.value
-                                            const selectedOption = options?.find((opt) => opt._id === selectedId) || null
+                                            const selectedOption =
+                                                options?.find(
+                                                    (opt) =>
+                                                        opt._id === selectedId,
+                                                ) || null
                                             setAutocompleteValue(selectedOption)
                                             field.handleChange(selectedId)
                                         }}
                                         disabled={autocompleteLoading}
                                     >
-                                        <option value="" disabled>Select an item to assign...</option>
+                                        <option value="" disabled>
+                                            Select an item to assign...
+                                        </option>
                                         {options?.map((option) => (
-                                            <option key={option._id} value={option._id}>
-                                                {option.type} - {option.serialNumber}
+                                            <option
+                                                key={option._id}
+                                                value={option._id}
+                                            >
+                                                {option.type} -{' '}
+                                                {option.serialNumber}
                                             </option>
                                         ))}
                                     </select>
 
                                     {autocompleteLoading && (
                                         <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                                            <RingLoader size={16} color="#64748b" />
+                                            <RingLoader
+                                                size={16}
+                                                color="#64748b"
+                                            />
                                         </div>
                                     )}
                                 </div>
@@ -120,12 +137,16 @@ export const AssignAssetModal = () => {
                         name="date"
                         children={(field) => (
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-sm font-medium text-slate-700">Assignment Date</label>
+                                <label className="text-sm font-medium text-slate-700">
+                                    Assignment Date
+                                </label>
                                 <input
                                     type="date"
                                     className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-blue/30 focus:border-primary-blue"
                                     value={field.state.value}
-                                    onChange={(e) => field.handleChange(e.target.value)}
+                                    onChange={(e) =>
+                                        field.handleChange(e.target.value)
+                                    }
                                 />
                                 {field.state.meta.errors ? (
                                     <ErrorText>
@@ -141,7 +162,10 @@ export const AssignAssetModal = () => {
                             type="button"
                             variant="outline"
                             onClick={() => {
-                                if (document.activeElement instanceof HTMLElement) {
+                                if (
+                                    document.activeElement instanceof
+                                    HTMLElement
+                                ) {
                                     document.activeElement.blur()
                                 }
                                 handleClose()
@@ -152,7 +176,7 @@ export const AssignAssetModal = () => {
                         </Button>
                         <Button
                             type="submit"
-                            className="bg-primary-blue hover:bg-primary-blue-dark text-white shadow-sm"
+                            className="border-[#2457a3] bg-[#2457a3] text-white shadow-sm hover:bg-[#1b4285]"
                         >
                             Assign Item
                         </Button>

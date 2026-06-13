@@ -8,6 +8,7 @@ import Button from '@/Components/Button/Button'
 import { ButtonTypes } from '@/Components/Button/ButtonTypes'
 import { useEvents } from '@/Pages/Events/Context/EventsContext'
 import { useDebouncedValue } from '@/hooks/use-debounced-value'
+import { ChunkLoadBoundary } from '@/Components/Error/ChunkLoadBoundary'
 
 const EventMapPicker = lazy(() => import('../Components/GoogleMap/MapPicker'))
 
@@ -238,20 +239,24 @@ export default function Forms() {
 
                             <div className="mt-4 overflow-hidden rounded-lg border border-slate-100 bg-white">
                                 {mountLocationPicker ? (
-                                    <Suspense
-                                        fallback={
-                                            <div className="flex h-[280px] w-full animate-pulse items-center justify-center bg-slate-100 md:h-[340px]" />
-                                        }
-                                    >
-                                        <EventMapPicker
-                                            onLocationChange={
-                                                handleLocationChange
+                                    <ChunkLoadBoundary>
+                                        <Suspense
+                                            fallback={
+                                                <div className="flex h-[280px] w-full animate-pulse items-center justify-center bg-slate-100 md:h-[340px]" />
                                             }
-                                            savedLocation={debouncedLocation}
-                                            showInput={false}
-                                            containerClassName="h-[280px] w-full md:h-[340px]"
-                                        />
-                                    </Suspense>
+                                        >
+                                            <EventMapPicker
+                                                onLocationChange={
+                                                    handleLocationChange
+                                                }
+                                                savedLocation={
+                                                    debouncedLocation
+                                                }
+                                                showInput={false}
+                                                containerClassName="h-[280px] w-full md:h-[340px]"
+                                            />
+                                        </Suspense>
+                                    </ChunkLoadBoundary>
                                 ) : (
                                     <div className="flex min-h-[120px] w-full flex-col items-center justify-center gap-3 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.08),_transparent_55%),linear-gradient(135deg,_rgba(248,250,252,1),_rgba(241,245,249,0.9))] px-6 py-6 text-center">
                                         <div className="rounded-full bg-white p-3 text-slate-500 shadow-sm ring-1 ring-slate-200">

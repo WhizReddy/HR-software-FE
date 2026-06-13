@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ADMIN_ROLES } from '@/features/auth/lib/access'
 import PrivateRoute from '@/features/auth/routing/PrivateRoute'
 import RoleRoute from '@/features/auth/routing/RoleRoute'
+import { ChunkLoadBoundary } from '@/Components/Error/ChunkLoadBoundary'
 
 const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'))
 const ResetPasswordPage = lazy(
@@ -39,7 +40,9 @@ const RouteLoader = () => (
 )
 
 const withSuspense = (element: ReactNode) => (
-    <Suspense fallback={<RouteLoader />}>{element}</Suspense>
+    <ChunkLoadBoundary>
+        <Suspense fallback={<RouteLoader />}>{element}</Suspense>
+    </ChunkLoadBoundary>
 )
 
 const router = createBrowserRouter([

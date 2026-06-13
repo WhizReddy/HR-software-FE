@@ -3,6 +3,7 @@ import { Calendar, MapPin, X } from 'lucide-react'
 import { useEvents } from '@/Pages/Events/Context/EventsContext'
 import Button from '@/Components/Button/Button'
 import { ButtonTypes } from '@/Components/Button/ButtonTypes'
+import { ChunkLoadBoundary } from '@/Components/Error/ChunkLoadBoundary'
 
 const EventCarousel = lazy(() => import('@/Components/Carosel/Carosel'))
 const EventMap = lazy(() => import('../GoogleMap/MapPicker'))
@@ -23,13 +24,15 @@ const SelectedEventCard = () => {
         <div className="flex max-h-[90vh] w-full flex-col overflow-hidden rounded-lg bg-white shadow-xl">
             {selectedEvent?.photo && selectedEvent.photo.length > 0 && (
                 <div className="w-full bg-slate-900">
-                    <Suspense
-                        fallback={
-                            <div className="h-56 w-full animate-pulse bg-slate-200" />
-                        }
-                    >
-                        <EventCarousel images={selectedEvent.photo} />
-                    </Suspense>
+                    <ChunkLoadBoundary>
+                        <Suspense
+                            fallback={
+                                <div className="h-56 w-full animate-pulse bg-slate-200" />
+                            }
+                        >
+                            <EventCarousel images={selectedEvent.photo} />
+                        </Suspense>
+                    </ChunkLoadBoundary>
                 </div>
             )}
 
@@ -55,15 +58,24 @@ const SelectedEventCard = () => {
                     <div className="flex items-start gap-3 text-slate-700">
                         <Calendar className="mt-0.5 text-[#2457a3]" size={20} />
                         <div>
-                            <div className="text-sm font-semibold text-slate-900 mb-0.5">Date & Time</div>
-                            <div className="text-sm">{formatDate(selectedEvent.startDate)} - {formatDate(selectedEvent.endDate)}</div>
+                            <div className="text-sm font-semibold text-slate-900 mb-0.5">
+                                Date & Time
+                            </div>
+                            <div className="text-sm">
+                                {formatDate(selectedEvent.startDate)} -{' '}
+                                {formatDate(selectedEvent.endDate)}
+                            </div>
                         </div>
                     </div>
                     <div className="flex items-start gap-3 text-slate-700">
                         <MapPin className="mt-0.5 text-[#2457a3]" size={20} />
                         <div>
-                            <div className="text-sm font-semibold text-slate-900 mb-0.5">Location</div>
-                            <div className="text-sm line-clamp-2">{selectedEvent.location}</div>
+                            <div className="text-sm font-semibold text-slate-900 mb-0.5">
+                                Location
+                            </div>
+                            <div className="text-sm line-clamp-2">
+                                {selectedEvent.location}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -93,18 +105,22 @@ const SelectedEventCard = () => {
 
                         {showMap && (
                             <div className="mt-4 h-[300px] w-full overflow-hidden rounded-lg border border-slate-200 bg-white">
-                                <Suspense
-                                    fallback={
-                                        <div className="h-full w-full animate-pulse bg-slate-100" />
-                                    }
-                                >
-                                    <EventMap
-                                        onLocationChange={() => {}}
-                                        savedLocation={selectedEvent.location}
-                                        showInput={false}
-                                        containerClassName="h-full w-full"
-                                    />
-                                </Suspense>
+                                <ChunkLoadBoundary>
+                                    <Suspense
+                                        fallback={
+                                            <div className="h-full w-full animate-pulse bg-slate-100" />
+                                        }
+                                    >
+                                        <EventMap
+                                            onLocationChange={() => {}}
+                                            savedLocation={
+                                                selectedEvent.location
+                                            }
+                                            showInput={false}
+                                            containerClassName="h-full w-full"
+                                        />
+                                    </Suspense>
+                                </ChunkLoadBoundary>
                             </div>
                         )}
                     </div>
