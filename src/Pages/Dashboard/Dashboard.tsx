@@ -33,9 +33,8 @@ const DashboardContent: React.FC = () => {
                             </h1>
                             {isAdmin && (
                                 <p className="mt-2 max-w-xl text-sm font-medium text-slate-500 sm:text-base">
-                                    Review your team health, approvals, and
-                                    activity from one streamlined command
-                                    center.
+                                    Check attendance, leave, and upcoming
+                                    activity before starting the day.
                                 </p>
                             )}
                         </div>
@@ -138,8 +137,8 @@ const DashboardContent: React.FC = () => {
                             </div>
                         ) : users.length === 0 ? (
                             <div className="flex min-h-[180px] items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50/70 px-6 text-center text-sm font-medium text-slate-400">
-                                No employees were returned for the team
-                                directory.
+                                No employees are available in the team directory
+                                yet.
                             </div>
                         ) : (
                             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10">

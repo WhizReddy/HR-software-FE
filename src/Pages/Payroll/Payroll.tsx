@@ -52,8 +52,8 @@ function PayrollContent() {
                                     Salary records
                                 </h1>
                                 <p className={style.panelDescription}>
-                                    Use the employee search to quickly find the
-                                    payroll rows you need.
+                                    Use employee search and date filters to find
+                                    the payroll rows you need.
                                 </p>
                             </div>
                             <div className={style.panelMeta}>

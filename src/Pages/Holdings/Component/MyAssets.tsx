@@ -2,12 +2,7 @@ import { useAuth } from '@/features/auth/context/AuthProvider'
 import { getUserHoldings } from '../Hook/queries'
 import { useQuery } from '@tanstack/react-query'
 import { RingLoader } from 'react-spinners'
-import {
-    CalendarClock,
-    Package,
-    ShieldCheck,
-    UserRound,
-} from 'lucide-react'
+import { CalendarClock, Package, ShieldCheck, UserRound } from 'lucide-react'
 import PageIntro from '@/Components/PageIntro/PageIntro'
 
 export const MyAssets = () => {
@@ -30,7 +25,9 @@ export const MyAssets = () => {
     if (isError) {
         return (
             <div className="rounded-2xl border border-rose-100 bg-rose-50 p-6 text-sm text-rose-600">
-                {error instanceof Error ? error.message : 'Failed to load assets.'}
+                {error instanceof Error
+                    ? error.message
+                    : 'Failed to load assets.'}
             </div>
         )
     }
@@ -47,7 +44,7 @@ export const MyAssets = () => {
             <PageIntro
                 eyebrow="Equipment"
                 title="My Assets"
-                description="Track the equipment currently assigned to you, check issue dates, and review return status without going through an oversized admin table."
+                description="See the equipment assigned to you and the return status for each item."
                 actions={
                     <div className="inline-flex items-center gap-2 rounded-2xl border border-white/80 bg-white/90 px-4 py-3 shadow-sm">
                         <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-50 text-[#2457a3]">
@@ -229,7 +226,8 @@ export const MyAssets = () => {
                         No assigned assets
                     </h2>
                     <p className="mt-2 text-sm text-slate-500">
-                        You do not currently have any company equipment assigned.
+                        You do not currently have any company equipment
+                        assigned.
                     </p>
                 </section>
             )}

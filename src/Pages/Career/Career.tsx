@@ -151,7 +151,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
     const candidatePromises = [
         'Direct work with product and engineering, not layers of approval.',
         'Role expectations that are explicit from the start.',
-        'A hiring process built around signal, not noise.',
+        'A hiring process focused on real fit and clear communication.',
     ]
 
     return (
@@ -168,7 +168,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                         <PageIntro
                             eyebrow="Internal Publishing"
                             title="Career Post Studio"
-                            description="Publish, refine, and retire career opportunities from a cleaner workspace that matches the rest of the product."
+                            description="Publish, edit, and close career posts from the admin board."
                             className="mb-8"
                             actions={
                                 <>
@@ -196,14 +196,13 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     Publishing Overview
                                 </p>
                                 <h2 className="mt-3 text-3xl font-semibold text-slate-950">
-                                    Keep the public board clean, readable, and
-                                    consistent.
+                                    Keep the public career board clear and up to
+                                    date.
                                 </h2>
                                 <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-                                    Career posts now sit on the same lighter
-                                    visual system as the rest of the app, so the
-                                    board feels like part of one product instead
-                                    of a separate landing page.
+                                    Use this page to manage roles, locations,
+                                    descriptions, and published openings without
+                                    editing the public page directly.
                                 </p>
 
                                 <div className="mt-6 grid gap-4 sm:grid-cols-3">
@@ -244,8 +243,8 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                     <>
                         <PageIntro
                             eyebrow="Career Board"
-                            title="Join a product team that prefers clarity over noise."
-                            description="We build internal tools that people depend on daily. The work is practical, the standards are high, and strong contributors get real ownership quickly."
+                            title="Build practical tools with a focused team."
+                            description="We work on internal products used every day. The work is practical, the team is small, and ownership matters."
                             className="mb-8"
                             actions={
                                 <>
@@ -287,14 +286,13 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         Team environment
                                     </p>
                                     <h2 className="mt-3 text-2xl font-semibold text-slate-950">
-                                        Strong ownership, calmer collaboration,
-                                        and less noise.
+                                        Clear ownership, steady collaboration,
+                                        and practical work.
                                     </h2>
                                     <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-                                        We keep expectations clear, ship
-                                        practical work, and give capable people
-                                        room to contribute without adding layers
-                                        of ceremony.
+                                        We keep expectations visible, ship
+                                        useful work, and give people room to
+                                        contribute without unnecessary process.
                                     </p>
                                 </div>
                             </article>
@@ -336,8 +334,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                                 Common locations
                                             </p>
                                             <h3 className="mt-2 text-xl font-semibold text-slate-950">
-                                                Flexible hiring, cleaner
-                                                presentation
+                                                Flexible roles, clear details
                                             </h3>
                                         </div>
                                         <ArrowUpRight
@@ -373,12 +370,12 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         />
                                         <div className="p-4">
                                             <p className="text-[11px] font-semibold uppercase text-slate-400">
-                                                Candidate signal
+                                                Candidate fit
                                             </p>
                                             <p className="mt-2 text-sm leading-7 text-slate-600">
-                                                We care more about sharp
-                                                execution and good judgment than
-                                                polished buzzwords.
+                                                We care about useful work, good
+                                                judgment, and clear
+                                                communication.
                                             </p>
                                         </div>
                                     </div>
@@ -573,7 +570,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                 </p>
                                 <h2 className="mt-3 text-3xl font-semibold text-slate-950">
                                     Serious work, calm collaboration, and
-                                    standards that stay consistent.
+                                    details that stay accurate.
                                 </h2>
                                 <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600">
                                     The environment is structured enough to keep

@@ -251,7 +251,7 @@ function InterviewContent() {
             <PageIntro
                 eyebrow="Hiring"
                 title="Interview Pipeline"
-                description="Review scheduled interviews, move candidates through the hiring flow, and keep every candidate action in one consistent table."
+                description="Review scheduled interviews and move candidates through each hiring step."
             />
 
             {error && (

@@ -27,7 +27,7 @@ function EmployeesContent() {
             <PageIntro
                 eyebrow="People"
                 title="Employee Directory"
-                description="Manage your organization's workforce, browse profiles, and move through employee records from one consistent workspace."
+                description="Keep employee profiles, roles, and contact details organized for everyday HR work."
                 className="mb-8"
             />
             {isError && (

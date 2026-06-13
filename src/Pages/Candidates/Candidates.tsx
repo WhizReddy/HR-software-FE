@@ -28,7 +28,7 @@ function CandidatesCoontext() {
             <PageIntro
                 eyebrow="Hiring"
                 title="Candidate Pipeline"
-                description="Search and review applicants consistently across the hiring pipeline."
+                description="Review applicants, update statuses, and keep hiring details easy to find."
                 className="mb-8"
             />
             {isError && (

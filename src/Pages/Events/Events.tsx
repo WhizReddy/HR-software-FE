@@ -80,7 +80,7 @@ function EventsContentAndComponents() {
             <PageIntro
                 eyebrow="Operations"
                 title="Events"
-                description="Create, search, and review company events with voting and location details in one place."
+                description="Create events, search upcoming activities, and review voting or location details."
                 className="mb-6"
                 actions={
                     isAdmin && (

@@ -13,7 +13,7 @@ function HoldingsComponent() {
             <PageIntro
                 eyebrow="Equipment"
                 title="Holdings"
-                description="Review employee asset ownership, inspect active assignments, and process returns from one place."
+                description="Review assigned equipment, see who owns each item, and record returns."
                 className="mb-6"
             />
             <HoldingsSearchFilter />

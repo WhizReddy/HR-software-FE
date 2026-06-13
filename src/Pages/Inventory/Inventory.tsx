@@ -25,7 +25,7 @@ function InventoryBaseComponent() {
             <PageIntro
                 eyebrow="Assets"
                 title="Inventory"
-                description="Track company equipment, monitor assignment status, and inspect serial-level details without leaving the inventory workspace."
+                description="Track laptops, monitors, serial numbers, and assignment status."
                 className="mb-6"
                 actions={
                     <Button type="button" onClick={handleOpenCreateModalOpen}>

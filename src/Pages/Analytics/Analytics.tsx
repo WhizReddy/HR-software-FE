@@ -43,7 +43,7 @@ const AnalyticsContent = () => {
             <PageIntro
                 eyebrow="Analytics"
                 title="Workforce Analytics"
-                description="A compact view of team availability, remote work, leave, and upcoming operational events."
+                description="See attendance, leave, remote work, and upcoming events in a simple overview."
             />
 
             {hasError && (

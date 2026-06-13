@@ -166,7 +166,7 @@ export default function ViewCandidats() {
                         ? `${applicant.firstName} ${applicant.lastName}`
                         : 'Candidate Profile'
                 }
-                description="Review candidate details, schedule interview phases, and keep the hiring decision flow aligned with the interview pipeline."
+                description="Review the applicant profile, CV, interview dates, and hiring notes."
                 actions={
                     applicant && (
                         <div className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-4 py-3 shadow-sm">

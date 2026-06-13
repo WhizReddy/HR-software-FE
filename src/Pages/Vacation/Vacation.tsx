@@ -41,7 +41,7 @@ function VacationComponent() {
             <PageIntro
                 eyebrow="People"
                 title="Vacation Management"
-                description="Review requests, inspect leave history, and create vacation entries from one workspace."
+                description="Review vacation requests, leave history, and employee balances."
             />
 
             <div className="flex flex-col items-stretch justify-between gap-4 rounded-lg border border-slate-200/80 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:flex-row sm:items-center">
