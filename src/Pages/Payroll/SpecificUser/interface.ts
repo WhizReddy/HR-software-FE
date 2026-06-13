@@ -10,6 +10,8 @@ export interface PayrollContextType {
     year: number | undefined
     setMonth: (month: number | undefined) => void
     setYear: (year: number | undefined) => void
+    resetFilters: () => void
+    hasActiveFilters: boolean
     fullName: string | undefined
     isPending: boolean
     isError: boolean

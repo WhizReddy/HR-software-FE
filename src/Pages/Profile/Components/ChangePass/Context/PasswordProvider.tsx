@@ -11,6 +11,7 @@ export const PasswordProvider: React.FC<{ children: React.ReactNode }> = ({
     const [confirmPassword, setConfirmPassword] = useState('')
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
+    const [isUpdatingPassword, setIsUpdatingPassword] = useState(false)
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target
@@ -53,6 +54,7 @@ export const PasswordProvider: React.FC<{ children: React.ReactNode }> = ({
         event: React.FormEvent<HTMLButtonElement>,
     ) => {
         event.preventDefault()
+        if (isUpdatingPassword) return
         setError('')
         setSuccess('')
 
@@ -60,6 +62,7 @@ export const PasswordProvider: React.FC<{ children: React.ReactNode }> = ({
             return
         }
 
+        setIsUpdatingPassword(true)
         try {
             const response = await AxiosInstance.post('/auth/updatepassword', {
                 oldPassword: currentPassword,
@@ -82,6 +85,8 @@ export const PasswordProvider: React.FC<{ children: React.ReactNode }> = ({
             } else {
                 setError('An error occurred while updating the password')
             }
+        } finally {
+            setIsUpdatingPassword(false)
         }
     }
 
@@ -91,6 +96,7 @@ export const PasswordProvider: React.FC<{ children: React.ReactNode }> = ({
         confirmPassword,
         error,
         success,
+        isUpdatingPassword,
         handleChange,
         handleUpdatePassword,
     }

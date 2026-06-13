@@ -21,6 +21,8 @@ export interface PayrollContextType {
     netSalary: number | undefined
     search: string
     clearSearch: () => void
+    resetFilters: () => void
+    hasActiveFilters: boolean
     page: number
     setFilters: React.Dispatch<
         React.SetStateAction<Record<string, string | boolean>>

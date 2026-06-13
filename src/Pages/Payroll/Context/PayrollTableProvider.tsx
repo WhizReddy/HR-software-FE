@@ -36,6 +36,7 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         setSearchValue: setSearch,
         searchQuery,
         clearSearch,
+        resetTableState,
         page,
         pageSize,
         handlePaginationModelChange,
@@ -73,6 +74,10 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         },
         [setSearch],
     )
+
+    const resetFilters = useCallback(() => {
+        resetTableState({ month: null, year: null })
+    }, [resetTableState])
 
     const navigate = useNavigate()
 
@@ -231,6 +236,9 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         year,
         search,
         clearSearch,
+        resetFilters,
+        hasActiveFilters:
+            search.trim() !== '' || month !== undefined || year !== undefined,
         netSalary,
         setNetSalary,
         filters,

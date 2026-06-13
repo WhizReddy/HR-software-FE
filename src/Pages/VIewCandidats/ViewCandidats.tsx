@@ -57,6 +57,7 @@ export default function ViewCandidats() {
         toastMessage,
         toastSeverity,
         handleToastClose,
+        isActionPending,
     } = useApplicantById()
     const [useCustomEmail, setUseCustomEmail] = useState(false)
 
@@ -358,6 +359,7 @@ export default function ViewCandidats() {
                                         onClick={() =>
                                             handleOpenModal('active')
                                         }
+                                        disabled={isActionPending}
                                         className="w-full justify-start"
                                     >
                                         <CalendarClock size={16} />
@@ -371,6 +373,7 @@ export default function ViewCandidats() {
                                         onClick={() =>
                                             handleOpenModal('active')
                                         }
+                                        disabled={isActionPending}
                                         className="w-full justify-start"
                                     >
                                         <CalendarClock size={16} />
@@ -385,6 +388,7 @@ export default function ViewCandidats() {
                                         onClick={() =>
                                             handleOpenModal('employ')
                                         }
+                                        disabled={isActionPending}
                                         className="w-full justify-start"
                                     >
                                         <CheckCircle2 size={16} />
@@ -396,6 +400,7 @@ export default function ViewCandidats() {
                                     type="button"
                                     variant="destructive"
                                     onClick={() => handleOpenModal('reject')}
+                                    disabled={isActionPending}
                                     className="w-full justify-start"
                                 >
                                     <XCircle size={16} />
@@ -432,13 +437,18 @@ export default function ViewCandidats() {
                         </div>
 
                         <div className="grid gap-3 sm:grid-cols-2">
-                            <Button type="button" onClick={handleConfirm}>
-                                Confirm
+                            <Button
+                                type="button"
+                                onClick={handleConfirm}
+                                disabled={isActionPending}
+                            >
+                                {isActionPending ? 'Working...' : 'Confirm'}
                             </Button>
                             <Button
                                 type="button"
                                 variant="outline"
                                 onClick={handleCloseModal}
+                                disabled={isActionPending}
                             >
                                 Cancel
                             </Button>
@@ -520,14 +530,19 @@ export default function ViewCandidats() {
                         )}
 
                         <div className="grid gap-3 sm:grid-cols-2">
-                            <Button type="button" onClick={handleSend}>
+                            <Button
+                                type="button"
+                                onClick={handleSend}
+                                disabled={isActionPending}
+                            >
                                 <Send size={16} />
-                                Send
+                                {isActionPending ? 'Sending...' : 'Send'}
                             </Button>
                             <Button
                                 type="button"
                                 variant="outline"
                                 onClick={handleCloseConfirmationModal}
+                                disabled={isActionPending}
                             >
                                 Close
                             </Button>

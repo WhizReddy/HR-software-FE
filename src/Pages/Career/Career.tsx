@@ -46,22 +46,35 @@ const truncateText = (value: string, maxLength: number) => {
 
 export const Careers = ({ managementMode = false }: CareersProps) => {
     const { events, setEvents, isLoading } = useGetAllEvents()
-    const { createEvent, handleChange, event, createEventError } =
+    const {
+        createEvent,
+        handleChange,
+        event,
+        createEventError,
+        isCreatingEvent,
+    } =
         useCreateEvent(setEvents)
-    const { editingEvent, handleEditChange, updateEvent, setEditingEvent } =
-        useUpdateEvent(setEvents)
+    const {
+        editingEvent,
+        handleEditChange,
+        updateEvent,
+        setEditingEvent,
+        isUpdatingEvent,
+    } = useUpdateEvent(setEvents)
     const {
         handleDelete,
         closeModal,
         showModal,
         handleDeleteEventModal,
         eventToDeleteId,
+        isDeletingEvent,
     } = useDeleteEvent(setEvents)
     const { currentUser } = useAuth()
 
     const isManager = isAdminRole(currentUser?.role)
     const [showForm, setShowForm] = useState(false)
     const [filter, setFilter] = useState('')
+    const isSavingPost = editingEvent ? isUpdatingEvent : isCreatingEvent
 
     const filteredEvents = useMemo(
         () =>
@@ -798,19 +811,23 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                                 <Button
                                     btnText={
-                                        editingEvent
-                                            ? 'Update Post'
-                                            : 'Publish Post'
+                                        isSavingPost
+                                            ? 'Saving...'
+                                            : editingEvent
+                                              ? 'Update Post'
+                                              : 'Publish Post'
                                     }
                                     type={ButtonTypes.PRIMARY}
                                     width="100%"
                                     onClick={handleSubmitForm}
+                                    disabled={isSavingPost}
                                 />
                                 <Button
                                     btnText="Cancel"
                                     width="100%"
                                     type={ButtonTypes.SECONDARY}
                                     onClick={handleCloseForm}
+                                    disabled={isSavingPost}
                                 />
                             </div>
                         </div>
@@ -837,17 +854,23 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     type={ButtonTypes.PRIMARY}
                                     backgroundColor="#d32f2f"
                                     borderColor="#d32f2f"
-                                    btnText="Delete Post"
+                                    btnText={
+                                        isDeletingEvent
+                                            ? 'Deleting...'
+                                            : 'Delete Post'
+                                    }
                                     width="100%"
                                     onClick={() =>
                                         handleDelete(eventToDeleteId)
                                     }
+                                    disabled={isDeletingEvent}
                                 />
                                 <Button
                                     btnText="Cancel"
                                     width="100%"
                                     type={ButtonTypes.SECONDARY}
                                     onClick={closeModal}
+                                    disabled={isDeletingEvent}
                                 />
                             </div>
                         </div>

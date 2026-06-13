@@ -20,6 +20,8 @@ function SpecificUserPayrollContent() {
         year,
         setMonth,
         setYear,
+        resetFilters,
+        hasActiveFilters,
         isPending,
         isError,
         errorMessage,
@@ -69,6 +71,8 @@ function SpecificUserPayrollContent() {
                     pageSize={pageSize}
                     onPaginationModelChange={handlePaginationModelChange}
                     title="Payment history"
+                    onResetFilters={resetFilters}
+                    hasActiveFilters={hasActiveFilters}
                     filterNode={
                         <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
                             <label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-slate-500">

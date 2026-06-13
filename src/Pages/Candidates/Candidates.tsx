@@ -19,6 +19,8 @@ function CandidatesCoontext() {
         search,
         setSearch,
         clearSearch,
+        resetFilters,
+        hasActiveFilters,
         statusFilter,
         setStatusFilter,
     } = useCandidateContext()
@@ -50,6 +52,8 @@ function CandidatesCoontext() {
                 onSearchChange={(e) => setSearch(e.target.value)}
                 onSearchClear={clearSearch}
                 searchPlaceholder="Search candidates..."
+                onResetFilters={resetFilters}
+                hasActiveFilters={hasActiveFilters}
                 exportFileName="candidates"
                 exportTitle="Candidate Pipeline"
                 filterNode={

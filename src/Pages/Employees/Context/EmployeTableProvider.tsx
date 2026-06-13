@@ -31,6 +31,7 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
         setSearchValue: setSearch,
         searchQuery,
         clearSearch,
+        resetTableState,
         page,
         pageSize,
         handlePaginationModelChange,
@@ -58,6 +59,10 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
         },
         [setSearchParams],
     )
+
+    const resetFilters = React.useCallback(() => {
+        resetTableState({ role: null })
+    }, [resetTableState])
 
     const fetchEmployeesPage = async (
         pageToFetch: number,
@@ -192,6 +197,8 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
         search,
         setSearch,
         clearSearch,
+        resetFilters,
+        hasActiveFilters: search.trim() !== '' || roleFilter !== 'all',
         roleFilter,
         setRoleFilter,
         totalPages: users?.totalPages ?? 0,

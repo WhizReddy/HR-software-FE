@@ -60,6 +60,7 @@ export const useCreateEvent = (
     const [createEventError, setCreateEventError] = useState<string | null>(
         null,
     )
+    const [isCreatingEvent, setIsCreatingEvent] = useState(false)
     const [event, setEvent] = useState<EventsCreationData>({
         title: '',
         description: '',
@@ -78,8 +79,11 @@ export const useCreateEvent = (
     }
 
     const createEvent = async () => {
+        if (isCreatingEvent) return false
+
         setCreateEventError(null)
 
+        setIsCreatingEvent(true)
         try {
             const response = await AxiosInstance.post('/event', { ...event })
             setEvents((prevEvents) => [response.data, ...prevEvents])
@@ -107,10 +111,18 @@ export const useCreateEvent = (
                 )
             }
             return false
+        } finally {
+            setIsCreatingEvent(false)
         }
     }
 
-    return { createEvent, handleChange, event, createEventError }
+    return {
+        createEvent,
+        handleChange,
+        event,
+        createEventError,
+        isCreatingEvent,
+    }
 }
 
 // Hook to update an event
@@ -119,6 +131,7 @@ export const useUpdateEvent = (
 ) => {
     const [editingEvent, setEditingEvent] = useState<EventsData | null>(null)
     const [showForm, setShowForm] = useState(false)
+    const [isUpdatingEvent, setIsUpdatingEvent] = useState(false)
 
     const handleEditClick = (event: EventsData) => {
         setEditingEvent(event)
@@ -143,7 +156,8 @@ export const useUpdateEvent = (
     }
 
     const updateEvent = async () => {
-        if (!editingEvent) return
+        if (!editingEvent) return false
+        if (isUpdatingEvent) return false
 
         const updatedEvent = {
             title: editingEvent.title,
@@ -152,6 +166,7 @@ export const useUpdateEvent = (
             type: editingEvent.type,
         }
 
+        setIsUpdatingEvent(true)
         try {
             const response = await AxiosInstance.patch(
                 `/event/${editingEvent._id}`,
@@ -167,6 +182,8 @@ export const useUpdateEvent = (
         } catch (error) {
             console.error('Error updating event:', error)
             return false
+        } finally {
+            setIsUpdatingEvent(false)
         }
     }
 
@@ -178,6 +195,7 @@ export const useUpdateEvent = (
         handleEditClick,
         updateEvent,
         toggleForm,
+        isUpdatingEvent,
     }
 }
 
@@ -187,6 +205,7 @@ export const useDeleteEvent = (
 ) => {
     const [showModal, setShowModal] = useState(false)
     const [eventToDeleteId, setEventToDeleteId] = useState<string | null>(null)
+    const [isDeletingEvent, setIsDeletingEvent] = useState(false)
 
     const handleDeleteEventModal = (eventId: string) => {
         setEventToDeleteId(eventId)
@@ -199,8 +218,10 @@ export const useDeleteEvent = (
     }
 
     const handleDelete = async (eventId: string | null) => {
-        if (eventId === null) return
+        if (eventId === null) return false
+        if (isDeletingEvent) return false
 
+        setIsDeletingEvent(true)
         try {
             await AxiosInstance.delete(`/event/${eventId}`)
             setEvents((prevEvents) =>
@@ -211,6 +232,8 @@ export const useDeleteEvent = (
         } catch (error) {
             console.error('Error deleting event:', error)
             return false
+        } finally {
+            setIsDeletingEvent(false)
         }
     }
 
@@ -220,5 +243,6 @@ export const useDeleteEvent = (
         showModal,
         handleDeleteEventModal,
         eventToDeleteId,
+        isDeletingEvent,
     }
 }

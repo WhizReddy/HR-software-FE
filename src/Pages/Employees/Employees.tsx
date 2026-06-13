@@ -18,6 +18,8 @@ function EmployeesContent() {
         search,
         setSearch,
         clearSearch,
+        resetFilters,
+        hasActiveFilters,
         roleFilter,
         setRoleFilter,
     } = useEmployeeContext()
@@ -49,6 +51,8 @@ function EmployeesContent() {
                 onSearchChange={(e) => setSearch(e.target.value)}
                 onSearchClear={clearSearch}
                 searchPlaceholder="Search employees..."
+                onResetFilters={resetFilters}
+                hasActiveFilters={hasActiveFilters}
                 exportFileName="employees"
                 exportTitle="Employee Directory"
                 filterNode={

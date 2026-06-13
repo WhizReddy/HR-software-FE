@@ -13,6 +13,8 @@ function PayrollContent() {
         search,
         setFullName,
         clearSearch,
+        resetFilters,
+        hasActiveFilters,
         isPending,
         page,
         pageSize,
@@ -84,6 +86,8 @@ function PayrollContent() {
                             }
                             onSearchClear={clearSearch}
                             searchPlaceholder="Search by employee name"
+                            onResetFilters={resetFilters}
+                            hasActiveFilters={hasActiveFilters}
                             exportFileName="payroll"
                             exportTitle="Payroll table"
                             filterNode={

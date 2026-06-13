@@ -48,6 +48,8 @@ export interface CandidateContextType {
     search: string
     setSearch: React.Dispatch<React.SetStateAction<string>>
     clearSearch: () => void
+    resetFilters: () => void
+    hasActiveFilters: boolean
     statusFilter: string
     setStatusFilter: (status: string) => void
     handlePaginationModelChange: (paginationModel: PaginationModel) => void

@@ -28,6 +28,7 @@ export const VacationTable = () => {
         setSearchValue: setSearchInput,
         searchQuery,
         clearSearch,
+        resetTableState,
         page,
         pageSize,
         handlePaginationModelChange,
@@ -59,6 +60,19 @@ export const VacationTable = () => {
             return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
         })
     }
+
+    const resetFilters = () => {
+        resetTableState({
+            requestStatus: null,
+            requestType: null,
+            selectedVacation: null,
+        })
+    }
+
+    const hasActiveFilters =
+        searchInput.trim() !== '' ||
+        statusFilter !== 'all' ||
+        typeFilter !== 'all'
 
     const { data, error, isPending } = useGetVacations(
         page,
@@ -160,6 +174,8 @@ export const VacationTable = () => {
                 onSearchChange={(e) => setSearchInput(e.target.value)}
                 onSearchClear={clearSearch}
                 searchPlaceholder="Search by employee, type, or status"
+                onResetFilters={resetFilters}
+                hasActiveFilters={hasActiveFilters}
                 exportFileName="vacation-requests"
                 exportTitle="Vacation requests"
                 filterNode={

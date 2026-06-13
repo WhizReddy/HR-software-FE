@@ -315,6 +315,8 @@ function InterviewContent() {
                 onSearchChange={(event) => setSearchQuery(event.target.value)}
                 onSearchClear={() => setSearchQuery('')}
                 searchPlaceholder="Search candidates..."
+                onResetFilters={() => setSearchQuery('')}
+                hasActiveFilters={searchQuery.trim() !== ''}
                 filterNode={
                     <span className="max-w-md text-sm leading-6 text-slate-500">
                         {currentDescription}

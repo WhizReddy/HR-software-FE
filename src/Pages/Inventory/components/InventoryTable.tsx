@@ -21,6 +21,7 @@ export const InventoryTable = () => {
         searchValue: searchInput,
         setSearchValue: setSearchInput,
         clearSearch,
+        resetTableState,
         page: currentPage,
         pageSize,
         handlePaginationModelChange,
@@ -45,6 +46,19 @@ export const InventoryTable = () => {
             return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
         })
     }
+
+    const resetFilters = () => {
+        resetTableState({
+            status: null,
+            type: null,
+            selectedInventoryItem: null,
+        })
+    }
+
+    const hasActiveFilters =
+        searchInput.trim() !== '' ||
+        statusFilter !== 'all' ||
+        typeFilter !== 'all'
 
     if (isError) {
         return (
@@ -163,6 +177,8 @@ export const InventoryTable = () => {
                 onSearchChange={(e) => setSearchInput(e.target.value)}
                 onSearchClear={clearSearch}
                 searchPlaceholder="Search inventory..."
+                onResetFilters={resetFilters}
+                hasActiveFilters={hasActiveFilters}
                 exportFileName="inventory"
                 exportTitle="Inventory records"
                 filterNode={

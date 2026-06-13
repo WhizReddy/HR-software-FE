@@ -13,7 +13,7 @@ const ProfileFormContext = () => {
     const { uploadImage, previewImage } = useFileUpload()
     const fileInputRef = useRef<HTMLInputElement>(null)
 
-    const { user, isCurrentUser, isAdmin, handleChange, handleUpdate } =
+    const { user, isCurrentUser, isAdmin, isLoading, handleChange, handleUpdate } =
         useProfile()
 
     if (!user) {
@@ -77,7 +77,8 @@ const ProfileFormContext = () => {
                             <Button
                                 onClick={handleUpdate}
                                 type={ButtonTypes.PRIMARY}
-                                btnText="Save Changes"
+                                btnText={isLoading ? 'Saving...' : 'Save Changes'}
+                                disabled={isLoading}
                                 className="w-full"
                             />
                         ) : (

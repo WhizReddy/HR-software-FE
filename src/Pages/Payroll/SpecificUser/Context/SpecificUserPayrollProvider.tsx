@@ -52,6 +52,18 @@ export const PayrollProviderSpecific: React.FC<{
         })
     }
 
+    const resetFilters = () => {
+        setSearchParams((prev) => {
+            const nextParams = upsertFilterParams(
+                prev,
+                { month: null, year: null },
+                { resetPage: true },
+            )
+
+            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
+        })
+    }
+
     const handlePaginationModelChange = (model: PaginationModel) => {
         setSearchParams((prev) => {
             const nextParams = upsertFilterParams(prev, {
@@ -172,6 +184,8 @@ export const PayrollProviderSpecific: React.FC<{
         year,
         setMonth: (value: number | undefined) => setUrlFilter('month', value),
         setYear: (value: number | undefined) => setUrlFilter('year', value),
+        resetFilters,
+        hasActiveFilters: month !== undefined || year !== undefined,
         isPending,
         isError,
         errorMessage: error?.message || null,

@@ -6,6 +6,7 @@ export interface PasswordContextType {
     confirmPassword: string
     error: string
     success: string
+    isUpdatingPassword: boolean
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
     handleUpdatePassword: (
         event: React.FormEvent<HTMLButtonElement>,

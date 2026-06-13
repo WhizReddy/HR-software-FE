@@ -28,6 +28,7 @@ export const CandidateProvider: React.FC<{ children: any }> = ({
         setSearchValue: setSearch,
         searchQuery,
         clearSearch,
+        resetTableState,
         page,
         pageSize,
         handlePaginationModelChange,
@@ -55,6 +56,10 @@ export const CandidateProvider: React.FC<{ children: any }> = ({
         },
         [setSearchParams],
     )
+
+    const resetFilters = React.useCallback(() => {
+        resetTableState({ status: null })
+    }, [resetTableState])
 
     const fetchCandidatesPage = async (
         pageToFetch: number,
@@ -220,6 +225,8 @@ export const CandidateProvider: React.FC<{ children: any }> = ({
         search,
         setSearch,
         clearSearch,
+        resetFilters,
+        hasActiveFilters: search.trim() !== '' || statusFilter !== 'all',
         statusFilter,
         setStatusFilter,
         totalPages: applicants?.totalPages ?? 0,

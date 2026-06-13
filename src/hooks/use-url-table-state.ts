@@ -95,6 +95,11 @@ export const useUrlTableState = ({
 
     useEffect(() => {
         const normalizedSearch = debouncedSearch.trim()
+        const visibleSearch = searchValue.trim()
+
+        if (normalizedSearch !== visibleSearch) {
+            return
+        }
 
         if (normalizedSearch === appliedSearch) {
             return
@@ -127,6 +132,7 @@ export const useUrlTableState = ({
         pageKey,
         resetPageOnSearch,
         searchKey,
+        searchValue,
         setSearchParams,
         stableAdditionalSearchUpdates,
     ])
@@ -162,6 +168,43 @@ export const useUrlTableState = ({
         setSearchParams,
         stableAdditionalSearchUpdates,
     ])
+
+    const resetTableState = useCallback(
+        (filterUpdates: Record<string, UrlParamValue> = {}) => {
+            setSearchValue('')
+
+            setSearchParams((prev) => {
+                const nextParams = upsertFilterParams(
+                    prev,
+                    {
+                        [searchKey]: null,
+                        ...stableAdditionalSearchUpdates,
+                        ...filterUpdates,
+                    },
+                    {
+                        resetPage: true,
+                        pageKey,
+                        limitKey,
+                        defaultPage: String(defaultPage),
+                        defaultLimit: String(defaultPageSize),
+                    },
+                )
+
+                return hasSearchParamsChanged(prev, nextParams)
+                    ? nextParams
+                    : prev
+            })
+        },
+        [
+            defaultPage,
+            defaultPageSize,
+            limitKey,
+            pageKey,
+            searchKey,
+            setSearchParams,
+            stableAdditionalSearchUpdates,
+        ],
+    )
 
     const page = ensurePagination
         ? parseNumberParam(searchParams, pageKey, defaultPage, { min: 0 })
@@ -215,6 +258,7 @@ export const useUrlTableState = ({
         setSearchValue,
         searchQuery: appliedSearch.trim(),
         clearSearch,
+        resetTableState,
         page,
         pageSize,
         handlePaginationModelChange,

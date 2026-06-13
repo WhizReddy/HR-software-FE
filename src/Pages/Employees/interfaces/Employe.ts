@@ -25,6 +25,8 @@ export interface EmployeeContextType {
     search: string
     setSearch: React.Dispatch<React.SetStateAction<string>>
     clearSearch: () => void
+    resetFilters: () => void
+    hasActiveFilters: boolean
     roleFilter: string
     setRoleFilter: (role: string) => void
     handlePaginationModelChange: (paginationModel: PaginationModel) => void

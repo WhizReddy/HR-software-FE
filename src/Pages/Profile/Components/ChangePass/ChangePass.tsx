@@ -12,6 +12,7 @@ function ChangePassContent() {
         confirmPassword,
         error,
         success,
+        isUpdatingPassword,
         handleChange,
         handleUpdatePassword,
     } = usePassword()
@@ -119,8 +120,13 @@ function ChangePassContent() {
                         <div className="flex flex-col gap-3 pt-4 sm:flex-row">
                             <Button
                                 type={ButtonTypes.PRIMARY}
-                                btnText="Update Password"
+                                btnText={
+                                    isUpdatingPassword
+                                        ? 'Updating...'
+                                        : 'Update Password'
+                                }
                                 onClick={handleUpdatePassword}
+                                disabled={isUpdatingPassword}
                                 className="w-full flex-1 sm:w-auto"
                             />
                             <Button

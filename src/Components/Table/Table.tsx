@@ -5,6 +5,7 @@ import {
     Download,
     Inbox,
     Printer,
+    RotateCcw,
     Search,
 } from 'lucide-react'
 import { ColDef, PaginationModel, RowParams } from '@/types/table'
@@ -44,6 +45,10 @@ interface DataTableProps<TRow> {
     showPaginationControls?: boolean
     exportFileName?: string
     exportTitle?: string
+    onResetFilters?: () => void
+    hasActiveFilters?: boolean
+    emptyTitle?: string
+    emptyDescription?: string
 }
 
 const normalizeExportValue = (value: unknown): string => {
@@ -119,6 +124,10 @@ function DataTable<TRow>({
     showPaginationControls = true,
     exportFileName,
     exportTitle,
+    onResetFilters,
+    hasActiveFilters,
+    emptyTitle,
+    emptyDescription,
 }: DataTableProps<TRow>) {
     const normalizedTotalPages =
         totalPages > 0
@@ -132,9 +141,18 @@ function DataTable<TRow>({
             ? (page + 1) * pageSize < totalCount
             : page < normalizedTotalPages - 1
     const hasSearch = Boolean(searchValue?.trim())
+    const hasActiveTableFilters = hasActiveFilters ?? hasSearch
     const canExport = Boolean(exportFileName) && rows.length > 0
     const exportedColumns = getExportColumns(columns)
     const resolvedExportTitle = exportTitle || title || 'Table export'
+    const resolvedEmptyTitle =
+        emptyTitle ||
+        (hasActiveTableFilters ? 'No matching records' : 'No records yet')
+    const resolvedEmptyDescription =
+        emptyDescription ||
+        (hasActiveTableFilters
+            ? 'Reset filters or try a different search to widen the results.'
+            : 'New records will appear here when they are available.')
 
     const resultLabel =
         totalCount !== undefined
@@ -239,13 +257,28 @@ function DataTable<TRow>({
         </div>
     ) : null
 
+    const resetControls = onResetFilters ? (
+        <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={onResetFilters}
+            disabled={!hasActiveTableFilters || isLoading}
+            className="h-10 rounded-md"
+        >
+            <RotateCcw size={16} />
+            Reset filters
+        </Button>
+    ) : null
+
     return (
         <Card className="overflow-hidden rounded-lg border border-slate-200/80 bg-white p-0 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
             {(title ||
                 actions ||
                 onSearchChange ||
                 filterNode ||
-                exportControls) && (
+                exportControls ||
+                resetControls) && (
                 <div className="grid gap-4 border-b border-slate-200/80 bg-white px-5 py-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
                     <div className="flex w-full flex-1 flex-col gap-3 sm:flex-row sm:items-center">
                         {title && (
@@ -288,9 +321,10 @@ function DataTable<TRow>({
                         )}
                     </div>
 
-                    {(filterNode || actions || exportControls) && (
+                    {(filterNode || actions || exportControls || resetControls) && (
                         <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-end lg:w-auto">
                             {filterNode}
+                            {resetControls}
                             {exportControls}
                             {actions}
                         </div>
@@ -298,9 +332,9 @@ function DataTable<TRow>({
                 </div>
             )}
 
-            <div className="overflow-x-auto">
+            <div className="max-h-[72vh] overflow-auto">
                 <Table className="min-w-[860px] text-left text-sm">
-                    <TableHeader className="sticky top-0 z-10">
+                    <TableHeader className="sticky top-0 z-20 shadow-[0_1px_0_rgba(226,232,240,0.9)]">
                         <TableRow className="border-b border-slate-200 bg-slate-50 hover:bg-slate-50">
                             {columns.map((col) => (
                                 <TableHead
@@ -349,9 +383,25 @@ function DataTable<TRow>({
                                             <Inbox size={24} />
                                         </div>
                                         <div className="space-y-1">
-                                            <p className="font-semibold text-slate-600">No data to display</p>
-                                            <p className="text-xs text-slate-400">Try adjusting your search or filters.</p>
+                                            <p className="font-semibold text-slate-600">
+                                                {resolvedEmptyTitle}
+                                            </p>
+                                            <p className="mx-auto max-w-sm text-xs leading-5 text-slate-400">
+                                                {resolvedEmptyDescription}
+                                            </p>
                                         </div>
+                                        {onResetFilters && hasActiveTableFilters && (
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={onResetFilters}
+                                                className="mt-1 rounded-md"
+                                            >
+                                                <RotateCcw size={16} />
+                                                Reset filters
+                                            </Button>
+                                        )}
                                     </div>
                                 </TableCell>
                             </TableRow>

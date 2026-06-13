@@ -18,6 +18,7 @@ const ContratContent = () => {
         toastOpen,
         handleToastClose,
         toastSeverity,
+        isUpdatingPayroll,
     } = useUpdatePayroll()
 
     const {
@@ -28,10 +29,14 @@ const ContratContent = () => {
         createToastSeverity,
         createToastOpen,
         handleCreateToastClose,
+        isCreatingPayroll,
     } = useCreatePayroll()
 
     const canManagePayroll = isAdminRole(userRole)
     const canViewPayroll = canManagePayroll || isSelfUser(currentUser?._id, id)
+    const isSavingPayroll = EditingPayroll
+        ? isUpdatingPayroll
+        : isCreatingPayroll
 
     if (!canViewPayroll) {
         return (
@@ -182,8 +187,15 @@ const ContratContent = () => {
                     {canManagePayroll ? (
                         <Button
                             type={ButtonTypes.PRIMARY}
-                            btnText={EditingPayroll ? 'Update Payroll' : 'Create Payroll'}
+                            btnText={
+                                isSavingPayroll
+                                    ? 'Saving...'
+                                    : EditingPayroll
+                                      ? 'Update Payroll'
+                                      : 'Create Payroll'
+                            }
                             onClick={EditingPayroll ? handleUpdatePayroll : handleCreatePayroll}
+                            disabled={isSavingPayroll}
                             className="w-full"
                         />
                     ) : (

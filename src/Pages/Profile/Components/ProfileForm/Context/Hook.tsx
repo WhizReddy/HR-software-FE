@@ -126,6 +126,7 @@ export const useCreatePayroll = () => {
     const [createToastSeverity, setCreateToastSeverity] = useState<
         'success' | 'error'
     >('success')
+    const [isCreatingPayroll, setIsCreatingPayroll] = useState(false)
 
     const handleChangePayroll = (
         event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -146,6 +147,7 @@ export const useCreatePayroll = () => {
         event: React.FormEvent<HTMLButtonElement>,
     ) => {
         event.preventDefault()
+        if (isCreatingPayroll) return
         const fieldsToCreate = {
             ...payroll,
             workingDays: payroll.workingDays,
@@ -155,6 +157,7 @@ export const useCreatePayroll = () => {
             extraHours: payroll.extraHours,
         }
 
+        setIsCreatingPayroll(true)
         try {
             await AxiosInstance.post('/salary', fieldsToCreate)
             queryClient.invalidateQueries({ queryKey: ['EditingPayroll', id] })
@@ -168,6 +171,8 @@ export const useCreatePayroll = () => {
             setCreateToastOpen(true)
             setCreateToastMessage('Failed to create payroll')
             setCreateToastSeverity('error')
+        } finally {
+            setIsCreatingPayroll(false)
         }
     }
 
@@ -183,6 +188,7 @@ export const useCreatePayroll = () => {
         createToastOpen,
         createToastSeverity,
         handleCreateToastClose,
+        isCreatingPayroll,
     }
 }
 
@@ -200,6 +206,7 @@ export const useUpdatePayroll = () => {
     const [toastSeverity, setToastSeverity] = useState<'success' | 'error'>(
         'success',
     )
+    const [isUpdatingPayroll, setIsUpdatingPayroll] = useState(false)
 
     const { isLoading, error } = useQuery<EmployeePayroll[], Error>({
         queryKey: ['EditingPayroll', id, targetMonth, targetYear],
@@ -244,6 +251,7 @@ export const useUpdatePayroll = () => {
     ) => {
         event.preventDefault()
         if (!EditingPayroll) return
+        if (isUpdatingPayroll) return
 
         const fieldsToUpdate = {
             workingDays: EditingPayroll.workingDays,
@@ -252,6 +260,7 @@ export const useUpdatePayroll = () => {
             bonusDescription: EditingPayroll.bonusDescription,
             extraHours: EditingPayroll.extraHours,
         }
+        setIsUpdatingPayroll(true)
         try {
             await AxiosInstance.patch(
                 `/salary/${EditingPayroll._id}`,
@@ -268,6 +277,8 @@ export const useUpdatePayroll = () => {
             setToastMessage('Error updating payroll')
             setToastSeverity('error')
             setToastOpen(true)
+        } finally {
+            setIsUpdatingPayroll(false)
         }
     }
 
@@ -285,5 +296,6 @@ export const useUpdatePayroll = () => {
         toastOpen,
         toastMessage,
         toastSeverity,
+        isUpdatingPayroll,
     }
 }

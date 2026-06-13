@@ -43,10 +43,37 @@ describe('DataTable', () => {
             />,
         )
 
-        expect(screen.getByText('No data to display')).toBeTruthy()
+        expect(screen.getByText('No records yet')).toBeTruthy()
         expect(
-            screen.getByText('Try adjusting your search or filters.'),
+            screen.getByText(
+                'New records will appear here when they are available.',
+            ),
         ).toBeTruthy()
+    })
+
+    it('shows reset controls when filters are active', () => {
+        const onResetFilters = vi.fn()
+
+        render(
+            <DataTable
+                rows={emptyRows}
+                columns={columns}
+                getRowId={(row) => String(row.name)}
+                totalPages={1}
+                page={0}
+                pageSize={5}
+                onPaginationModelChange={() => undefined}
+                onResetFilters={onResetFilters}
+                hasActiveFilters
+            />,
+        )
+
+        expect(screen.getByText('No matching records')).toBeTruthy()
+        fireEvent.click(
+            screen.getAllByRole('button', { name: /reset filters/i })[0],
+        )
+
+        expect(onResetFilters).toHaveBeenCalledTimes(1)
     })
 
     it('calls pagination changes with the next page', () => {

@@ -15,6 +15,7 @@ export const useApplicantById = () => {
     const [toastOpen, setToastOpen] = useState(false)
     const [toastMessage, setToastMessage] = useState('')
     const [toastSeverity, setToastSeverity] = useState<'success' | 'error'>('success')
+    const [isActionPending, setIsActionPending] = useState(false)
     const handleToastClose = () => setToastOpen(false)
 
     const { id } = useParams<{ id: string }>()
@@ -47,6 +48,8 @@ export const useApplicantById = () => {
     }
 
     const handleReject = async () => {
+        if (isActionPending) return
+        setIsActionPending(true)
         try {
             await AxiosInstance.patch(`/applicant/${id}`, {
                 status: 'rejected',
@@ -62,10 +65,14 @@ export const useApplicantById = () => {
             setToastMessage(Array.isArray(errorMsg) ? errorMsg[0] : errorMsg)
             setToastSeverity('error')
             setToastOpen(true)
+        } finally {
+            setIsActionPending(false)
         }
     }
 
     const handleEmploy = async () => {
+        if (isActionPending) return
+        setIsActionPending(true)
         try {
             await AxiosInstance.patch(`/applicant/${id}`, {
                 status: 'employed',
@@ -81,10 +88,14 @@ export const useApplicantById = () => {
             setToastMessage(Array.isArray(errorMsg) ? errorMsg[0] : errorMsg)
             setToastSeverity('error')
             setToastOpen(true)
+        } finally {
+            setIsActionPending(false)
         }
     }
 
     const handleAccept = async () => {
+        if (isActionPending) return
+        setIsActionPending(true)
         try {
             await AxiosInstance.patch(`/applicant/${id}`, {
                 status: 'active',
@@ -96,6 +107,8 @@ export const useApplicantById = () => {
             setToastMessage(Array.isArray(errorMsg) ? errorMsg[0] : errorMsg)
             setToastSeverity('error')
             setToastOpen(true)
+        } finally {
+            setIsActionPending(false)
         }
     }
 
@@ -114,7 +127,9 @@ export const useApplicantById = () => {
 
     const handleSend = async () => {
         if (!applicant) return
+        if (isActionPending) return
 
+        setIsActionPending(true)
         try {
             const payload: any = {
                 customMessage: customMessage || undefined,
@@ -158,6 +173,8 @@ export const useApplicantById = () => {
             setToastMessage(Array.isArray(errorMsg) ? errorMsg[0] : errorMsg)
             setToastSeverity('error')
             setToastOpen(true)
+        } finally {
+            setIsActionPending(false)
         }
     }
 
@@ -185,6 +202,7 @@ export const useApplicantById = () => {
         toastOpen,
         toastMessage,
         toastSeverity,
-        handleToastClose
+        handleToastClose,
+        isActionPending,
     }
 }
