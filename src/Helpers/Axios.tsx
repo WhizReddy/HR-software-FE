@@ -1,7 +1,16 @@
 import axios from 'axios'
+const configuredApiUrl = (
+    import.meta.env.VITE_API_URL as string | undefined
+)?.replace(/\/+$/, '')
+
 export const API_URL =
-    (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/+$/, '') ||
-    'https://hr-software-backend.onrender.com'
+    configuredApiUrl || 'https://hr-software-backend.onrender.com'
+
+if (import.meta.env.DEV && !configuredApiUrl) {
+    console.warn(
+        'VITE_API_URL is not set. Using the temporary backend fallback; configure VITE_API_URL before removing the fallback.',
+    )
+}
 
 export const PublicAxiosInstance = axios.create({
     baseURL: API_URL,

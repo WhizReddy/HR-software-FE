@@ -9,12 +9,54 @@ const EventCarousel = lazy(() => import('@/Components/Carosel/Carosel'))
 const EventMap = lazy(() => import('../GoogleMap/MapPicker'))
 
 const SelectedEventCard = () => {
-    const { selectedEvent, handleCloseEventDetails, formatDate } = useEvents()
+    const {
+        selectedEvent,
+        selectedEventError,
+        isSelectedEventLoading,
+        retrySelectedEvent,
+        handleCloseEventDetails,
+        formatDate,
+    } = useEvents()
     const [showMap, setShowMap] = useState(false)
 
     useEffect(() => {
         setShowMap(false)
     }, [selectedEvent?._id])
+
+    if (isSelectedEventLoading) {
+        return (
+            <div className="flex max-h-[90vh] w-full flex-col overflow-hidden rounded-lg bg-white p-6 shadow-xl">
+                <div className="h-8 w-2/3 animate-pulse rounded bg-slate-100" />
+                <div className="mt-6 h-24 animate-pulse rounded bg-slate-100" />
+                <div className="mt-4 h-40 animate-pulse rounded bg-slate-100" />
+            </div>
+        )
+    }
+
+    if (selectedEventError) {
+        return (
+            <div className="w-full rounded-lg bg-white p-6 text-center shadow-xl">
+                <h2 className="text-lg font-semibold text-slate-950">
+                    Event details unavailable
+                </h2>
+                <p className="mt-2 text-sm text-slate-500">
+                    {selectedEventError}
+                </p>
+                <div className="mt-5 flex justify-center gap-3">
+                    <Button
+                        btnText="Close"
+                        type={ButtonTypes.SECONDARY}
+                        onClick={handleCloseEventDetails}
+                    />
+                    <Button
+                        btnText="Retry"
+                        type={ButtonTypes.PRIMARY}
+                        onClick={retrySelectedEvent}
+                    />
+                </div>
+            </div>
+        )
+    }
 
     if (!selectedEvent) {
         return null

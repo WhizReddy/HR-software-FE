@@ -20,9 +20,13 @@ export const ReturnAssetModal = () => {
         >
             <div className="p-6 max-w-md w-full mx-auto bg-white rounded-xl shadow-lg relative">
                 {itemGetter.isLoading ? (
-                    <div className="py-8 text-center text-slate-500">Loading...</div>
+                    <div className="py-8 text-center text-slate-500">
+                        Loading...
+                    </div>
                 ) : itemGetter.isError ? (
-                    <div className="py-8 text-center text-red-500">Error: {itemGetter.error.message}</div>
+                    <div className="py-8 text-center text-red-500">
+                        Error: {itemGetter.error.message}
+                    </div>
                 ) : (
                     <>
                         {itemGetter.data && (
@@ -32,9 +36,14 @@ export const ReturnAssetModal = () => {
                                         {TitleCaser(itemGetter.data.type)}
                                     </h3>
                                     <div className="space-y-0.5">
-                                        <p className="text-slate-600 font-medium">SN: {itemGetter.data.serialNumber}</p>
+                                        <p className="text-slate-600 font-medium">
+                                            SN: {itemGetter.data.serialNumber}
+                                        </p>
                                         <p className="text-xs text-slate-400">
-                                            Assigned: {dayjs(itemGetter.data.takenDate).format('DD MMM YYYY')}
+                                            Assigned:{' '}
+                                            {dayjs(
+                                                itemGetter.data.takenDate,
+                                            ).format('DD MMM YYYY')}
                                         </p>
                                     </div>
                                 </div>
@@ -43,7 +52,10 @@ export const ReturnAssetModal = () => {
                                     onSubmit={(e) => {
                                         e.preventDefault()
                                         e.stopPropagation()
-                                        if (document.activeElement instanceof HTMLElement) {
+                                        if (
+                                            document.activeElement instanceof
+                                            HTMLElement
+                                        ) {
                                             document.activeElement.blur()
                                         }
                                         form.handleSubmit()
@@ -59,24 +71,40 @@ export const ReturnAssetModal = () => {
                                         validators={{
                                             onChange: picklist(
                                                 ['available', 'broken'],
-                                                "Please select an item status"
+                                                'Please select an item status',
                                             ),
                                         }}
                                         children={(field) => (
                                             <div className="flex flex-col gap-1.5">
-                                                <label className="text-sm font-medium text-slate-700">Condition upon return</label>
+                                                <label className="text-sm font-medium text-slate-700">
+                                                    Condition upon return
+                                                </label>
                                                 <select
                                                     className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-blue/30 focus:border-primary-blue appearance-none"
                                                     value={field.state.value}
-                                                    onChange={(e) => field.handleChange(e.target.value as any)}
+                                                    onChange={(e) =>
+                                                        field.handleChange(
+                                                            e.target
+                                                                .value as any,
+                                                        )
+                                                    }
                                                 >
-                                                    <option value="" disabled>Select status...</option>
-                                                    <option value="available">Available (Good Condition)</option>
-                                                    <option value="broken">Broken / Damaged</option>
+                                                    <option value="" disabled>
+                                                        Select status...
+                                                    </option>
+                                                    <option value="available">
+                                                        Available (Good
+                                                        Condition)
+                                                    </option>
+                                                    <option value="broken">
+                                                        Broken / Damaged
+                                                    </option>
                                                 </select>
                                                 {field.state.meta.errors ? (
                                                     <ErrorText>
-                                                        {field.state.meta.errors.join(', ')}
+                                                        {field.state.meta.errors.join(
+                                                            ', ',
+                                                        )}
                                                     </ErrorText>
                                                 ) : null}
                                             </div>
@@ -87,16 +115,24 @@ export const ReturnAssetModal = () => {
                                         name="returnDate"
                                         children={(field) => (
                                             <div className="flex flex-col gap-1.5">
-                                                <label className="text-sm font-medium text-slate-700">Return Date</label>
+                                                <label className="text-sm font-medium text-slate-700">
+                                                    Return Date
+                                                </label>
                                                 <input
                                                     type="date"
                                                     className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-blue/30 focus:border-primary-blue"
                                                     value={field.state.value}
-                                                    onChange={(e) => field.handleChange(e.target.value)}
+                                                    onChange={(e) =>
+                                                        field.handleChange(
+                                                            e.target.value,
+                                                        )
+                                                    }
                                                 />
                                                 {field.state.meta.errors ? (
                                                     <ErrorText>
-                                                        {field.state.meta.errors.join(', ')}
+                                                        {field.state.meta.errors.join(
+                                                            ', ',
+                                                        )}
                                                     </ErrorText>
                                                 ) : null}
                                             </div>
@@ -108,7 +144,10 @@ export const ReturnAssetModal = () => {
                                             type="button"
                                             variant="outline"
                                             onClick={() => {
-                                                if (document.activeElement instanceof HTMLElement) {
+                                                if (
+                                                    document.activeElement instanceof
+                                                    HTMLElement
+                                                ) {
                                                     document.activeElement.blur()
                                                 }
                                                 handleClose()
@@ -119,9 +158,12 @@ export const ReturnAssetModal = () => {
                                         </Button>
                                         <Button
                                             type="submit"
-                                            className="bg-rose-600 hover:bg-rose-700 text-white shadow-sm"
+                                            disabled={form.state.isSubmitting}
+                                            className="border-rose-600 bg-rose-600 text-white shadow-sm hover:bg-rose-700"
                                         >
-                                            {form.state.isSubmitting ? 'Processing...' : 'Return Item'}
+                                            {form.state.isSubmitting
+                                                ? 'Processing...'
+                                                : 'Return Item'}
                                         </Button>
                                     </div>
                                 </form>

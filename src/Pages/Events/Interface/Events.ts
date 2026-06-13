@@ -34,6 +34,7 @@ export interface EventsContextProps {
     createEvent: UseMutateFunction<any, Error, void, unknown>
     isCreating: boolean
     updateEvent: UseMutateFunction<any, Error, void, unknown>
+    isUpdating: boolean
     handleDelete: (id: string | number) => void
     handleEditChange: (e: React.ChangeEvent<HTMLInputElement>) => void
     setParticipants: React.Dispatch<React.SetStateAction<string[]>>
@@ -53,6 +54,9 @@ export interface EventsContextProps {
     setShowEventModal: React.Dispatch<React.SetStateAction<boolean>>
     selectedEvent: EventsData | null
     setSelectedEvent: React.Dispatch<React.SetStateAction<EventsData | null>>
+    selectedEventError: string | null
+    isSelectedEventLoading: boolean
+    retrySelectedEvent: () => void
     updateToastMessage: string
     updateToastOpen: boolean
     updateToastSeverity: 'success' | 'error'

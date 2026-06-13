@@ -30,7 +30,9 @@ Set these values in `.env` for local development:
 Workflow: `.github/workflows/frontend-ci.yml`
 
 Runs on pushes/PRs:
+
 - `npm run lint`
+- `npm test`
 - `npm run build`
 
 ## Notes
@@ -38,3 +40,4 @@ Runs on pushes/PRs:
 - Backend is expected to run on Render free tier.
 - If your backend sleeps on free tier, the first request can take 30-60+ seconds while Render wakes it up.
 - Uploaded files and map features depend on the two Vite env vars above being present in Vercel.
+- The frontend still has a temporary hardcoded backend fallback for older deployments. Treat it as deprecated and remove it only after every environment has `VITE_API_URL` configured.

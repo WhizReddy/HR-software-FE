@@ -8,7 +8,11 @@ import React, {
     useState,
 } from 'react'
 import { EventsData, EventsContextProps } from '@/Pages/Events/Interface/Events'
-import { useCreateEvent, useUpdateEvent, useDeleteEvent } from '@/Pages/Events/Hook/index'
+import {
+    useCreateEvent,
+    useUpdateEvent,
+    useDeleteEvent,
+} from '@/Pages/Events/Hook/index'
 import { useAuth } from '@/features/auth/context/AuthProvider'
 import { useSearchParams } from 'react-router-dom'
 import AxiosInstance from '@/Helpers/Axios'
@@ -20,19 +24,28 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
     const [showEventModal, setShowEventModal] = useState<boolean>(false)
     const [selectedEvent, setSelectedEvent] = useState<EventsData | null>(null)
+    const [selectedEventError, setSelectedEventError] = useState<string | null>(
+        null,
+    )
+    const [isSelectedEventLoading, setIsSelectedEventLoading] = useState(false)
     const closingEventIdRef = useRef<string | null>(null)
     const [drawerOpen, setDrawerOpen] = useState(false)
-    const [drawerAction, setDrawerAction] = useState<'create' | 'edit'>('create')
+    const [drawerAction, setDrawerAction] = useState<'create' | 'edit'>(
+        'create',
+    )
     const { currentUser } = useAuth()
     const isAdmin = currentUser?.role === 'admin' || currentUser?.role === 'hr'
     const typesofEvent = ['sports', 'teambuilding', 'training', 'other']
 
     const formatDate = (date: string): string => {
-        if (!date || typeof date !== 'string' || !date.includes('T')) return '';
-        return date.split('T')[0].replace(/-/g, '/');
-    };
+        if (!date || typeof date !== 'string' || !date.includes('T')) return ''
+        return date.split('T')[0].replace(/-/g, '/')
+    }
 
     const loadEventById = useCallback(async (id: string) => {
+        setShowEventModal(true)
+        setIsSelectedEventLoading(true)
+        setSelectedEventError(null)
         try {
             const res = await AxiosInstance.get(`/event/${id}`)
             startTransition(() => {
@@ -40,7 +53,10 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
                 setShowEventModal(true)
             })
         } catch {
-            // mute modal fetch errors here; card click should stay responsive
+            setSelectedEvent(null)
+            setSelectedEventError('Event details could not be loaded.')
+        } finally {
+            setIsSelectedEventLoading(false)
         }
     }, [])
 
@@ -48,29 +64,48 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const eventId = searchParams.get('event')
 
-    const handleSeeEventDetails = useCallback((event: EventsData) => {
-        closingEventIdRef.current = null
-        setSearchParams((prev) => {
-            const next = new URLSearchParams(prev)
-            next.set('event', event._id.toString())
-            return next
-        }, { replace: true })
-        startTransition(() => {
-            setSelectedEvent(event)
-            setShowEventModal(true)
-        })
-    }, [setSearchParams])
+    const handleSeeEventDetails = useCallback(
+        (event: EventsData) => {
+            closingEventIdRef.current = null
+            setSelectedEventError(null)
+            setIsSelectedEventLoading(false)
+            setSearchParams(
+                (prev) => {
+                    const next = new URLSearchParams(prev)
+                    next.set('event', event._id.toString())
+                    return next
+                },
+                { replace: true },
+            )
+            startTransition(() => {
+                setSelectedEvent(event)
+                setShowEventModal(true)
+            })
+        },
+        [setSearchParams],
+    )
 
     const handleCloseEventDetails = useCallback(() => {
         closingEventIdRef.current = selectedEvent?._id || eventId
-        setSearchParams((prev) => {
-            const next = new URLSearchParams(prev)
-            next.delete('event')
-            return next
-        }, { replace: true })
+        setSearchParams(
+            (prev) => {
+                const next = new URLSearchParams(prev)
+                next.delete('event')
+                return next
+            },
+            { replace: true },
+        )
         setSelectedEvent(null)
+        setSelectedEventError(null)
+        setIsSelectedEventLoading(false)
         setShowEventModal(false)
     }, [eventId, selectedEvent?._id, setSearchParams])
+
+    const retrySelectedEvent = useCallback(() => {
+        if (eventId) {
+            void loadEventById(eventId)
+        }
+    }, [eventId, loadEventById])
 
     useEffect(() => {
         if (!eventId) {
@@ -139,6 +174,7 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
         updateToastMessage,
         updateToastOpen,
         updateToastSeverity,
+        isUpdating,
         editType,
         setEditType,
     } = useUpdateEvent(handleCloseDrawer, eventPhotos, setEventPhotos)
@@ -158,6 +194,7 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
                 createEvent,
                 isCreating,
                 updateEvent,
+                isUpdating,
                 handleDelete,
                 handleEditChange,
                 event,
@@ -175,6 +212,9 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
                 setShowEventModal,
                 selectedEvent,
                 setSelectedEvent,
+                selectedEventError,
+                isSelectedEventLoading,
+                retrySelectedEvent,
                 updateToastMessage,
                 updateToastOpen,
                 updateToastSeverity,
@@ -200,7 +240,7 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({
                 participants,
                 setParticipants,
                 editParticipants,
-                setEditParticipants
+                setEditParticipants,
             }}
         >
             {children}

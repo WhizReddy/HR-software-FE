@@ -15,6 +15,8 @@ type SearchParamUpdater =
 
 type SearchParamSetter = (nextInit: SearchParamUpdater) => void
 
+const DEFAULT_PAGE_SIZE_OPTIONS = [5, 10, 20]
+
 interface UseUrlTableStateOptions {
     searchParams: URLSearchParams
     setSearchParams: SearchParamSetter
@@ -23,6 +25,7 @@ interface UseUrlTableStateOptions {
     limitKey?: string
     defaultPage?: number
     defaultPageSize?: number
+    pageSizeOptions?: number[]
     debounceMs?: number
     ensurePagination?: boolean
     resetPageOnSearch?: boolean
@@ -37,6 +40,7 @@ export const useUrlTableState = ({
     limitKey = 'limit',
     defaultPage = 0,
     defaultPageSize = 5,
+    pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS,
     debounceMs = 400,
     ensurePagination = true,
     resetPageOnSearch = ensurePagination,
@@ -68,6 +72,7 @@ export const useUrlTableState = ({
                 limitKey,
                 defaultPage: String(defaultPage),
                 defaultLimit: String(defaultPageSize),
+                allowedLimits: pageSizeOptions,
             })
 
             return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
@@ -78,6 +83,7 @@ export const useUrlTableState = ({
         ensurePagination,
         limitKey,
         pageKey,
+        pageSizeOptions,
         setSearchParams,
     ])
 
@@ -158,11 +164,14 @@ export const useUrlTableState = ({
     ])
 
     const page = ensurePagination
-        ? parseNumberParam(searchParams, pageKey, defaultPage)
+        ? parseNumberParam(searchParams, pageKey, defaultPage, { min: 0 })
         : defaultPage
 
     const pageSize = ensurePagination
-        ? parseNumberParam(searchParams, limitKey, defaultPageSize)
+        ? parseNumberParam(searchParams, limitKey, defaultPageSize, {
+              min: 1,
+              allowedValues: pageSizeOptions,
+          })
         : defaultPageSize
 
     const handlePaginationModelChange = useCallback(

@@ -16,6 +16,7 @@ import {
     parseNumberParam,
     upsertFilterParams,
 } from '@/Helpers/urlFilters'
+import { PaginatedResponse } from '@/Helpers/clientTableFiltering'
 
 const EVENT_PAGE_SIZE = 6
 
@@ -25,11 +26,12 @@ export const useGetAllEvents = () => {
         searchParams.get('search') || '',
     )
     const debouncedSearchEvent = useDebouncedValue(searchEvent, 350)
-    const currentPage = parseNumberParam(searchParams, 'page', 0)
+    const currentPage = parseNumberParam(searchParams, 'page', 0, { min: 0 })
     const currentLimit = parseNumberParam(
         searchParams,
         'limit',
         EVENT_PAGE_SIZE,
+        { min: 1 },
     )
     const loadedFromPageRef = useRef(currentPage)
 
@@ -57,11 +59,24 @@ export const useGetAllEvents = () => {
         queryFn: ({ pageParam = 0 }) =>
             fetchEvents(debouncedSearchEvent || '', pageParam, currentLimit),
         initialPageParam: currentPage,
-        getNextPageParam: (lastPage: any, _allPages, lastPageParam) => {
-            if (lastPage?.data && lastPage.data.length < currentLimit) {
+        getNextPageParam: (
+            lastPage: PaginatedResponse<EventsData>,
+            _allPages,
+            lastPageParam,
+        ) => {
+            const nextPage = Number(lastPageParam) + 1
+
+            if (
+                typeof lastPage.totalPages === 'number' &&
+                nextPage >= lastPage.totalPages
+            ) {
                 return undefined
             }
-            return Number(lastPageParam) + 1
+
+            if (lastPage.data.length < currentLimit) {
+                return undefined
+            }
+            return nextPage
         },
     })
 
@@ -472,6 +487,7 @@ export const useUpdateEvent = (
         updateToastMessage,
         updateToastOpen,
         updateToastSeverity,
+        isUpdating: updateEventMutation.isPending,
         editType,
         setEditType,
         updatedEvent,

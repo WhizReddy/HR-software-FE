@@ -32,6 +32,7 @@ export default function Forms() {
         editingEvent,
         createEvent,
         isCreating,
+        isUpdating,
         updateEvent,
         handleChange,
         handleEditChange,
@@ -322,7 +323,9 @@ export default function Forms() {
                     <Button
                         btnText={
                             editingEvent
-                                ? 'Update Event'
+                                ? isUpdating
+                                    ? 'Updating...'
+                                    : 'Update Event'
                                 : isCreating
                                   ? 'Publishing...'
                                   : 'Publish Event'
@@ -332,7 +335,7 @@ export default function Forms() {
                         border="none"
                         width="100%"
                         padding="12px"
-                        disabled={isCreating}
+                        disabled={isCreating || isUpdating}
                         onClick={editingEvent ? updateEvent : createEvent}
                     />
                 </div>

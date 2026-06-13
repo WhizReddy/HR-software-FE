@@ -1,0 +1,95 @@
+import {
+    cleanup,
+    fireEvent,
+    render,
+    screen,
+    waitFor,
+} from '@testing-library/react'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom'
+import NotificationDropdown from './Notification'
+
+const axiosMock = vi.hoisted(() => ({
+    get: vi.fn(),
+    patch: vi.fn(),
+}))
+
+vi.mock('@/Helpers/Axios', () => ({
+    default: axiosMock,
+}))
+
+vi.mock('@/features/auth/context/AuthProvider', () => ({
+    useAuth: () => ({
+        currentUser: {
+            _id: 'user-1',
+            role: 'admin',
+        },
+    }),
+}))
+
+const LocationDisplay = () => {
+    const location = useLocation()
+    return (
+        <div data-testid="location">{location.pathname + location.search}</div>
+    )
+}
+
+const renderNotifications = () =>
+    render(
+        <MemoryRouter
+            initialEntries={['/dashboard']}
+            future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
+        >
+            <Routes>
+                <Route
+                    path="*"
+                    element={
+                        <>
+                            <NotificationDropdown />
+                            <LocationDisplay />
+                        </>
+                    }
+                />
+            </Routes>
+        </MemoryRouter>,
+    )
+
+describe('NotificationDropdown', () => {
+    afterEach(() => {
+        cleanup()
+        vi.clearAllMocks()
+    })
+
+    it('marks an event notification as read and navigates to the event route', async () => {
+        axiosMock.get.mockResolvedValueOnce({
+            data: [
+                {
+                    _id: 'notification-1',
+                    title: 'New event',
+                    type: 'events',
+                    typeId: 'event-1',
+                    content: 'Open team event',
+                    date: '2026-06-13',
+                    isRead: false,
+                },
+            ],
+        })
+        axiosMock.patch.mockResolvedValueOnce({ data: {} })
+
+        renderNotifications()
+
+        fireEvent.click(
+            await screen.findByLabelText(/Notifications, 1 unread/i),
+        )
+        fireEvent.click(await screen.findByText('New event'))
+
+        await waitFor(() => {
+            expect(axiosMock.patch).toHaveBeenCalledWith(
+                'notification/notification-1/user/user-1',
+            )
+            expect(screen.getByTestId('location').textContent).toBe(
+                '/events?event=event-1&page=0&limit=6',
+            )
+        })
+    })
+})

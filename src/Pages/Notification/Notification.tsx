@@ -20,9 +20,27 @@ const NotificationDropdown: React.FC = () => {
     const navigate = useNavigate()
     const dropdownRef = useRef<HTMLDivElement>(null)
     const [isOpen, setIsOpen] = useState(false)
-    const { notifications, setNotifications } = useGetAllNotifications() ?? {
+    const [pendingNotificationIds, setPendingNotificationIds] = useState<
+        Array<string | number>
+    >([])
+    const [isMarkingAll, setIsMarkingAll] = useState(false)
+    const [isShowingAll, setIsShowingAll] = useState(false)
+    const {
+        notifications,
+        setNotifications,
+        isLoading,
+        error,
+        setError,
+        retry,
+        fetchForPeriod,
+    } = useGetAllNotifications() ?? {
         notifications: [],
         setNotifications: () => {},
+        isLoading: false,
+        error: null,
+        setError: () => {},
+        retry: () => {},
+        fetchForPeriod: () => Promise.resolve(),
     }
     const unreadCount = useMemo(
         () => notifications.filter((n) => !n.isRead).length,
@@ -52,6 +70,8 @@ const NotificationDropdown: React.FC = () => {
         }
 
         try {
+            setError(null)
+            setPendingNotificationIds((ids) => [...ids, notification._id])
             await AxiosInstance.patch(
                 `notification/${notification._id}/user/${currentUser._id}`,
             )
@@ -63,6 +83,11 @@ const NotificationDropdown: React.FC = () => {
             console.error(
                 `Error removing notification ${notification._id}:`,
                 error,
+            )
+            setError('Notification could not be marked as read.')
+        } finally {
+            setPendingNotificationIds((ids) =>
+                ids.filter((id) => id !== notification._id),
             )
         }
     }
@@ -133,6 +158,8 @@ const NotificationDropdown: React.FC = () => {
         }
 
         try {
+            setError(null)
+            setIsMarkingAll(true)
             const unreadNotifications = notifications.filter(
                 (notification) => !notification.isRead,
             )
@@ -155,6 +182,9 @@ const NotificationDropdown: React.FC = () => {
             setNotifications(updatedNotifications)
         } catch (error) {
             console.error('Error marking all as read:', error)
+            setError('Notifications could not be marked as read.')
+        } finally {
+            setIsMarkingAll(false)
         }
     }
 
@@ -164,13 +194,13 @@ const NotificationDropdown: React.FC = () => {
         }
 
         try {
-            const params = new URLSearchParams({ period: 'week' })
-            const result = await AxiosInstance.get(
-                `notification/user/${currentUser._id}?${params.toString()}`,
-            )
-            setNotifications(result.data)
+            setIsShowingAll(true)
+            await fetchForPeriod('week')
         } catch (error) {
             console.error('Error showing all notifications:', error)
+            setError('All notifications could not be loaded.')
+        } finally {
+            setIsShowingAll(false)
         }
     }
 
@@ -198,7 +228,26 @@ const NotificationDropdown: React.FC = () => {
                     className="absolute right-0 z-[60] mt-2 w-[min(92vw,28rem)] overflow-hidden rounded-lg border border-slate-200 bg-white shadow-xl"
                 >
                     <div className="max-h-[26rem] overflow-y-auto p-2">
-                        {notifications.length === 0 && (
+                        {isLoading && (
+                            <div className="px-3 py-8 text-center text-sm font-medium text-slate-500">
+                                Loading notifications...
+                            </div>
+                        )}
+
+                        {error && (
+                            <div className="m-2 rounded-md border border-rose-200 bg-rose-50 px-3 py-3 text-sm text-rose-700">
+                                <p className="font-semibold">{error}</p>
+                                <button
+                                    type="button"
+                                    onClick={retry}
+                                    className="mt-2 text-sm font-semibold text-rose-700 underline-offset-4 hover:underline"
+                                >
+                                    Retry
+                                </button>
+                            </div>
+                        )}
+
+                        {!isLoading && notifications.length === 0 && (
                             <div className="px-3 py-8 text-center text-sm text-slate-500">
                                 No notifications to show.
                             </div>
@@ -235,6 +284,12 @@ const NotificationDropdown: React.FC = () => {
                                                 ? 'Notification already read'
                                                 : 'Mark notification as read'
                                         }
+                                        disabled={
+                                            notification.isRead ||
+                                            pendingNotificationIds.includes(
+                                                notification._id,
+                                            )
+                                        }
                                         onClick={(e) => {
                                             e.stopPropagation()
                                             removeNotification(notification)
@@ -247,7 +302,11 @@ const NotificationDropdown: React.FC = () => {
                                     >
                                         {notification.isRead
                                             ? 'Read'
-                                            : 'Mark as read'}
+                                            : pendingNotificationIds.includes(
+                                                    notification._id,
+                                                )
+                                              ? 'Saving...'
+                                              : 'Mark as read'}
                                     </button>
                                 </div>
                             </div>
@@ -259,18 +318,22 @@ const NotificationDropdown: React.FC = () => {
                             <button
                                 type="button"
                                 className="text-sm text-slate-500 transition-colors hover:text-blue-600"
+                                disabled={isMarkingAll}
                                 onClick={markAllAsRead}
                             >
-                                Mark all as read
+                                {isMarkingAll
+                                    ? 'Saving...'
+                                    : 'Mark all as read'}
                             </button>
                         )}
 
                         <button
                             type="button"
                             className="ml-auto text-sm text-slate-500 transition-colors hover:text-blue-600"
+                            disabled={isShowingAll}
                             onClick={showAll}
                         >
-                            Show all
+                            {isShowingAll ? 'Loading...' : 'Show all'}
                         </button>
                     </div>
                 </div>

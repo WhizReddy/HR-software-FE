@@ -1,5 +1,5 @@
 import { ModalComponent } from '@/Components/Modal/Modal'
-import { useContext, useEffect, useCallback } from 'react'
+import { useContext, useEffect, useCallback, useState } from 'react'
 import { HoldingsContext } from '../../HoldingsContext'
 import AxiosInstance from '@/Helpers/Axios'
 import { Asset } from '../../TAsset'
@@ -22,6 +22,7 @@ export const AssignAssetModal = () => {
     } = useContext(HoldingsContext)
 
     const isOpen = !!searchParams.get('assignItem')
+    const [assetLoadError, setAssetLoadError] = useState<string | null>(null)
 
     const { form } = useAssignAssetForm()
 
@@ -40,11 +41,18 @@ export const AssignAssetModal = () => {
         }
 
         setAutocompleteLoading(true)
-        fetchAssets().then(() => {
-            if (active) {
-                setAutocompleteLoading(false)
-            }
-        })
+        setAssetLoadError(null)
+        fetchAssets()
+            .catch(() => {
+                if (active) {
+                    setAssetLoadError('Available assets could not be loaded.')
+                }
+            })
+            .finally(() => {
+                if (active) {
+                    setAutocompleteLoading(false)
+                }
+            })
 
         return () => {
             active = false
@@ -124,6 +132,11 @@ export const AssignAssetModal = () => {
                                         </div>
                                     )}
                                 </div>
+                                {assetLoadError && (
+                                    <p className="rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
+                                        {assetLoadError}
+                                    </p>
+                                )}
                                 {field.state.meta.errors ? (
                                     <ErrorText>
                                         {field.state.meta.errors.join(', ')}
@@ -176,9 +189,14 @@ export const AssignAssetModal = () => {
                         </Button>
                         <Button
                             type="submit"
+                            disabled={
+                                form.state.isSubmitting || autocompleteLoading
+                            }
                             className="border-[#2457a3] bg-[#2457a3] text-white shadow-sm hover:bg-[#1b4285]"
                         >
-                            Assign Item
+                            {form.state.isSubmitting
+                                ? 'Assigning...'
+                                : 'Assign Item'}
                         </Button>
                     </div>
                 </form>

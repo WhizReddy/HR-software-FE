@@ -5,6 +5,7 @@ interface EnsurePaginationOptions {
     limitKey?: string
     defaultPage?: string
     defaultLimit?: string
+    allowedLimits?: number[]
 }
 
 interface UpdateFilterOptions extends EnsurePaginationOptions {
@@ -20,6 +21,7 @@ export const parseNumberParam = (
     params: URLSearchParams,
     key: string,
     fallback: number,
+    options: { min?: number; allowedValues?: number[] } = {},
 ): number => {
     const rawValue = params.get(key)
     if (!rawValue) {
@@ -27,7 +29,22 @@ export const parseNumberParam = (
     }
 
     const parsed = Number(rawValue)
-    return Number.isFinite(parsed) ? parsed : fallback
+    if (!Number.isFinite(parsed) || !Number.isInteger(parsed)) {
+        return fallback
+    }
+
+    if (options.min !== undefined && parsed < options.min) {
+        return fallback
+    }
+
+    if (
+        options.allowedValues?.length &&
+        !options.allowedValues.includes(parsed)
+    ) {
+        return fallback
+    }
+
+    return parsed
 }
 
 export const ensurePaginationParams = (
@@ -39,15 +56,36 @@ export const ensurePaginationParams = (
         limitKey = DEFAULT_LIMIT_KEY,
         defaultPage = DEFAULT_PAGE_VALUE,
         defaultLimit = DEFAULT_LIMIT_VALUE,
+        allowedLimits,
     } = options
 
     const nextParams = new URLSearchParams(prevParams)
+    const parsedDefaultPage = Number(defaultPage)
+    const parsedDefaultLimit = Number(defaultLimit)
+    const pageValue = parseNumberParam(nextParams, pageKey, parsedDefaultPage, {
+        min: 0,
+    })
+    const limitValue = parseNumberParam(
+        nextParams,
+        limitKey,
+        parsedDefaultLimit,
+        {
+            min: 1,
+            allowedValues: allowedLimits,
+        },
+    )
 
-    if (!nextParams.get(pageKey)) {
+    if (
+        !nextParams.get(pageKey) ||
+        String(pageValue) !== nextParams.get(pageKey)
+    ) {
         nextParams.set(pageKey, defaultPage)
     }
 
-    if (!nextParams.get(limitKey)) {
+    if (
+        !nextParams.get(limitKey) ||
+        String(limitValue) !== nextParams.get(limitKey)
+    ) {
         nextParams.set(limitKey, defaultLimit)
     }
 
