@@ -273,8 +273,8 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
 
                                 <div className="relative min-h-[260px] overflow-hidden border-t border-slate-200 lg:border-l lg:border-t-0">
                                     <img
-                                        src={Workers}
-                                        alt="Team collaboration"
+                                        src={WorkerThree}
+                                        alt="Team planning in the office"
                                         className="absolute inset-0 h-full w-full object-cover"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/10 to-transparent" />
@@ -293,43 +293,85 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                     </>
                 ) : (
                     <>
-                        <PageIntro
-                            eyebrow="Career Board"
-                            title="Build practical tools with a focused team."
-                            description="We work on internal products used every day. The work is practical, the team is small, and ownership matters."
-                            className="mb-8"
-                            actions={
-                                <>
-                                    <Link
-                                        to="/recruitment"
-                                        className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-[#2457a3] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#1c4380] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 sm:w-auto"
-                                    >
-                                        Submit General Application
-                                        <ArrowRight size={16} />
-                                    </Link>
-                                    <Link
-                                        to="/"
-                                        className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 sm:w-auto"
-                                    >
-                                        <LogIn size={16} />
-                                        Login
-                                    </Link>
-                                    {isManager && (
+                        <section className="relative mb-8 min-h-[520px] overflow-hidden rounded-lg border border-slate-200/80 bg-slate-950 shadow-[0_1px_2px_rgba(15,23,42,0.08)]">
+                            <img
+                                src={Workers}
+                                alt="Focused office workspace"
+                                className="absolute inset-0 h-full w-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,23,42,0.88),rgba(15,23,42,0.58)_46%,rgba(15,23,42,0.12))]" />
+                            <div className="relative flex min-h-[520px] flex-col justify-between p-6 text-white sm:p-8 lg:p-10">
+                                <div className="max-w-3xl">
+                                    <div className="flex flex-wrap gap-2">
+                                        <span className="inline-flex items-center gap-2 rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase text-white/85 backdrop-blur">
+                                            <Sparkles size={14} />
+                                            Career board
+                                        </span>
+                                        <span className="rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase text-white/85 backdrop-blur">
+                                            Tirane based team
+                                        </span>
+                                    </div>
+                                    <h1 className="mt-8 max-w-[38rem] break-words text-2xl font-semibold leading-tight min-[420px]:text-3xl sm:text-5xl lg:text-6xl">
+                                        Work on HR tools people actually use.
+                                    </h1>
+                                    <p className="mt-5 max-w-xl text-sm leading-7 text-white/78 sm:text-lg sm:leading-8">
+                                        Join a focused team building practical
+                                        tools for recruitment, payroll, assets,
+                                        and planning.
+                                    </p>
+                                    <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                                         <Link
-                                            to="/career-posts"
-                                            className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 sm:w-auto"
+                                            to="/recruitment"
+                                            className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-center text-sm font-semibold text-slate-950 transition hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:w-auto"
                                         >
-                                            Manage Career Posts
+                                            Submit General Application
+                                            <ArrowRight size={16} />
                                         </Link>
+                                        <Link
+                                            to="/"
+                                            className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 sm:w-auto"
+                                        >
+                                            <LogIn size={16} />
+                                            Login
+                                        </Link>
+                                        {isManager && (
+                                            <Link
+                                                to="/career-posts"
+                                                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 sm:w-auto"
+                                            >
+                                                Manage Career Posts
+                                            </Link>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div className="mt-10 grid gap-3 sm:grid-cols-3">
+                                    {heroMetrics.map(
+                                        ({ label, value, icon: Icon }) => (
+                                            <div
+                                                key={label}
+                                                className="rounded-lg border border-white/15 bg-white/10 p-4 backdrop-blur"
+                                            >
+                                                <div className="flex items-center gap-2 text-white/75">
+                                                    <Icon size={16} />
+                                                    <p className="text-[11px] font-semibold uppercase">
+                                                        {label}
+                                                    </p>
+                                                </div>
+                                                <p className="mt-3 text-lg font-semibold text-white">
+                                                    {value}
+                                                </p>
+                                            </div>
+                                        ),
                                     )}
-                                </>
-                            }
-                        />
+                                </div>
+                            </div>
+                        </section>
 
                         <section className="grid items-start gap-5 lg:grid-cols-[1.15fr_0.85fr]">
                             <article className="overflow-hidden rounded-lg border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
                                 <img
-                                    src={Workers}
+                                    src={WorkerThree}
                                     alt="Team collaboration"
                                     className="h-[320px] w-full object-cover"
                                 />

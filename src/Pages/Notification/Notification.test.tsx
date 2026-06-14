@@ -92,4 +92,21 @@ describe('NotificationDropdown', () => {
             )
         })
     })
+
+    it('loads the weekly notification view from the period switch', async () => {
+        axiosMock.get
+            .mockResolvedValueOnce({ data: [] })
+            .mockResolvedValueOnce({ data: [] })
+
+        renderNotifications()
+
+        fireEvent.click(await screen.findByLabelText(/Notifications/i))
+        fireEvent.click(await screen.findByText('This week'))
+
+        await waitFor(() => {
+            expect(axiosMock.get).toHaveBeenLastCalledWith(
+                'notification/user/user-1?period=week',
+            )
+        })
+    })
 })

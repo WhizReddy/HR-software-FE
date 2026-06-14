@@ -1,7 +1,7 @@
 import { useAuth } from '@/features/auth/context/AuthProvider'
 import AxiosInstance from '@/Helpers/Axios'
 import { useCallback, useEffect, useState } from 'react'
-interface Notification {
+export interface Notification {
     _id: string | number
     title: string
     type: string
@@ -10,17 +10,23 @@ interface Notification {
     date: string
     isRead: boolean
 }
+
+export type NotificationPeriod = 'today' | 'week'
+
 export const useGetAllNotifications = () => {
     const { currentUser } = useAuth()
     const currentUserId = currentUser?._id
     const [notifications, setNotifications] = useState<Notification[]>([])
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
+    const [currentPeriod, setCurrentPeriod] =
+        useState<NotificationPeriod>('today')
 
     const fetchNotifications = useCallback(
-        async (userId: string, period = 'today') => {
+        async (userId: string, period: NotificationPeriod = 'today') => {
             setIsLoading(true)
             setError(null)
+            setCurrentPeriod(period)
             try {
                 const params = new URLSearchParams({ period })
                 const response = await AxiosInstance.get(
@@ -45,12 +51,13 @@ export const useGetAllNotifications = () => {
 
     const retry = useCallback(() => {
         if (currentUserId) {
-            void fetchNotifications(currentUserId.toString())
+            return fetchNotifications(currentUserId.toString(), currentPeriod)
         }
-    }, [currentUserId, fetchNotifications])
+        return Promise.resolve()
+    }, [currentPeriod, currentUserId, fetchNotifications])
 
     const fetchForPeriod = useCallback(
-        (period: string) => {
+        (period: NotificationPeriod) => {
             if (!currentUserId) {
                 return Promise.resolve()
             }
@@ -68,5 +75,6 @@ export const useGetAllNotifications = () => {
         setError,
         retry,
         fetchForPeriod,
+        currentPeriod,
     }
 }
