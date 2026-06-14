@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import {
     AlertCircle,
     ArrowUpRight,
+    BriefcaseBusiness,
     CalendarClock,
     ClipboardCheck,
     PackageSearch,
@@ -62,6 +63,17 @@ const DashboardContent: React.FC = () => {
             hint: 'Open hiring records',
             icon: UserRoundCheck,
             to: '/candidates?status=active&page=0&limit=5',
+            restricted: true,
+        },
+        {
+            label: 'Upcoming interviews',
+            value: formatAttentionCount(
+                needsAttention.upcomingInterviews,
+                needsAttention.isLoading,
+            ),
+            hint: 'Active candidates scheduled ahead',
+            icon: BriefcaseBusiness,
+            to: '/interview',
             restricted: true,
         },
         {
@@ -142,7 +154,7 @@ const DashboardContent: React.FC = () => {
                                 </p>
                             </div>
                         </div>
-                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
                             {attentionItems.map((item) => {
                                 const Icon = item.icon
                                 return (

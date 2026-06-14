@@ -17,7 +17,7 @@ const markerStyles: Record<DashboardCalendarItem['kind'], string> = {
 const markerLabels: Record<DashboardCalendarItem['kind'], string> = {
     event: 'Events',
     vacation: 'Leave',
-    interview: 'Interviews',
+    interview: 'Upcoming interviews',
 }
 
 const getRangeBounds = (item: DashboardCalendarItem) => {
@@ -47,6 +47,7 @@ const itemTouchesMonth = (item: DashboardCalendarItem, month: Dayjs) => {
 export default function Calendar() {
     const { calendarItems, isCalendarLoading } = useDashboardContext()
     const [visibleMonth, setVisibleMonth] = useState(() => dayjs().startOf('month'))
+    const [selectedDate, setSelectedDate] = useState(() => dayjs().startOf('day'))
     const today = dayjs()
     const firstDay = visibleMonth.startOf('month').day()
     const daysInMonth = visibleMonth.daysInMonth()
@@ -81,6 +82,23 @@ export default function Calendar() {
         }),
         { event: 0, vacation: 0, interview: 0 },
     )
+    const selectedDayItems = selectedDate.isSame(visibleMonth, 'month')
+        ? (itemsByDay[selectedDate.date()] ?? [])
+        : []
+
+    const moveVisibleMonth = (direction: 'previous' | 'next') => {
+        const nextMonth =
+            direction === 'previous'
+                ? visibleMonth.subtract(1, 'month')
+                : visibleMonth.add(1, 'month')
+
+        setVisibleMonth(nextMonth)
+        setSelectedDate((currentSelectedDate) =>
+            currentSelectedDate.isSame(nextMonth, 'month')
+                ? currentSelectedDate
+                : nextMonth.startOf('month'),
+        )
+    }
 
     return (
         <div className="w-full">
@@ -98,7 +116,7 @@ export default function Calendar() {
                 <div className="flex items-center gap-2">
                     <button
                         type="button"
-                        onClick={() => setVisibleMonth((currentMonth) => currentMonth.subtract(1, 'month'))}
+                        onClick={() => moveVisibleMonth('previous')}
                         className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-500 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-700"
                         aria-label="Previous month"
                     >
@@ -106,7 +124,7 @@ export default function Calendar() {
                     </button>
                     <button
                         type="button"
-                        onClick={() => setVisibleMonth((currentMonth) => currentMonth.add(1, 'month'))}
+                        onClick={() => moveVisibleMonth('next')}
                         className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-500 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-700"
                         aria-label="Next month"
                     >
@@ -133,15 +151,25 @@ export default function Calendar() {
                     ).slice(0, 3)
 
                     return (
-                        <div
+                        <button
+                            type="button"
                             key={date}
+                            onClick={() =>
+                                setSelectedDate(visibleMonth.date(date).startOf('day'))
+                            }
                             className={`relative mx-auto flex h-10 w-10 items-center justify-center rounded-lg font-medium transition-colors ${
                                 isToday
                                     ? 'bg-blue-600 text-white shadow-md shadow-blue-200'
+                                    : selectedDate.isSame(
+                                            visibleMonth.date(date),
+                                            'day',
+                                        )
+                                      ? 'bg-slate-900 text-white'
                                     : dayItems.length > 0
                                       ? 'bg-blue-50 text-blue-700'
                                       : 'text-slate-700 hover:bg-slate-100'
                             }`}
+                            aria-label={`${visibleMonth.date(date).format('MMMM D')}, ${dayItems.length} calendar item${dayItems.length === 1 ? '' : 's'}`}
                         >
                             {date}
                             {visibleMarkers.length > 0 && (
@@ -158,9 +186,48 @@ export default function Calendar() {
                                     ))}
                                 </span>
                             )}
-                        </div>
+                        </button>
                     )
                 })}
+            </div>
+            <div className="mt-5 rounded-lg border border-slate-200 bg-slate-50/70 p-4 text-left">
+                <div className="mb-3 flex items-center justify-between gap-3">
+                    <div>
+                        <p className="text-sm font-semibold text-slate-900">
+                            {selectedDate.format('DD MMM YYYY')}
+                        </p>
+                        <p className="mt-0.5 text-xs font-medium text-slate-500">
+                            {selectedDayItems.length} calendar item
+                            {selectedDayItems.length === 1 ? '' : 's'}
+                        </p>
+                    </div>
+                </div>
+                {selectedDayItems.length > 0 ? (
+                    <ul className="space-y-2">
+                        {selectedDayItems.map((item) => (
+                            <li
+                                key={item.id}
+                                className="flex items-start gap-2 rounded-md bg-white px-3 py-2 text-sm text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)]"
+                            >
+                                <span
+                                    className={`mt-1.5 h-2 w-2 flex-shrink-0 rounded-full ${markerStyles[item.kind]}`}
+                                />
+                                <div className="min-w-0">
+                                    <p className="font-semibold text-slate-900">
+                                        {item.title}
+                                    </p>
+                                    <p className="mt-0.5 text-xs font-medium text-slate-500">
+                                        {markerLabels[item.kind]}
+                                    </p>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p className="rounded-md bg-white px-3 py-2 text-sm font-medium text-slate-500 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+                        No calendar items for this day.
+                    </p>
+                )}
             </div>
             <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 text-xs font-semibold text-slate-500">
                 {Object.entries(markerLabels).map(([kind, label]) => (

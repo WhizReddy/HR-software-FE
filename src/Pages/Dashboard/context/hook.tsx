@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import AxiosInstance from '@/Helpers/Axios'
 import { EventsData } from '../../Events/Interface/Events'
 import { UserProfileData } from '../../Employees/interfaces/Employe'
@@ -33,6 +33,7 @@ interface DashboardContextType {
         pendingVacations: number | null
         activeCandidates: number | null
         brokenAssets: number | null
+        upcomingInterviews: number | null
         upcomingEvents: number
         isLoading: boolean
         canViewRestrictedItems: boolean
@@ -138,6 +139,18 @@ interface DashboardApplicant {
     lastName?: string
     firstInterviewDate?: string | null
     secondInterviewDate?: string | null
+    status?: string
+}
+
+interface DashboardUpcomingInterview {
+    id: string
+    applicantId: string
+    fullName: string
+    email?: string
+    positionApplied?: string
+    phase: 'first_interview' | 'second_interview'
+    interviewDate: string
+    status?: string
 }
 
 const fetchAcceptedVacations = async (): Promise<DashboardVacation[]> => {
@@ -147,9 +160,73 @@ const fetchAcceptedVacations = async (): Promise<DashboardVacation[]> => {
     return normalizeArrayPayload<DashboardVacation>(response.data)
 }
 
-const fetchInterviewApplicants = async (): Promise<DashboardApplicant[]> => {
-    const response = await AxiosInstance.get('/applicant?page=0&limit=100')
-    return normalizeArrayPayload<DashboardApplicant>(response.data)
+const mapApplicantsToUpcomingInterviews = (
+    applicants: DashboardApplicant[],
+    fromDate: Dayjs,
+): DashboardUpcomingInterview[] =>
+    applicants
+        .filter((applicant) => applicant.status === 'active')
+        .flatMap((applicant) => {
+            const fullName =
+                [applicant.firstName, applicant.lastName]
+                    .filter(Boolean)
+                    .join(' ') || 'Candidate'
+
+            const buildInterview = (
+                phase: DashboardUpcomingInterview['phase'],
+                interviewDateValue?: string | null,
+            ): DashboardUpcomingInterview | null => {
+                const interviewDate = dayjs(interviewDateValue)
+
+                if (!interviewDate.isValid() || interviewDate.isBefore(fromDate)) {
+                    return null
+                }
+
+                return {
+                    id: `${applicant._id}-${phase}`,
+                    applicantId: applicant._id,
+                    fullName,
+                    phase,
+                    interviewDate: interviewDateValue ?? '',
+                    status: applicant.status,
+                }
+            }
+
+            return [
+                buildInterview('first_interview', applicant.firstInterviewDate),
+                buildInterview('second_interview', applicant.secondInterviewDate),
+            ].filter(Boolean) as DashboardUpcomingInterview[]
+        })
+        .sort(
+            (firstInterview, secondInterview) =>
+                dayjs(firstInterview.interviewDate).valueOf() -
+                dayjs(secondInterview.interviewDate).valueOf(),
+        )
+
+const fetchUpcomingInterviews = async (): Promise<
+    DashboardUpcomingInterview[]
+> => {
+    const fromDate = dayjs().startOf('day')
+    const params = new URLSearchParams({
+        from: fromDate.toISOString(),
+        page: '0',
+        limit: '100',
+    })
+
+    try {
+        const response = await AxiosInstance.get(
+            `/applicant/interviews/upcoming?${params.toString()}`,
+        )
+        return normalizeArrayPayload<DashboardUpcomingInterview>(response.data)
+    } catch {
+        const response = await AxiosInstance.get(
+            '/applicant?page=0&limit=100&status=active',
+        )
+        return mapApplicantsToUpcomingInterviews(
+            normalizeArrayPayload<DashboardApplicant>(response.data),
+            fromDate,
+        )
+    }
 }
 
 export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -186,11 +263,11 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({
     })
 
     const {
-        data: interviewApplicants = [],
-        isLoading: isInterviewApplicantsLoading,
+        data: upcomingInterviewsForCalendar = [],
+        isLoading: isUpcomingInterviewsLoading,
     } = useQuery({
-        queryKey: ['dashboard', 'calendar', 'interviews'],
-        queryFn: fetchInterviewApplicants,
+        queryKey: ['dashboard', 'calendar', 'upcoming-interviews'],
+        queryFn: fetchUpcomingInterviews,
         enabled: canViewRestrictedItems,
         retry: false,
     })
@@ -310,30 +387,16 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({
         })
 
     const interviewCalendarItems: DashboardCalendarItem[] =
-        interviewApplicants.flatMap((applicant) => {
-            const fullName =
-                [applicant.firstName, applicant.lastName]
-                    .filter(Boolean)
-                    .join(' ') || 'Candidate'
+        upcomingInterviewsForCalendar.map((interview) => {
+            const phaseLabel =
+                interview.phase === 'first_interview' ? 'first' : 'second'
 
-            return [
-                applicant.firstInterviewDate
-                    ? {
-                          id: `interview-first-${applicant._id}`,
-                          title: `${fullName} first interview`,
-                          startDate: applicant.firstInterviewDate,
-                          kind: 'interview' as const,
-                      }
-                    : null,
-                applicant.secondInterviewDate
-                    ? {
-                          id: `interview-second-${applicant._id}`,
-                          title: `${fullName} second interview`,
-                          startDate: applicant.secondInterviewDate,
-                          kind: 'interview' as const,
-                      }
-                    : null,
-            ].filter(Boolean) as DashboardCalendarItem[]
+            return {
+                id: `interview-${interview.id}`,
+                title: `${interview.fullName || 'Candidate'} ${phaseLabel} interview`,
+                startDate: interview.interviewDate,
+                kind: 'interview',
+            }
         })
 
     const calendarItems = [
@@ -345,18 +408,22 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({
     const isCalendarLoading =
         isEventsLoading ||
         (canViewRestrictedItems &&
-            (isAcceptedVacationsLoading || isInterviewApplicantsLoading))
+            (isAcceptedVacationsLoading || isUpcomingInterviewsLoading))
 
     const needsAttention = {
         pendingVacations,
         activeCandidates,
         brokenAssets,
+        upcomingInterviews: canViewRestrictedItems
+            ? upcomingInterviewsForCalendar.length
+            : null,
         upcomingEvents: upcomingEvents.length,
         isLoading:
             canViewRestrictedItems &&
             (isPendingVacationsLoading ||
                 isActiveCandidatesLoading ||
-                isBrokenAssetsLoading),
+                isBrokenAssetsLoading ||
+                isUpcomingInterviewsLoading),
         canViewRestrictedItems,
     }
 
