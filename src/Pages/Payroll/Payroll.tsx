@@ -79,7 +79,6 @@ function PayrollContent() {
                             onPaginationModelChange={
                                 handlePaginationModelChange
                             }
-                            title="Payroll table"
                             searchValue={search}
                             onSearchChange={(event) =>
                                 setFullName(event.target.value)

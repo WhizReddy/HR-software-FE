@@ -203,53 +203,92 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             }
                         />
 
-                        <section className="grid items-start gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-                            <article className="rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
-                                <p className="text-xs font-semibold uppercase text-slate-400">
-                                    Publishing Overview
-                                </p>
-                                <h2 className="mt-3 text-3xl font-semibold text-slate-950">
-                                    Keep the public career board clear and up to
-                                    date.
-                                </h2>
-                                <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-                                    Use this page to manage roles, locations,
-                                    descriptions, and published openings without
-                                    editing the public page directly.
-                                </p>
+                        <section className="overflow-hidden rounded-lg border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
+                            <div className="grid lg:grid-cols-[1.15fr_0.85fr]">
+                                <div className="p-6 sm:p-7">
+                                    <div className="flex flex-wrap items-center gap-2">
+                                        <span className="inline-flex items-center gap-2 rounded-md bg-blue-50 px-3 py-1.5 text-xs font-semibold uppercase text-[#2457a3]">
+                                            <Sparkles size={14} />
+                                            Publishing overview
+                                        </span>
+                                        <span className="rounded-md border border-slate-200 px-3 py-1.5 text-xs font-semibold uppercase text-slate-500">
+                                            Admin board
+                                        </span>
+                                    </div>
 
-                                <div className="mt-6 grid gap-4 sm:grid-cols-3">
-                                    {heroMetrics.map(
-                                        ({ label, value, icon: Icon }) => (
-                                            <div
-                                                key={label}
-                                                className="rounded-lg border border-slate-200 bg-slate-50 p-4"
-                                            >
-                                                <div className="flex items-center gap-2 text-slate-500">
-                                                    <Icon
-                                                        size={16}
-                                                        className="text-[#2457a3]"
-                                                    />
-                                                    <p className="text-[11px] font-semibold uppercase text-slate-500">
-                                                        {label}
+                                    <h2 className="mt-5 max-w-2xl text-3xl font-semibold leading-tight text-slate-950">
+                                        Keep every open role clear, current, and
+                                        ready for candidates.
+                                    </h2>
+                                    <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
+                                        Manage the posts that appear on the
+                                        public career page. Keep titles,
+                                        locations, and descriptions consistent
+                                        so applicants know exactly what they are
+                                        applying for.
+                                    </p>
+
+                                    <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                                        {heroMetrics.map(
+                                            ({ label, value, icon: Icon }) => (
+                                                <div
+                                                    key={label}
+                                                    className="rounded-lg border border-slate-200 bg-slate-50 p-4"
+                                                >
+                                                    <div className="flex items-center gap-2 text-slate-500">
+                                                        <Icon
+                                                            size={16}
+                                                            className="text-[#2457a3]"
+                                                        />
+                                                        <p className="text-[11px] font-semibold uppercase text-slate-500">
+                                                            {label}
+                                                        </p>
+                                                    </div>
+                                                    <p className="mt-3 text-lg font-bold text-slate-900">
+                                                        {value}
                                                     </p>
                                                 </div>
-                                                <p className="mt-3 text-lg font-bold text-slate-900">
-                                                    {value}
-                                                </p>
-                                            </div>
-                                        ),
-                                    )}
-                                </div>
-                            </article>
+                                            ),
+                                        )}
+                                    </div>
 
-                            <article className="overflow-hidden rounded-lg border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
-                                <img
-                                    src={Workers}
-                                    alt="Team collaboration"
-                                    className="h-full min-h-[280px] w-full object-cover"
-                                />
-                            </article>
+                                    <div className="mt-6 grid gap-3 text-sm text-slate-600 sm:grid-cols-3">
+                                        {[
+                                            'Write a direct role title',
+                                            'Keep location details accurate',
+                                            'Preview the public page',
+                                        ].map((item) => (
+                                            <div
+                                                key={item}
+                                                className="flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2"
+                                            >
+                                                <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                                                <span className="font-medium">
+                                                    {item}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="relative min-h-[260px] overflow-hidden border-t border-slate-200 lg:border-l lg:border-t-0">
+                                    <img
+                                        src={Workers}
+                                        alt="Team collaboration"
+                                        className="absolute inset-0 h-full w-full object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/10 to-transparent" />
+                                    <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
+                                        <p className="text-xs font-semibold uppercase text-white/70">
+                                            Public board preview
+                                        </p>
+                                        <p className="mt-2 max-w-sm text-lg font-semibold leading-7">
+                                            Candidates see the posts you manage
+                                            here.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </section>
                     </>
                 ) : (

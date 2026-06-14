@@ -247,7 +247,7 @@ function InterviewContent() {
     ])
 
     return (
-        <main className="mx-auto w-full max-w-full space-y-6">
+        <main className="mx-auto flex min-h-full w-full max-w-full flex-col gap-6 bg-[#f5f7fb] pb-2">
             <PageIntro
                 eyebrow="Hiring"
                 title="Interview Pipeline"

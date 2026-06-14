@@ -169,7 +169,6 @@ export const VacationTable = () => {
                 rows={rows}
                 columns={columns}
                 getRowId={getRowId}
-                title="Vacation requests"
                 searchValue={searchInput}
                 onSearchChange={(e) => setSearchInput(e.target.value)}
                 onSearchClear={clearSearch}
