@@ -18,4 +18,17 @@ describe('RecruitmentSchema', () => {
                 .success,
         ).toBe(true)
     })
+
+    it('accepts international phone numbers with common separators', () => {
+        expect(
+            safeParse(
+                RecruitmentSchema.entries.phoneNumber,
+                '+355 69 123 4567',
+            ).success,
+        ).toBe(true)
+        expect(
+            safeParse(RecruitmentSchema.entries.phoneNumber, '+44 7911 123456')
+                .success,
+        ).toBe(true)
+    })
 })

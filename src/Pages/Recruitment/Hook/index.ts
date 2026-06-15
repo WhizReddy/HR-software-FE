@@ -3,6 +3,7 @@ import { useForm } from '@tanstack/react-form'
 import { AxiosError } from 'axios'
 import { useContext } from 'react'
 import { RecruitmentContext } from '../Context/RecruitmentContext'
+import { normalizePhoneNumber } from '../utils/phone'
 
 export const useRecruitmentForm = () => {
     const { setError, setShowModal } = useContext(RecruitmentContext)
@@ -45,7 +46,7 @@ export const useRecruitmentForm = () => {
                 }
                 formData.append('firstName', value.firstName)
                 formData.append('lastName', value.lastName)
-                formData.append('phoneNumber', value.phoneNumber)
+                formData.append('phoneNumber', normalizePhoneNumber(value.phoneNumber))
                 formData.append('positionApplied', value.positionApplied)
                 formData.append('salaryExpectations', value.salaryExpectations)
                 formData.append(

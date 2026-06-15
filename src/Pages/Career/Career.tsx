@@ -19,6 +19,7 @@ import { ModalComponent } from '@/Components/Modal/Modal'
 import Button from '@/Components/Button/Button'
 import { ButtonTypes } from '@/Components/Button/ButtonTypes'
 import PageIntro from '@/Components/PageIntro/PageIntro'
+import { usePageMeta } from '@/hooks/use-page-meta'
 import {
     EventsData,
     useCreateEvent,
@@ -45,6 +46,15 @@ const truncateText = (value: string, maxLength: number) => {
 }
 
 export const Careers = ({ managementMode = false }: CareersProps) => {
+    usePageMeta({
+        title: managementMode
+            ? 'Career Post Studio | People Hub'
+            : 'Careers | People Hub',
+        description: managementMode
+            ? 'Manage public career posts for the People Hub recruitment board.'
+            : 'Explore open roles and submit a focused application to the People Hub team.',
+    })
+
     const { events, setEvents, isLoading } = useGetAllEvents()
     const {
         createEvent,
@@ -193,7 +203,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                 className={
                     managementMode
                         ? 'mx-auto w-full max-w-full'
-                        : 'mx-auto w-full min-w-0 max-w-7xl px-4 py-8 sm:px-6 lg:px-8'
+                        : 'mx-auto w-full min-w-0 max-w-[1500px] px-4 py-8 sm:px-6 lg:px-8'
                 }
             >
                 {managementMode ? (
@@ -313,7 +323,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                     </>
                 ) : (
                     <>
-                        <section className="relative mb-8 min-h-[560px] max-w-full overflow-hidden rounded-xl border border-slate-200/80 bg-slate-950 shadow-[0_22px_70px_rgba(15,23,42,0.18)]">
+                        <section className="relative mb-8 min-h-[560px] w-full min-w-0 max-w-full overflow-hidden rounded-xl border border-slate-200/80 bg-slate-950 shadow-[0_22px_70px_rgba(15,23,42,0.18)]">
                             <img
                                 src={Workers}
                                 alt="Focused office workspace"
@@ -321,8 +331,8 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             />
                             <div className="absolute inset-0 bg-[linear-gradient(105deg,rgba(15,23,42,0.93),rgba(15,23,42,0.72)_48%,rgba(15,23,42,0.18))]" />
                             <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-slate-950/80 to-transparent" />
-                            <div className="relative flex min-h-[560px] flex-col justify-between p-5 text-white sm:p-8 lg:p-10">
-                                <div className="max-w-3xl pt-2 sm:pt-6">
+                            <div className="relative flex min-h-[560px] min-w-0 flex-col justify-between p-5 text-white sm:p-8 lg:p-10">
+                                <div className="max-w-full pt-2 sm:max-w-3xl sm:pt-6">
                                     <div className="flex flex-wrap gap-2">
                                         <span className="inline-flex items-center gap-2 rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase text-white/85 backdrop-blur">
                                             <Sparkles size={14} />
@@ -335,22 +345,22 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     <h1 className="mt-8 max-w-[38rem] break-words text-2xl font-semibold leading-tight min-[420px]:text-3xl sm:text-5xl lg:text-6xl">
                                         Work on HR tools people actually use.
                                     </h1>
-                                    <p className="mt-5 max-w-xl text-base leading-8 text-white/78 sm:text-lg">
+                                    <p className="mt-5 max-w-full break-words text-base leading-8 text-white/78 sm:max-w-xl sm:text-lg">
                                         Join a focused team building practical
                                         tools for recruitment, payroll, assets,
                                         and planning.
                                     </p>
-                                    <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                                    <div className="mt-8 flex min-w-0 flex-col gap-3 sm:flex-row">
                                         <Link
                                             to="/recruitment"
-                                            className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-center text-sm font-semibold text-slate-950 shadow-sm transition hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:w-auto"
+                                            className="inline-flex min-h-11 w-full min-w-0 items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-center text-sm font-semibold text-slate-950 shadow-sm transition hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:w-auto"
                                         >
                                             Submit General Application
                                             <ArrowRight size={16} />
                                         </Link>
                                         <Link
                                             to="/"
-                                            className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 sm:w-auto"
+                                            className="inline-flex min-h-11 w-full min-w-0 items-center justify-center gap-2 rounded-md border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 sm:w-auto"
                                         >
                                             <LogIn size={16} />
                                             Login
@@ -358,7 +368,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         {isManager && (
                                             <Link
                                                 to="/career-posts"
-                                                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 sm:w-auto"
+                                                className="inline-flex min-h-11 w-full min-w-0 items-center justify-center gap-2 rounded-md border border-white/25 bg-white/10 px-5 py-3 text-center text-sm font-semibold text-white backdrop-blur transition hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 sm:w-auto"
                                             >
                                                 Manage Career Posts
                                             </Link>
@@ -366,12 +376,12 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     </div>
                                 </div>
 
-                                <div className="mt-10 grid gap-3 sm:grid-cols-3">
+                                <div className="mt-10 grid min-w-0 gap-3 sm:grid-cols-3">
                                     {heroMetrics.map(
                                         ({ label, value, icon: Icon }) => (
                                             <div
                                                 key={label}
-                                                className="rounded-lg border border-white/15 bg-white/10 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur"
+                                                className="min-w-0 rounded-lg border border-white/15 bg-white/10 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur"
                                             >
                                                 <div className="flex items-center gap-2 text-white/75">
                                                     <Icon size={16} />
@@ -379,7 +389,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                                         {label}
                                                     </p>
                                                 </div>
-                                                <p className="mt-3 text-lg font-semibold text-white">
+                                                <p className="mt-3 break-words text-lg font-semibold text-white">
                                                     {value}
                                                 </p>
                                             </div>
@@ -391,14 +401,14 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
 
                         <section className="grid min-w-0 items-start gap-5 lg:grid-cols-[1.05fr_0.95fr]">
                             <article className="min-w-0 overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
-                                <div className="relative min-h-[330px]">
+                                <div className="relative min-h-[330px] min-w-0">
                                     <img
                                         src={WorkerThree}
                                         alt="Team collaboration"
                                         className="absolute inset-0 h-full w-full object-cover"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-950/15 to-transparent" />
-                                    <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                                    <div className="absolute bottom-0 left-0 right-0 min-w-0 p-6 text-white">
                                         <p className="text-xs font-semibold uppercase text-white/65">
                                             Team environment
                                         </p>
@@ -408,13 +418,13 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         </h2>
                                     </div>
                                 </div>
-                                <div className="border-t border-slate-100 p-6">
+                                <div className="min-w-0 border-t border-slate-100 p-6">
                                     <p className="max-w-2xl break-words text-sm leading-7 text-slate-600">
                                         We keep expectations visible, ship
                                         useful work, and give people room to
                                         contribute without unnecessary process.
                                     </p>
-                                    <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                                    <div className="mt-5 grid min-w-0 gap-3 sm:grid-cols-3">
                                         {[
                                             'Real product work',
                                             'Direct feedback',
@@ -422,7 +432,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         ].map((item) => (
                                             <div
                                                 key={item}
-                                                className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-3 text-sm font-semibold text-slate-700"
+                                                className="min-w-0 break-words rounded-lg border border-slate-200 bg-slate-50 px-3 py-3 text-sm font-semibold text-slate-700"
                                             >
                                                 {item}
                                             </div>
@@ -441,18 +451,18 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                             ({ title, description, icon: Icon }) => (
                                                 <div
                                                     key={title}
-                                                    className="flex gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4"
+                                                    className="flex min-w-0 gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4"
                                                 >
                                                     <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-white text-[#2457a3] shadow-sm">
                                                         <Icon
                                                             size={16}
                                                         />
                                                     </div>
-                                                    <div>
+                                                    <div className="min-w-0">
                                                         <h3 className="text-sm font-semibold text-slate-950">
                                                             {title}
                                                         </h3>
-                                                        <p className="mt-1 text-sm leading-6 text-slate-600">
+                                                        <p className="mt-1 break-words text-sm leading-6 text-slate-600">
                                                             {description}
                                                         </p>
                                                     </div>
@@ -463,12 +473,12 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                 </article>
 
                                 <article className="min-w-0 rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
-                                    <div className="flex items-center justify-between gap-3">
+                                    <div className="flex min-w-0 items-center justify-between gap-3">
                                         <div>
                                             <p className="text-xs font-semibold uppercase text-slate-400">
                                                 Common locations
                                             </p>
-                                            <h3 className="mt-2 text-xl font-semibold text-slate-950">
+                                            <h3 className="mt-2 break-words text-xl font-semibold text-slate-950">
                                                 Flexible roles, clear details
                                             </h3>
                                         </div>
@@ -579,14 +589,6 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     : 'You can still send a general application and we will keep your profile on file.'}
                             </p>
                             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-                                {!managementMode && (
-                                    <Link
-                                        to="/recruitment"
-                                        className="inline-flex min-h-11 w-full items-center justify-center rounded-md bg-[#2457a3] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#1c4380] sm:w-auto"
-                                    >
-                                        Apply Anyway
-                                    </Link>
-                                )}
                                 {managementMode && (
                                     <button
                                         type="button"
@@ -779,33 +781,6 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         ))}
                                     </div>
                                 </article>
-                            </div>
-                        </section>
-
-                        <section className="mt-6 rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
-                            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                                <div className="max-w-2xl">
-                                    <p className="text-xs font-semibold uppercase text-slate-400">
-                                        Ready to talk?
-                                    </p>
-                                    <h2 className="mt-3 text-3xl font-semibold text-slate-950">
-                                        Apply for an open role or send a strong
-                                        general application.
-                                    </h2>
-                                    <p className="mt-3 text-sm leading-7 text-slate-600">
-                                        If your profile fits our direction, we
-                                        would rather hear from you early than
-                                        wait for a perfect listing.
-                                    </p>
-                                </div>
-
-                                <Link
-                                    to="/recruitment"
-                                    className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-[#2457a3] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#1c4380] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 sm:w-auto"
-                                >
-                                    Start Application
-                                    <ArrowRight size={16} />
-                                </Link>
                             </div>
                         </section>
 

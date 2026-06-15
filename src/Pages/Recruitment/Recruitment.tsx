@@ -1,15 +1,18 @@
 import { useContext, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import {
+    AlertCircle,
     BriefcaseBusiness,
     CheckCircle2,
     Clock3,
     FileText,
+    Globe2,
     LogIn,
     Mail,
     Phone,
     RotateCcw,
     Send,
+    Sparkles,
     UploadCloud,
 } from 'lucide-react'
 import { ValidationError } from '@tanstack/react-form'
@@ -31,9 +34,17 @@ import {
 } from './Context/RecruitmentContext'
 import { useRecruitmentForm } from './Hook'
 import { RecruitmentSchema } from '@/Schemas/Recruitment/Recruitment.schema'
-import image from '/Images/Vector-illustration-of-communication-Graphics-69695603-1-removebg-preview.png'
+import { usePageMeta } from '@/hooks/use-page-meta'
+import Workers from '/Images/career-workspace-hero.jpg'
+import WorkerTwo from '/Images/career-planning-table.jpg'
 
 function RecruitmentBase() {
+    usePageMeta({
+        title: 'Submit Application | People Hub',
+        description:
+            'Submit your candidate profile, CV, preferred role, and technology background to the People Hub recruitment team.',
+    })
+
     const {
         error,
         setError,
@@ -44,6 +55,7 @@ function RecruitmentBase() {
         setFileName,
     } = useContext(RecruitmentContext)
     const { form } = useRecruitmentForm()
+    const isSubmitting = form.state.isSubmitting
 
     const resetForm = () => {
         form.reset()
@@ -61,8 +73,8 @@ function RecruitmentBase() {
     }
 
     return (
-        <main className="min-h-screen bg-[#f5f7fb]">
-            <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 pt-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+        <main className="min-h-screen overflow-x-hidden bg-[#f5f7fb]">
+            <div className="mx-auto flex w-full min-w-0 max-w-[1500px] flex-col gap-3 px-4 pt-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
                 <Link
                     to="/career"
                     className="inline-flex min-h-10 w-full items-center justify-center rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:bg-slate-50 sm:w-auto"
@@ -78,32 +90,85 @@ function RecruitmentBase() {
                 </Link>
             </div>
 
-            <section className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-5 sm:px-6 lg:grid-cols-[minmax(320px,0.88fr)_minmax(0,1.12fr)] lg:px-8 lg:py-8">
-                <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
-                    <div className="overflow-hidden rounded-lg border border-slate-200/80 bg-[#2457a3] text-white shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
-                        <div className="p-6 sm:p-7">
-                            <p className="text-xs font-semibold uppercase text-blue-100">
-                                Careers
-                            </p>
-                            <h1 className="mt-3 max-w-xl text-3xl font-semibold leading-tight sm:text-4xl">
-                                Apply to join the CRM team
-                            </h1>
-                            <p className="mt-4 max-w-xl text-sm leading-6 text-blue-50 sm:text-base">
-                                Send your details once, attach your CV, and our
-                                hiring team will review your application from
-                                the recruitment dashboard.
-                            </p>
-                        </div>
-                        <div className="border-t border-white/15 bg-white/10 px-6 pt-3 sm:px-7">
-                            <img
-                                alt="Team collaboration"
-                                src={image}
-                                className="mx-auto h-52 w-full max-w-md object-contain sm:h-64"
-                            />
+            <section className="mx-auto grid w-full min-w-0 max-w-[1500px] gap-6 px-4 py-5 sm:px-6 lg:grid-cols-[minmax(340px,0.9fr)_minmax(0,1.1fr)] lg:px-8 lg:py-8">
+                <aside className="min-w-0 space-y-5 lg:sticky lg:top-6 lg:self-start">
+                    <div className="relative min-h-[430px] w-full min-w-0 max-w-full overflow-hidden rounded-xl border border-slate-200/80 bg-slate-950 text-white shadow-[0_22px_70px_rgba(15,23,42,0.16)]">
+                        <img
+                            alt="Focused office workspace"
+                            src={Workers}
+                            className="absolute inset-0 h-full w-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-[linear-gradient(140deg,rgba(15,23,42,0.94),rgba(15,23,42,0.70)_56%,rgba(15,23,42,0.20))]" />
+                        <div className="relative flex min-h-[430px] min-w-0 flex-col justify-between p-6 sm:p-7">
+                            <div>
+                                <div className="flex flex-wrap gap-2">
+                                    <span className="inline-flex items-center gap-2 rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase text-white/85 backdrop-blur">
+                                        <Sparkles size={14} />
+                                        Recruitment
+                                    </span>
+                                    <span className="rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase text-white/85 backdrop-blur">
+                                        Candidate form
+                                    </span>
+                                </div>
+                                <h1 className="mt-8 max-w-full break-words text-3xl font-semibold leading-tight sm:max-w-xl sm:text-4xl">
+                                    Tell us where you can make the strongest
+                                    impact.
+                                </h1>
+                                <p className="mt-4 max-w-full break-words text-sm leading-7 text-white/75 sm:max-w-xl sm:text-base">
+                                    Send your details once, attach your CV, and
+                                    the hiring team will review your profile
+                                    from the recruitment dashboard.
+                                </p>
+                            </div>
+
+                            <div className="mt-8 grid min-w-0 gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+                                <div className="rounded-lg border border-white/15 bg-white/10 p-4 backdrop-blur">
+                                    <p className="text-[11px] font-semibold uppercase text-white/60">
+                                        CV
+                                    </p>
+                                    <p className="mt-2 font-semibold">
+                                        Required
+                                    </p>
+                                </div>
+                                <div className="rounded-lg border border-white/15 bg-white/10 p-4 backdrop-blur">
+                                    <p className="text-[11px] font-semibold uppercase text-white/60">
+                                        Phone
+                                    </p>
+                                    <p className="mt-2 font-semibold">
+                                        International
+                                    </p>
+                                </div>
+                                <div className="rounded-lg border border-white/15 bg-white/10 p-4 backdrop-blur">
+                                    <p className="text-[11px] font-semibold uppercase text-white/60">
+                                        Review
+                                    </p>
+                                    <p className="mt-2 font-semibold">
+                                        Email check
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+                    <div className="min-w-0 overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
+                        <img
+                            alt="Planning table"
+                            src={WorkerTwo}
+                            className="h-40 w-full object-cover"
+                        />
+                        <div className="p-5">
+                            <p className="text-xs font-semibold uppercase text-slate-400">
+                                Application flow
+                            </p>
+                            <p className="mt-3 break-words text-sm leading-7 text-slate-600">
+                                Keep the information direct. The stronger the
+                                role context and CV, the easier it is to review
+                                your fit quickly.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="grid min-w-0 gap-3 sm:grid-cols-3 lg:grid-cols-1">
                         <InfoCard
                             icon={<FileText size={18} />}
                             title="CV required"
@@ -121,28 +186,28 @@ function RecruitmentBase() {
                         />
                     </div>
 
-                    <div className="rounded-lg border border-slate-200/80 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
+                    <div className="min-w-0 rounded-xl border border-slate-200/80 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
                         <p className="text-[11px] font-semibold uppercase text-slate-400">
                             Contact Fields
                         </p>
                         <div className="mt-4 grid gap-3">
-                            <div className="flex items-center gap-3 rounded-md bg-slate-50 px-4 py-3">
+                            <div className="flex min-w-0 items-center gap-3 rounded-md bg-slate-50 px-4 py-3">
                                 <Mail size={16} className="text-[#2457a3]" />
-                                <span className="text-sm font-semibold text-slate-700">
+                                <span className="min-w-0 break-words text-sm font-semibold text-slate-700">
                                     Email confirmation enabled
                                 </span>
                             </div>
-                            <div className="flex items-center gap-3 rounded-md bg-slate-50 px-4 py-3">
-                                <Phone size={16} className="text-[#2457a3]" />
-                                <span className="text-sm font-semibold text-slate-700">
-                                    Albania mobile format
+                            <div className="flex min-w-0 items-center gap-3 rounded-md bg-slate-50 px-4 py-3">
+                                <Globe2 size={16} className="text-[#2457a3]" />
+                                <span className="min-w-0 break-words text-sm font-semibold text-slate-700">
+                                    International phone numbers accepted
                                 </span>
                             </div>
                         </div>
                     </div>
                 </aside>
 
-                <section className="rounded-lg border border-slate-200/80 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:p-7 lg:p-8">
+                <section className="min-w-0 rounded-xl border border-slate-200/80 bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)] sm:p-7 lg:p-8">
                     <div className="flex flex-col gap-4 border-b border-slate-100 pb-6 sm:flex-row sm:items-start sm:justify-between">
                         <div>
                             <p className="text-xs font-semibold uppercase text-slate-400">
@@ -288,16 +353,15 @@ function RecruitmentBase() {
                                         <FieldFrame errors={errors}>
                                             <Input
                                                 icon={
-                                                    <span className="border-r border-slate-200 pr-2 text-sm font-bold text-slate-500">
-                                                        +355
-                                                    </span>
+                                                    <Phone size={16} />
                                                 }
                                                 iconPosition="start"
                                                 label="Phone Number"
                                                 name="phoneNumber"
                                                 IsUsername
+                                                type="tel"
+                                                placeholder="+355 69 123 4567"
                                                 value={value}
-                                                inputClassName="pl-16"
                                                 onChange={(event: any) =>
                                                     handleChange(
                                                         event.target.value,
@@ -583,9 +647,33 @@ function RecruitmentBase() {
                             />
                         </FormSection>
 
+                        {isSubmitting && (
+                            <div className="flex gap-3 rounded-lg border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-[#2457a3]">
+                                <Send size={18} className="mt-0.5 shrink-0" />
+                                <div>
+                                    <p className="font-semibold">
+                                        Sending your application...
+                                    </p>
+                                    <p className="mt-1 leading-6 text-blue-700/80">
+                                        Keep this page open while the CV and
+                                        profile details are uploaded.
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+
                         {error && (
-                            <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
-                                {error}
+                            <div className="flex gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                                <AlertCircle
+                                    size={18}
+                                    className="mt-0.5 shrink-0"
+                                />
+                                <div>
+                                    <p className="font-semibold">
+                                        Application could not be submitted
+                                    </p>
+                                    <p className="mt-1 leading-6">{error}</p>
+                                </div>
                             </div>
                         )}
 
@@ -595,17 +683,18 @@ function RecruitmentBase() {
                                 btnText="Reset"
                                 width="100%"
                                 onClick={resetForm}
+                                disabled={isSubmitting}
                                 icon={<RotateCcw size={16} />}
                                 className="justify-center whitespace-nowrap rounded-md py-3"
                             />
                             <MyButton
                                 type={ButtonTypes.PRIMARY}
                                 btnText={
-                                    form.state.isSubmitting
+                                    isSubmitting
                                         ? 'Sending...'
                                         : 'Submit Application'
                                 }
-                                disabled={form.state.isSubmitting}
+                                disabled={isSubmitting}
                                 isSubmit
                                 width="100%"
                                 icon={<Send size={16} />}
@@ -617,7 +706,7 @@ function RecruitmentBase() {
             </section>
 
             <Toast
-                message="Please check your inbox or spam to confirm your identity."
+                message="Application submitted. Please check your inbox or spam folder to confirm your identity."
                 onClose={handleSuccessClose}
                 open={showModal}
                 severity="success"
@@ -643,14 +732,16 @@ const InfoCard = ({
     title: string
     text: string
 }) => (
-    <article className="rounded-lg border border-slate-200/80 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
+    <article className="min-w-0 rounded-lg border border-slate-200/80 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
         <div className="flex items-start gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-blue-50 text-[#2457a3]">
                 {icon}
             </div>
-            <div>
+            <div className="min-w-0">
                 <h2 className="text-sm font-semibold text-slate-900">{title}</h2>
-                <p className="mt-1 text-sm leading-5 text-slate-500">{text}</p>
+                <p className="mt-1 break-words text-sm leading-5 text-slate-500">
+                    {text}
+                </p>
             </div>
         </div>
     </article>
@@ -665,7 +756,7 @@ const FormSection = ({
     description: string
     children: ReactNode
 }) => (
-    <section className="border-t border-slate-100 pt-6 first:border-t-0 first:pt-0">
+    <section className="min-w-0 border-t border-slate-100 pt-6 first:border-t-0 first:pt-0">
         <div className="mb-5">
             <h3 className="text-base font-semibold text-slate-950">
                 {title}

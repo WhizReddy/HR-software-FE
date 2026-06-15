@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import AxiosInstance from '../../../Helpers/Axios'
+import { usePageMeta } from '@/hooks/use-page-meta'
 
 const EmailConfirmation: React.FC = () => {
+    usePageMeta({
+        title: 'Confirm Application | People Hub',
+        description:
+            'Confirm your People Hub recruitment application email address.',
+    })
+
     const { search } = useLocation()
     const query = new URLSearchParams(search)
     const token = query.get('token')

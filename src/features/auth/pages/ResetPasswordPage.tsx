@@ -5,12 +5,21 @@ import { Button } from '@/Components/ui/button'
 import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
 import AuthPageShell from '../components/AuthPageShell'
+import { usePageMeta } from '@/hooks/use-page-meta'
 
 export default function ResetPasswordPage() {
     const [searchParams] = useSearchParams()
     const tokenFromUrl = searchParams.get('token')
 
     const step = tokenFromUrl ? 'reset' : 'email'
+    usePageMeta({
+        title:
+            step === 'email'
+                ? 'Forgot Password | People Hub'
+                : 'Reset Password | People Hub',
+        description:
+            'Recover access to People Hub with a secure password reset flow.',
+    })
     const [email, setEmail] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')

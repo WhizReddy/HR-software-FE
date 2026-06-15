@@ -10,8 +10,6 @@ import {
     object,
     picklist,
     pipe,
-    regex,
-    startsWith,
     string,
     transform,
 } from 'valibot'
@@ -21,6 +19,7 @@ import {
     foundMethod as applicationMethodList,
     technologies as technologiesList,
 } from '@/Pages/Recruitment/Component/RecruitmentData'
+import { isValidRecruitmentPhoneNumber } from '@/Pages/Recruitment/utils/phone'
 
 export const RecruitmentSchema = object({
     applicationMethod: picklist(
@@ -59,8 +58,10 @@ export const RecruitmentSchema = object({
 
     phoneNumber: pipe(
         string('Phone Number is required'),
-        regex(/^6[6-9]\d{7}$/, 'Invalid phone number format'),
-        startsWith('6', 'The number should start with a 6   '),
+        check(
+            isValidRecruitmentPhoneNumber,
+            'Enter a valid phone number, e.g. +355 69 123 4567',
+        ),
     ),
 
     positionApplied: pipe(

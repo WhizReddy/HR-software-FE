@@ -11,8 +11,15 @@ import { useAuth } from '../context/AuthProvider'
 import { useLoginForm } from '../hooks/useLoginForm'
 import { LoginSchema } from '../schemas/login.schema'
 import AuthPageShell from '../components/AuthPageShell'
+import { usePageMeta } from '@/hooks/use-page-meta'
 
 const LoginPageContent = () => {
+    usePageMeta({
+        title: 'Login | People Hub',
+        description:
+            'Sign in to People Hub to manage HR, recruitment, payroll, assets, and operations.',
+    })
+
     const { isAuthenticated } = useAuth()
     const navigate = useNavigate()
     const {
