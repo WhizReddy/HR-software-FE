@@ -109,4 +109,41 @@ describe('NotificationDropdown', () => {
             )
         })
     })
+
+    it('marks a notification from the inline action without navigating', async () => {
+        axiosMock.get.mockResolvedValueOnce({
+            data: [
+                {
+                    _id: 'notification-2',
+                    title: 'Vacation request',
+                    type: 'vacation',
+                    typeId: 'vacation-1',
+                    content: 'A vacation request needs review',
+                    date: '2026-06-14',
+                    isRead: false,
+                },
+            ],
+        })
+        axiosMock.patch.mockResolvedValueOnce({ data: {} })
+
+        renderNotifications()
+
+        fireEvent.click(
+            await screen.findByLabelText(/Notifications, 1 unread/i),
+        )
+        fireEvent.click(
+            await screen.findByRole('button', {
+                name: 'Mark notification as read',
+            }),
+        )
+
+        await waitFor(() => {
+            expect(axiosMock.patch).toHaveBeenCalledWith(
+                'notification/notification-2/user/user-1',
+            )
+            expect(screen.getByTestId('location').textContent).toBe(
+                '/dashboard',
+            )
+        })
+    })
 })

@@ -166,6 +166,26 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
         'Role expectations that are explicit from the start.',
         'A hiring process focused on real fit and clear communication.',
     ]
+    const hiringSteps = [
+        {
+            title: 'Apply with context',
+            description:
+                'Send a focused application with the work, skills, and direction that best represent you.',
+            icon: BriefcaseBusiness,
+        },
+        {
+            title: 'Quick review',
+            description:
+                'Profiles are reviewed against the role expectations, not against generic checklists.',
+            icon: Clock3,
+        },
+        {
+            title: 'Clear conversation',
+            description:
+                'Interview steps stay practical, direct, and connected to the work you would actually do.',
+            icon: ShieldCheck,
+        },
+    ]
 
     return (
         <div className="min-h-screen overflow-x-hidden">
@@ -173,7 +193,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                 className={
                     managementMode
                         ? 'mx-auto w-full max-w-full'
-                        : 'mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8'
+                        : 'mx-auto w-full min-w-0 max-w-7xl px-4 py-8 sm:px-6 lg:px-8'
                 }
             >
                 {managementMode ? (
@@ -293,15 +313,16 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                     </>
                 ) : (
                     <>
-                        <section className="relative mb-8 min-h-[520px] overflow-hidden rounded-lg border border-slate-200/80 bg-slate-950 shadow-[0_1px_2px_rgba(15,23,42,0.08)]">
+                        <section className="relative mb-8 min-h-[560px] max-w-full overflow-hidden rounded-xl border border-slate-200/80 bg-slate-950 shadow-[0_22px_70px_rgba(15,23,42,0.18)]">
                             <img
                                 src={Workers}
                                 alt="Focused office workspace"
-                                className="absolute inset-0 h-full w-full object-cover"
+                                className="absolute inset-0 h-full w-full object-cover object-center"
                             />
-                            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,23,42,0.88),rgba(15,23,42,0.58)_46%,rgba(15,23,42,0.12))]" />
-                            <div className="relative flex min-h-[520px] flex-col justify-between p-6 text-white sm:p-8 lg:p-10">
-                                <div className="max-w-3xl">
+                            <div className="absolute inset-0 bg-[linear-gradient(105deg,rgba(15,23,42,0.93),rgba(15,23,42,0.72)_48%,rgba(15,23,42,0.18))]" />
+                            <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-slate-950/80 to-transparent" />
+                            <div className="relative flex min-h-[560px] flex-col justify-between p-5 text-white sm:p-8 lg:p-10">
+                                <div className="max-w-3xl pt-2 sm:pt-6">
                                     <div className="flex flex-wrap gap-2">
                                         <span className="inline-flex items-center gap-2 rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase text-white/85 backdrop-blur">
                                             <Sparkles size={14} />
@@ -314,7 +335,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     <h1 className="mt-8 max-w-[38rem] break-words text-2xl font-semibold leading-tight min-[420px]:text-3xl sm:text-5xl lg:text-6xl">
                                         Work on HR tools people actually use.
                                     </h1>
-                                    <p className="mt-5 max-w-xl text-sm leading-7 text-white/78 sm:text-lg sm:leading-8">
+                                    <p className="mt-5 max-w-xl text-base leading-8 text-white/78 sm:text-lg">
                                         Join a focused team building practical
                                         tools for recruitment, payroll, assets,
                                         and planning.
@@ -322,7 +343,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                                         <Link
                                             to="/recruitment"
-                                            className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-center text-sm font-semibold text-slate-950 transition hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:w-auto"
+                                            className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-center text-sm font-semibold text-slate-950 shadow-sm transition hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:w-auto"
                                         >
                                             Submit General Application
                                             <ArrowRight size={16} />
@@ -350,7 +371,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         ({ label, value, icon: Icon }) => (
                                             <div
                                                 key={label}
-                                                className="rounded-lg border border-white/15 bg-white/10 p-4 backdrop-blur"
+                                                className="rounded-lg border border-white/15 bg-white/10 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur"
                                             >
                                                 <div className="flex items-center gap-2 text-white/75">
                                                     <Icon size={16} />
@@ -368,60 +389,80 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             </div>
                         </section>
 
-                        <section className="grid items-start gap-5 lg:grid-cols-[1.15fr_0.85fr]">
-                            <article className="overflow-hidden rounded-lg border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
-                                <img
-                                    src={WorkerThree}
-                                    alt="Team collaboration"
-                                    className="h-[320px] w-full object-cover"
-                                />
+                        <section className="grid min-w-0 items-start gap-5 lg:grid-cols-[1.05fr_0.95fr]">
+                            <article className="min-w-0 overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
+                                <div className="relative min-h-[330px]">
+                                    <img
+                                        src={WorkerThree}
+                                        alt="Team collaboration"
+                                        className="absolute inset-0 h-full w-full object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-950/15 to-transparent" />
+                                    <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                                        <p className="text-xs font-semibold uppercase text-white/65">
+                                            Team environment
+                                        </p>
+                                        <h2 className="mt-3 max-w-xl break-words text-xl font-semibold leading-tight min-[420px]:text-2xl sm:text-3xl">
+                                            Clear ownership, steady
+                                            collaboration, and practical work.
+                                        </h2>
+                                    </div>
+                                </div>
                                 <div className="border-t border-slate-100 p-6">
-                                    <p className="text-xs font-semibold uppercase text-slate-400">
-                                        Team environment
-                                    </p>
-                                    <h2 className="mt-3 text-2xl font-semibold text-slate-950">
-                                        Clear ownership, steady collaboration,
-                                        and practical work.
-                                    </h2>
-                                    <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
+                                    <p className="max-w-2xl break-words text-sm leading-7 text-slate-600">
                                         We keep expectations visible, ship
                                         useful work, and give people room to
                                         contribute without unnecessary process.
                                     </p>
+                                    <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                                        {[
+                                            'Real product work',
+                                            'Direct feedback',
+                                            'Low-noise execution',
+                                        ].map((item) => (
+                                            <div
+                                                key={item}
+                                                className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-3 text-sm font-semibold text-slate-700"
+                                            >
+                                                {item}
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </article>
 
-                            <div className="grid gap-5">
-                                <article className="rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
+                            <div className="grid min-w-0 gap-5">
+                                <article className="min-w-0 rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
                                     <p className="text-xs font-semibold uppercase text-slate-400">
-                                        Quick Snapshot
+                                        Hiring rhythm
                                     </p>
-                                    <div className="mt-5 grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
-                                        {heroMetrics.map(
-                                            ({ label, value, icon: Icon }) => (
+                                    <div className="mt-5 grid gap-3">
+                                        {hiringSteps.map(
+                                            ({ title, description, icon: Icon }) => (
                                                 <div
-                                                    key={label}
-                                                    className="rounded-lg border border-slate-200 bg-slate-50 p-4"
+                                                    key={title}
+                                                    className="flex gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4"
                                                 >
-                                                    <div className="flex items-center gap-2 text-slate-500">
+                                                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-white text-[#2457a3] shadow-sm">
                                                         <Icon
                                                             size={16}
-                                                            className="text-[#2457a3]"
                                                         />
-                                                        <p className="text-[11px] font-semibold uppercase text-slate-500">
-                                                            {label}
+                                                    </div>
+                                                    <div>
+                                                        <h3 className="text-sm font-semibold text-slate-950">
+                                                            {title}
+                                                        </h3>
+                                                        <p className="mt-1 text-sm leading-6 text-slate-600">
+                                                            {description}
                                                         </p>
                                                     </div>
-                                                    <p className="mt-3 text-lg font-bold text-slate-900">
-                                                        {value}
-                                                    </p>
                                                 </div>
                                             ),
                                         )}
                                     </div>
                                 </article>
 
-                                <article className="rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
+                                <article className="min-w-0 rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
                                     <div className="flex items-center justify-between gap-3">
                                         <div>
                                             <p className="text-xs font-semibold uppercase text-slate-400">
@@ -479,7 +520,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                     </>
                 )}
 
-                <section className="mt-8 rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
+                <section className="mt-8 min-w-0 rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                         <div>
                             <p className="text-sm font-semibold uppercase text-slate-400">
@@ -563,7 +604,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             {filteredEvents.map((careerEvent) => (
                                 <article
                                     key={careerEvent._id}
-                                    className="group flex h-full flex-col rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] transition-colors duration-200 hover:border-[#2457a3]/35"
+                                    className="group flex h-full flex-col rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] transition duration-200 hover:-translate-y-0.5 hover:border-[#2457a3]/35 hover:shadow-[0_18px_45px_rgba(15,23,42,0.10)]"
                                 >
                                     <div className="flex items-start justify-between gap-4">
                                         <div>

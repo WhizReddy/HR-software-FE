@@ -170,8 +170,8 @@ const NotificationDropdown: React.FC = () => {
             await AxiosInstance.patch(
                 `notification/${notification._id}/user/${currentUser._id}`,
             )
-            setNotifications(
-                notifications.map((item) =>
+            setNotifications((currentNotifications) =>
+                currentNotifications.map((item) =>
                     item._id === notification._id
                         ? { ...item, isRead: true }
                         : item,
@@ -240,8 +240,8 @@ const NotificationDropdown: React.FC = () => {
                 .map((result) => result.value)
 
             if (markedIds.length > 0) {
-                setNotifications(
-                    notifications.map((notification) =>
+                setNotifications((currentNotifications) =>
+                    currentNotifications.map((notification) =>
                         markedIds.includes(notification._id)
                             ? { ...notification, isRead: true }
                             : notification,
@@ -503,11 +503,12 @@ const NotificationDropdown: React.FC = () => {
                                                     notification.isRead ||
                                                     isPending
                                                 }
-                                                onClick={() =>
+                                                onClick={(event) => {
+                                                    event.stopPropagation()
                                                     markNotificationAsRead(
                                                         notification,
                                                     )
-                                                }
+                                                }}
                                                 className="inline-flex h-8 items-center gap-2 rounded-md border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
                                             >
                                                 {notification.isRead ? (
