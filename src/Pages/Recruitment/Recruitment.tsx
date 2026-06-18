@@ -200,13 +200,13 @@ function RecruitmentBase() {
                         </p>
                         <div className="mt-4 grid gap-3">
                             <div className="flex min-w-0 items-center gap-3 rounded-md bg-slate-50 px-4 py-3">
-                                <Mail size={16} className="text-[#2457a3]" />
+                                <Mail size={16} className="text-slate-600" />
                                 <span className="min-w-0 break-words text-sm font-semibold text-slate-700">
                                     Email confirmation enabled
                                 </span>
                             </div>
                             <div className="flex min-w-0 items-center gap-3 rounded-md bg-slate-50 px-4 py-3">
-                                <Globe2 size={16} className="text-[#2457a3]" />
+                                <Globe2 size={16} className="text-slate-600" />
                                 <span className="min-w-0 break-words text-sm font-semibold text-slate-700">
                                     International phone numbers accepted
                                 </span>
@@ -230,7 +230,7 @@ function RecruitmentBase() {
                                 application correctly.
                             </p>
                         </div>
-                        <div className="inline-flex w-fit items-center gap-2 rounded-md border border-blue-100 bg-blue-50 px-3 py-2 text-xs font-semibold uppercase text-[#2457a3]">
+                        <div className="inline-flex w-fit items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold uppercase text-slate-700">
                             <BriefcaseBusiness size={15} />
                             People Hub Hiring
                         </div>
@@ -620,8 +620,8 @@ function RecruitmentBase() {
                                     handleChange,
                                 }) => (
                                     <FieldFrame errors={errors}>
-                                        <label className="flex min-h-[150px] w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-center transition-colors hover:border-[#2457a3] hover:bg-blue-50/60">
-                                            <span className="flex h-12 w-12 items-center justify-center rounded-md bg-white text-[#2457a3] shadow-sm ring-1 ring-slate-200">
+                                        <label className="flex min-h-[150px] w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-center transition-colors hover:border-slate-400 hover:bg-white">
+                                            <span className="flex h-12 w-12 items-center justify-center rounded-md bg-white text-slate-600 shadow-sm ring-1 ring-slate-200">
                                                 <UploadCloud size={22} />
                                             </span>
                                             <span className="font-bold text-slate-800">
@@ -656,13 +656,13 @@ function RecruitmentBase() {
                         </FormSection>
 
                         {isSubmitting && (
-                            <div className="flex gap-3 rounded-lg border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-[#2457a3]">
+                            <div className="flex gap-3 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
                                 <Send size={18} className="mt-0.5 shrink-0" />
                                 <div>
                                     <p className="font-semibold">
                                         Sending your application...
                                     </p>
-                                    <p className="mt-1 leading-6 text-blue-700/80">
+                                    <p className="mt-1 leading-6 text-slate-600">
                                         Keep this page open while the CV and
                                         profile details are uploaded.
                                     </p>
@@ -739,7 +739,7 @@ const InfoCard = ({
 }) => (
     <article className="min-w-0 rounded-lg border border-slate-200/80 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
         <div className="flex items-start gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-blue-50 text-[#2457a3]">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-slate-100 text-slate-600">
                 {icon}
             </div>
             <div className="min-w-0">

@@ -80,7 +80,7 @@ export const BreadcrumbComponent: React.FC = () => {
         <Breadcrumb className="mb-4">
             <BreadcrumbList className="inline-flex rounded-md border border-slate-200/80 bg-white px-3 py-1.5 text-xs text-slate-500 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
                 <BreadcrumbItem>
-                    <BreadcrumbLink render={<Link to="/dashboard" className="hover:text-[#2457a3]" />}>
+                    <BreadcrumbLink render={<Link to="/dashboard" className="hover:text-slate-700" />}>
                         Home
                     </BreadcrumbLink>
                 </BreadcrumbItem>
@@ -98,7 +98,7 @@ export const BreadcrumbComponent: React.FC = () => {
                                     </BreadcrumbPage>
                                 ) : (
                                     <BreadcrumbLink
-                                        render={<Link to={crumb.to} className="capitalize hover:text-[#2457a3]" />}
+                                        render={<Link to={crumb.to} className="capitalize hover:text-slate-700" />}
                                     >
                                         {crumb.label}
                                     </BreadcrumbLink>

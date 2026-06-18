@@ -189,7 +189,7 @@ export const VacationTable = () => {
                                         event.target.value,
                                     )
                                 }
-                                className="h-10 rounded-md border border-slate-200 bg-white px-3 text-sm font-medium normal-case tracking-normal text-slate-700 shadow-sm focus:border-[#2457a3] focus:outline-none focus:ring-2 focus:ring-[#2457a3]/20"
+                                className="h-10 rounded-md border border-slate-200 bg-white px-3 text-sm font-medium normal-case tracking-normal text-slate-700 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400/25"
                             >
                                 <option value="all">All statuses</option>
                                 <option value="pending">Pending</option>
@@ -207,7 +207,7 @@ export const VacationTable = () => {
                                         event.target.value,
                                     )
                                 }
-                                className="h-10 rounded-md border border-slate-200 bg-white px-3 text-sm font-medium normal-case tracking-normal text-slate-700 shadow-sm focus:border-[#2457a3] focus:outline-none focus:ring-2 focus:ring-[#2457a3]/20"
+                                className="h-10 rounded-md border border-slate-200 bg-white px-3 text-sm font-medium normal-case tracking-normal text-slate-700 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400/25"
                             >
                                 <option value="all">All types</option>
                                 <option value="vacation">Vacation</option>

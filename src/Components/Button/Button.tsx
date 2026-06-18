@@ -53,7 +53,7 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
     const variants = {
         [ButtonTypes.PRIMARY]:
-            'border border-[#2457a3] bg-[#2457a3] text-white shadow-[0_1px_2px_rgba(15,23,42,0.08)] hover:bg-[#1b4285] focus-visible:ring-[#2457a3]',
+            'border border-slate-700 bg-slate-800 text-white shadow-[0_1px_2px_rgba(15,23,42,0.08)] hover:bg-slate-900 focus-visible:ring-slate-400',
         [ButtonTypes.SECONDARY]:
             'border border-slate-200 bg-white text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)] hover:border-slate-300 hover:bg-slate-50 focus-visible:ring-slate-300',
         [ButtonTypes.DANGER]:

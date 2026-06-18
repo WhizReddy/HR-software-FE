@@ -79,7 +79,7 @@ function InterviewContent() {
                                 event.stopPropagation()
                                 handleNavigateToProfile(row._id.toString())
                             }}
-                            className="block max-w-[220px] truncate text-left text-sm font-bold text-slate-900 transition-colors hover:text-[#2457a3]"
+                            className="block max-w-[220px] truncate text-left text-sm font-bold text-slate-900 transition-colors hover:text-slate-700"
                         >
                             {row.firstName} {row.lastName}
                         </button>
@@ -99,7 +99,7 @@ function InterviewContent() {
                 headerName: 'Position',
                 width: 210,
                 renderCell: ({ value }: RenderCellParams<Interview>) => (
-                    <span className="inline-flex max-w-[190px] items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-blue-700">
+                    <span className="inline-flex max-w-[190px] items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-slate-700">
                         <BriefcaseBusiness size={14} />
                         <span className="truncate">
                             {String(value || 'Not specified')}
@@ -125,7 +125,7 @@ function InterviewContent() {
                         <span className="inline-flex items-center gap-2 text-sm font-medium text-slate-600">
                             <CalendarRange
                                 size={15}
-                                className="text-[#2457a3]"
+                                className="text-slate-600"
                             />
                             {formattedDate === 'No Date Provided'
                                 ? 'Not scheduled'
@@ -276,7 +276,7 @@ function InterviewContent() {
                                 }
                                 className={`flex min-w-[170px] items-center justify-between gap-3 rounded-xl border px-4 py-3 text-left transition-colors ${
                                     isActive
-                                        ? 'border-[#2457a3] bg-blue-50 text-[#2457a3]'
+                                        ? 'border-slate-300 bg-slate-50 text-slate-700'
                                         : 'border-transparent text-slate-600 hover:border-slate-200 hover:bg-slate-50'
                                 }`}
                             >
@@ -286,7 +286,7 @@ function InterviewContent() {
                                 <span
                                     className={`rounded-full px-2 py-0.5 text-xs font-bold ${
                                         isActive
-                                            ? 'bg-white text-[#2457a3]'
+                                            ? 'bg-white text-slate-700'
                                             : 'bg-slate-100 text-slate-500'
                                     }`}
                                 >

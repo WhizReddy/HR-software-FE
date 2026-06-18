@@ -38,7 +38,7 @@ export const SingleInventoryItem = () => {
 
                         <div className="mt-8">
                             <h4 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2 flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                                <div className="w-2 h-2 rounded-full bg-slate-500"></div>
                                 Assignment History
                             </h4>
 
@@ -55,7 +55,7 @@ export const SingleInventoryItem = () => {
                                                 (history: ItemHistory, index: number) => (
                                                     <div
                                                         key={index}
-                                                        className={`${style.singleHistory} bg-slate-50/80 hover:bg-white hover:shadow-md transition-all rounded-xl p-4 border border-transparent hover:border-blue-100 group`}
+                                                        className={`${style.singleHistory} bg-slate-50/80 hover:bg-white hover:shadow-md transition-all rounded-xl p-4 border border-transparent hover:border-slate-200 group`}
                                                     >
                                                         <p className="text-slate-600 font-medium">
                                                             {dayjs(history?.takenDate).format('DD MMM YYYY')}
@@ -75,7 +75,7 @@ export const SingleInventoryItem = () => {
                                                                 <span className="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-tighter">Current</span>
                                                             )}
                                                         </p>
-                                                        <p className="text-[#2457a3] font-bold group-hover:scale-105 transition-transform origin-left">
+                                                        <p className="text-slate-600 font-bold group-hover:scale-105 transition-transform origin-left">
                                                             {history.user?.firstName}{' '}
                                                             {history.user?.lastName}
                                                         </p>

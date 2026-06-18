@@ -37,9 +37,9 @@
     --foreground: #0F172A;
     --muted-foreground: #64748B;
     --border: #E2E8F0;
-    --primary: #2457A3;
-    --primary-hover: #1B4285;
-    --primary-soft: #EBF2FA;
+    --primary: #334155;
+    --primary-hover: #1E293B;
+    --primary-soft: #F1F5F9;
     --primary-foreground: #FFFFFF;
     --success: #059669;
     --danger: #DC2626;
@@ -49,8 +49,8 @@
 
     /* Backward-compatible aliases used by older screens */
     --primary-blue: var(--primary);
-    --primary-blue-light: #4A7BCD;
-    --primary-blue-dark: #153B75;
+    --primary-blue-light: #64748B;
+    --primary-blue-dark: #1E293B;
     --accent-blue: var(--primary-soft);
     --bg-color: var(--background);
     --surface-color: var(--surface);
@@ -77,7 +77,7 @@
     --accent-foreground: var(--foreground);
     --destructive: var(--danger);
     --input: var(--border);
-    --ring: rgba(36, 87, 163, 0.45);
+    --ring: rgba(51, 65, 85, 0.35);
     --chart-1: oklch(0.646 0.222 41.116);
     --chart-2: oklch(0.6 0.118 184.704);
     --chart-3: oklch(0.398 0.07 227.392);

@@ -64,7 +64,7 @@ const Selecter: React.FC<SelecterProps> = ({
                 className={cn(
                     'w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-800 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-colors duration-200 hover:border-slate-300',
                     multiple ? 'min-h-[120px] py-1' : 'h-10 py-2',
-                    'focus-visible:border-blue-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30 focus-visible:ring-offset-0',
+                    'focus-visible:border-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/25 focus-visible:ring-offset-0',
                     'disabled:cursor-not-allowed disabled:opacity-50',
                 )}
             >

@@ -166,7 +166,7 @@ export default function Calendar() {
                                         )
                                       ? 'bg-slate-900 text-white'
                                     : dayItems.length > 0
-                                      ? 'bg-blue-50 text-blue-700'
+                                      ? 'bg-slate-100 text-slate-700'
                                       : 'text-slate-700 hover:bg-slate-100'
                             }`}
                             aria-label={`${visibleMonth.date(date).format('MMMM D')}, ${dayItems.length} calendar item${dayItems.length === 1 ? '' : 's'}`}

@@ -53,13 +53,13 @@ function VacationComponent() {
                 >
                     <ToggleGroupItem
                         value="requests"
-                        className="rounded-md px-6 text-sm font-semibold transition-all data-[state=on]:bg-white data-[state=on]:text-[#2457a3] data-[state=on]:shadow-sm"
+                        className="rounded-md px-6 text-sm font-semibold transition-all data-[state=on]:bg-white data-[state=on]:text-slate-800 data-[state=on]:shadow-sm"
                     >
                         Requests
                     </ToggleGroupItem>
                     <ToggleGroupItem
                         value="userLeaves"
-                        className="rounded-md px-6 text-sm font-semibold transition-all data-[state=on]:bg-white data-[state=on]:text-[#2457a3] data-[state=on]:shadow-sm"
+                        className="rounded-md px-6 text-sm font-semibold transition-all data-[state=on]:bg-white data-[state=on]:text-slate-800 data-[state=on]:shadow-sm"
                     >
                         User Leaves
                     </ToggleGroupItem>

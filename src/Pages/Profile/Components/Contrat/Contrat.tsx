@@ -62,7 +62,7 @@ const ContratContent = () => {
 
             {/* Left Column - Payroll Information Card */}
             <div className="flex h-full flex-col rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:p-8">
-                <h3 className="mb-6 border-b border-slate-100 pb-4 text-lg font-semibold text-[#2457a3]">Payroll Information</h3>
+                <h3 className="mb-6 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-600">Payroll Information</h3>
 
                 <div className="flex-1 space-y-6">
                     <div className="space-y-1">

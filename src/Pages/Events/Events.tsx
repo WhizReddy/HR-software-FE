@@ -123,7 +123,7 @@ function EventsContentAndComponents() {
                             page.data.map((event: EventsData) => (
                                 <div
                                     key={event._id}
-                                    className="group flex min-h-[400px] flex-col overflow-hidden rounded-lg border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06)] transition-all duration-200 hover:border-[#2457a3]/30 hover:shadow-[0_12px_30px_rgba(15,23,42,0.08)]"
+                                    className="group flex min-h-[400px] flex-col overflow-hidden rounded-lg border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06)] transition-all duration-200 hover:border-slate-300 hover:shadow-[0_12px_30px_rgba(15,23,42,0.08)]"
                                 >
                                     {event.photo && event.photo.length > 0 ? (
                                         <div className="h-40 w-full flex-shrink-0 overflow-hidden bg-slate-100">
@@ -182,7 +182,7 @@ function EventsContentAndComponents() {
                                             <div className="flex items-center gap-2.5 text-sm text-slate-600">
                                                 <Calendar
                                                     size={17}
-                                                    className="flex-shrink-0 text-[#2457a3]"
+                                                    className="flex-shrink-0 text-slate-600"
                                                 />
                                                 <span
                                                     className="font-medium"
@@ -198,7 +198,7 @@ function EventsContentAndComponents() {
                                             <div className="flex items-start gap-2.5 text-sm text-slate-600">
                                                 <MapPin
                                                     size={17}
-                                                    className="mt-0.5 flex-shrink-0 text-[#2457a3]"
+                                                    className="mt-0.5 flex-shrink-0 text-slate-600"
                                                 />
                                                 <span style={clampText(1)}>
                                                     {event.location}
@@ -212,7 +212,7 @@ function EventsContentAndComponents() {
                                             onClick={() =>
                                                 handleSeeEventDetails(event)
                                             }
-                                            className="flex w-full items-center justify-center rounded-md border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-[#2457a3] transition-colors duration-200 hover:border-[#2457a3]/25 hover:bg-[#2457a3]/5"
+                                            className="flex w-full items-center justify-center rounded-md border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors duration-200 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-950"
                                         >
                                             See Details
                                         </button>

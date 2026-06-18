@@ -145,7 +145,7 @@ export const EmployeesWithHoldings = () => {
                                         }
                                         variant="outline"
                                         size="sm"
-                                        className="h-10 px-4 font-semibold text-blue-700 hover:bg-blue-50"
+                                        className="h-10 px-4 font-semibold text-slate-700 hover:bg-slate-50"
                                     >
                                         Assign asset
                                     </Button>

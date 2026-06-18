@@ -41,7 +41,7 @@ const SimpleCollapsableCard: React.FC<SimpleCollapsableCardProps> = ({
             <button
                 type="button"
                 aria-expanded={expanded}
-                className="flex w-full cursor-pointer flex-col gap-3 px-5 py-4 text-left transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2457a3]/25 sm:flex-row sm:items-center sm:justify-between"
+                className="flex w-full cursor-pointer flex-col gap-3 px-5 py-4 text-left transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/25 sm:flex-row sm:items-center sm:justify-between"
                 onClick={() => setExpanded((prev) => !prev)}
             >
                 <div className="flex min-w-0 items-center gap-3">
@@ -52,7 +52,7 @@ const SimpleCollapsableCard: React.FC<SimpleCollapsableCardProps> = ({
                             className="h-9 w-9 rounded-md border border-slate-200 object-cover"
                         />
                     ) : (
-                        <div className="flex h-9 w-9 items-center justify-center rounded-md bg-blue-100 text-blue-700">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-md bg-slate-100 text-slate-700">
                             <User size={18} />
                         </div>
                     )}
@@ -67,7 +67,7 @@ const SimpleCollapsableCard: React.FC<SimpleCollapsableCardProps> = ({
                 </div>
                 <div className="flex items-center gap-3 self-start sm:self-auto">
                     {items && (
-                        <span className="rounded-md bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700">
+                        <span className="rounded-md bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700">
                             {itemCount} {items.type}
                             {itemCount !== 1 ? 's' : ''}
                         </span>

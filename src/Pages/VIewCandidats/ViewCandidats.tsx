@@ -177,7 +177,7 @@ export default function ViewCandidats() {
                                         ? 'bg-emerald-500'
                                         : applicant.status === 'rejected'
                                           ? 'bg-rose-500'
-                                          : 'bg-blue-500'
+                                          : 'bg-slate-500'
                                 }`}
                             />
                             <span className="text-sm font-semibold capitalize text-slate-800">
@@ -193,7 +193,7 @@ export default function ViewCandidats() {
                     <Card className="rounded-lg border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
                         <div className="flex flex-col gap-4 border-b border-slate-100 pb-5 sm:flex-row sm:items-center sm:justify-between">
                             <div className="flex items-center gap-3">
-                                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-50 text-[#2457a3]">
+                                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-slate-50 text-slate-600">
                                     <UserRound size={22} />
                                 </div>
                                 <div>
@@ -306,7 +306,7 @@ export default function ViewCandidats() {
                                         href={cvUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-[#2457a3] hover:text-[#1a407a]"
+                                        className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-950"
                                     >
                                         <FileText size={16} />
                                         View CV
@@ -493,7 +493,7 @@ export default function ViewCandidats() {
                                 onChange={(event) =>
                                     setUseCustomEmail(event.target.checked)
                                 }
-                                className="h-4 w-4 cursor-pointer rounded accent-[#2457a3] focus:ring-[#2457a3]"
+                                className="h-4 w-4 cursor-pointer rounded accent-slate-700 focus:ring-slate-400"
                             />
                             <span className="text-sm font-semibold text-slate-700">
                                 Use custom email

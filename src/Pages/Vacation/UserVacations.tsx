@@ -142,12 +142,12 @@ const UserVacationsComponent = () => {
                                     className="h-16 w-16 shrink-0 rounded-lg border border-slate-200 object-cover"
                                 />
                             ) : (
-                                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-blue-50 text-[#2457a3]">
+                                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-600">
                                     <UserRound size={24} />
                                 </div>
                             )}
                             <div className="min-w-0">
-                                <p className="text-xs font-semibold uppercase text-[#2457a3]">
+                                <p className="text-xs font-semibold uppercase text-slate-600">
                                     Vacation profile
                                 </p>
                                 <h1 className="mt-1 truncate text-2xl font-semibold text-slate-950">
@@ -172,7 +172,7 @@ const UserVacationsComponent = () => {
                     <div className="mt-5 grid gap-3 sm:grid-cols-3">
                         <div className="rounded-lg border border-slate-100 bg-slate-50 px-4 py-3">
                             <div className="flex items-center gap-2 text-slate-500">
-                                <Mail size={16} className="text-[#2457a3]" />
+                                <Mail size={16} className="text-slate-600" />
                                 <p className="text-[11px] font-semibold uppercase">
                                     Email
                                 </p>
@@ -183,7 +183,7 @@ const UserVacationsComponent = () => {
                         </div>
                         <div className="rounded-lg border border-slate-100 bg-slate-50 px-4 py-3">
                             <div className="flex items-center gap-2 text-slate-500">
-                                <Phone size={16} className="text-[#2457a3]" />
+                                <Phone size={16} className="text-slate-600" />
                                 <p className="text-[11px] font-semibold uppercase">
                                     Phone
                                 </p>
@@ -196,7 +196,7 @@ const UserVacationsComponent = () => {
                             <div className="flex items-center gap-2 text-slate-500">
                                 <CalendarDays
                                     size={16}
-                                    className="text-[#2457a3]"
+                                    className="text-slate-600"
                                 />
                                 <p className="text-[11px] font-semibold uppercase">
                                     Used leave

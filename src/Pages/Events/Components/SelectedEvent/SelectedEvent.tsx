@@ -98,7 +98,7 @@ const SelectedEventCard = () => {
 
                 <div className="mb-8 grid grid-cols-1 gap-4 rounded-lg border border-slate-200/80 bg-slate-50 p-5 sm:grid-cols-2">
                     <div className="flex items-start gap-3 text-slate-700">
-                        <Calendar className="mt-0.5 text-[#2457a3]" size={20} />
+                        <Calendar className="mt-0.5 text-slate-600" size={20} />
                         <div>
                             <div className="text-sm font-semibold text-slate-900 mb-0.5">
                                 Date & Time
@@ -110,7 +110,7 @@ const SelectedEventCard = () => {
                         </div>
                     </div>
                     <div className="flex items-start gap-3 text-slate-700">
-                        <MapPin className="mt-0.5 text-[#2457a3]" size={20} />
+                        <MapPin className="mt-0.5 text-slate-600" size={20} />
                         <div>
                             <div className="text-sm font-semibold text-slate-900 mb-0.5">
                                 Location

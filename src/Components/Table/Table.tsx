@@ -424,7 +424,7 @@ function DataTable<TRow>({
                                         idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/40'
                                     } ${
                                         handleRowClick
-                                            ? 'cursor-pointer hover:bg-blue-50/60'
+                                            ? 'cursor-pointer hover:bg-slate-50'
                                             : 'hover:bg-slate-50'
                                     }`}
                                 >
@@ -477,7 +477,7 @@ function DataTable<TRow>({
                                                 pageSize: Number(event.target.value),
                                             })
                                         }
-                                        className="h-9 rounded-md border border-slate-200 bg-white px-2 text-sm font-semibold text-slate-700 outline-none transition-colors hover:border-slate-300 focus:border-[#2457a3] focus:ring-2 focus:ring-[#2457a3]/15 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400"
+                                        className="h-9 rounded-md border border-slate-200 bg-white px-2 text-sm font-semibold text-slate-700 outline-none transition-colors hover:border-slate-300 focus:border-slate-400 focus:ring-2 focus:ring-slate-400/20 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400"
                                     >
                                         {pageSizeOptions.map((option) => (
                                             <option key={option} value={option}>

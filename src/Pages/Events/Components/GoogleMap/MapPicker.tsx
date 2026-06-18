@@ -255,7 +255,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
                         <button
                             type="button"
                             onClick={handleSearch}
-                            className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:border-slate-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2457a3]/20 sm:mt-6"
+                            className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:border-slate-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/25 sm:mt-6"
                         >
                             <Search size={16} />
                             Search

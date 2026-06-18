@@ -48,7 +48,7 @@ const LoginPageContent = () => {
     if (checkingIsAuthenticated) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-slate-50">
-                <RingLoader color="#2457A3" />
+                <RingLoader color="#334155" />
             </div>
         )
     }
@@ -58,7 +58,7 @@ const LoginPageContent = () => {
             heroTitle={
                 <>
                     Run HR work <br />
-                    <span className="text-blue-200">from one calm hub.</span>
+                    <span className="text-slate-300">from one calm hub.</span>
                 </>
             }
             heroDescription="People Hub brings recruitment, team records, vacations, payroll, assets, and daily HR operations into one connected workspace."
@@ -121,7 +121,7 @@ const LoginPageContent = () => {
                                 </Label>
                                 <Link
                                     to="/forgot-password"
-                                    className="text-sm font-semibold text-[#2457a3] hover:text-[#1a407a] transition-colors"
+                                    className="text-sm font-semibold text-slate-700 transition-colors hover:text-slate-950"
                                 >
                                     Forgot password?
                                 </Link>
@@ -163,7 +163,7 @@ const LoginPageContent = () => {
 
                 <Button
                     type="submit"
-                    className="mt-8 h-12 w-full rounded-xl bg-[#2457a3] text-base font-semibold text-white shadow-sm transition-colors hover:bg-[#1a407a]"
+                    className="mt-8 h-12 w-full rounded-xl border border-slate-700 bg-slate-800 text-base font-semibold text-white shadow-sm transition-colors hover:bg-slate-900"
                     disabled={form.state.isSubmitting}
                 >
                     {form.state.isSubmitting

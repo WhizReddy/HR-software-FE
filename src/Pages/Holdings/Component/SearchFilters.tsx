@@ -85,7 +85,7 @@ export const HoldingsSearchFilter = () => {
                                 type="button"
                                 onClick={() => handleChange(filter.value)}
                                 className={`rounded-md px-4 py-1.5 text-xs font-semibold transition-all duration-200 ease-in-out ${isActive
-                                        ? 'bg-white text-[#2457a3] shadow-sm ring-1 ring-slate-200/50'
+                                        ? 'bg-white text-slate-800 shadow-sm ring-1 ring-slate-200/50'
                                         : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
                                     }`}
                             >

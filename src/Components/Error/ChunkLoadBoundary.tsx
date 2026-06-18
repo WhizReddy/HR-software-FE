@@ -67,7 +67,7 @@ export class ChunkLoadBoundary extends Component<
                     <button
                         type="button"
                         onClick={() => window.location.reload()}
-                        className="mt-5 inline-flex min-h-10 items-center justify-center rounded-md bg-[#2457a3] px-4 text-sm font-semibold text-white transition-colors hover:bg-[#1b4285] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2457a3]/30"
+                        className="mt-5 inline-flex min-h-10 items-center justify-center rounded-md border border-slate-700 bg-slate-800 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/40"
                     >
                         Refresh page
                     </button>

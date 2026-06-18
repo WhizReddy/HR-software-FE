@@ -117,7 +117,7 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
                         type="checkbox"
                         checked={useCustomEmail}
                         onChange={(e) => setUseCustomEmail(e.target.checked)}
-                        className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500 accent-blue-600"
+                        className="h-5 w-5 rounded accent-slate-700 focus:ring-slate-400"
                     />
                     <span className="text-slate-700 font-medium">Use custom email</span>
                 </label>

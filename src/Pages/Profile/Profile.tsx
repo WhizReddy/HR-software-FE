@@ -24,14 +24,14 @@ export default function Profile() {
                     <TabsList className="flex h-auto w-full justify-start gap-1 overflow-x-auto rounded-lg border border-slate-200 bg-slate-100 p-1 md:w-64 md:flex-col md:items-stretch">
                         <TabsTrigger
                             value="profile"
-                            className="w-full justify-start rounded-md px-4 py-3 text-sm font-semibold text-slate-600 transition-all hover:bg-white/70 data-[state=active]:bg-white data-[state=active]:text-[#2457a3] data-[state=active]:shadow-sm"
+                            className="w-full justify-start rounded-md px-4 py-3 text-sm font-semibold text-slate-600 transition-all hover:bg-white/70 data-[state=active]:bg-white data-[state=active]:text-slate-800 data-[state=active]:shadow-sm"
                         >
                             Profile details
                         </TabsTrigger>
                         {canViewPayroll && (
                             <TabsTrigger
                                 value="payroll"
-                                className="w-full justify-start rounded-md px-4 py-3 text-sm font-semibold text-slate-600 transition-all hover:bg-white/70 data-[state=active]:bg-white data-[state=active]:text-[#2457a3] data-[state=active]:shadow-sm"
+                                className="w-full justify-start rounded-md px-4 py-3 text-sm font-semibold text-slate-600 transition-all hover:bg-white/70 data-[state=active]:bg-white data-[state=active]:text-slate-800 data-[state=active]:shadow-sm"
                             >
                                 Payroll & Contracts
                             </TabsTrigger>
@@ -39,7 +39,7 @@ export default function Profile() {
                         {canViewSecurity && (
                             <TabsTrigger
                                 value="security"
-                                className="w-full justify-start rounded-md px-4 py-3 text-sm font-semibold text-slate-600 transition-all hover:bg-white/70 data-[state=active]:bg-white data-[state=active]:text-[#2457a3] data-[state=active]:shadow-sm"
+                                className="w-full justify-start rounded-md px-4 py-3 text-sm font-semibold text-slate-600 transition-all hover:bg-white/70 data-[state=active]:bg-white data-[state=active]:text-slate-800 data-[state=active]:shadow-sm"
                             >
                                 Security
                             </TabsTrigger>

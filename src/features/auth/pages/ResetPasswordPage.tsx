@@ -100,7 +100,7 @@ export default function ResetPasswordPage() {
             heroTitle={
                 <>
                     Secure your account <br />
-                    <span className="text-blue-200">safely.</span>
+                    <span className="text-slate-300">safely.</span>
                 </>
             }
             heroDescription="Reset your password quickly and securely to regain access to your HR Management toolkit."
@@ -132,7 +132,7 @@ export default function ResetPasswordPage() {
 
                     <Button
                         type="submit"
-                        className="mt-6 h-12 w-full rounded-md bg-[#2457a3] text-base font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.08)] transition-colors hover:bg-[#1a407a]"
+                        className="mt-6 h-12 w-full rounded-md border border-slate-700 bg-slate-800 text-base font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.08)] transition-colors hover:bg-slate-900"
                         disabled={isLoading}
                     >
                         {isLoading ? 'Sending...' : 'Send Reset Link'}
@@ -177,7 +177,7 @@ export default function ResetPasswordPage() {
 
                     <Button
                         type="submit"
-                        className="mt-6 h-12 w-full rounded-md bg-[#2457a3] text-base font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.08)] transition-colors hover:bg-[#1a407a]"
+                        className="mt-6 h-12 w-full rounded-md border border-slate-700 bg-slate-800 text-base font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.08)] transition-colors hover:bg-slate-900"
                         disabled={isLoading}
                     >
                         {isLoading ? 'Resetting...' : 'Reset Password'}
@@ -204,7 +204,7 @@ export default function ResetPasswordPage() {
             <div className="mt-8 text-center">
                 <Link
                     to="/"
-                    className="text-sm text-[#2457a3] hover:text-[#1a407a] transition-colors font-medium hover:underline"
+                    className="text-sm font-medium text-slate-700 transition-colors hover:text-slate-950 hover:underline"
                 >
                     Back to Login
                 </Link>

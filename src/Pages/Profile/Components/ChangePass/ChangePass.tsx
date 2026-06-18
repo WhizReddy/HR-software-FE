@@ -21,7 +21,7 @@ function ChangePassContent() {
         <div className="mx-auto w-full max-w-4xl">
             <div className="rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:p-8">
                 <div className="mb-8 border-b border-slate-100 pb-4">
-                    <h3 className="text-xl font-semibold text-[#2457a3]">Security Settings</h3>
+                    <h3 className="text-xl font-semibold text-slate-600">Security Settings</h3>
                     <p className="mt-2 text-sm leading-6 text-slate-500">
                         Update your password to keep your account secure. We recommend using a strong password that you don't use elsewhere.
                     </p>
@@ -29,8 +29,8 @@ function ChangePassContent() {
 
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                     {/* Left side info */}
-                    <div className="flex flex-col justify-center space-y-6 rounded-lg border border-blue-100 bg-blue-50 p-6">
-                        <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-lg bg-[#2457a3]/10 text-[#2457a3]">
+                    <div className="flex flex-col justify-center space-y-6 rounded-lg border border-slate-200 bg-slate-50 p-6">
+                        <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
                             <ShieldCheck size={22} />
                         </div>
                         <h4 className="text-lg font-semibold text-slate-950">Password Requirements</h4>

@@ -9,7 +9,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'border border-[#2457a3] bg-[#2457a3] text-white shadow-sm hover:bg-[#1b4285]',
+          'border border-slate-700 bg-slate-800 text-white shadow-sm hover:bg-slate-900',
         destructive:
           'border border-red-600 bg-red-600 text-white shadow-sm hover:bg-red-700',
         outline:
@@ -17,7 +17,7 @@ const buttonVariants = cva(
         secondary:
           'border border-slate-200/80 bg-slate-100 text-slate-700 shadow-sm hover:bg-slate-200',
         ghost: 'text-slate-600 hover:bg-slate-100 hover:text-slate-900',
-        link: 'text-[#2457a3] underline-offset-4 hover:text-[#1b4285] hover:underline',
+        link: 'text-slate-700 underline-offset-4 hover:text-slate-950 hover:underline',
         success:
           'border border-emerald-600 bg-emerald-600 text-white shadow-sm hover:bg-emerald-700',
         warning:

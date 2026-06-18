@@ -106,7 +106,7 @@ export default function Forms() {
                         type="button"
                         onClick={handleCloseDrawer}
                         aria-label="Close event form"
-                        className="rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                        className="rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
                     >
                         <X className="h-5 w-5" />
                     </button>

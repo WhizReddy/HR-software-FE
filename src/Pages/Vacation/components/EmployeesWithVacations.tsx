@@ -62,7 +62,7 @@ export const EmployeesWithVacations = () => {
     if (isLoading)
         return (
             <div className="flex min-h-[360px] flex-col items-center justify-center rounded-lg border border-slate-200/80 bg-white">
-                <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#2457a3] border-t-transparent" />
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-600 border-t-transparent" />
                 <p className="mt-3 text-sm font-medium text-slate-500">
                     Loading user leaves...
                 </p>
@@ -135,7 +135,7 @@ export const EmployeesWithVacations = () => {
                                             className="h-12 w-12 rounded-md border border-slate-200 object-cover"
                                         />
                                     ) : (
-                                        <div className="flex h-12 w-12 items-center justify-center rounded-md bg-blue-50 text-blue-700">
+                                        <div className="flex h-12 w-12 items-center justify-center rounded-md bg-slate-50 text-slate-700">
                                             <User size={20} />
                                         </div>
                                     )}
@@ -153,7 +153,7 @@ export const EmployeesWithVacations = () => {
                                     <span className="rounded-md bg-slate-100 px-2.5 py-1 text-xs font-semibold capitalize text-slate-600">
                                         {user.role || 'Employee'}
                                     </span>
-                                    <span className="rounded-md bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">
+                                    <span className="rounded-md bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-700">
                                         {user.vacations?.length ?? 0} leave
                                         {(user.vacations?.length ?? 0) === 1
                                             ? ''

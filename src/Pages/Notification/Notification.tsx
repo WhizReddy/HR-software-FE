@@ -33,8 +33,8 @@ const getTypeStyles = (type: string, isRead: boolean) => {
     switch (type) {
         case 'events':
             return {
-                dot: 'bg-blue-500',
-                badge: 'border-blue-100 bg-blue-50 text-blue-700',
+                dot: 'bg-slate-500',
+                badge: 'border-slate-200 bg-slate-50 text-slate-700',
             }
         case 'vacation':
         case 'allVacation':
@@ -294,7 +294,7 @@ const NotificationDropdown: React.FC = () => {
         <div ref={dropdownRef} className="relative inline-block">
             <button
                 type="button"
-                className="relative rounded-full p-2 text-slate-600 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2457a3]/25"
+                className="relative rounded-full p-2 text-slate-600 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/25"
                 onClick={() => setIsOpen((prev) => !prev)}
                 aria-expanded={isOpen}
                 aria-haspopup="menu"
@@ -353,7 +353,7 @@ const NotificationDropdown: React.FC = () => {
                                             }
                                             className={`rounded-md px-3 py-1.5 text-xs font-semibold transition ${
                                                 isActive
-                                                    ? 'bg-white text-[#2457a3] shadow-sm'
+                                                    ? 'bg-white text-slate-700 shadow-sm'
                                                     : 'text-slate-500 hover:text-slate-700'
                                             }`}
                                         >
@@ -383,7 +383,7 @@ const NotificationDropdown: React.FC = () => {
                             <div className="flex min-h-40 flex-col items-center justify-center gap-3 text-center text-sm font-medium text-slate-500">
                                 <Loader2
                                     size={22}
-                                    className="animate-spin text-[#2457a3]"
+                                    className="animate-spin text-slate-600"
                                 />
                                 Loading notifications...
                             </div>
@@ -448,7 +448,7 @@ const NotificationDropdown: React.FC = () => {
                                         className={`mb-2 rounded-lg border p-3 transition ${
                                             notification.isRead
                                                 ? 'border-slate-200 bg-white'
-                                                : 'border-blue-100 bg-blue-50/35'
+                                                : 'border-slate-200 bg-slate-50/35'
                                         }`}
                                     >
                                         <button
@@ -541,7 +541,7 @@ const NotificationDropdown: React.FC = () => {
                         </p>
                         <button
                             type="button"
-                            className="inline-flex h-9 items-center justify-center gap-2 rounded-md bg-[#2457a3] px-3 text-xs font-semibold text-white transition hover:bg-[#1c4380] disabled:cursor-not-allowed disabled:opacity-60"
+                            className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-slate-700 bg-slate-800 px-3 text-xs font-semibold text-white transition hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
                             disabled={unreadCount === 0 || isMarkingAll}
                             onClick={markAllAsRead}
                         >

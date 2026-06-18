@@ -103,7 +103,7 @@ const DashboardContent: React.FC = () => {
                 <div className="overflow-hidden rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:p-7">
                     <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
                         <div>
-                            <p className="mb-2 inline-flex items-center gap-2 text-xs font-semibold uppercase text-[#2457a3]">
+                            <p className="mb-2 inline-flex items-center gap-2 text-xs font-semibold uppercase text-slate-500">
                                 <Sparkles size={12} />
                                 Daily Snapshot
                             </p>
@@ -162,7 +162,7 @@ const DashboardContent: React.FC = () => {
                                         key={item.label}
                                         type="button"
                                         onClick={() => navigate(item.to)}
-                                        className="group flex min-h-[112px] items-center justify-between gap-4 rounded-lg border border-slate-200 bg-white p-4 text-left transition-colors hover:border-[#2457a3]/30 hover:bg-blue-50/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2457a3]/20"
+                                        className="group flex min-h-[112px] items-center justify-between gap-4 rounded-lg border border-slate-200 bg-white p-4 text-left transition-colors hover:border-slate-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/25"
                                     >
                                         <div className="min-w-0">
                                             <p className="text-xs font-semibold uppercase text-slate-500">
@@ -175,7 +175,7 @@ const DashboardContent: React.FC = () => {
                                                 {item.hint}
                                             </p>
                                         </div>
-                                        <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-slate-100 text-[#2457a3] transition-colors group-hover:bg-white">
+                                        <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition-colors group-hover:bg-white">
                                             <Icon size={20} />
                                         </span>
                                     </button>
@@ -277,10 +277,10 @@ const DashboardContent: React.FC = () => {
                                                 <img
                                                     src={employee.imageUrl}
                                                     alt={`${employee.firstName} ${employee.lastName}`}
-                                                    className="h-16 w-16 rounded-full object-cover ring-4 ring-white shadow-sm transition-all duration-300 group-hover:ring-blue-100"
+                                                    className="h-16 w-16 rounded-full object-cover ring-4 ring-white shadow-sm transition-all duration-300 group-hover:ring-slate-100"
                                                 />
                                             ) : (
-                                                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-blue-500 text-xl font-bold text-white ring-4 ring-white shadow-sm transition-all duration-300 group-hover:ring-blue-100">
+                                                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-slate-800 to-slate-600 text-xl font-bold text-white ring-4 ring-white shadow-sm transition-all duration-300 group-hover:ring-slate-100">
                                                     {employee.firstName?.charAt(
                                                         0,
                                                     )}
@@ -291,7 +291,7 @@ const DashboardContent: React.FC = () => {
                                             )}
                                         </div>
                                         <div className="w-full px-1 text-center">
-                                            <p className="truncate text-sm font-semibold leading-tight text-slate-800 transition-colors group-hover:text-blue-600">
+                                            <p className="truncate text-sm font-semibold leading-tight text-slate-800 transition-colors group-hover:text-slate-600">
                                                 {employee.firstName}{' '}
                                                 {employee.lastName}
                                             </p>

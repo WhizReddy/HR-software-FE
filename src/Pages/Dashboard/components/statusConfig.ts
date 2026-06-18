@@ -40,6 +40,6 @@ export const statusConfig: Record<
         icon: Monitor,
         chartColor: '#3b82f6',
         gradient: 'from-blue-500 to-cyan-400',
-        badgeClassName: 'bg-blue-500',
+        badgeClassName: 'bg-slate-500',
     },
 }

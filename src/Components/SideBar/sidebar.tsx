@@ -120,11 +120,11 @@ export const SideBar: React.FC = () => {
     >
       <SidebarHeader className="h-16 justify-center border-b border-slate-100 px-3">
         <div className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#2457a3] text-sm font-bold text-white shadow-sm">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-800 text-sm font-bold text-white shadow-sm">
             PH
           </div>
           <span className="truncate text-base font-semibold text-slate-900 group-data-[collapsible=icon]:hidden">
-            People <span className="text-[#2457a3]">Hub</span>
+            People <span className="text-slate-500">Hub</span>
           </span>
         </div>
       </SidebarHeader>
@@ -148,7 +148,7 @@ export const SideBar: React.FC = () => {
                       onClick={() => navigate(path)}
                       className={
                         isActive
-                          ? 'bg-blue-50 text-[#2457a3] shadow-none hover:bg-blue-50 hover:text-[#2457a3]'
+                          ? 'bg-slate-100 text-slate-950 shadow-none hover:bg-slate-100 hover:text-slate-950'
                           : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                       }
                     >

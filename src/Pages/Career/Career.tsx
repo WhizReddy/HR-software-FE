@@ -266,7 +266,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             <div className="grid lg:grid-cols-[1.15fr_0.85fr]">
                                 <div className="p-6 sm:p-7">
                                     <div className="flex flex-wrap items-center gap-2">
-                                        <span className="inline-flex items-center gap-2 rounded-md bg-blue-50 px-3 py-1.5 text-xs font-semibold uppercase text-[#2457a3]">
+                                        <span className="inline-flex items-center gap-2 rounded-md bg-slate-100 px-3 py-1.5 text-xs font-semibold uppercase text-slate-700">
                                             <Sparkles size={14} />
                                             Publishing overview
                                         </span>
@@ -297,7 +297,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                                     <div className="flex items-center gap-2 text-slate-500">
                                                         <Icon
                                                             size={16}
-                                                            className="text-[#2457a3]"
+                                                            className="text-slate-600"
                                                         />
                                                         <p className="text-[11px] font-semibold uppercase text-slate-500">
                                                             {label}
@@ -507,7 +507,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                                     key={title}
                                                     className="flex min-w-0 gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4"
                                                 >
-                                                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-white text-[#2457a3] shadow-sm">
+                                                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-white text-slate-600 shadow-sm">
                                                         <Icon
                                                             size={16}
                                                         />
@@ -538,7 +538,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         </div>
                                         <ArrowUpRight
                                             size={16}
-                                            className="text-[#2457a3]"
+                                            className="text-slate-600"
                                         />
                                     </div>
                                     <div className="mt-5 flex flex-wrap gap-2">
@@ -607,7 +607,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             </p>
                         </div>
 
-                        <label className="flex w-full items-center gap-3 rounded-md border border-slate-200 bg-slate-50 px-4 py-3 lg:max-w-md focus-within:border-[#2457a3] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#2457a3]/15">
+                        <label className="flex w-full items-center gap-3 rounded-md border border-slate-200 bg-slate-50 px-4 py-3 lg:max-w-md focus-within:border-slate-400 focus-within:bg-white focus-within:ring-2 focus-within:ring-slate-400/20">
                             <Search size={18} className="text-slate-400" />
                             <input
                                 type="text"
@@ -663,7 +663,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             {filteredEvents.map((careerEvent) => (
                                 <article
                                     key={careerEvent._id}
-                                    className="group flex h-full flex-col rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] transition duration-200 hover:-translate-y-0.5 hover:border-[#2457a3]/35 hover:shadow-[0_18px_45px_rgba(15,23,42,0.10)]"
+                                    className="group flex h-full flex-col rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_18px_45px_rgba(15,23,42,0.10)]"
                                 >
                                     <div className="flex items-start justify-between gap-4">
                                         <div>
@@ -678,7 +678,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                             <div className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700">
                                                 <MapPin
                                                     size={15}
-                                                    className="text-[#2457a3]"
+                                                    className="text-slate-600"
                                                 />
                                                 <span>
                                                     {careerEvent.location ||
@@ -697,7 +697,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                                         )
                                                     }
                                                     aria-label={`Edit ${careerEvent.title}`}
-                                                    className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-slate-200 text-slate-500 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2457a3]/30"
+                                                    className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-slate-200 text-slate-500 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/30"
                                                 >
                                                     <Pencil size={16} />
                                                 </button>
@@ -728,7 +728,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         {managementMode ? (
                                             <Link
                                                 to="/career"
-                                                className="inline-flex items-center gap-2 text-sm font-semibold text-[#2457a3] transition hover:text-[#183b74]"
+                                                className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 transition hover:text-slate-950"
                                             >
                                                 Preview public page
                                                 <ArrowRight size={14} />
@@ -786,7 +786,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                                 key={title}
                                                 className="rounded-lg border border-slate-200 bg-slate-50 p-5"
                                             >
-                                                <div className="flex h-11 w-11 items-center justify-center rounded-md bg-white text-[#2457a3] shadow-sm">
+                                                <div className="flex h-11 w-11 items-center justify-center rounded-md bg-white text-slate-600 shadow-sm">
                                                     <Icon size={18} />
                                                 </div>
                                                 <h3 className="mt-4 text-lg font-semibold text-slate-950">
@@ -831,7 +831,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                                 key={promise}
                                                 className="flex items-start gap-3"
                                             >
-                                                <span className="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-blue-50 text-[#2457a3]">
+                                                <span className="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-slate-100 text-slate-600">
                                                     <ArrowRight size={14} />
                                                 </span>
                                                 <p className="text-sm leading-7 text-slate-600">
@@ -871,7 +871,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                             key={title}
                                             className="min-w-0 rounded-lg border border-slate-200 bg-slate-50 p-5"
                                         >
-                                            <div className="flex h-11 w-11 items-center justify-center rounded-md bg-white text-[#2457a3] shadow-sm">
+                                            <div className="flex h-11 w-11 items-center justify-center rounded-md bg-white text-slate-600 shadow-sm">
                                                 <Icon size={18} />
                                             </div>
                                             <h3 className="mt-4 text-base font-semibold text-slate-950">
@@ -952,7 +952,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                                 : handleChange
                                         }
                                         placeholder="Frontend Developer"
-                                        className="w-full rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#2457a3] focus:bg-white"
+                                        className="w-full rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-slate-400 focus:bg-white"
                                     />
                                 </label>
 
@@ -974,7 +974,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                                 : handleChange
                                         }
                                         placeholder="Tirane / Hybrid"
-                                        className="w-full rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#2457a3] focus:bg-white"
+                                        className="w-full rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-slate-400 focus:bg-white"
                                     />
                                 </label>
 
@@ -996,7 +996,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         }
                                         placeholder="Describe the role, expectations, and why someone should apply."
                                         rows={6}
-                                        className="w-full rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-7 text-slate-700 outline-none transition focus:border-[#2457a3] focus:bg-white"
+                                        className="w-full rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-7 text-slate-700 outline-none transition focus:border-slate-400 focus:bg-white"
                                     />
                                 </label>
 

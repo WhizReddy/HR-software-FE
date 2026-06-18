@@ -47,7 +47,7 @@ export const MyAssets = () => {
                 description="See the equipment assigned to you and the return status for each item."
                 actions={
                     <div className="inline-flex items-center gap-2 rounded-2xl border border-white/80 bg-white/90 px-4 py-3 shadow-sm">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-50 text-[#2457a3]">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-50 text-slate-600">
                             <UserRound size={18} />
                         </div>
                         <div className="text-left">
@@ -77,7 +77,7 @@ export const MyAssets = () => {
 
                 <article className="rounded-[24px] border border-slate-200/70 bg-white p-5 shadow-sm">
                     <div className="flex items-center gap-2 text-slate-400">
-                        <ShieldCheck size={16} className="text-[#2457a3]" />
+                        <ShieldCheck size={16} className="text-slate-600" />
                         <p className="text-[11px] font-semibold uppercase tracking-[0.18em]">
                             Active Assignments
                         </p>
@@ -92,7 +92,7 @@ export const MyAssets = () => {
 
                 <article className="rounded-[24px] border border-slate-200/70 bg-white p-5 shadow-sm">
                     <div className="flex items-center gap-2 text-slate-400">
-                        <CalendarClock size={16} className="text-[#2457a3]" />
+                        <CalendarClock size={16} className="text-slate-600" />
                         <p className="text-[11px] font-semibold uppercase tracking-[0.18em]">
                             Latest Issue Date
                         </p>
@@ -128,7 +128,7 @@ export const MyAssets = () => {
                                     <span
                                         className={`inline-flex w-fit rounded-full px-3 py-1 text-xs font-semibold ${
                                             asset.status === 'assigned'
-                                                ? 'bg-blue-100 text-blue-700'
+                                                ? 'bg-slate-100 text-slate-700'
                                                 : 'bg-slate-100 text-slate-600'
                                         }`}
                                     >
@@ -179,7 +179,7 @@ export const MyAssets = () => {
                             Account Snapshot
                         </p>
                         <div className="mt-4 flex items-center gap-3">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-[#2457a3]">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-50 text-slate-600">
                                 <UserRound size={22} />
                             </div>
                             <div>

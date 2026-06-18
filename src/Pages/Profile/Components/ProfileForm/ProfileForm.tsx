@@ -55,7 +55,7 @@ const ProfileFormContext = () => {
                                     alt={fullName || 'Profile'}
                                 />
                             ) : (
-                                <div className="flex h-full w-full items-center justify-center bg-blue-50 text-3xl font-semibold text-[#2457a3]">
+                                <div className="flex h-full w-full items-center justify-center bg-slate-50 text-3xl font-semibold text-slate-600">
                                     {initials || <UserRound size={36} />}
                                 </div>
                             )}
@@ -105,7 +105,7 @@ const ProfileFormContext = () => {
 
                 <div className="space-y-4 rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
                     <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-[#2457a3]">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-50 text-slate-600">
                             <ShieldCheck size={18} />
                         </div>
                         <div>
@@ -138,7 +138,7 @@ const ProfileFormContext = () => {
             {/* Right Column - Personal Information Card */}
             <div className="xl:col-span-2">
                 <div className="h-full rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:p-8">
-                    <h3 className="mb-6 border-b border-slate-100 pb-4 text-lg font-semibold text-[#2457a3]">Personal Details</h3>
+                    <h3 className="mb-6 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-600">Personal Details</h3>
 
                     <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
                         <div className="space-y-1">

@@ -80,7 +80,7 @@ export const ReturnAssetModal = () => {
                                                     Condition upon return
                                                 </label>
                                                 <select
-                                                    className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-blue/30 focus:border-primary-blue appearance-none"
+                                                    className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400/25 focus:border-slate-400 appearance-none"
                                                     value={field.state.value}
                                                     onChange={(e) =>
                                                         field.handleChange(
@@ -120,7 +120,7 @@ export const ReturnAssetModal = () => {
                                                 </label>
                                                 <input
                                                     type="date"
-                                                    className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-blue/30 focus:border-primary-blue"
+                                                    className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400/25 focus:border-slate-400"
                                                     value={field.state.value}
                                                     onChange={(e) =>
                                                         field.handleChange(

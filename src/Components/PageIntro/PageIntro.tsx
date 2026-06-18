@@ -26,7 +26,7 @@ export const PageIntro: React.FC<PageIntroProps> = ({
             <div className="relative grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
                 <div className="min-w-0 max-w-3xl">
                     {eyebrow && (
-                        <p className="text-[11px] font-semibold uppercase text-[#2457a3]">
+                        <p className="text-[11px] font-semibold uppercase text-slate-500">
                             {eyebrow}
                         </p>
                     )}

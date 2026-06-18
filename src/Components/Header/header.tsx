@@ -77,9 +77,9 @@ export const Header: React.FC = () => {
             aria-expanded={isProfileOpen}
             aria-haspopup="menu"
             aria-label="Open profile menu"
-            className="flex items-center gap-2 rounded-lg border border-slate-200/80 bg-white p-1 pr-3 shadow-sm transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30"
+            className="flex items-center gap-2 rounded-lg border border-slate-200/80 bg-white p-1 pr-3 shadow-sm transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/30"
           >
-            <Avatar className="h-8 w-8 cursor-pointer bg-gradient-to-br from-[#2457a3] to-[#4A7BCD] text-white shadow-sm">
+            <Avatar className="h-8 w-8 cursor-pointer bg-gradient-to-br from-slate-800 to-slate-600 text-white shadow-sm">
               <AvatarFallback className="bg-transparent text-xs font-bold text-white">
                 {initials}
               </AvatarFallback>
