@@ -196,6 +196,32 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
             icon: ShieldCheck,
         },
     ]
+    const benefits = [
+        {
+            title: 'Hybrid work',
+            description:
+                'Flexible office rhythm for focused work, team reviews, and planned collaboration.',
+            icon: Users,
+        },
+        {
+            title: 'Learning budget',
+            description:
+                'Support for practical courses, books, and tools that improve your product craft.',
+            icon: Sparkles,
+        },
+        {
+            title: 'Health insurance',
+            description:
+                'Benefits that keep the team covered while they do steady, responsible work.',
+            icon: ShieldCheck,
+        },
+        {
+            title: 'Team events',
+            description:
+                'Small, useful team gatherings connected to planning, feedback, and shared wins.',
+            icon: BriefcaseBusiness,
+        },
+    ]
 
     return (
         <div className="min-h-screen overflow-x-hidden">
@@ -323,6 +349,48 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                     </>
                 ) : (
                     <>
+                        <nav className="mb-5 flex flex-col gap-3 rounded-2xl border border-slate-200/80 bg-white px-4 py-3 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:flex-row sm:items-center sm:justify-between">
+                            <div className="flex items-center gap-3">
+                                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#2457a3] text-sm font-bold tracking-wider text-white shadow-sm">
+                                    PH
+                                </div>
+                                <div>
+                                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                                        People Hub
+                                    </p>
+                                    <p className="text-sm font-semibold text-slate-800">
+                                        Careers
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex flex-wrap items-center gap-2">
+                                <a
+                                    href="#open-roles"
+                                    className="inline-flex min-h-10 items-center rounded-md px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 hover:text-slate-950"
+                                >
+                                    Open roles
+                                </a>
+                                <a
+                                    href="#culture"
+                                    className="inline-flex min-h-10 items-center rounded-md px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 hover:text-slate-950"
+                                >
+                                    Culture
+                                </a>
+                                <a
+                                    href="#benefits"
+                                    className="inline-flex min-h-10 items-center rounded-md px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 hover:text-slate-950"
+                                >
+                                    Benefits
+                                </a>
+                                <Link
+                                    to="/"
+                                    className="inline-flex min-h-10 items-center justify-center rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-slate-300 hover:bg-slate-50"
+                                >
+                                    Sign in
+                                </Link>
+                            </div>
+                        </nav>
+
                         <section className="relative mb-8 min-h-[560px] w-full min-w-0 max-w-full overflow-hidden rounded-xl border border-slate-200/80 bg-slate-950 shadow-[0_22px_70px_rgba(15,23,42,0.18)]">
                             <img
                                 src={Workers}
@@ -351,9 +419,16 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         and planning.
                                     </p>
                                     <div className="mt-8 flex min-w-0 flex-col gap-3 sm:flex-row">
+                                        <a
+                                            href="#open-roles"
+                                            className="inline-flex min-h-11 w-full min-w-0 items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-center text-sm font-semibold text-slate-950 shadow-sm transition hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:w-auto"
+                                        >
+                                            View open roles
+                                            <ArrowRight size={16} />
+                                        </a>
                                         <Link
                                             to="/recruitment"
-                                            className="inline-flex min-h-11 w-full min-w-0 items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-center text-sm font-semibold text-slate-950 shadow-sm transition hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:w-auto"
+                                            className="inline-flex min-h-11 w-full min-w-0 items-center justify-center gap-2 rounded-md border border-white/25 bg-white/10 px-5 py-3 text-center text-sm font-semibold text-white backdrop-blur transition hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 sm:w-auto"
                                         >
                                             Submit General Application
                                             <ArrowRight size={16} />
@@ -530,7 +605,10 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                     </>
                 )}
 
-                <section className="mt-8 min-w-0 rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
+                <section
+                    id="open-roles"
+                    className="mt-8 scroll-mt-8 min-w-0 rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]"
+                >
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                         <div>
                             <p className="text-sm font-semibold uppercase text-slate-400">
@@ -700,7 +778,10 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
 
                 {!managementMode && (
                     <>
-                        <section className="mt-12 grid items-start gap-5 lg:grid-cols-[1.15fr_0.85fr]">
+                        <section
+                            id="culture"
+                            className="mt-12 scroll-mt-8 grid items-start gap-5 lg:grid-cols-[1.15fr_0.85fr]"
+                        >
                             <div className="rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
                                 <p className="text-xs font-semibold uppercase text-slate-400">
                                     Why join us
@@ -781,6 +862,48 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         ))}
                                     </div>
                                 </article>
+                            </div>
+                        </section>
+
+                        <section
+                            id="benefits"
+                            className="mt-6 scroll-mt-8 rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]"
+                        >
+                            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                                <div>
+                                    <p className="text-xs font-semibold uppercase text-slate-400">
+                                        Benefits
+                                    </p>
+                                    <h2 className="mt-2 text-2xl font-semibold text-slate-950">
+                                        Built for sustainable team work.
+                                    </h2>
+                                </div>
+                                <p className="max-w-xl text-sm leading-6 text-slate-500">
+                                    Practical support that fits the way People
+                                    Hub teams plan, build, and improve the
+                                    product.
+                                </p>
+                            </div>
+
+                            <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                                {benefits.map(
+                                    ({ title, description, icon: Icon }) => (
+                                        <article
+                                            key={title}
+                                            className="min-w-0 rounded-lg border border-slate-200 bg-slate-50 p-5"
+                                        >
+                                            <div className="flex h-11 w-11 items-center justify-center rounded-md bg-white text-[#2457a3] shadow-sm">
+                                                <Icon size={18} />
+                                            </div>
+                                            <h3 className="mt-4 text-base font-semibold text-slate-950">
+                                                {title}
+                                            </h3>
+                                            <p className="mt-3 text-sm leading-6 text-slate-600">
+                                                {description}
+                                            </p>
+                                        </article>
+                                    ),
+                                )}
                             </div>
                         </section>
 

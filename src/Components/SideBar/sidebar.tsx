@@ -121,10 +121,10 @@ export const SideBar: React.FC = () => {
       <SidebarHeader className="h-16 justify-center border-b border-slate-100 px-3">
         <div className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#2457a3] text-sm font-bold text-white shadow-sm">
-            E
+            PH
           </div>
           <span className="truncate text-base font-semibold text-slate-900 group-data-[collapsible=icon]:hidden">
-            PEOPLE <span className="text-[#2457a3]">HUB</span>
+            People <span className="text-[#2457a3]">Hub</span>
           </span>
         </div>
       </SidebarHeader>

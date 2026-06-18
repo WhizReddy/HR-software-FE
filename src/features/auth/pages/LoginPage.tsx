@@ -56,13 +56,13 @@ const LoginPageContent = () => {
         <AuthPageShell
             heroTitle={
                 <>
-                    Manage your people <br />
-                    <span className="text-blue-200">brilliantly.</span>
+                    Run HR work <br />
+                    <span className="text-blue-200">from one calm hub.</span>
                 </>
             }
-            heroDescription="The all-in-one modern toolkit designed for HR teams to drive engagement, manage assets, and streamline recruitment effortlessly."
-            cardTitle="Welcome Back"
-            cardDescription="Please sign in to your account"
+            heroDescription="People Hub brings recruitment, team records, vacations, payroll, assets, and daily HR operations into one connected workspace."
+            cardTitle="Sign in to People Hub"
+            cardDescription="Use your workspace account to continue"
         >
             <form
                 className="space-y-6"
@@ -158,7 +158,7 @@ const LoginPageContent = () => {
                     disabled={form.state.isSubmitting}
                 >
                     {form.state.isSubmitting
-                        ? 'Authenticating...'
+                        ? 'Signing in...'
                         : 'Sign In'}
                 </Button>
 
@@ -169,6 +169,19 @@ const LoginPageContent = () => {
                         </ErrorText>
                     </div>
                 )}
+
+                <div className="space-y-3 border-t border-slate-100 pt-5 text-center">
+                    <Link
+                        to="/career"
+                        className="inline-flex w-full items-center justify-center rounded-md border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-slate-300 hover:bg-slate-50"
+                    >
+                        View open roles
+                    </Link>
+                    <p className="text-xs text-slate-500">
+                        Public hiring pages are part of the same People Hub
+                        product experience.
+                    </p>
+                </div>
             </form>
         </AuthPageShell>
     )

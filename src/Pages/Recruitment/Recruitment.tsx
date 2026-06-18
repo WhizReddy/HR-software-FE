@@ -74,20 +74,37 @@ function RecruitmentBase() {
 
     return (
         <main className="min-h-screen overflow-x-hidden bg-[#f5f7fb]">
-            <div className="mx-auto flex w-full min-w-0 max-w-[1500px] flex-col gap-3 px-4 pt-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-                <Link
-                    to="/career"
-                    className="inline-flex min-h-10 w-full items-center justify-center rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:bg-slate-50 sm:w-auto"
-                >
-                    Career Board
-                </Link>
-                <Link
-                    to="/"
-                    className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-md bg-[#2457a3] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[#1b4285] sm:w-auto"
-                >
-                    <LogIn size={16} />
-                    Login
-                </Link>
+            <div className="mx-auto flex w-full min-w-0 max-w-[1500px] flex-col gap-3 px-4 pt-4 sm:px-6 lg:px-8">
+                <nav className="flex flex-col gap-3 rounded-2xl border border-slate-200/80 bg-white px-4 py-3 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#2457a3] text-sm font-bold tracking-wider text-white shadow-sm">
+                            PH
+                        </div>
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                                People Hub
+                            </p>
+                            <p className="text-sm font-semibold text-slate-800">
+                                Candidate application
+                            </p>
+                        </div>
+                    </div>
+                    <div className="grid gap-2 sm:flex sm:items-center">
+                        <Link
+                            to="/career"
+                            className="inline-flex min-h-10 w-full items-center justify-center rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:bg-slate-50 sm:w-auto"
+                        >
+                            Back to careers
+                        </Link>
+                        <Link
+                            to="/"
+                            className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-md bg-[#2457a3] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[#1b4285] sm:w-auto"
+                        >
+                            <LogIn size={16} />
+                            Sign in
+                        </Link>
+                    </div>
+                </nav>
             </div>
 
             <section className="mx-auto grid w-full min-w-0 max-w-[1500px] gap-6 px-4 py-5 sm:px-6 lg:grid-cols-[minmax(340px,0.9fr)_minmax(0,1.1fr)] lg:px-8 lg:py-8">
@@ -224,7 +241,7 @@ function RecruitmentBase() {
                         </div>
                         <div className="inline-flex w-fit items-center gap-2 rounded-md border border-blue-100 bg-blue-50 px-3 py-2 text-xs font-semibold uppercase text-[#2457a3]">
                             <BriefcaseBusiness size={15} />
-                            CRM Hiring
+                            People Hub Hiring
                         </div>
                     </div>
 
