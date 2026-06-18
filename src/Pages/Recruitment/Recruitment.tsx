@@ -17,9 +17,10 @@ import {
 } from 'lucide-react'
 import { ValidationError } from '@tanstack/react-form'
 import { valibotValidator } from '@tanstack/valibot-form-adapter'
-import MyButton from '../../Components/Button/Button'
-import { ButtonTypes } from '../../Components/Button/ButtonTypes'
 import Input from '../../Components/Input/Index'
+import PublicPageNav, {
+    publicButtonClasses,
+} from '@/Components/Public/PublicPageNav'
 import { ErrorText } from '@/Components/Error/ErrorTextForm'
 import Toast from '@/Components/Toast/Toast'
 import Selecter from '@/Components/Input/components/Select/Selecter'
@@ -74,40 +75,30 @@ function RecruitmentBase() {
 
     return (
         <main className="min-h-screen overflow-x-hidden bg-[#f5f7fb]">
-            <div className="mx-auto flex w-full min-w-0 max-w-[1500px] flex-col gap-3 px-4 pt-4 sm:px-6 lg:px-8">
-                <nav className="flex flex-col gap-3 rounded-2xl border border-slate-200/80 bg-white px-4 py-3 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:flex-row sm:items-center sm:justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#2457a3] text-sm font-bold tracking-wider text-white shadow-sm">
-                            PH
-                        </div>
-                        <div>
-                            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
-                                People Hub
-                            </p>
-                            <p className="text-sm font-semibold text-slate-800">
-                                Candidate application
-                            </p>
-                        </div>
-                    </div>
-                    <div className="grid gap-2 sm:flex sm:items-center">
-                        <Link
-                            to="/career"
-                            className="inline-flex min-h-10 w-full items-center justify-center rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:bg-slate-50 sm:w-auto"
-                        >
-                            Back to careers
-                        </Link>
-                        <Link
-                            to="/"
-                            className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-md bg-[#2457a3] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[#1b4285] sm:w-auto"
-                        >
-                            <LogIn size={16} />
-                            Sign in
-                        </Link>
-                    </div>
-                </nav>
+            <div className="mx-auto box-border flex w-full min-w-0 max-w-[calc(100vw-1.5rem)] flex-col gap-3 px-3 pt-3 sm:max-w-[1500px] sm:px-6 sm:pt-4 lg:px-8">
+                <PublicPageNav
+                    contextLabel="Candidate application"
+                    actions={
+                        <>
+                            <Link
+                                to="/career"
+                                className={`${publicButtonClasses.secondary} w-full sm:w-auto`}
+                            >
+                                Back to careers
+                            </Link>
+                            <Link
+                                to="/"
+                                className={`${publicButtonClasses.primary} w-full sm:w-auto`}
+                            >
+                                <LogIn size={16} />
+                                Sign in
+                            </Link>
+                        </>
+                    }
+                />
             </div>
 
-            <section className="mx-auto grid w-full min-w-0 max-w-[1500px] gap-6 px-4 py-5 sm:px-6 lg:grid-cols-[minmax(340px,0.9fr)_minmax(0,1.1fr)] lg:px-8 lg:py-8">
+            <section className="mx-auto box-border grid w-full min-w-0 max-w-[calc(100vw-1.5rem)] gap-6 px-3 py-5 sm:max-w-[1500px] sm:px-6 lg:grid-cols-[minmax(340px,0.9fr)_minmax(0,1.1fr)] lg:px-8 lg:py-8">
                 <aside className="min-w-0 space-y-5 lg:sticky lg:top-6 lg:self-start">
                     <div className="relative min-h-[430px] w-full min-w-0 max-w-full overflow-hidden rounded-xl border border-slate-200/80 bg-slate-950 text-white shadow-[0_22px_70px_rgba(15,23,42,0.16)]">
                         <img
@@ -127,11 +118,11 @@ function RecruitmentBase() {
                                         Candidate form
                                     </span>
                                 </div>
-                                <h1 className="mt-8 max-w-full break-words text-3xl font-semibold leading-tight sm:max-w-xl sm:text-4xl">
+                                <h1 className="mt-8 max-w-full break-words text-2xl font-semibold leading-tight [overflow-wrap:anywhere] min-[420px]:text-3xl sm:max-w-xl sm:text-4xl">
                                     Tell us where you can make the strongest
                                     impact.
                                 </h1>
-                                <p className="mt-4 max-w-full break-words text-sm leading-7 text-white/75 sm:max-w-xl sm:text-base">
+                                <p className="mt-4 max-w-full break-words text-sm leading-7 text-white/75 [overflow-wrap:anywhere] sm:max-w-xl sm:text-base">
                                     Send your details once, attach your CV, and
                                     the hiring team will review your profile
                                     from the recruitment dashboard.
@@ -695,28 +686,25 @@ function RecruitmentBase() {
                         )}
 
                         <div className="grid gap-3 border-t border-slate-100 pt-6 sm:grid-cols-[160px_minmax(0,1fr)]">
-                            <MyButton
-                                type={ButtonTypes.SECONDARY}
-                                btnText="Reset"
-                                width="100%"
+                            <button
+                                type="button"
                                 onClick={resetForm}
                                 disabled={isSubmitting}
-                                icon={<RotateCcw size={16} />}
-                                className="justify-center whitespace-nowrap rounded-md py-3"
-                            />
-                            <MyButton
-                                type={ButtonTypes.PRIMARY}
-                                btnText={
-                                    isSubmitting
-                                        ? 'Sending...'
-                                        : 'Submit Application'
-                                }
+                                className={`${publicButtonClasses.secondary} disabled:pointer-events-none disabled:opacity-55`}
+                            >
+                                <RotateCcw size={16} />
+                                Reset
+                            </button>
+                            <button
+                                type="submit"
                                 disabled={isSubmitting}
-                                isSubmit
-                                width="100%"
-                                icon={<Send size={16} />}
-                                className="justify-center whitespace-nowrap rounded-md py-3"
-                            />
+                                className={`${publicButtonClasses.primary} disabled:pointer-events-none disabled:opacity-55`}
+                            >
+                                <Send size={16} />
+                                {isSubmitting
+                                    ? 'Sending...'
+                                    : 'Submit Application'}
+                            </button>
                         </div>
                     </form>
                 </section>

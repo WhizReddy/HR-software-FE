@@ -82,7 +82,7 @@ describe('Career page', () => {
         expect(screen.getByText('People Hub')).toBeTruthy()
         expect(
             screen
-                .getByRole('link', { name: /^open roles$/i })
+                .getAllByRole('link', { name: /^open roles$/i })[0]
                 .getAttribute('href'),
         ).toBe('#open-roles')
         expect(

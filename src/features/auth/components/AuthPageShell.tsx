@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import PublicPageNav from '@/Components/Public/PublicPageNav'
 
 interface AuthPageShellProps {
     heroTitle: ReactNode
@@ -6,6 +7,7 @@ interface AuthPageShellProps {
     cardTitle: string
     cardDescription: string
     children: ReactNode
+    publicActions?: ReactNode
 }
 
 export default function AuthPageShell({
@@ -14,10 +16,11 @@ export default function AuthPageShell({
     cardTitle,
     cardDescription,
     children,
+    publicActions,
 }: AuthPageShellProps) {
     return (
-        <div className="min-h-screen w-full bg-[var(--background)]">
-            <div className="grid min-h-screen w-full lg:grid-cols-[0.95fr_1.05fr]">
+        <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-[var(--background)]">
+            <div className="grid min-h-screen w-full min-w-0 lg:grid-cols-[0.95fr_1.05fr]">
                 <div className="relative hidden flex-col justify-between overflow-hidden bg-[linear-gradient(135deg,#174f98_0%,#2457a3_48%,#0f766e_100%)] px-12 py-10 text-white lg:flex xl:px-16">
                     <div className="max-w-xl">
                         <div className="mb-14 flex items-center gap-3">
@@ -64,23 +67,32 @@ export default function AuthPageShell({
                     </div>
                 </div>
 
-                <div className="flex w-full items-center justify-center px-6 py-10 sm:px-10 lg:px-12">
-                    <div className="w-full max-w-[440px] rounded-2xl border border-slate-200/80 bg-white p-8 shadow-[var(--shadow-card)] sm:p-10">
-                        <div className="mb-8 flex items-center justify-center gap-3 lg:hidden">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--primary)] text-sm font-bold tracking-wider text-white shadow-sm">
-                                PH
+                <div className="flex w-full min-w-0 flex-col items-center justify-start px-4 py-6 sm:justify-center sm:px-10 lg:px-12">
+                    {publicActions && (
+                        <PublicPageNav
+                            contextLabel="Sign in"
+                            actions={publicActions}
+                            className="mb-5 w-full max-w-[calc(100vw-2rem)] sm:max-w-[440px]"
+                        />
+                    )}
+                    <div className="w-full min-w-0 max-w-[calc(100vw-2rem)] rounded-2xl border border-slate-200/80 bg-white p-6 shadow-[var(--shadow-card)] sm:max-w-[440px] sm:p-10">
+                        {!publicActions && (
+                            <div className="mb-8 flex items-center justify-center gap-3 lg:hidden">
+                                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--primary)] text-sm font-bold tracking-wider text-white shadow-sm">
+                                    PH
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                                        People Hub
+                                    </p>
+                                    <p className="text-sm font-semibold text-slate-800">
+                                        HR operations workspace
+                                    </p>
+                                </div>
                             </div>
-                            <div className="text-left">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
-                                    People Hub
-                                </p>
-                                <p className="text-sm font-semibold text-slate-800">
-                                    HR operations workspace
-                                </p>
-                            </div>
-                        </div>
+                        )}
                         <div className="text-center">
-                            <h2 className="mb-2 text-3xl font-semibold text-slate-950">
+                            <h2 className="mb-2 break-words text-2xl font-semibold leading-tight text-slate-950 sm:text-3xl">
                                 {cardTitle}
                             </h2>
                             <p className="text-sm font-medium text-slate-500">

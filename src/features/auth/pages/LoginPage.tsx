@@ -12,6 +12,7 @@ import { useLoginForm } from '../hooks/useLoginForm'
 import { LoginSchema } from '../schemas/login.schema'
 import AuthPageShell from '../components/AuthPageShell'
 import { usePageMeta } from '@/hooks/use-page-meta'
+import { publicButtonClasses } from '@/Components/Public/PublicPageNav'
 
 const LoginPageContent = () => {
     usePageMeta({
@@ -63,6 +64,14 @@ const LoginPageContent = () => {
             heroDescription="People Hub brings recruitment, team records, vacations, payroll, assets, and daily HR operations into one connected workspace."
             cardTitle="Sign in to People Hub"
             cardDescription="Use your workspace account to continue"
+            publicActions={
+                <Link
+                    to="/career"
+                    className={publicButtonClasses.secondary}
+                >
+                    Open roles
+                </Link>
+            }
         >
             <form
                 className="space-y-6"
@@ -154,7 +163,7 @@ const LoginPageContent = () => {
 
                 <Button
                     type="submit"
-                    className="mt-8 h-12 w-full rounded-md bg-[#2457a3] text-base font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.08)] transition-colors hover:bg-[#1a407a]"
+                    className="mt-8 h-12 w-full rounded-xl bg-[#2457a3] text-base font-semibold text-white shadow-sm transition-colors hover:bg-[#1a407a]"
                     disabled={form.state.isSubmitting}
                 >
                     {form.state.isSubmitting
@@ -169,19 +178,6 @@ const LoginPageContent = () => {
                         </ErrorText>
                     </div>
                 )}
-
-                <div className="space-y-3 border-t border-slate-100 pt-5 text-center">
-                    <Link
-                        to="/career"
-                        className="inline-flex w-full items-center justify-center rounded-md border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-slate-300 hover:bg-slate-50"
-                    >
-                        View open roles
-                    </Link>
-                    <p className="text-xs text-slate-500">
-                        Public hiring pages are part of the same People Hub
-                        product experience.
-                    </p>
-                </div>
             </form>
         </AuthPageShell>
     )

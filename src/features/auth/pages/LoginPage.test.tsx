@@ -66,7 +66,7 @@ describe('LoginPage', () => {
         expect(await screen.findAllByText(/people hub/i)).not.toHaveLength(0)
 
         const careerLink = screen.getByRole('link', {
-            name: /view open roles/i,
+            name: /open roles/i,
         })
         expect(careerLink.getAttribute('href')).toBe('/career')
 

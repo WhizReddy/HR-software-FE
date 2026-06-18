@@ -19,6 +19,9 @@ import { ModalComponent } from '@/Components/Modal/Modal'
 import Button from '@/Components/Button/Button'
 import { ButtonTypes } from '@/Components/Button/ButtonTypes'
 import PageIntro from '@/Components/PageIntro/PageIntro'
+import PublicPageNav, {
+    publicButtonClasses,
+} from '@/Components/Public/PublicPageNav'
 import { usePageMeta } from '@/hooks/use-page-meta'
 import {
     EventsData,
@@ -229,7 +232,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                 className={
                     managementMode
                         ? 'mx-auto w-full max-w-full'
-                        : 'mx-auto w-full min-w-0 max-w-[1500px] px-4 py-8 sm:px-6 lg:px-8'
+                        : 'mx-auto box-border w-full min-w-0 max-w-[calc(100vw-1.5rem)] px-3 py-6 sm:max-w-[1500px] sm:px-6 sm:py-8 lg:px-8'
                 }
             >
                 {managementMode ? (
@@ -243,14 +246,14 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                 <>
                                     <Link
                                         to="/career"
-                                        className="inline-flex min-h-11 items-center rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                                        className={publicButtonClasses.secondary}
                                     >
                                         View Public Page
                                     </Link>
                                     <button
                                         type="button"
                                         onClick={handleOpenCreate}
-                                        className="inline-flex min-h-11 items-center gap-2 rounded-md bg-[#2457a3] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#1c4380]"
+                                        className={publicButtonClasses.primary}
                                     >
                                         <Plus size={16} />
                                         New Career Post
@@ -349,47 +352,23 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                     </>
                 ) : (
                     <>
-                        <nav className="mb-5 flex flex-col gap-3 rounded-2xl border border-slate-200/80 bg-white px-4 py-3 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:flex-row sm:items-center sm:justify-between">
-                            <div className="flex items-center gap-3">
-                                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#2457a3] text-sm font-bold tracking-wider text-white shadow-sm">
-                                    PH
-                                </div>
-                                <div>
-                                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
-                                        People Hub
-                                    </p>
-                                    <p className="text-sm font-semibold text-slate-800">
-                                        Careers
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="flex flex-wrap items-center gap-2">
-                                <a
-                                    href="#open-roles"
-                                    className="inline-flex min-h-10 items-center rounded-md px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 hover:text-slate-950"
-                                >
-                                    Open roles
-                                </a>
-                                <a
-                                    href="#culture"
-                                    className="inline-flex min-h-10 items-center rounded-md px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 hover:text-slate-950"
-                                >
-                                    Culture
-                                </a>
-                                <a
-                                    href="#benefits"
-                                    className="inline-flex min-h-10 items-center rounded-md px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 hover:text-slate-950"
-                                >
-                                    Benefits
-                                </a>
+                        <PublicPageNav
+                            contextLabel="Careers"
+                            className="mb-5"
+                            navItems={[
+                                { href: '#open-roles', label: 'Open roles' },
+                                { href: '#culture', label: 'Culture' },
+                                { href: '#benefits', label: 'Benefits' },
+                            ]}
+                            actions={
                                 <Link
                                     to="/"
-                                    className="inline-flex min-h-10 items-center justify-center rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-slate-300 hover:bg-slate-50"
+                                    className={publicButtonClasses.secondary}
                                 >
                                     Sign in
                                 </Link>
-                            </div>
-                        </nav>
+                            }
+                        />
 
                         <section className="relative mb-8 min-h-[560px] w-full min-w-0 max-w-full overflow-hidden rounded-xl border border-slate-200/80 bg-slate-950 shadow-[0_22px_70px_rgba(15,23,42,0.18)]">
                             <img
@@ -410,10 +389,10 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                             Tirane based team
                                         </span>
                                     </div>
-                                    <h1 className="mt-8 max-w-[38rem] break-words text-2xl font-semibold leading-tight min-[420px]:text-3xl sm:text-5xl lg:text-6xl">
+                                    <h1 className="mt-8 max-w-[38rem] break-words text-2xl font-semibold leading-tight [overflow-wrap:anywhere] min-[420px]:text-3xl sm:text-5xl lg:text-6xl">
                                         Work on HR tools people actually use.
                                     </h1>
-                                    <p className="mt-5 max-w-full break-words text-base leading-8 text-white/78 sm:max-w-xl sm:text-lg">
+                                    <p className="mt-5 max-w-full break-words text-base leading-8 text-white/78 [overflow-wrap:anywhere] sm:max-w-xl sm:text-lg">
                                         Join a focused team building practical
                                         tools for recruitment, payroll, assets,
                                         and planning.
@@ -421,21 +400,21 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     <div className="mt-8 flex min-w-0 flex-col gap-3 sm:flex-row">
                                         <a
                                             href="#open-roles"
-                                            className="inline-flex min-h-11 w-full min-w-0 items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-center text-sm font-semibold text-slate-950 shadow-sm transition hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:w-auto"
+                                            className={`${publicButtonClasses.primary} w-full min-w-0 sm:w-auto`}
                                         >
-                                            View open roles
+                                            Open roles
                                             <ArrowRight size={16} />
                                         </a>
                                         <Link
                                             to="/recruitment"
-                                            className="inline-flex min-h-11 w-full min-w-0 items-center justify-center gap-2 rounded-md border border-white/25 bg-white/10 px-5 py-3 text-center text-sm font-semibold text-white backdrop-blur transition hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 sm:w-auto"
+                                            className={`${publicButtonClasses.secondary} w-full min-w-0 sm:w-auto`}
                                         >
                                             Submit General Application
                                             <ArrowRight size={16} />
                                         </Link>
                                         <Link
                                             to="/"
-                                            className="inline-flex min-h-11 w-full min-w-0 items-center justify-center gap-2 rounded-md border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 sm:w-auto"
+                                            className={`${publicButtonClasses.secondary} w-full min-w-0 sm:w-auto`}
                                         >
                                             <LogIn size={16} />
                                             Login
@@ -443,7 +422,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         {isManager && (
                                             <Link
                                                 to="/career-posts"
-                                                className="inline-flex min-h-11 w-full min-w-0 items-center justify-center gap-2 rounded-md border border-white/25 bg-white/10 px-5 py-3 text-center text-sm font-semibold text-white backdrop-blur transition hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 sm:w-auto"
+                                                className={`${publicButtonClasses.secondary} w-full min-w-0 sm:w-auto`}
                                             >
                                                 Manage Career Posts
                                             </Link>
@@ -487,14 +466,14 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         <p className="text-xs font-semibold uppercase text-white/65">
                                             Team environment
                                         </p>
-                                        <h2 className="mt-3 max-w-xl break-words text-xl font-semibold leading-tight min-[420px]:text-2xl sm:text-3xl">
+                                        <h2 className="mt-3 max-w-xl break-words text-xl font-semibold leading-tight [overflow-wrap:anywhere] min-[420px]:text-2xl sm:text-3xl">
                                             Clear ownership, steady
                                             collaboration, and practical work.
                                         </h2>
                                     </div>
                                 </div>
                                 <div className="min-w-0 border-t border-slate-100 p-6">
-                                    <p className="max-w-2xl break-words text-sm leading-7 text-slate-600">
+                                    <p className="max-w-2xl break-words text-sm leading-7 text-slate-600 [overflow-wrap:anywhere]">
                                         We keep expectations visible, ship
                                         useful work, and give people room to
                                         contribute without unnecessary process.
@@ -671,7 +650,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     <button
                                         type="button"
                                         onClick={handleOpenCreate}
-                                        className="inline-flex items-center gap-2 rounded-md bg-[#2457a3] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#1c4380]"
+                                        className={publicButtonClasses.primary}
                                     >
                                         <Plus size={16} />
                                         Create Career Post
@@ -763,7 +742,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         {!managementMode && (
                                             <Link
                                                 to="/recruitment"
-                                                className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#2457a3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2457a3]/30"
+                                                className={`${publicButtonClasses.primary} shrink-0 whitespace-nowrap`}
                                             >
                                                 Apply Now
                                                 <ArrowRight size={14} />
