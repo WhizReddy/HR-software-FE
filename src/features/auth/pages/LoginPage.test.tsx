@@ -65,8 +65,15 @@ describe('LoginPage', () => {
 
         expect(await screen.findAllByText(/people hub/i)).not.toHaveLength(0)
 
+        expect(screen.getByText(/candidate pipeline/i)).toBeTruthy()
+        expect(screen.getByText(/124/i)).toBeTruthy()
+        expect(screen.getByText(/18/i)).toBeTruthy()
+        expect(screen.getByText(/6/i)).toBeTruthy()
+        expect(screen.getByText(/applied/i)).toBeTruthy()
+        expect(screen.getAllByText(/interview/i).length).toBeGreaterThan(0)
+
         const careerLink = screen.getByRole('link', {
-            name: /open roles/i,
+            name: /view open roles/i,
         })
         expect(careerLink.getAttribute('href')).toBe('/career')
 

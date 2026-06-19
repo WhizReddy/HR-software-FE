@@ -57,19 +57,21 @@ const LoginPageContent = () => {
         <AuthPageShell
             heroTitle={
                 <>
-                    Run HR work <br />
-                    <span className="text-slate-300">from one calm hub.</span>
+                    Track hiring work <br />
+                    <span className="text-slate-500">
+                        without losing the thread.
+                    </span>
                 </>
             }
-            heroDescription="People Hub brings recruitment, team records, vacations, payroll, assets, and daily HR operations into one connected workspace."
-            cardTitle="Sign in to People Hub"
-            cardDescription="Use your workspace account to continue"
+            heroDescription="Track applicants, interviews, and hiring decisions from one workspace, then continue into employee workflows when the team grows."
+            cardTitle="Sign in to your workspace"
+            cardDescription="Manage hiring, candidates, and employee workflows in one place."
             publicActions={
                 <Link
                     to="/career"
                     className={publicButtonClasses.secondary}
                 >
-                    Open roles
+                    View open roles
                 </Link>
             }
         >
@@ -168,7 +170,7 @@ const LoginPageContent = () => {
                 >
                     {form.state.isSubmitting
                         ? 'Signing in...'
-                        : 'Sign In'}
+                        : 'Sign in'}
                 </Button>
 
                 {error && (
