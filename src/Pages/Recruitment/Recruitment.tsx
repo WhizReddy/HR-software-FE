@@ -43,7 +43,7 @@ function RecruitmentBase() {
     usePageMeta({
         title: 'Submit Application | People Hub',
         description:
-            'Submit your candidate profile, CV, preferred role, and technology background to the People Hub recruitment team.',
+            'Send your candidate details, CV, preferred role, and technology background to People Hub.',
     })
 
     const {
@@ -88,7 +88,7 @@ function RecruitmentBase() {
                             </Link>
                             <Link
                                 to="/"
-                                className={`${publicButtonClasses.primary} w-full sm:w-auto`}
+                                className={`${publicButtonClasses.secondary} w-full sm:w-auto`}
                             >
                                 <LogIn size={16} />
                                 Sign in
@@ -110,28 +110,27 @@ function RecruitmentBase() {
                         <div className="relative flex min-h-[430px] min-w-0 flex-col justify-between p-6 sm:p-7">
                             <div>
                                 <div className="flex flex-wrap gap-2">
-                                    <span className="inline-flex items-center gap-2 rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase text-white/85 backdrop-blur">
+                                    <span className="inline-flex items-center gap-2 rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/85 backdrop-blur">
                                         <Sparkles size={14} />
                                         Recruitment
                                     </span>
-                                    <span className="rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase text-white/85 backdrop-blur">
+                                    <span className="rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/85 backdrop-blur">
                                         Candidate form
                                     </span>
                                 </div>
                                 <h1 className="mt-8 max-w-full break-words text-2xl font-semibold leading-tight [overflow-wrap:anywhere] min-[420px]:text-3xl sm:max-w-xl sm:text-4xl">
-                                    Tell us where you can make the strongest
-                                    impact.
+                                    Send your application in one place.
                                 </h1>
                                 <p className="mt-4 max-w-full break-words text-sm leading-7 text-white/75 [overflow-wrap:anywhere] sm:max-w-xl sm:text-base">
-                                    Send your details once, attach your CV, and
-                                    the hiring team will review your profile
-                                    from the recruitment dashboard.
+                                    Add your details, attach your CV, and the
+                                    hiring team will review everything from the
+                                    same dashboard.
                                 </p>
                             </div>
 
                             <div className="mt-8 grid min-w-0 gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
                                 <div className="rounded-lg border border-white/15 bg-white/10 p-4 backdrop-blur">
-                                    <p className="text-[11px] font-semibold uppercase text-white/60">
+                                    <p className="text-xs font-medium text-white/60">
                                         CV
                                     </p>
                                     <p className="mt-2 font-semibold">
@@ -139,7 +138,7 @@ function RecruitmentBase() {
                                     </p>
                                 </div>
                                 <div className="rounded-lg border border-white/15 bg-white/10 p-4 backdrop-blur">
-                                    <p className="text-[11px] font-semibold uppercase text-white/60">
+                                    <p className="text-xs font-medium text-white/60">
                                         Phone
                                     </p>
                                     <p className="mt-2 font-semibold">
@@ -147,7 +146,7 @@ function RecruitmentBase() {
                                     </p>
                                 </div>
                                 <div className="rounded-lg border border-white/15 bg-white/10 p-4 backdrop-blur">
-                                    <p className="text-[11px] font-semibold uppercase text-white/60">
+                                    <p className="text-xs font-medium text-white/60">
                                         Review
                                     </p>
                                     <p className="mt-2 font-semibold">
@@ -165,13 +164,13 @@ function RecruitmentBase() {
                             className="h-40 w-full object-cover"
                         />
                         <div className="p-5">
-                            <p className="text-xs font-semibold uppercase text-slate-400">
+                            <p className="text-sm font-semibold text-slate-500">
                                 Application flow
                             </p>
                             <p className="mt-3 break-words text-sm leading-7 text-slate-600">
-                                Keep the information direct. The stronger the
-                                role context and CV, the easier it is to review
-                                your fit quickly.
+                                Short and specific is better. Tell us what role
+                                fits you, what you have worked with, and where
+                                your CV can show it.
                             </p>
                         </div>
                     </div>
@@ -195,8 +194,8 @@ function RecruitmentBase() {
                     </div>
 
                     <div className="min-w-0 rounded-xl border border-slate-200/80 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
-                        <p className="text-[11px] font-semibold uppercase text-slate-400">
-                            Contact Fields
+                        <p className="text-sm font-semibold text-slate-500">
+                            Contact fields
                         </p>
                         <div className="mt-4 grid gap-3">
                             <div className="flex min-w-0 items-center gap-3 rounded-md bg-slate-50 px-4 py-3">
@@ -218,21 +217,21 @@ function RecruitmentBase() {
                 <section className="min-w-0 rounded-xl border border-slate-200/80 bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)] sm:p-7 lg:p-8">
                     <div className="flex flex-col gap-4 border-b border-slate-100 pb-6 sm:flex-row sm:items-start sm:justify-between">
                         <div>
-                            <p className="text-xs font-semibold uppercase text-slate-400">
-                                Application Form
+                            <p className="text-sm font-semibold text-slate-500">
+                                Application form
                             </p>
                             <h2 className="mt-2 text-2xl font-semibold text-slate-950">
-                                Candidate Details
+                                Candidate details
                             </h2>
                             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
                                 Complete the required profile, role, and CV
-                                fields so the hiring team can process your
-                                application correctly.
+                                fields so the hiring team can review the
+                                application clearly.
                             </p>
                         </div>
-                        <div className="inline-flex w-fit items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold uppercase text-slate-700">
+                        <div className="inline-flex w-fit items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700">
                             <BriefcaseBusiness size={15} />
-                            People Hub Hiring
+                            Hiring team
                         </div>
                     </div>
 
@@ -246,7 +245,7 @@ function RecruitmentBase() {
                         className="mt-6 space-y-8"
                     >
                         <FormSection
-                            title="Personal Information"
+                            title="Personal information"
                             description="Basic identity and contact details."
                         >
                             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
@@ -368,7 +367,7 @@ function RecruitmentBase() {
                                                 name="phoneNumber"
                                                 IsUsername
                                                 type="tel"
-                                                placeholder="+355 69 123 4567"
+                                                placeholder="+44 7700 900123"
                                                 value={value}
                                                 onChange={(event: any) =>
                                                     handleChange(
@@ -450,7 +449,7 @@ function RecruitmentBase() {
                         </FormSection>
 
                         <FormSection
-                            title="Role Information"
+                            title="Role information"
                             description="Position, experience, and technical background."
                         >
                             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
@@ -587,7 +586,7 @@ function RecruitmentBase() {
                         </FormSection>
 
                         <FormSection
-                            title="CV Attachment"
+                            title="CV attachment"
                             description="Attach the document the hiring team should review."
                         >
                             <form.Field

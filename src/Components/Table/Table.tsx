@@ -231,14 +231,14 @@ function DataTable<TRow>({
     }
 
     const exportControls = exportFileName ? (
-        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-end">
+        <div className="flex w-full flex-row gap-2 sm:w-auto sm:items-center">
             <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={handleCsvExport}
                 disabled={!canExport || isLoading}
-                className="h-10 min-w-[88px] justify-center rounded-md"
+                className="h-10 flex-1 justify-center rounded-md sm:flex-none"
             >
                 <Download size={16} />
                 CSV
@@ -249,7 +249,7 @@ function DataTable<TRow>({
                 size="sm"
                 onClick={handlePrintExport}
                 disabled={!canExport || isLoading}
-                className="h-10 min-w-[88px] justify-center rounded-md"
+                className="h-10 flex-1 justify-center rounded-md sm:flex-none"
             >
                 <Printer size={16} />
                 PDF
@@ -264,7 +264,7 @@ function DataTable<TRow>({
             size="sm"
             onClick={onResetFilters}
             disabled={!hasActiveTableFilters || isLoading}
-            className="h-10 min-w-[148px] justify-center rounded-md"
+            className="h-10 min-w-[132px] justify-center rounded-md"
         >
             <RotateCcw size={16} />
             Reset filters
@@ -272,15 +272,15 @@ function DataTable<TRow>({
     ) : null
 
     return (
-        <Card className="overflow-hidden rounded-lg border border-slate-200/80 bg-white p-0 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
+        <Card className="overflow-hidden rounded-lg border border-slate-200 bg-white p-0 shadow-none">
             {(title ||
                 actions ||
                 onSearchChange ||
                 filterNode ||
                 exportControls ||
                 resetControls) && (
-                <div className="grid gap-4 border-b border-slate-200/80 bg-white px-5 py-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-                    <div className="flex w-full flex-1 flex-col gap-3 sm:flex-row sm:items-end">
+                <div className="grid gap-4 border-b border-slate-200 bg-white px-5 py-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+                    <div className="flex w-full flex-1 flex-col gap-3 sm:flex-row sm:items-center">
                         {title && (
                             <div className="min-w-0 pb-1">
                                 <h2 className="truncate text-base font-semibold text-slate-900">
@@ -289,7 +289,7 @@ function DataTable<TRow>({
                             </div>
                         )}
                         {onSearchChange && (
-                            <div className="flex w-full flex-col gap-2 sm:max-w-lg sm:flex-row sm:items-end">
+                            <div className="flex w-full flex-col gap-2 sm:max-w-lg sm:flex-row sm:items-center">
                                 <div className="flex-1">
                                     <Input
                                         IsUsername
@@ -322,14 +322,14 @@ function DataTable<TRow>({
                     </div>
 
                     {(filterNode || actions || exportControls || resetControls) && (
-                        <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-end sm:justify-end lg:w-auto">
+                        <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-end lg:w-auto">
                             {filterNode && (
-                                <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-end">
+                                <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
                                     {filterNode}
                                 </div>
                             )}
                             {(resetControls || exportControls || actions) && (
-                                <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-end">
+                                <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
                                     {resetControls}
                                     {exportControls}
                                     {actions}
@@ -343,11 +343,11 @@ function DataTable<TRow>({
             <div className="max-h-[72vh] overflow-auto">
                 <Table className="min-w-[860px] text-left text-sm">
                     <TableHeader className="sticky top-0 z-20 shadow-[0_1px_0_rgba(226,232,240,0.9)]">
-                        <TableRow className="border-b border-slate-200 bg-slate-50 hover:bg-slate-50">
+                        <TableRow className="border-b border-slate-200 bg-slate-50/80 hover:bg-slate-50/80">
                             {columns.map((col) => (
                                 <TableHead
                                     key={col.field}
-                                    className="h-11 whitespace-nowrap px-5 py-3 text-xs font-semibold uppercase text-slate-500"
+                                    className="h-11 whitespace-nowrap px-5 py-3 text-[13px] font-semibold text-slate-500"
                                     style={col.width ? { width: col.width } : undefined}
                                 >
                                     {col.headerName}

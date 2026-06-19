@@ -19,22 +19,22 @@ export const PageIntro: React.FC<PageIntroProps> = ({
     return (
         <section
             className={cn(
-                'relative w-full max-w-full overflow-hidden rounded-lg border border-slate-200/80 bg-white px-5 py-5 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:px-6 sm:py-6',
+                'w-full max-w-full px-1 py-1 sm:px-0',
                 className,
             )}
         >
-            <div className="relative grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+            <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
                 <div className="min-w-0 max-w-3xl">
                     {eyebrow && (
-                        <p className="text-[11px] font-semibold uppercase text-slate-500">
+                        <p className="text-sm font-medium text-slate-500">
                             {eyebrow}
                         </p>
                     )}
-                    <h1 className="mt-2 text-2xl font-semibold text-slate-950 sm:text-3xl">
+                    <h1 className="mt-1 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">
                         {title}
                     </h1>
                     {description && (
-                        <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+                        <p className="mt-2 max-w-2xl text-[15px] leading-7 text-slate-600">
                             {description}
                         </p>
                     )}

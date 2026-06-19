@@ -5,7 +5,6 @@ import {
     ArrowUpRight,
     BriefcaseBusiness,
     Clock3,
-    LogIn,
     MapPin,
     Pencil,
     Plus,
@@ -55,7 +54,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
             : 'Careers | People Hub',
         description: managementMode
             ? 'Manage public career posts for the People Hub recruitment board.'
-            : 'Explore open roles and submit a focused application to the People Hub team.',
+            : 'See current People Hub roles and send an application with your CV and role details.',
     })
 
     const { events, setEvents, isLoading } = useGetAllEvents()
@@ -144,58 +143,58 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
             icon: BriefcaseBusiness,
         },
         {
-            label: 'Candidate replies',
-            value: 'Fast feedback',
+            label: 'Reply window',
+            value: '2-3 days',
             icon: Clock3,
         },
         {
-            label: 'Team style',
-            value: 'Small, sharp squads',
+            label: 'Working style',
+            value: 'Small product team',
             icon: Users,
         },
     ]
     const culturePrinciples = [
         {
-            title: 'Focused teams',
+            title: 'Product ownership',
             description:
-                'Small squads own problems end to end, with less ceremony and clearer accountability.',
+                'People stay close to the problem, the user, and the quality of the final screen.',
             icon: Users,
         },
         {
-            title: 'Clear expectations',
+            title: 'Plain communication',
             description:
-                'People do their best work when the bar is high, explicit, and backed by good feedback.',
+                'We prefer clear notes, direct feedback, and decisions that are easy to understand later.',
             icon: ShieldCheck,
         },
         {
-            title: 'Steady growth',
+            title: 'Room to improve',
             description:
-                'We care about durable product decisions, clean execution, and teammates who keep improving.',
+                'Better work over time matters here: cleaner flows, fewer mistakes, and stronger judgment.',
             icon: Sparkles,
         },
     ]
     const candidatePromises = [
-        'Direct work with product and engineering, not layers of approval.',
-        'Role expectations that are explicit from the start.',
-        'A hiring process focused on real fit and clear communication.',
+        'You will know who reviews your application and what the next step is.',
+        'We talk about the role, the team, and the actual work early.',
+        'If a role is not a fit, we try to close the loop clearly.',
     ]
     const hiringSteps = [
         {
-            title: 'Apply with context',
+            title: 'Send your application',
             description:
-                'Send a focused application with the work, skills, and direction that best represent you.',
+                'Tell us which role fits you, add the skills that matter, and attach your CV.',
             icon: BriefcaseBusiness,
         },
         {
-            title: 'Quick review',
+            title: 'Team review',
             description:
-                'Profiles are reviewed against the role expectations, not against generic checklists.',
+                'The hiring team checks the profile against the role before moving it forward.',
             icon: Clock3,
         },
         {
-            title: 'Clear conversation',
+            title: 'Interview conversation',
             description:
-                'Interview steps stay practical, direct, and connected to the work you would actually do.',
+                'Interviews stay connected to the work, the team, and the way we build the product.',
             icon: ShieldCheck,
         },
     ]
@@ -203,25 +202,25 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
         {
             title: 'Hybrid work',
             description:
-                'Flexible office rhythm for focused work, team reviews, and planned collaboration.',
+                'A practical office rhythm for focused work, planning, and team review.',
             icon: Users,
         },
         {
             title: 'Learning budget',
             description:
-                'Support for practical courses, books, and tools that improve your product craft.',
+                'Support for useful courses, books, and tools that improve day-to-day work.',
             icon: Sparkles,
         },
         {
             title: 'Health insurance',
             description:
-                'Benefits that keep the team covered while they do steady, responsible work.',
+                'Health coverage for the team and their regular work rhythm.',
             icon: ShieldCheck,
         },
         {
             title: 'Team events',
             description:
-                'Small, useful team gatherings connected to planning, feedback, and shared wins.',
+                'Simple team gatherings for planning, feedback, and shared wins.',
             icon: BriefcaseBusiness,
         },
     ]
@@ -266,11 +265,11 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             <div className="grid lg:grid-cols-[1.15fr_0.85fr]">
                                 <div className="p-6 sm:p-7">
                                     <div className="flex flex-wrap items-center gap-2">
-                                        <span className="inline-flex items-center gap-2 rounded-md bg-slate-100 px-3 py-1.5 text-xs font-semibold uppercase text-slate-700">
+                                        <span className="inline-flex items-center gap-2 rounded-md bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700">
                                             <Sparkles size={14} />
                                             Publishing overview
                                         </span>
-                                        <span className="rounded-md border border-slate-200 px-3 py-1.5 text-xs font-semibold uppercase text-slate-500">
+                                        <span className="rounded-md border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-500">
                                             Admin board
                                         </span>
                                     </div>
@@ -338,7 +337,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/10 to-transparent" />
                                     <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
-                                        <p className="text-xs font-semibold uppercase text-white/70">
+                                        <p className="text-xs font-semibold text-white/70">
                                             Public board preview
                                         </p>
                                         <p className="mt-2 max-w-sm text-lg font-semibold leading-7">
@@ -381,21 +380,32 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             <div className="relative flex min-h-[560px] min-w-0 flex-col justify-between p-5 text-white sm:p-8 lg:p-10">
                                 <div className="max-w-full pt-2 sm:max-w-3xl sm:pt-6">
                                     <div className="flex flex-wrap gap-2">
-                                        <span className="inline-flex items-center gap-2 rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase text-white/85 backdrop-blur">
-                                            <Sparkles size={14} />
+                                        <span className="inline-flex items-center gap-2 rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/85 backdrop-blur">
+                                            <BriefcaseBusiness size={14} />
                                             Career board
                                         </span>
-                                        <span className="rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase text-white/85 backdrop-blur">
-                                            Tirane based team
+                                        <span className="rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/85 backdrop-blur">
+                                            Tirana based team
                                         </span>
                                     </div>
                                     <h1 className="mt-8 max-w-[38rem] break-words text-2xl font-semibold leading-tight [overflow-wrap:anywhere] min-[420px]:text-3xl sm:text-5xl lg:text-6xl">
-                                        Work on HR tools people actually use.
+                                        <span className="block sm:inline">
+                                            Build HR software
+                                        </span>{' '}
+                                        <span className="block sm:inline">
+                                            with a small team.
+                                        </span>
                                     </h1>
                                     <p className="mt-5 max-w-full break-words text-base leading-8 text-white/78 [overflow-wrap:anywhere] sm:max-w-xl sm:text-lg">
-                                        Join a focused team building practical
-                                        tools for recruitment, payroll, assets,
-                                        and planning.
+                                        <span className="block sm:inline">
+                                            We build hiring, payroll,
+                                        </span>{' '}
+                                        <span className="block sm:inline">
+                                            assets, and planning tools
+                                        </span>{' '}
+                                        <span className="block sm:inline">
+                                            used by People Hub teams.
+                                        </span>
                                     </p>
                                     <div className="mt-8 flex min-w-0 flex-col gap-3 sm:flex-row">
                                         <a
@@ -409,15 +419,8 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                             to="/recruitment"
                                             className={`${publicButtonClasses.secondary} w-full min-w-0 sm:w-auto`}
                                         >
-                                            Submit General Application
+                                            Submit application
                                             <ArrowRight size={16} />
-                                        </Link>
-                                        <Link
-                                            to="/"
-                                            className={`${publicButtonClasses.secondary} w-full min-w-0 sm:w-auto`}
-                                        >
-                                            <LogIn size={16} />
-                                            Login
                                         </Link>
                                         {isManager && (
                                             <Link
@@ -439,7 +442,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                             >
                                                 <div className="flex items-center gap-2 text-white/75">
                                                     <Icon size={16} />
-                                                    <p className="text-[11px] font-semibold uppercase">
+                                                    <p className="text-xs font-medium">
                                                         {label}
                                                     </p>
                                                 </div>
@@ -463,26 +466,26 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-950/15 to-transparent" />
                                     <div className="absolute bottom-0 left-0 right-0 min-w-0 p-6 text-white">
-                                        <p className="text-xs font-semibold uppercase text-white/65">
+                                        <p className="text-xs font-semibold text-white/65">
                                             Team environment
                                         </p>
                                         <h2 className="mt-3 max-w-xl break-words text-xl font-semibold leading-tight [overflow-wrap:anywhere] min-[420px]:text-2xl sm:text-3xl">
-                                            Clear ownership, steady
-                                            collaboration, and practical work.
+                                            Clear ownership, useful work, and
+                                            fewer handoffs.
                                         </h2>
                                     </div>
                                 </div>
                                 <div className="min-w-0 border-t border-slate-100 p-6">
                                     <p className="max-w-2xl break-words text-sm leading-7 text-slate-600 [overflow-wrap:anywhere]">
-                                        We keep expectations visible, ship
-                                        useful work, and give people room to
-                                        contribute without unnecessary process.
+                                        The work is practical: understand the
+                                        request, improve the flow, and leave the
+                                        product easier to use than before.
                                     </p>
                                     <div className="mt-5 grid min-w-0 gap-3 sm:grid-cols-3">
                                         {[
                                             'Real product work',
                                             'Direct feedback',
-                                            'Low-noise execution',
+                                            'Less busywork',
                                         ].map((item) => (
                                             <div
                                                 key={item}
@@ -497,8 +500,8 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
 
                             <div className="grid min-w-0 gap-5">
                                 <article className="min-w-0 rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
-                                    <p className="text-xs font-semibold uppercase text-slate-400">
-                                        Hiring rhythm
+                                    <p className="text-sm font-semibold text-slate-500">
+                                        Hiring steps
                                     </p>
                                     <div className="mt-5 grid gap-3">
                                         {hiringSteps.map(
@@ -529,7 +532,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                 <article className="min-w-0 rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
                                     <div className="flex min-w-0 items-center justify-between gap-3">
                                         <div>
-                                            <p className="text-xs font-semibold uppercase text-slate-400">
+                                            <p className="text-sm font-semibold text-slate-500">
                                                 Common locations
                                             </p>
                                             <h3 className="mt-2 break-words text-xl font-semibold text-slate-950">
@@ -568,8 +571,8 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                             className="h-36 w-full object-cover"
                                         />
                                         <div className="p-4">
-                                            <p className="text-[11px] font-semibold uppercase text-slate-400">
-                                                Candidate fit
+                                            <p className="text-xs font-semibold text-slate-500">
+                                                What we value
                                             </p>
                                             <p className="mt-2 text-sm leading-7 text-slate-600">
                                                 We care about useful work, good
@@ -590,10 +593,10 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                 >
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                         <div>
-                            <p className="text-sm font-semibold uppercase text-slate-400">
+                            <p className="text-sm font-semibold text-slate-500">
                                 {managementMode
-                                    ? 'Filter Posts'
-                                    : 'Find a Role'}
+                                    ? 'Filter posts'
+                                    : 'Find a role'}
                             </p>
                             <h2 className="mt-1 text-xl font-semibold text-slate-950">
                                 {managementMode
@@ -667,10 +670,10 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                 >
                                     <div className="flex items-start justify-between gap-4">
                                         <div>
-                                            <p className="inline-flex rounded-md bg-sky-50 px-3 py-1 text-xs font-semibold uppercase text-sky-700">
+                                            <p className="inline-flex rounded-md bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
                                                 {managementMode
-                                                    ? 'Published Post'
-                                                    : 'Open Role'}
+                                                    ? 'Published post'
+                                                    : 'Open role'}
                                             </p>
                                             <h3 className="mt-5 text-[1.85rem] font-semibold leading-tight text-slate-950">
                                                 {careerEvent.title}
@@ -734,8 +737,8 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                                 <ArrowRight size={14} />
                                             </Link>
                                         ) : (
-                                            <span className="text-xs font-semibold uppercase text-slate-400">
-                                                General application supported
+                                            <span className="text-xs font-semibold text-slate-500">
+                                                General applications welcome
                                             </span>
                                         )}
 
@@ -744,7 +747,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                                 to="/recruitment"
                                                 className={`${publicButtonClasses.primary} shrink-0 whitespace-nowrap`}
                                             >
-                                                Apply Now
+                                                Apply now
                                                 <ArrowRight size={14} />
                                             </Link>
                                         )}
@@ -762,17 +765,16 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             className="mt-12 scroll-mt-8 grid items-start gap-5 lg:grid-cols-[1.15fr_0.85fr]"
                         >
                             <div className="rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
-                                <p className="text-xs font-semibold uppercase text-slate-400">
+                                <p className="text-sm font-semibold text-slate-500">
                                     Why join us
                                 </p>
                                 <h2 className="mt-3 text-3xl font-semibold text-slate-950">
-                                    Serious work, calm collaboration, and
-                                    details that stay accurate.
+                                    A product team where details matter.
                                 </h2>
                                 <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600">
-                                    The environment is structured enough to keep
-                                    things moving and flexible enough for strong
-                                    people to make a visible difference.
+                                    We keep the team small enough for people to
+                                    be heard and structured enough that work
+                                    does not get lost.
                                 </p>
 
                                 <div className="mt-6 grid gap-4 sm:grid-cols-3">
@@ -809,20 +811,19 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         className="h-56 w-full object-cover"
                                     />
                                     <div className="p-6">
-                                        <p className="text-xs font-semibold uppercase text-slate-400">
+                                        <p className="text-sm font-semibold text-slate-500">
                                             Team perspective
                                         </p>
                                         <blockquote className="mt-3 text-lg font-semibold leading-8 text-slate-900">
-                                            “The work is practical and the bar
-                                            is clear. You know what good looks
-                                            like, and you get room to deliver
-                                            it.”
+                                            “You can see where your work lands.
+                                            That makes it easier to care about
+                                            the details.”
                                         </blockquote>
                                     </div>
                                 </article>
 
                                 <article className="rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
-                                    <p className="text-xs font-semibold uppercase text-slate-400">
+                                    <p className="text-sm font-semibold text-slate-500">
                                         What candidates can expect
                                     </p>
                                     <div className="mt-5 space-y-4">
@@ -850,17 +851,16 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                         >
                             <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                                 <div>
-                                    <p className="text-xs font-semibold uppercase text-slate-400">
+                                    <p className="text-sm font-semibold text-slate-500">
                                         Benefits
                                     </p>
                                     <h2 className="mt-2 text-2xl font-semibold text-slate-950">
-                                        Built for sustainable team work.
+                                        Support that fits the work.
                                     </h2>
                                 </div>
                                 <p className="max-w-xl text-sm leading-6 text-slate-500">
-                                    Practical support that fits the way People
-                                    Hub teams plan, build, and improve the
-                                    product.
+                                    Useful support for the way our team plans,
+                                    builds, and improves the product.
                                 </p>
                             </div>
 
@@ -886,26 +886,6 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             </div>
                         </section>
 
-                        <section className="mt-6 grid gap-5 lg:grid-cols-3">
-                            {culturePrinciples.map((principle) => (
-                                <article
-                                    key={`${principle.title}-summary`}
-                                    className="rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]"
-                                >
-                                    <p className="text-xs font-semibold uppercase text-slate-400">
-                                        Candidate fit
-                                    </p>
-                                    <p className="mt-3 text-sm leading-7 text-slate-600">
-                                        {principle.title === 'Focused teams'
-                                            ? 'You are comfortable owning a problem directly and communicating without excess ceremony.'
-                                            : principle.title ===
-                                                'Clear expectations'
-                                              ? 'You prefer feedback that is concrete, quick, and tied to actual output.'
-                                              : 'You want work that compounds over time instead of short-lived cosmetic tasks.'}
-                                    </p>
-                                </article>
-                            ))}
-                        </section>
                     </>
                 )}
             </div>
@@ -922,8 +902,8 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                         <div className="w-full rounded-lg bg-white p-6 sm:p-7">
                             <div className="flex items-start justify-between gap-4">
                                 <div>
-                                    <p className="text-xs font-semibold uppercase text-slate-400">
-                                        Career Publishing
+                                    <p className="text-sm font-semibold text-slate-500">
+                                        Career publishing
                                     </p>
                                     <h2 className="mt-2 text-2xl font-semibold text-slate-950">
                                         {editingEvent
