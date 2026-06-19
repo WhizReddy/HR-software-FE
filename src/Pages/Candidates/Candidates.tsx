@@ -68,7 +68,6 @@ function CandidatesCoontext() {
                         >
                             <option value="all">All statuses</option>
                             <option value="active">Active</option>
-                            <option value="pending">Pending</option>
                             <option value="rejected">Rejected</option>
                             <option value="employed">Employed</option>
                         </select>

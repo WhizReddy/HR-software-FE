@@ -19,6 +19,24 @@ import {
     PaginatedResponse,
 } from '@/Helpers/clientTableFiltering'
 
+const candidateStatusOptions = ['active', 'rejected', 'employed'] as const
+type CandidateStatusOption = (typeof candidateStatusOptions)[number]
+type CandidateStatusFilter = CandidateStatusOption | 'all'
+
+const normalizeCandidateStatusFilter = (
+    status: string | null,
+): CandidateStatusFilter =>
+    status && candidateStatusOptions.includes(status as CandidateStatusOption)
+        ? (status as CandidateStatusOption)
+        : 'all'
+
+const normalizeCandidateStatus = (
+    status: string | undefined,
+): CandidateStatusOption =>
+    candidateStatusOptions.includes(status as CandidateStatusOption)
+        ? (status as CandidateStatusOption)
+        : 'active'
+
 export const CandidateProvider: React.FC<{ children: any }> = ({
     children,
 }) => {
@@ -36,7 +54,9 @@ export const CandidateProvider: React.FC<{ children: any }> = ({
         searchParams,
         setSearchParams,
     })
-    const statusFilter = searchParams.get('status') || 'all'
+    const statusFilter = normalizeCandidateStatusFilter(
+        searchParams.get('status'),
+    )
 
     const setStatusFilter = React.useCallback(
         (status: string) => {
@@ -86,9 +106,10 @@ export const CandidateProvider: React.FC<{ children: any }> = ({
 
     const matchesCandidateFilters = (candidate: CandidateRow) => {
         const fullName = `${candidate.firstName} ${candidate.lastName}`
+        const candidateStatus = normalizeCandidateStatus(candidate.status)
         const matchesStatus =
             statusFilter === 'all' ||
-            normalizeFilterText(candidate.status) ===
+            normalizeFilterText(candidateStatus) ===
                 normalizeFilterText(statusFilter)
 
         return (
@@ -100,7 +121,7 @@ export const CandidateProvider: React.FC<{ children: any }> = ({
                 candidate.email,
                 candidate.phoneNumber,
                 candidate.positionApplied,
-                candidate.status,
+                candidateStatus,
                 candidate.experience,
                 candidate.applicationMethod,
             ])
@@ -159,7 +180,7 @@ export const CandidateProvider: React.FC<{ children: any }> = ({
             positionApplied: applicant.positionApplied,
             technologiesUsed: applicant.technologiesUsed,
             salaryExpectations: applicant.salaryExpectations,
-            status: applicant.status,
+            status: normalizeCandidateStatus(applicant.status),
         })) ?? []
 
     const columns = [
@@ -174,9 +195,7 @@ export const CandidateProvider: React.FC<{ children: any }> = ({
                 const color =
                     params.value === 'active'
                         ? 'green'
-                        : params.value === 'pending'
-                          ? 'orange'
-                          : params.value === 'rejected'
+                        : params.value === 'rejected'
                             ? 'red'
                             : params.value === 'employed'
                               ? 'purple'
