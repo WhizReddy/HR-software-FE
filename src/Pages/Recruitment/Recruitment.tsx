@@ -6,9 +6,7 @@ import {
     CheckCircle2,
     Clock3,
     FileText,
-    Globe2,
     LogIn,
-    Mail,
     Phone,
     RotateCcw,
     Send,
@@ -34,10 +32,13 @@ import {
     RecruitmentProvider,
 } from './Context/RecruitmentContext'
 import { useRecruitmentForm } from './Hook'
-import { RecruitmentSchema } from '@/Schemas/Recruitment/Recruitment.schema'
+import {
+    RECRUITMENT_CV_MAX_SIZE_BYTES,
+    RECRUITMENT_CV_MAX_SIZE_MB,
+    RecruitmentSchema,
+} from '@/Schemas/Recruitment/Recruitment.schema'
 import { usePageMeta } from '@/hooks/use-page-meta'
 import Workers from '/Images/career-workspace-hero.jpg'
-import WorkerTwo from '/Images/career-planning-table.jpg'
 
 function RecruitmentBase() {
     usePageMeta({
@@ -75,7 +76,7 @@ function RecruitmentBase() {
 
     return (
         <main className="min-h-screen overflow-x-hidden bg-[#f5f7fb]">
-            <div className="mx-auto box-border flex w-full min-w-0 max-w-[calc(100vw-1.5rem)] flex-col gap-3 px-3 pt-3 sm:max-w-[1500px] sm:px-6 sm:pt-4 lg:px-8">
+            <div className="mx-auto box-border flex w-full min-w-0 max-w-[1500px] flex-col gap-3 px-4 pt-3 sm:px-6 sm:pt-4 lg:px-8">
                 <PublicPageNav
                     contextLabel="Candidate application"
                     actions={
@@ -98,7 +99,7 @@ function RecruitmentBase() {
                 />
             </div>
 
-            <section className="mx-auto box-border grid w-full min-w-0 max-w-[calc(100vw-1.5rem)] gap-6 px-3 py-5 sm:max-w-[1500px] sm:px-6 lg:grid-cols-[minmax(340px,0.9fr)_minmax(0,1.1fr)] lg:px-8 lg:py-8">
+            <section className="mx-auto box-border grid w-full min-w-0 max-w-[1500px] gap-6 px-4 py-5 sm:px-6 lg:grid-cols-[minmax(340px,0.9fr)_minmax(0,1.1fr)] lg:px-8 lg:py-8">
                 <aside className="min-w-0 space-y-5 lg:sticky lg:top-6 lg:self-start">
                     <div className="relative min-h-[430px] w-full min-w-0 max-w-full overflow-hidden rounded-xl border border-slate-200/80 bg-slate-950 text-white shadow-[0_22px_70px_rgba(15,23,42,0.16)]">
                         <img
@@ -157,29 +158,11 @@ function RecruitmentBase() {
                         </div>
                     </div>
 
-                    <div className="min-w-0 overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
-                        <img
-                            alt="Planning table"
-                            src={WorkerTwo}
-                            className="h-40 w-full object-cover"
-                        />
-                        <div className="p-5">
-                            <p className="text-sm font-semibold text-slate-500">
-                                Application flow
-                            </p>
-                            <p className="mt-3 break-words text-sm leading-7 text-slate-600">
-                                Short and specific is better. Tell us what role
-                                fits you, what you have worked with, and where
-                                your CV can show it.
-                            </p>
-                        </div>
-                    </div>
-
                     <div className="grid min-w-0 gap-3 sm:grid-cols-3 lg:grid-cols-1">
                         <InfoCard
                             icon={<FileText size={18} />}
                             title="CV required"
-                            text="PDF, DOC, or DOCX up to 10MB."
+                            text={`PDF, DOC, or DOCX up to ${RECRUITMENT_CV_MAX_SIZE_MB}MB.`}
                         />
                         <InfoCard
                             icon={<Clock3 size={18} />}
@@ -191,26 +174,6 @@ function RecruitmentBase() {
                             title="Email check"
                             text="Use an email not already tied to an employee login."
                         />
-                    </div>
-
-                    <div className="min-w-0 rounded-xl border border-slate-200/80 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
-                        <p className="text-sm font-semibold text-slate-500">
-                            Contact fields
-                        </p>
-                        <div className="mt-4 grid gap-3">
-                            <div className="flex min-w-0 items-center gap-3 rounded-md bg-slate-50 px-4 py-3">
-                                <Mail size={16} className="text-slate-600" />
-                                <span className="min-w-0 break-words text-sm font-semibold text-slate-700">
-                                    Email confirmation enabled
-                                </span>
-                            </div>
-                            <div className="flex min-w-0 items-center gap-3 rounded-md bg-slate-50 px-4 py-3">
-                                <Globe2 size={16} className="text-slate-600" />
-                                <span className="min-w-0 break-words text-sm font-semibold text-slate-700">
-                                    International phone numbers accepted
-                                </span>
-                            </div>
-                        </div>
                     </div>
                 </aside>
 
@@ -607,8 +570,11 @@ function RecruitmentBase() {
                                         ) {
                                             return 'Please select a valid PDF, DOCX, or DOC file'
                                         }
-                                        if (selectedFile.size > 10 * 1024 * 1024) {
-                                            return 'File must be 10MB or smaller'
+                                        if (
+                                            selectedFile.size >
+                                            RECRUITMENT_CV_MAX_SIZE_BYTES
+                                        ) {
+                                            return `File must be ${RECRUITMENT_CV_MAX_SIZE_MB}MB or smaller`
                                         }
                                     },
                                 }}
@@ -628,7 +594,7 @@ function RecruitmentBase() {
                                             </span>
                                             <span className="max-w-full truncate text-sm font-medium text-slate-500">
                                                 {fileName ||
-                                                    'PDF, DOC, or DOCX up to 10MB'}
+                                                    `PDF, DOC, or DOCX up to ${RECRUITMENT_CV_MAX_SIZE_MB}MB`}
                                             </span>
                                             <input
                                                 type="file"

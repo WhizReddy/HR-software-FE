@@ -53,6 +53,7 @@ describe('Recruitment page', () => {
         expect(screen.getByLabelText(/first name/i)).toBeTruthy()
         expect(screen.getByLabelText(/phone number/i)).toBeTruthy()
         expect(screen.getByText(/upload your cv/i)).toBeTruthy()
+        expect(screen.getAllByText(/up to 5MB/i).length).toBeGreaterThan(0)
         expect(
             screen.getByRole('button', { name: /reset/i }).getAttribute('type'),
         ).toBe('button')

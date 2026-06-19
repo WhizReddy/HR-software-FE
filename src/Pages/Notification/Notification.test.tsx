@@ -146,4 +146,48 @@ describe('NotificationDropdown', () => {
             )
         })
     })
+
+    it('uses the bulk endpoint when marking all notifications as read', async () => {
+        axiosMock.get.mockResolvedValueOnce({
+            data: [
+                {
+                    _id: 'notification-3',
+                    title: 'Candidate update',
+                    type: 'candidates',
+                    typeId: 'candidate-1',
+                    content: 'A candidate needs review',
+                    date: '2026-06-14',
+                    isRead: false,
+                },
+                {
+                    _id: 'notification-4',
+                    title: 'Leave request',
+                    type: 'vacation',
+                    typeId: 'vacation-2',
+                    content: 'A leave request needs review',
+                    date: '2026-06-14',
+                    isRead: false,
+                },
+            ],
+        })
+        axiosMock.patch.mockResolvedValueOnce({ data: { updated: 2 } })
+
+        renderNotifications()
+
+        fireEvent.click(
+            await screen.findByLabelText(/Notifications, 2 unread/i),
+        )
+        fireEvent.click(
+            await screen.findByRole('button', {
+                name: /mark all as read/i,
+            }),
+        )
+
+        await waitFor(() => {
+            expect(axiosMock.patch).toHaveBeenCalledTimes(1)
+            expect(axiosMock.patch).toHaveBeenCalledWith(
+                'notification/user/user-1/read-all?period=today',
+            )
+        })
+    })
 })

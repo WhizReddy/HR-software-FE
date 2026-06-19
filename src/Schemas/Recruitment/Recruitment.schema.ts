@@ -21,6 +21,10 @@ import {
 } from '@/Pages/Recruitment/Component/RecruitmentData'
 import { isValidRecruitmentPhoneNumber } from '@/Pages/Recruitment/utils/phone'
 
+export const RECRUITMENT_CV_MAX_SIZE_MB = 5
+export const RECRUITMENT_CV_MAX_SIZE_BYTES =
+    RECRUITMENT_CV_MAX_SIZE_MB * 1024 * 1024
+
 export const RecruitmentSchema = object({
     applicationMethod: picklist(
         applicationMethodList,
@@ -44,7 +48,10 @@ export const RecruitmentSchema = object({
         check((input) => input.length > 0),
         transform((input) => input[0]),
         mimeType(['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']),
-        maxSize(1024 * 1024 * 10),
+        maxSize(
+            RECRUITMENT_CV_MAX_SIZE_BYTES,
+            `File must be ${RECRUITMENT_CV_MAX_SIZE_MB}MB or smaller`,
+        ),
     ),
 
     firstName: pipe(

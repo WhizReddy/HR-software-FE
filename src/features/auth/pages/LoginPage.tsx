@@ -12,7 +12,6 @@ import { useLoginForm } from '../hooks/useLoginForm'
 import { LoginSchema } from '../schemas/login.schema'
 import AuthPageShell from '../components/AuthPageShell'
 import { usePageMeta } from '@/hooks/use-page-meta'
-import { publicButtonClasses } from '@/Components/Public/PublicPageNav'
 
 const LoginPageContent = () => {
     usePageMeta({
@@ -57,23 +56,12 @@ const LoginPageContent = () => {
         <AuthPageShell
             heroTitle={
                 <>
-                    Track hiring work <br />
-                    <span className="text-slate-500">
-                        without losing the thread.
-                    </span>
+                    People Hub
                 </>
             }
-            heroDescription="Track applicants, interviews, and hiring decisions from one workspace, then continue into employee workflows when the team grows."
-            cardTitle="Sign in to your workspace"
-            cardDescription="Manage hiring, candidates, and employee workflows in one place."
-            publicActions={
-                <Link
-                    to="/career"
-                    className={publicButtonClasses.secondary}
-                >
-                    View open roles
-                </Link>
-            }
+            heroDescription="A small HR workspace for the team that runs hiring, leave, payroll, and assets."
+            cardTitle="Sign in"
+            cardDescription="Use your team account to continue."
         >
             <form
                 className="space-y-6"
@@ -165,7 +153,7 @@ const LoginPageContent = () => {
 
                 <Button
                     type="submit"
-                    className="mt-8 h-12 w-full rounded-xl border border-slate-700 bg-slate-800 text-base font-semibold text-white shadow-sm transition-colors hover:bg-slate-900"
+                    className="mt-8 h-12 w-full rounded-lg border border-slate-900 bg-slate-950 text-base font-semibold text-white shadow-sm transition-colors hover:bg-slate-800"
                     disabled={form.state.isSubmitting}
                 >
                     {form.state.isSubmitting

@@ -3,11 +3,11 @@ import { cn } from '@/lib/utils'
 
 export const publicButtonClasses = {
     primary:
-        'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-slate-900 bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/40',
+        'inline-flex min-h-11 max-w-full items-center justify-center gap-2 whitespace-normal rounded-lg border border-slate-900 bg-slate-900 px-5 py-2.5 text-center text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/40',
     secondary:
-        'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300',
+        'inline-flex min-h-11 max-w-full items-center justify-center gap-2 whitespace-normal rounded-lg border border-slate-200 bg-white px-5 py-2.5 text-center text-sm font-semibold text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300',
     navLink:
-        'inline-flex min-h-11 items-center rounded-lg px-3.5 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300',
+        'inline-flex min-h-11 max-w-full items-center rounded-lg px-3.5 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300',
 }
 
 type PublicPageNavItem = {
@@ -31,7 +31,7 @@ export default function PublicPageNav({
     return (
         <nav
             className={cn(
-                'flex w-full flex-col gap-3 rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-none sm:flex-row sm:items-center sm:justify-between',
+                'flex w-full min-w-0 max-w-full flex-col gap-3 rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-none sm:flex-row sm:items-center sm:justify-between',
                 className,
             )}
         >
@@ -50,12 +50,12 @@ export default function PublicPageNav({
             </div>
 
             {(navItems.length > 0 || actions) && (
-                <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-end">
+                <div className="flex w-full min-w-0 flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:justify-end">
                     {navItems.map((item) => (
                         <a
                             key={item.href}
                             href={item.href}
-                            className={publicButtonClasses.navLink}
+                            className={`${publicButtonClasses.navLink} w-full sm:w-auto`}
                         >
                             {item.label}
                         </a>

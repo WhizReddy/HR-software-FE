@@ -92,11 +92,16 @@ describe('Career page', () => {
         ).toBe('/')
         expect(
             screen
-                .getByRole('link', { name: /apply now/i })
+                .getByRole('link', { name: /submit application/i })
                 .getAttribute('href'),
         ).toBe('/recruitment')
-        expect(screen.getByRole('link', { name: /benefits/i }).getAttribute('href')).toBe('#benefits')
-        expect(screen.getByText('Hybrid work')).toBeTruthy()
+        expect(
+            screen
+                .getAllByRole('link', { name: /^apply$/i })[0]
+                .getAttribute('href'),
+        ).toBe('#application-notes')
+        expect(screen.getByText('Open roles, written clearly.')).toBeTruthy()
+        expect(screen.getByText('Before applying')).toBeTruthy()
     })
 
     it('renders loading and empty public states', () => {
@@ -119,6 +124,6 @@ describe('Career page', () => {
             </MemoryRouter>,
         )
 
-        expect(screen.getByText('No matching openings right now')).toBeTruthy()
+        expect(screen.getByText('No open role matches right now')).toBeTruthy()
     })
 })

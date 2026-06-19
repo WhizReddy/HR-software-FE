@@ -218,43 +218,38 @@ const NotificationDropdown: React.FC = () => {
         try {
             setError(null)
             setIsMarkingAll(true)
+            const unreadIds = unreadNotifications.map(
+                (notification) => notification._id,
+            )
             setPendingNotificationIds((ids) => [
                 ...ids,
-                ...unreadNotifications.map((notification) => notification._id),
+                ...unreadIds,
             ])
-
-            const results = await Promise.allSettled(
-                unreadNotifications.map((notification) =>
-                    AxiosInstance.patch(
-                        `notification/${notification._id}/user/${currentUser._id}`,
-                    ).then(() => notification._id),
+            setNotifications((currentNotifications) =>
+                currentNotifications.map((notification) =>
+                    unreadIds.includes(notification._id)
+                        ? { ...notification, isRead: true }
+                        : notification,
                 ),
             )
-            const markedIds = results
-                .filter(
-                    (
-                        result,
-                    ): result is PromiseFulfilledResult<string | number> =>
-                        result.status === 'fulfilled',
-                )
-                .map((result) => result.value)
 
-            if (markedIds.length > 0) {
-                setNotifications((currentNotifications) =>
-                    currentNotifications.map((notification) =>
-                        markedIds.includes(notification._id)
-                            ? { ...notification, isRead: true }
-                            : notification,
-                    ),
-                )
-            }
-
-            if (markedIds.length !== unreadNotifications.length) {
-                setError('Some notifications could not be marked as read.')
-            }
+            const params = new URLSearchParams({ period: currentPeriod })
+            await AxiosInstance.patch(
+                `notification/user/${currentUser._id}/read-all?${params.toString()}`,
+            )
         } catch (error) {
             console.error('Error marking notifications as read:', error)
             setError('Notifications could not be marked as read.')
+            setNotifications((currentNotifications) =>
+                currentNotifications.map((notification) =>
+                    unreadNotifications.some(
+                        (unreadNotification) =>
+                            unreadNotification._id === notification._id,
+                    )
+                        ? { ...notification, isRead: false }
+                        : notification,
+                ),
+            )
         } finally {
             setIsMarkingAll(false)
             setPendingNotificationIds((ids) =>

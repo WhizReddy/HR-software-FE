@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { safeParse } from 'valibot'
-import { RecruitmentSchema } from './Recruitment.schema'
+import {
+    RECRUITMENT_CV_MAX_SIZE_BYTES,
+    RECRUITMENT_CV_MAX_SIZE_MB,
+    RecruitmentSchema,
+} from './Recruitment.schema'
 
 describe('RecruitmentSchema', () => {
     it('rejects invalid email and phone values', () => {
@@ -30,5 +34,10 @@ describe('RecruitmentSchema', () => {
             safeParse(RecruitmentSchema.entries.phoneNumber, '+44 7911 123456')
                 .success,
         ).toBe(true)
+    })
+
+    it('keeps the CV upload limit aligned with the backend', () => {
+        expect(RECRUITMENT_CV_MAX_SIZE_MB).toBe(5)
+        expect(RECRUITMENT_CV_MAX_SIZE_BYTES).toBe(5 * 1024 * 1024)
     })
 })

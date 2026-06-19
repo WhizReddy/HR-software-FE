@@ -60,17 +60,14 @@ describe('LoginPage', () => {
 
     afterEach(cleanup)
 
-    it('renders People Hub branding and public route links', async () => {
+    it('renders People Hub branding and the password recovery link', async () => {
         renderLogin()
 
         expect(await screen.findAllByText(/people hub/i)).not.toHaveLength(0)
-
-        expect(screen.getByText(/built for daily hr work/i)).toBeTruthy()
-
-        const careerLink = screen.getByRole('link', {
-            name: /view open roles/i,
-        })
-        expect(careerLink.getAttribute('href')).toBe('/career')
+        expect(screen.queryByText(/built for daily hr work/i)).toBeNull()
+        expect(
+            screen.queryByRole('link', { name: /view open roles/i }),
+        ).toBeNull()
 
         const forgotPasswordLink = screen.getByRole('link', {
             name: /forgot password/i,

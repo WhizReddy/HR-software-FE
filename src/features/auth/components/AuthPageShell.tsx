@@ -19,57 +19,48 @@ export default function AuthPageShell({
     publicActions,
 }: AuthPageShellProps) {
     return (
-        <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-[var(--background)]">
-            <div className="grid min-h-screen w-full min-w-0 lg:grid-cols-[0.95fr_1.05fr]">
-                <div className="relative hidden flex-col justify-center overflow-hidden border-r border-slate-200 bg-slate-100 px-10 py-8 text-slate-950 lg:flex xl:px-14">
-                    <div className="max-w-xl">
-                        <div className="mb-10 flex items-center gap-3">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-900 shadow-sm">
-                                <h2 className="text-lg font-bold tracking-widest text-white">
-                                    PH
-                                </h2>
-                            </div>
-                            <div>
-                                <p className="text-sm font-semibold text-slate-950">
-                                    People Hub
-                                </p>
-                                <p className="text-sm font-medium text-slate-500">
-                                    Recruiter workspace
-                                </p>
-                            </div>
+        <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-[#f6f7f4] text-slate-950">
+            <main className="mx-auto grid min-h-screen w-full max-w-[1040px] items-center gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[0.82fr_1fr] lg:gap-12 lg:px-8">
+                <section className="hidden min-w-0 lg:block">
+                    <div className="inline-flex items-center gap-3">
+                        <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-slate-950 text-sm font-bold tracking-widest text-white shadow-sm">
+                            PH
                         </div>
-                        <h1 className="max-w-lg text-5xl font-semibold leading-[1.05] text-slate-950">
-                            {heroTitle}
-                        </h1>
-                        <p className="mt-6 max-w-md text-base leading-7 text-slate-600">
-                            {heroDescription}
-                        </p>
-
-                        <div className="mt-10 max-w-md border-l border-slate-300 pl-5">
-                            <p className="text-sm font-semibold text-slate-900">
-                                Built for daily HR work
+                        <div>
+                            <p className="text-sm font-semibold text-slate-950">
+                                People Hub
                             </p>
-                            <p className="mt-2 text-sm leading-6 text-slate-600">
-                                Hiring records, interviews, employee details,
-                                leave, payroll, and assets stay in the same
-                                workspace.
+                            <p className="text-sm font-medium text-slate-500">
+                                HR workspace
                             </p>
                         </div>
                     </div>
-                </div>
 
-                <div className="flex w-full min-w-0 flex-col items-center justify-start px-4 py-6 sm:justify-center sm:px-10 lg:px-12">
+                    <h1 className="mt-10 max-w-sm text-4xl font-semibold leading-tight text-slate-950">
+                        {heroTitle}
+                    </h1>
+                    <p className="mt-5 max-w-sm text-base leading-7 text-slate-600">
+                        {heroDescription}
+                    </p>
+
+                    <div className="mt-10 w-36 border-t border-slate-300" />
+                    <p className="mt-5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Private team access
+                    </p>
+                </section>
+
+                <section className="flex w-full min-w-0 flex-col items-center justify-center">
                     {publicActions && (
                         <PublicPageNav
                             contextLabel="Sign in"
                             actions={publicActions}
-                            className="mb-5 w-full max-w-[calc(100vw-2rem)] sm:max-w-[440px]"
+                            className="mb-5 w-full max-w-[440px]"
                         />
                     )}
-                    <div className="w-full min-w-0 max-w-[calc(100vw-2rem)] rounded-2xl border border-slate-200/80 bg-white p-6 shadow-[var(--shadow-card)] sm:max-w-[440px] sm:p-10">
+                    <div className="w-full min-w-0 max-w-[440px] rounded-xl border border-slate-200 bg-white p-5 shadow-[0_24px_70px_rgba(15,23,42,0.10)] sm:p-8">
                         {!publicActions && (
-                            <div className="mb-8 flex items-center justify-center gap-3 lg:hidden">
-                                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--primary)] text-sm font-bold tracking-wider text-white shadow-sm">
+                            <div className="mb-7 flex items-center gap-3 lg:hidden">
+                                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-950 text-sm font-bold tracking-wider text-white shadow-sm">
                                     PH
                                 </div>
                                 <div className="text-left">
@@ -82,19 +73,19 @@ export default function AuthPageShell({
                                 </div>
                             </div>
                         )}
-                        <div className="text-center">
-                            <h2 className="mb-2 break-words text-2xl font-semibold leading-tight text-slate-950 sm:text-3xl">
+                        <div>
+                            <h2 className="mb-2 break-words text-2xl font-semibold leading-tight text-slate-950">
                                 {cardTitle}
                             </h2>
-                            <p className="text-sm font-medium text-slate-500">
+                            <p className="break-words text-sm font-medium text-slate-500">
                                 {cardDescription}
                             </p>
                         </div>
 
                         <div className="mt-8">{children}</div>
                     </div>
-                </div>
-            </div>
+                </section>
+            </main>
         </div>
     )
 }

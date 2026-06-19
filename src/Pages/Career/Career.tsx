@@ -2,14 +2,12 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
     ArrowRight,
-    ArrowUpRight,
     BriefcaseBusiness,
     Clock3,
     MapPin,
     Pencil,
     Plus,
     Search,
-    ShieldCheck,
     Sparkles,
     Trash2,
     Users,
@@ -31,8 +29,6 @@ import {
 } from './Hook'
 import { useAuth } from '@/features/auth/context/AuthProvider'
 import { isAdminRole } from '@/features/auth/lib/access'
-import Workers from '/Images/career-workspace-hero.jpg'
-import WorkerTwo from '/Images/career-planning-table.jpg'
 import WorkerThree from '/Images/career-meeting-room.jpg'
 
 type CareersProps = {
@@ -130,12 +126,6 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
         }
     }
 
-    const activeLocations = new Set(
-        events.map((careerEvent) => careerEvent.location),
-    )
-    const featuredLocations = Array.from(activeLocations)
-        .filter(Boolean)
-        .slice(0, 3)
     const heroMetrics = [
         {
             label: 'Open roles',
@@ -153,85 +143,18 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
             icon: Users,
         },
     ]
-    const culturePrinciples = [
-        {
-            title: 'Product ownership',
-            description:
-                'People stay close to the problem, the user, and the quality of the final screen.',
-            icon: Users,
-        },
-        {
-            title: 'Plain communication',
-            description:
-                'We prefer clear notes, direct feedback, and decisions that are easy to understand later.',
-            icon: ShieldCheck,
-        },
-        {
-            title: 'Room to improve',
-            description:
-                'Better work over time matters here: cleaner flows, fewer mistakes, and stronger judgment.',
-            icon: Sparkles,
-        },
+    const applicationNotes = [
+        'Use the exact role title when applying so the team can match your profile quickly.',
+        'Attach a CV that shows recent work, tools, and project responsibilities.',
+        'After email confirmation, the application appears in the HR review board.',
     ]
-    const candidatePromises = [
-        'You will know who reviews your application and what the next step is.',
-        'We talk about the role, the team, and the actual work early.',
-        'If a role is not a fit, we try to close the loop clearly.',
-    ]
-    const hiringSteps = [
-        {
-            title: 'Send your application',
-            description:
-                'Tell us which role fits you, add the skills that matter, and attach your CV.',
-            icon: BriefcaseBusiness,
-        },
-        {
-            title: 'Team review',
-            description:
-                'The hiring team checks the profile against the role before moving it forward.',
-            icon: Clock3,
-        },
-        {
-            title: 'Interview conversation',
-            description:
-                'Interviews stay connected to the work, the team, and the way we build the product.',
-            icon: ShieldCheck,
-        },
-    ]
-    const benefits = [
-        {
-            title: 'Hybrid work',
-            description:
-                'A practical office rhythm for focused work, planning, and team review.',
-            icon: Users,
-        },
-        {
-            title: 'Learning budget',
-            description:
-                'Support for useful courses, books, and tools that improve day-to-day work.',
-            icon: Sparkles,
-        },
-        {
-            title: 'Health insurance',
-            description:
-                'Health coverage for the team and their regular work rhythm.',
-            icon: ShieldCheck,
-        },
-        {
-            title: 'Team events',
-            description:
-                'Simple team gatherings for planning, feedback, and shared wins.',
-            icon: BriefcaseBusiness,
-        },
-    ]
-
     return (
         <div className="min-h-screen overflow-x-hidden">
             <div
                 className={
                     managementMode
                         ? 'mx-auto w-full max-w-full'
-                        : 'mx-auto box-border w-full min-w-0 max-w-[calc(100vw-1.5rem)] px-3 py-6 sm:max-w-[1500px] sm:px-6 sm:py-8 lg:px-8'
+                        : 'mx-auto box-border w-full min-w-0 max-w-[1500px] px-4 py-6 sm:px-6 sm:py-8 lg:px-8'
                 }
             >
                 {managementMode ? (
@@ -356,8 +279,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             className="mb-5"
                             navItems={[
                                 { href: '#open-roles', label: 'Open roles' },
-                                { href: '#culture', label: 'Culture' },
-                                { href: '#benefits', label: 'Benefits' },
+                                { href: '#application-notes', label: 'Apply' },
                             ]}
                             actions={
                                 <Link
@@ -369,55 +291,32 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             }
                         />
 
-                        <section className="relative mb-8 min-h-[560px] w-full min-w-0 max-w-full overflow-hidden rounded-xl border border-slate-200/80 bg-slate-950 shadow-[0_22px_70px_rgba(15,23,42,0.18)]">
-                            <img
-                                src={Workers}
-                                alt="Focused office workspace"
-                                className="absolute inset-0 h-full w-full object-cover object-center"
-                            />
-                            <div className="absolute inset-0 bg-[linear-gradient(105deg,rgba(15,23,42,0.93),rgba(15,23,42,0.72)_48%,rgba(15,23,42,0.18))]" />
-                            <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-slate-950/80 to-transparent" />
-                            <div className="relative flex min-h-[560px] min-w-0 flex-col justify-between p-5 text-white sm:p-8 lg:p-10">
-                                <div className="max-w-full pt-2 sm:max-w-3xl sm:pt-6">
-                                    <div className="flex flex-wrap gap-2">
-                                        <span className="inline-flex items-center gap-2 rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/85 backdrop-blur">
-                                            <BriefcaseBusiness size={14} />
-                                            Career board
-                                        </span>
-                                        <span className="rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/85 backdrop-blur">
-                                            Tirana based team
-                                        </span>
-                                    </div>
-                                    <h1 className="mt-8 max-w-[38rem] break-words text-2xl font-semibold leading-tight [overflow-wrap:anywhere] min-[420px]:text-3xl sm:text-5xl lg:text-6xl">
-                                        <span className="block sm:inline">
-                                            Build HR software
-                                        </span>{' '}
-                                        <span className="block sm:inline">
-                                            with a small team.
-                                        </span>
-                                    </h1>
-                                    <p className="mt-5 max-w-full break-words text-base leading-8 text-white/78 [overflow-wrap:anywhere] sm:max-w-xl sm:text-lg">
-                                        <span className="block sm:inline">
-                                            We build hiring, payroll,
-                                        </span>{' '}
-                                        <span className="block sm:inline">
-                                            assets, and planning tools
-                                        </span>{' '}
-                                        <span className="block sm:inline">
-                                            used by People Hub teams.
-                                        </span>
+                        <section className="mb-6 rounded-xl border border-slate-200 bg-[#fbfbf8] p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:p-8">
+                            <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-end">
+                                <div className="min-w-0">
+                                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                        People Hub Careers
                                     </p>
-                                    <div className="mt-8 flex min-w-0 flex-col gap-3 sm:flex-row">
+                                    <h1 className="mt-5 max-w-2xl break-words text-2xl font-semibold leading-tight text-slate-950 min-[420px]:text-3xl sm:text-5xl">
+                                        Open roles, written clearly.
+                                    </h1>
+                                    <p className="mt-4 max-w-2xl break-words text-sm leading-7 text-slate-600 sm:text-base">
+                                        Browse the roles currently published by
+                                        the HR team. If nothing fits today, you
+                                        can still send a general application.
+                                    </p>
+
+                                    <div className="mt-7 flex min-w-0 flex-col gap-3 sm:flex-row">
                                         <a
                                             href="#open-roles"
-                                            className={`${publicButtonClasses.primary} w-full min-w-0 sm:w-auto`}
+                                            className={`${publicButtonClasses.primary} w-full sm:w-auto`}
                                         >
-                                            Open roles
+                                            View roles
                                             <ArrowRight size={16} />
                                         </a>
                                         <Link
                                             to="/recruitment"
-                                            className={`${publicButtonClasses.secondary} w-full min-w-0 sm:w-auto`}
+                                            className={`${publicButtonClasses.secondary} w-full sm:w-auto`}
                                         >
                                             Submit application
                                             <ArrowRight size={16} />
@@ -425,467 +324,352 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                         {isManager && (
                                             <Link
                                                 to="/career-posts"
-                                                className={`${publicButtonClasses.secondary} w-full min-w-0 sm:w-auto`}
+                                                className={`${publicButtonClasses.secondary} w-full sm:w-auto`}
                                             >
-                                                Manage Career Posts
+                                                Manage posts
                                             </Link>
                                         )}
                                     </div>
                                 </div>
 
-                                <div className="mt-10 grid min-w-0 gap-3 sm:grid-cols-3">
-                                    {heroMetrics.map(
-                                        ({ label, value, icon: Icon }) => (
-                                            <div
-                                                key={label}
-                                                className="min-w-0 rounded-lg border border-white/15 bg-white/10 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur"
-                                            >
-                                                <div className="flex items-center gap-2 text-white/75">
-                                                    <Icon size={16} />
-                                                    <p className="text-xs font-medium">
-                                                        {label}
-                                                    </p>
-                                                </div>
-                                                <p className="mt-3 break-words text-lg font-semibold text-white">
-                                                    {value}
-                                                </p>
-                                            </div>
-                                        ),
-                                    )}
-                                </div>
+                                <aside className="rounded-lg border border-slate-200 bg-white p-5">
+                                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                        Current board
+                                    </p>
+                                    <dl className="mt-5 divide-y divide-slate-100">
+                                        <div className="flex flex-wrap items-center justify-between gap-2 py-3 first:pt-0">
+                                            <dt className="text-sm font-medium text-slate-500">
+                                                Open roles
+                                            </dt>
+                                            <dd className="shrink-0 text-lg font-semibold text-slate-950">
+                                                {events.length}
+                                            </dd>
+                                        </div>
+                                        <div className="flex flex-wrap items-center justify-between gap-2 py-3">
+                                            <dt className="text-sm font-medium text-slate-500">
+                                                Application form
+                                            </dt>
+                                            <dd className="shrink-0 text-sm font-semibold text-slate-950">
+                                                Available
+                                            </dd>
+                                        </div>
+                                        <div className="flex flex-wrap items-center justify-between gap-2 py-3 last:pb-0">
+                                            <dt className="text-sm font-medium text-slate-500">
+                                                Location
+                                            </dt>
+                                            <dd className="shrink-0 text-sm font-semibold text-slate-950">
+                                                Per role
+                                            </dd>
+                                        </div>
+                                    </dl>
+                                </aside>
                             </div>
                         </section>
 
-                        <section className="grid min-w-0 items-start gap-5 lg:grid-cols-[1.05fr_0.95fr]">
-                            <article className="min-w-0 overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
-                                <div className="relative min-h-[330px] min-w-0">
-                                    <img
-                                        src={WorkerThree}
-                                        alt="Team collaboration"
-                                        className="absolute inset-0 h-full w-full object-cover"
+                        <section
+                            id="open-roles"
+                            className="grid scroll-mt-8 gap-5 lg:grid-cols-[320px_minmax(0,1fr)]"
+                        >
+                            <aside
+                                id="application-notes"
+                                className="h-fit rounded-xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]"
+                            >
+                                <label className="flex w-full items-center gap-3 rounded-md border border-slate-200 bg-slate-50 px-4 py-3 focus-within:border-slate-400 focus-within:bg-white focus-within:ring-2 focus-within:ring-slate-400/20">
+                                    <Search
+                                        size={18}
+                                        className="shrink-0 text-slate-400"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-950/15 to-transparent" />
-                                    <div className="absolute bottom-0 left-0 right-0 min-w-0 p-6 text-white">
-                                        <p className="text-xs font-semibold text-white/65">
-                                            Team environment
-                                        </p>
-                                        <h2 className="mt-3 max-w-xl break-words text-xl font-semibold leading-tight [overflow-wrap:anywhere] min-[420px]:text-2xl sm:text-3xl">
-                                            Clear ownership, useful work, and
-                                            fewer handoffs.
-                                        </h2>
-                                    </div>
-                                </div>
-                                <div className="min-w-0 border-t border-slate-100 p-6">
-                                    <p className="max-w-2xl break-words text-sm leading-7 text-slate-600 [overflow-wrap:anywhere]">
-                                        The work is practical: understand the
-                                        request, improve the flow, and leave the
-                                        product easier to use than before.
+                                    <input
+                                        type="text"
+                                        placeholder="Search roles..."
+                                        value={filter}
+                                        onChange={(e) =>
+                                            setFilter(e.target.value)
+                                        }
+                                        className="min-w-0 flex-1 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
+                                    />
+                                </label>
+
+                                <div className="mt-6">
+                                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                        Before applying
                                     </p>
-                                    <div className="mt-5 grid min-w-0 gap-3 sm:grid-cols-3">
-                                        {[
-                                            'Real product work',
-                                            'Direct feedback',
-                                            'Less busywork',
-                                        ].map((item) => (
-                                            <div
-                                                key={item}
-                                                className="min-w-0 break-words rounded-lg border border-slate-200 bg-slate-50 px-3 py-3 text-sm font-semibold text-slate-700"
+                                    <div className="mt-4 space-y-3">
+                                        {applicationNotes.map((note) => (
+                                            <p
+                                                key={note}
+                                                className="border-l border-slate-200 pl-3 text-sm leading-6 text-slate-600"
                                             >
-                                                {item}
-                                            </div>
+                                                {note}
+                                            </p>
                                         ))}
                                     </div>
                                 </div>
-                            </article>
+                            </aside>
 
-                            <div className="grid min-w-0 gap-5">
-                                <article className="min-w-0 rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
-                                    <p className="text-sm font-semibold text-slate-500">
-                                        Hiring steps
-                                    </p>
-                                    <div className="mt-5 grid gap-3">
-                                        {hiringSteps.map(
-                                            ({ title, description, icon: Icon }) => (
+                            <div className="min-w-0 rounded-xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:p-6">
+                                <div className="flex flex-col gap-2 border-b border-slate-100 pb-5 sm:flex-row sm:items-end sm:justify-between">
+                                    <div>
+                                        <p className="text-sm font-semibold text-slate-500">
+                                            Open roles
+                                        </p>
+                                        <h2 className="mt-1 text-2xl font-semibold text-slate-950">
+                                            {filteredEvents.length} result
+                                            {filteredEvents.length === 1
+                                                ? ''
+                                                : 's'}
+                                        </h2>
+                                    </div>
+                                    {filter && (
+                                        <p className="text-sm text-slate-500">
+                                            Search: “{filter}”
+                                        </p>
+                                    )}
+                                </div>
+
+                                {isLoading ? (
+                                    <div className="mt-5 space-y-3">
+                                        {Array.from({ length: 3 }).map(
+                                            (_, index) => (
                                                 <div
-                                                    key={title}
-                                                    className="flex min-w-0 gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4"
-                                                >
-                                                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-white text-slate-600 shadow-sm">
-                                                        <Icon
-                                                            size={16}
-                                                        />
-                                                    </div>
-                                                    <div className="min-w-0">
-                                                        <h3 className="text-sm font-semibold text-slate-950">
-                                                            {title}
-                                                        </h3>
-                                                        <p className="mt-1 break-words text-sm leading-6 text-slate-600">
-                                                            {description}
-                                                        </p>
-                                                    </div>
-                                                </div>
+                                                    key={index}
+                                                    className="h-32 animate-pulse rounded-lg border border-slate-200 bg-slate-100"
+                                                />
                                             ),
                                         )}
                                     </div>
-                                </article>
-
-                                <article className="min-w-0 rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
-                                    <div className="flex min-w-0 items-center justify-between gap-3">
-                                        <div>
-                                            <p className="text-sm font-semibold text-slate-500">
-                                                Common locations
-                                            </p>
-                                            <h3 className="mt-2 break-words text-xl font-semibold text-slate-950">
-                                                Flexible roles, clear details
-                                            </h3>
+                                ) : filteredEvents.length === 0 ? (
+                                    <div className="mt-5 rounded-lg border border-dashed border-slate-200 bg-slate-50 p-6">
+                                        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                                            <div>
+                                                <h3 className="text-lg font-semibold text-slate-950">
+                                                    No open role matches right
+                                                    now
+                                                </h3>
+                                                <p className="mt-2 text-sm leading-6 text-slate-600">
+                                                    Send a general application
+                                                    and the HR team can review
+                                                    your profile when a role
+                                                    opens.
+                                                </p>
+                                            </div>
+                                            <Link
+                                                to="/recruitment"
+                                                className={`${publicButtonClasses.secondary} w-full shrink-0 sm:w-auto`}
+                                            >
+                                                Apply anyway
+                                                <ArrowRight size={16} />
+                                            </Link>
                                         </div>
-                                        <ArrowUpRight
-                                            size={16}
-                                            className="text-slate-600"
-                                        />
                                     </div>
-                                    <div className="mt-5 flex flex-wrap gap-2">
-                                        {featuredLocations.length > 0 ? (
-                                            featuredLocations.map(
-                                                (location) => (
-                                                    <span
-                                                        key={location}
-                                                        className="inline-flex items-center rounded-md border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700"
+                                ) : (
+                                    <div className="mt-5 space-y-3">
+                                        {filteredEvents.map((careerEvent) => (
+                                            <article
+                                                key={careerEvent._id}
+                                                className="rounded-lg border border-slate-200 bg-white p-5 transition hover:border-slate-300 hover:bg-slate-50/70"
+                                            >
+                                                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                                                    <div className="min-w-0">
+                                                        <h3 className="break-words text-xl font-semibold text-slate-950">
+                                                            {careerEvent.title}
+                                                        </h3>
+                                                        <p className="mt-3 flex items-center gap-2 text-sm font-medium text-slate-500">
+                                                            <MapPin
+                                                                size={15}
+                                                                className="shrink-0"
+                                                            />
+                                                            <span>
+                                                                {careerEvent.location ||
+                                                                    'Location to be confirmed'}
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                    <Link
+                                                        to="/recruitment"
+                                                        className={`${publicButtonClasses.primary} w-full shrink-0 sm:w-auto`}
                                                     >
-                                                        {location}
-                                                    </span>
-                                                ),
-                                            )
-                                        ) : (
-                                            <span className="text-sm text-slate-500">
-                                                Flexible location details are
-                                                shared per role.
-                                            </span>
-                                        )}
+                                                        Apply
+                                                        <ArrowRight
+                                                            size={16}
+                                                        />
+                                                    </Link>
+                                                </div>
+                                                <p className="mt-4 text-sm leading-7 text-slate-600">
+                                                    {truncateText(
+                                                        careerEvent.description,
+                                                        220,
+                                                    )}
+                                                </p>
+                                            </article>
+                                        ))}
                                     </div>
-
-                                    <div className="mt-5 overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
-                                        <img
-                                            src={WorkerTwo}
-                                            alt="Team planning session"
-                                            className="h-36 w-full object-cover"
-                                        />
-                                        <div className="p-4">
-                                            <p className="text-xs font-semibold text-slate-500">
-                                                What we value
-                                            </p>
-                                            <p className="mt-2 text-sm leading-7 text-slate-600">
-                                                We care about useful work, good
-                                                judgment, and clear
-                                                communication.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </article>
+                                )}
                             </div>
                         </section>
                     </>
                 )}
 
-                <section
-                    id="open-roles"
-                    className="mt-8 scroll-mt-8 min-w-0 rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]"
-                >
-                    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                        <div>
-                            <p className="text-sm font-semibold text-slate-500">
-                                {managementMode
-                                    ? 'Filter posts'
-                                    : 'Find a role'}
-                            </p>
-                            <h2 className="mt-1 text-xl font-semibold text-slate-950">
-                                {managementMode
-                                    ? 'Search your published career posts'
-                                    : 'Browse opportunities by title, location, or keyword'}
-                            </h2>
-                            <p className="mt-2 text-sm text-slate-500">
-                                {filteredEvents.length} result
-                                {filteredEvents.length === 1 ? '' : 's'}
-                                {filter ? ` for "${filter}"` : ''}
-                            </p>
-                        </div>
-
-                        <label className="flex w-full items-center gap-3 rounded-md border border-slate-200 bg-slate-50 px-4 py-3 lg:max-w-md focus-within:border-slate-400 focus-within:bg-white focus-within:ring-2 focus-within:ring-slate-400/20">
-                            <Search size={18} className="text-slate-400" />
-                            <input
-                                type="text"
-                                placeholder="Search positions..."
-                                value={filter}
-                                onChange={(e) => setFilter(e.target.value)}
-                                className="w-full bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
-                            />
-                        </label>
-                    </div>
-                </section>
-
-                <section className="mt-8">
-                    {isLoading ? (
-                        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                            {Array.from({ length: 3 }).map((_, index) => (
-                                <div
-                                    key={index}
-                                    className="h-64 animate-pulse rounded-lg border border-slate-200 bg-slate-100"
-                                />
-                            ))}
-                        </div>
-                    ) : filteredEvents.length === 0 ? (
-                        <div className="rounded-lg border border-dashed border-slate-200 bg-white p-10 text-center shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
-                            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-slate-400">
-                                <BriefcaseBusiness size={28} />
-                            </div>
-                            <h3 className="mt-6 text-2xl font-semibold text-slate-950">
-                                {managementMode
-                                    ? 'No career posts match this filter'
-                                    : 'No matching openings right now'}
-                            </h3>
-                            <p className="mt-3 text-sm text-slate-500">
-                                {managementMode
-                                    ? 'Clear the filter or publish a new role to populate the board.'
-                                    : 'You can still send a general application and we will keep your profile on file.'}
-                            </p>
-                            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-                                {managementMode && (
-                                    <button
-                                        type="button"
-                                        onClick={handleOpenCreate}
-                                        className={publicButtonClasses.primary}
-                                    >
-                                        <Plus size={16} />
-                                        Create Career Post
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                            {filteredEvents.map((careerEvent) => (
-                                <article
-                                    key={careerEvent._id}
-                                    className="group flex h-full flex-col rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_18px_45px_rgba(15,23,42,0.10)]"
-                                >
-                                    <div className="flex items-start justify-between gap-4">
-                                        <div>
-                                            <p className="inline-flex rounded-md bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
-                                                {managementMode
-                                                    ? 'Published post'
-                                                    : 'Open role'}
-                                            </p>
-                                            <h3 className="mt-5 text-[1.85rem] font-semibold leading-tight text-slate-950">
-                                                {careerEvent.title}
-                                            </h3>
-                                            <div className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700">
-                                                <MapPin
-                                                    size={15}
-                                                    className="text-slate-600"
-                                                />
-                                                <span>
-                                                    {careerEvent.location ||
-                                                        'Location to be confirmed'}
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        {managementMode && isManager && (
-                                            <div className="flex items-center gap-2">
-                                                <button
-                                                    type="button"
-                                                    onClick={() =>
-                                                        handleOpenEdit(
-                                                            careerEvent,
-                                                        )
-                                                    }
-                                                    aria-label={`Edit ${careerEvent.title}`}
-                                                    className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-slate-200 text-slate-500 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/30"
-                                                >
-                                                    <Pencil size={16} />
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    onClick={() =>
-                                                        handleDeleteEventModal(
-                                                            careerEvent._id,
-                                                        )
-                                                    }
-                                                    aria-label={`Delete ${careerEvent.title}`}
-                                                    className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-rose-200 text-rose-500 transition hover:bg-rose-50 hover:text-rose-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-200"
-                                                >
-                                                    <Trash2 size={16} />
-                                                </button>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    <p className="mt-5 flex-1 text-sm leading-7 text-slate-600">
-                                        {truncateText(
-                                            careerEvent.description,
-                                            190,
-                                        )}
-                                    </p>
-
-                                    <div className="mt-8 flex items-center justify-between gap-3 border-t border-slate-100 pt-5">
-                                        {managementMode ? (
-                                            <Link
-                                                to="/career"
-                                                className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 transition hover:text-slate-950"
-                                            >
-                                                Preview public page
-                                                <ArrowRight size={14} />
-                                            </Link>
-                                        ) : (
-                                            <span className="text-xs font-semibold text-slate-500">
-                                                General applications welcome
-                                            </span>
-                                        )}
-
-                                        {!managementMode && (
-                                            <Link
-                                                to="/recruitment"
-                                                className={`${publicButtonClasses.primary} shrink-0 whitespace-nowrap`}
-                                            >
-                                                Apply now
-                                                <ArrowRight size={14} />
-                                            </Link>
-                                        )}
-                                    </div>
-                                </article>
-                            ))}
-                        </div>
-                    )}
-                </section>
-
-                {!managementMode && (
+                {managementMode && (
                     <>
                         <section
-                            id="culture"
-                            className="mt-12 scroll-mt-8 grid items-start gap-5 lg:grid-cols-[1.15fr_0.85fr]"
+                            id="open-roles"
+                            className="mt-8 scroll-mt-8 min-w-0 rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]"
                         >
-                            <div className="rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
-                                <p className="text-sm font-semibold text-slate-500">
-                                    Why join us
-                                </p>
-                                <h2 className="mt-3 text-3xl font-semibold text-slate-950">
-                                    A product team where details matter.
-                                </h2>
-                                <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600">
-                                    We keep the team small enough for people to
-                                    be heard and structured enough that work
-                                    does not get lost.
-                                </p>
+                            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                                <div>
+                                    <p className="text-sm font-semibold text-slate-500">
+                                        Filter posts
+                                    </p>
+                                    <h2 className="mt-1 text-xl font-semibold text-slate-950">
+                                        Search your published career posts
+                                    </h2>
+                                    <p className="mt-2 text-sm text-slate-500">
+                                        {filteredEvents.length} result
+                                        {filteredEvents.length === 1
+                                            ? ''
+                                            : 's'}
+                                        {filter ? ` for "${filter}"` : ''}
+                                    </p>
+                                </div>
 
-                                <div className="mt-6 grid gap-4 sm:grid-cols-3">
-                                    {culturePrinciples.map(
-                                        ({
-                                            title,
-                                            description,
-                                            icon: Icon,
-                                        }) => (
-                                            <article
-                                                key={title}
-                                                className="rounded-lg border border-slate-200 bg-slate-50 p-5"
-                                            >
-                                                <div className="flex h-11 w-11 items-center justify-center rounded-md bg-white text-slate-600 shadow-sm">
-                                                    <Icon size={18} />
-                                                </div>
-                                                <h3 className="mt-4 text-lg font-semibold text-slate-950">
-                                                    {title}
-                                                </h3>
-                                                <p className="mt-3 text-sm leading-7 text-slate-600">
-                                                    {description}
-                                                </p>
-                                            </article>
+                                <label className="flex w-full items-center gap-3 rounded-md border border-slate-200 bg-slate-50 px-4 py-3 lg:max-w-md focus-within:border-slate-400 focus-within:bg-white focus-within:ring-2 focus-within:ring-slate-400/20">
+                                    <Search
+                                        size={18}
+                                        className="text-slate-400"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Search positions..."
+                                        value={filter}
+                                        onChange={(e) =>
+                                            setFilter(e.target.value)
+                                        }
+                                        className="w-full bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
+                                    />
+                                </label>
+                            </div>
+                        </section>
+
+                        <section className="mt-8">
+                            {isLoading ? (
+                                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                                    {Array.from({ length: 3 }).map(
+                                        (_, index) => (
+                                            <div
+                                                key={index}
+                                                className="h-64 animate-pulse rounded-lg border border-slate-200 bg-slate-100"
+                                            />
                                         ),
                                     )}
                                 </div>
-                            </div>
-
-                            <div className="grid gap-5">
-                                <article className="overflow-hidden rounded-lg border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
-                                    <img
-                                        src={WorkerThree}
-                                        alt="Team collaboration in the office"
-                                        className="h-56 w-full object-cover"
-                                    />
-                                    <div className="p-6">
-                                        <p className="text-sm font-semibold text-slate-500">
-                                            Team perspective
-                                        </p>
-                                        <blockquote className="mt-3 text-lg font-semibold leading-8 text-slate-900">
-                                            “You can see where your work lands.
-                                            That makes it easier to care about
-                                            the details.”
-                                        </blockquote>
+                            ) : filteredEvents.length === 0 ? (
+                                <div className="rounded-lg border border-dashed border-slate-200 bg-white p-10 text-center shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
+                                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                                        <BriefcaseBusiness size={28} />
                                     </div>
-                                </article>
-
-                                <article className="rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
-                                    <p className="text-sm font-semibold text-slate-500">
-                                        What candidates can expect
+                                    <h3 className="mt-6 text-2xl font-semibold text-slate-950">
+                                        No career posts match this filter
+                                    </h3>
+                                    <p className="mt-3 text-sm text-slate-500">
+                                        Clear the filter or publish a new role
+                                        to populate the board.
                                     </p>
-                                    <div className="mt-5 space-y-4">
-                                        {candidatePromises.map((promise) => (
-                                            <div
-                                                key={promise}
-                                                className="flex items-start gap-3"
-                                            >
-                                                <span className="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-slate-100 text-slate-600">
-                                                    <ArrowRight size={14} />
-                                                </span>
-                                                <p className="text-sm leading-7 text-slate-600">
-                                                    {promise}
-                                                </p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </article>
-                            </div>
-                        </section>
-
-                        <section
-                            id="benefits"
-                            className="mt-6 scroll-mt-8 rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]"
-                        >
-                            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-                                <div>
-                                    <p className="text-sm font-semibold text-slate-500">
-                                        Benefits
-                                    </p>
-                                    <h2 className="mt-2 text-2xl font-semibold text-slate-950">
-                                        Support that fits the work.
-                                    </h2>
-                                </div>
-                                <p className="max-w-xl text-sm leading-6 text-slate-500">
-                                    Useful support for the way our team plans,
-                                    builds, and improves the product.
-                                </p>
-                            </div>
-
-                            <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                                {benefits.map(
-                                    ({ title, description, icon: Icon }) => (
-                                        <article
-                                            key={title}
-                                            className="min-w-0 rounded-lg border border-slate-200 bg-slate-50 p-5"
+                                    <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+                                        <button
+                                            type="button"
+                                            onClick={handleOpenCreate}
+                                            className={
+                                                publicButtonClasses.primary
+                                            }
                                         >
-                                            <div className="flex h-11 w-11 items-center justify-center rounded-md bg-white text-slate-600 shadow-sm">
-                                                <Icon size={18} />
-                                            </div>
-                                            <h3 className="mt-4 text-base font-semibold text-slate-950">
-                                                {title}
-                                            </h3>
-                                            <p className="mt-3 text-sm leading-6 text-slate-600">
-                                                {description}
-                                            </p>
-                                        </article>
-                                    ),
-                                )}
-                            </div>
-                        </section>
+                                            <Plus size={16} />
+                                            Create Career Post
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+                                    {filteredEvents.map((careerEvent) => (
+                                        <article
+                                            key={careerEvent._id}
+                                            className="group flex h-full flex-col rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_18px_45px_rgba(15,23,42,0.10)]"
+                                        >
+                                            <div className="flex items-start justify-between gap-4">
+                                                <div>
+                                                    <p className="inline-flex rounded-md bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+                                                        Published post
+                                                    </p>
+                                                    <h3 className="mt-5 text-[1.85rem] font-semibold leading-tight text-slate-950">
+                                                        {careerEvent.title}
+                                                    </h3>
+                                                    <div className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700">
+                                                        <MapPin
+                                                            size={15}
+                                                            className="text-slate-600"
+                                                        />
+                                                        <span>
+                                                            {careerEvent.location ||
+                                                                'Location to be confirmed'}
+                                                        </span>
+                                                    </div>
+                                                </div>
 
+                                                {isManager && (
+                                                    <div className="flex items-center gap-2">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() =>
+                                                                handleOpenEdit(
+                                                                    careerEvent,
+                                                                )
+                                                            }
+                                                            aria-label={`Edit ${careerEvent.title}`}
+                                                            className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-slate-200 text-slate-500 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/30"
+                                                        >
+                                                            <Pencil
+                                                                size={16}
+                                                            />
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() =>
+                                                                handleDeleteEventModal(
+                                                                    careerEvent._id,
+                                                                )
+                                                            }
+                                                            aria-label={`Delete ${careerEvent.title}`}
+                                                            className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-rose-200 text-rose-500 transition hover:bg-rose-50 hover:text-rose-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-200"
+                                                        >
+                                                            <Trash2
+                                                                size={16}
+                                                            />
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <p className="mt-5 flex-1 text-sm leading-7 text-slate-600">
+                                                {truncateText(
+                                                    careerEvent.description,
+                                                    190,
+                                                )}
+                                            </p>
+
+                                            <div className="mt-8 flex items-center justify-between gap-3 border-t border-slate-100 pt-5">
+                                                <Link
+                                                    to="/career"
+                                                    className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 transition hover:text-slate-950"
+                                                >
+                                                    Preview public page
+                                                    <ArrowRight size={14} />
+                                                </Link>
+                                            </div>
+                                        </article>
+                                    ))}
+                                </div>
+                            )}
+                        </section>
                     </>
                 )}
             </div>
