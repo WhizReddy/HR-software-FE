@@ -9,7 +9,7 @@ import {
 const weekDays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
 
 const markerStyles: Record<DashboardCalendarItem['kind'], string> = {
-    event: 'bg-blue-600',
+    event: 'bg-slate-700',
     vacation: 'bg-emerald-600',
     interview: 'bg-amber-500',
 }
@@ -107,7 +107,7 @@ export default function Calendar() {
                     <h3 className="text-xl font-semibold text-slate-950">
                         {visibleMonth.format('MMMM YYYY')}
                     </h3>
-                    <p className="mt-1 text-xs font-medium uppercase text-slate-400">
+                    <p className="mt-1 text-xs font-medium text-slate-500">
                         {isCalendarLoading
                             ? 'Loading calendar'
                             : `${monthItems.length} item${monthItems.length === 1 ? '' : 's'} this month`}
@@ -132,7 +132,7 @@ export default function Calendar() {
                     </button>
                 </div>
             </div>
-            <div className="mb-3 grid grid-cols-7 gap-1 text-center text-xs font-medium uppercase text-slate-400">
+            <div className="mb-3 grid grid-cols-7 gap-1 text-center text-xs font-medium text-slate-500">
                 {weekDays.map((day) => (
                     <div key={day}>{day}</div>
                 ))}
@@ -159,7 +159,7 @@ export default function Calendar() {
                             }
                             className={`relative mx-auto flex h-10 w-10 items-center justify-center rounded-lg font-medium transition-colors ${
                                 isToday
-                                    ? 'bg-blue-600 text-white shadow-md shadow-blue-200'
+                                    ? 'bg-slate-900 text-white'
                                     : selectedDate.isSame(
                                             visibleMonth.date(date),
                                             'day',

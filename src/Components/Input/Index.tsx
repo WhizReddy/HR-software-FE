@@ -98,8 +98,8 @@ const Input: React.FC<InputProps> = ({
                 <Label
                     htmlFor={name}
                     className={cn(
-                        'text-[11px] font-semibold uppercase text-slate-500',
-                        isFilter ? 'text-[10px]' : '',
+                        'text-xs font-medium text-slate-600',
+                        isFilter ? 'text-xs' : '',
                     )}
                 >
                     {label}

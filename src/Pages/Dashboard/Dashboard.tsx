@@ -14,9 +14,9 @@ import {
     CalendarClock,
     ClipboardCheck,
     PackageSearch,
-    Sparkles,
     UserRoundCheck,
 } from 'lucide-react'
+import PageIntro from '@/Components/PageIntro/PageIntro'
 
 const formatAttentionCount = (
     value: number | null,
@@ -100,23 +100,15 @@ const DashboardContent: React.FC = () => {
     return (
         <div className="relative overflow-x-hidden">
             <div className="relative z-10 mx-auto w-full max-w-full space-y-5">
-                <div className="overflow-hidden rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:p-7">
-                    <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-                        <div>
-                            <p className="mb-2 inline-flex items-center gap-2 text-xs font-semibold uppercase text-slate-500">
-                                <Sparkles size={12} />
-                                Daily Snapshot
-                            </p>
-                            <h1 className="text-2xl font-semibold text-slate-950 sm:text-3xl">
-                                {greeter()}, {userName}
-                            </h1>
-                            {isAdmin && (
-                                <p className="mt-2 max-w-xl text-sm font-medium text-slate-500 sm:text-base">
-                                    Check attendance, leave, and upcoming
-                                    activity before starting the day.
-                                </p>
-                            )}
-                        </div>
+                <PageIntro
+                    eyebrow="Dashboard"
+                    title={`${greeter()}, ${userName}`}
+                    description={
+                        isAdmin
+                            ? 'Check attendance, leave, and upcoming activity before starting the day.'
+                            : undefined
+                    }
+                    actions={
                         <button
                             type="button"
                             onClick={() => navigate('/employees')}
@@ -125,8 +117,8 @@ const DashboardContent: React.FC = () => {
                             Open Team Directory
                             <ArrowUpRight size={16} />
                         </button>
-                    </div>
-                </div>
+                    }
+                />
 
                 {hasError && (
                     <div className="flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800">
@@ -143,7 +135,7 @@ const DashboardContent: React.FC = () => {
                 )}
 
                 {attentionItems.length > 0 && (
-                    <div className="rounded-lg border border-slate-200/80 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
+                    <div className="rounded-lg border border-slate-200 bg-white p-5">
                         <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                             <div>
                                 <h2 className="text-base font-semibold text-slate-900">
@@ -165,10 +157,10 @@ const DashboardContent: React.FC = () => {
                                         className="group flex min-h-[112px] items-center justify-between gap-4 rounded-lg border border-slate-200 bg-white p-4 text-left transition-colors hover:border-slate-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/25"
                                     >
                                         <div className="min-w-0">
-                                            <p className="text-xs font-semibold uppercase text-slate-500">
+                                            <p className="text-sm font-medium text-slate-600">
                                                 {item.label}
                                             </p>
-                                            <p className="mt-2 text-3xl font-semibold leading-none text-slate-950">
+                                            <p className="mt-2 text-2xl font-semibold leading-none text-slate-950">
                                                 {item.value}
                                             </p>
                                             <p className="mt-2 truncate text-sm font-medium text-slate-500">
@@ -223,7 +215,7 @@ const DashboardContent: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="flex h-full flex-col rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] xl:col-span-4">
+                    <div className="flex h-full flex-col rounded-lg border border-slate-200 bg-white p-6 xl:col-span-4">
                         <h3 className="mb-4 text-base font-semibold text-slate-900">
                             Calendar
                         </h3>
@@ -232,13 +224,13 @@ const DashboardContent: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="flex min-h-[500px] flex-col rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] xl:col-span-4">
+                    <div className="flex min-h-[500px] flex-col rounded-lg border border-slate-200 bg-white p-6 xl:col-span-4">
                         <InfoSection />
                     </div>
 
-                    <div className="flex min-h-[500px] flex-col rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] xl:col-span-4">
+                    <div className="flex min-h-[500px] flex-col rounded-lg border border-slate-200 bg-white p-6 xl:col-span-4">
                         <h3 className="mb-4 text-base font-semibold text-slate-900">
-                            Status Overview
+                            Status overview
                         </h3>
                         <p className="mb-6 text-sm font-medium leading-6 text-slate-500">
                             Built from total employees, remote work, and active
@@ -249,7 +241,7 @@ const DashboardContent: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)] xl:col-span-12">
+                    <div className="rounded-lg border border-slate-200 bg-white p-6 xl:col-span-12">
                         <h3 className="mb-6 text-base font-semibold text-slate-900">
                             Team Directory
                         </h3>

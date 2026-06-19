@@ -49,7 +49,7 @@ const Selecter: React.FC<SelecterProps> = ({
             style={{ width: width ? (typeof width === 'number' ? `${width}px` : width) : '100%' }}
         >
             {label && (
-                <Label htmlFor={name} className="text-[11px] font-semibold uppercase text-slate-500">
+                <Label htmlFor={name} className="text-xs font-medium text-slate-600">
                     {label}
                 </Label>
             )}

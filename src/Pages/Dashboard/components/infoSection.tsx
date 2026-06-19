@@ -39,7 +39,7 @@ const InfoSection: React.FC = () => {
         <div className="flex h-full flex-col">
             <div className="mb-5">
                 <h2 className="text-base font-semibold text-slate-900">
-                    Upcoming Events
+                    Upcoming events
                 </h2>
                 <p className="mt-1 text-sm font-medium text-slate-500">
                     Next scheduled items, sorted by the nearest start date.
@@ -63,10 +63,10 @@ const InfoSection: React.FC = () => {
                         >
                             <div className="flex items-start justify-between gap-3">
                                 <div className="min-w-0">
-                                    <p className="text-xs font-semibold uppercase text-blue-500">
+                                    <p className="text-xs font-medium text-slate-500">
                                         {getTimelineLabel(event.startDate, event.endDate)}
                                     </p>
-                                    <h3 className="mt-1 text-[15px] font-semibold leading-tight text-slate-800 transition-colors group-hover:text-blue-600">
+                                    <h3 className="mt-1 text-[15px] font-semibold leading-tight text-slate-800 transition-colors group-hover:text-slate-950">
                                         {event.title}
                                     </h3>
                                 </div>
@@ -81,20 +81,20 @@ const InfoSection: React.FC = () => {
 
                             <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-semibold text-slate-500">
                                 <span className="inline-flex items-center gap-1.5">
-                                    <CalendarDays size={14} className="text-blue-500" />
+                                    <CalendarDays size={14} className="text-slate-500" />
                                     {dayjs(event.startDate).isValid()
                                         ? dayjs(event.startDate).format('ddd DD MMM YYYY')
                                         : 'Date pending'}
                                 </span>
                                 {event.time && (
                                     <span className="inline-flex items-center gap-1.5">
-                                        <Clock3 size={14} className="text-blue-500" />
+                                        <Clock3 size={14} className="text-slate-500" />
                                         {event.time}
                                     </span>
                                 )}
                                 {event.location && (
                                     <span className="inline-flex items-center gap-1.5">
-                                        <MapPin size={14} className="text-blue-500" />
+                                        <MapPin size={14} className="text-slate-500" />
                                         {event.location}
                                     </span>
                                 )}

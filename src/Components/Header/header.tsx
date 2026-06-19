@@ -57,14 +57,11 @@ export const Header: React.FC = () => {
   }
 
   return (
-    <header className="sticky top-0 z-20 mx-4 mt-4 flex h-16 items-center justify-between rounded-lg border border-slate-200/80 bg-white px-4 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:mx-6 sm:px-5 lg:mx-8">
+    <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-slate-200 bg-slate-50/95 px-4 backdrop-blur sm:px-6 lg:px-8">
       <div className="flex items-center gap-3">
         <SidebarTrigger className="rounded-md border border-transparent p-2 text-slate-500 transition-colors hover:border-slate-200 hover:bg-slate-50 hover:text-slate-700" />
         <div className="hidden md:block">
-          <p className="text-[11px] font-semibold uppercase text-slate-400">
-            Workspace
-          </p>
-          <p className="text-sm font-semibold text-slate-700">People Operations Hub</p>
+          <p className="text-sm font-semibold text-slate-800">People Operations Hub</p>
         </div>
       </div>
 
@@ -77,9 +74,9 @@ export const Header: React.FC = () => {
             aria-expanded={isProfileOpen}
             aria-haspopup="menu"
             aria-label="Open profile menu"
-            className="flex items-center gap-2 rounded-lg border border-slate-200/80 bg-white p-1 pr-3 shadow-sm transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/30"
+            className="flex items-center gap-2 rounded-md border border-slate-200 bg-white p-1 pr-3 transition-colors hover:border-slate-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/30"
           >
-            <Avatar className="h-8 w-8 cursor-pointer bg-gradient-to-br from-slate-800 to-slate-600 text-white shadow-sm">
+            <Avatar className="h-8 w-8 cursor-pointer bg-slate-900 text-white">
               <AvatarFallback className="bg-transparent text-xs font-bold text-white">
                 {initials}
               </AvatarFallback>
@@ -88,7 +85,7 @@ export const Header: React.FC = () => {
               <p className="max-w-[140px] truncate text-sm font-semibold text-slate-700">
                 {currentUser?.firstName} {currentUser?.lastName}
               </p>
-              <p className="text-[11px] font-medium uppercase text-slate-400">
+              <p className="text-xs font-medium capitalize text-slate-500">
                 {currentUser?.role ?? 'user'}
               </p>
             </div>
@@ -99,7 +96,7 @@ export const Header: React.FC = () => {
             <div
               role="menu"
               aria-label="Profile options"
-              className="absolute right-0 z-50 mt-2 w-64 overflow-hidden rounded-lg border border-slate-200/90 bg-white shadow-xl shadow-slate-200/70"
+              className="absolute right-0 z-50 mt-2 w-64 overflow-hidden rounded-lg border border-slate-200/90 bg-white shadow-lg shadow-slate-200/50"
             >
               <div className="border-b border-slate-100 px-4 py-3">
                 <p className="truncate text-sm font-semibold text-slate-800">

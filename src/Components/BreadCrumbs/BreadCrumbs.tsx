@@ -77,8 +77,8 @@ export const BreadcrumbComponent: React.FC = () => {
     if (crumbs.length === 0) return null
 
     return (
-        <Breadcrumb className="mb-4">
-            <BreadcrumbList className="inline-flex rounded-md border border-slate-200/80 bg-white px-3 py-1.5 text-xs text-slate-500 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+        <Breadcrumb className="mb-5 px-1">
+            <BreadcrumbList className="text-sm text-slate-500">
                 <BreadcrumbItem>
                     <BreadcrumbLink render={<Link to="/dashboard" className="hover:text-slate-700" />}>
                         Home
@@ -93,7 +93,7 @@ export const BreadcrumbComponent: React.FC = () => {
                             <BreadcrumbSeparator className="text-slate-300" />
                             <BreadcrumbItem>
                                 {isLast || !crumb.to ? (
-                                    <BreadcrumbPage className="font-semibold capitalize text-slate-700">
+                                    <BreadcrumbPage className="font-medium capitalize text-slate-700">
                                         {crumb.label}
                                     </BreadcrumbPage>
                                 ) : (
