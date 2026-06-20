@@ -17,6 +17,7 @@ import {
     UserRoundCheck,
 } from 'lucide-react'
 import PageIntro from '@/Components/PageIntro/PageIntro'
+import dayjs from 'dayjs'
 
 const formatAttentionCount = (
     value: number | null,
@@ -32,6 +33,7 @@ const DashboardContent: React.FC = () => {
         employeeData,
         users,
         upcomingEvents,
+        upcomingInterviews,
         needsAttention,
         hasError,
         isStatsLoading,
@@ -42,6 +44,7 @@ const DashboardContent: React.FC = () => {
 
     const userName = currentUser ? currentUser.firstName : 'User'
     const isAdmin = currentUser?.role === 'admin' || currentUser?.role === 'hr'
+    const nextInterviews = upcomingInterviews.slice(0, 3)
     const attentionItems = [
         {
             label: 'Pending vacation',
@@ -174,6 +177,57 @@ const DashboardContent: React.FC = () => {
                                 )
                             })}
                         </div>
+                        {nextInterviews.length > 0 && (
+                            <div className="mt-5 rounded-lg border border-slate-200 bg-slate-50/70 p-4">
+                                <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                                    <div>
+                                        <h3 className="text-sm font-semibold text-slate-900">
+                                            Next interviews
+                                        </h3>
+                                        <p className="mt-1 text-xs font-medium text-slate-500">
+                                            Active candidates with scheduled
+                                            interview dates.
+                                        </p>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => navigate('/interview')}
+                                        className="inline-flex h-9 items-center justify-center rounded-md border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+                                    >
+                                        Open interviews
+                                    </button>
+                                </div>
+                                <div className="grid gap-2 md:grid-cols-3">
+                                    {nextInterviews.map((interview) => (
+                                        <article
+                                            key={interview.id}
+                                            className="rounded-md border border-slate-200 bg-white px-3 py-3"
+                                        >
+                                            <p className="truncate text-sm font-semibold text-slate-900">
+                                                {interview.fullName}
+                                            </p>
+                                            <p className="mt-1 text-xs font-medium capitalize text-slate-500">
+                                                {interview.phase.replace(
+                                                    '_',
+                                                    ' ',
+                                                )}
+                                            </p>
+                                            <p className="mt-2 text-xs font-semibold text-slate-700">
+                                                {dayjs(
+                                                    interview.interviewDate,
+                                                ).isValid()
+                                                    ? dayjs(
+                                                          interview.interviewDate,
+                                                      ).format(
+                                                          'DD MMM, HH:mm',
+                                                      )
+                                                    : 'Date pending'}
+                                            </p>
+                                        </article>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
 

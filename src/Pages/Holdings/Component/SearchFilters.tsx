@@ -37,24 +37,24 @@ export const HoldingsSearchFilter = () => {
     }
 
     const userFilterChoices = [
-        { label: 'ALL', value: 'all' },
-        { label: 'W ASSETS', value: 'with' },
-        { label: 'W/O ASSETS', value: 'without' }
+        { label: 'All', value: 'all' },
+        { label: 'With assets', value: 'with' },
+        { label: 'No assets', value: 'without' },
     ]
 
     const currentUserFilter = searchParams.get('users') || 'all'
     const hasSearch = searchInput.trim() !== ''
 
     return (
-        <div className="mb-4 flex flex-col justify-between gap-4 rounded-lg border border-slate-200/80 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:flex-row sm:items-center">
-            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
+        <div className="mb-4 flex flex-col justify-between gap-4 rounded-lg border border-slate-200/80 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.06)] lg:flex-row lg:items-end">
+            <div className="flex w-full flex-col gap-2 sm:flex-row sm:items-end lg:max-w-xl">
                 <div className="w-full sm:w-72">
                     <Input
                         type="search"
                         iconPosition="start"
                         icon={<Search size={18} className="text-slate-400" />}
                         IsUsername
-                        label="Search Employees"
+                        placeholder="Search employees..."
                         name="search"
                         value={searchInput}
                         onChange={(e) => setSearchInput(e.target.value)}
@@ -66,17 +66,17 @@ export const HoldingsSearchFilter = () => {
                     variant="outline"
                     onClick={clearSearch}
                     disabled={!hasSearch}
-                    className="h-10 rounded-md sm:self-end"
+                    className="h-10 w-full rounded-md sm:w-auto"
                 >
                     Clear
                 </Button>
             </div>
 
-            <div className="flex flex-col gap-1.5 sm:items-end">
-                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                    Filter by
+            <div className="flex flex-col gap-1.5">
+                <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    Assets
                 </span>
-                <div className="inline-flex rounded-md border border-slate-200 bg-slate-100 p-1">
+                <div className="grid grid-cols-3 rounded-md border border-slate-200 bg-slate-100 p-1">
                     {userFilterChoices.map((filter) => {
                         const isActive = currentUserFilter === filter.value
                         return (
@@ -84,7 +84,7 @@ export const HoldingsSearchFilter = () => {
                                 key={filter.value}
                                 type="button"
                                 onClick={() => handleChange(filter.value)}
-                                className={`rounded-md px-4 py-1.5 text-xs font-semibold transition-all duration-200 ease-in-out ${isActive
+                                className={`min-h-9 rounded-md px-3 py-1.5 text-center text-xs font-semibold transition-all duration-200 ease-in-out ${isActive
                                         ? 'bg-white text-slate-800 shadow-sm ring-1 ring-slate-200/50'
                                         : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
                                     }`}

@@ -55,6 +55,8 @@ function EmployeesContent() {
                 hasActiveFilters={hasActiveFilters}
                 exportFileName="employees"
                 exportTitle="Employee Directory"
+                emptyTitle="No employees found"
+                emptyDescription="Employee profiles will appear here once they are created or matched by your filters."
                 filterNode={
                     <label className="flex w-full flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-slate-500 sm:w-44">
                         Role

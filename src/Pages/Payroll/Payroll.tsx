@@ -3,6 +3,7 @@ import DataTable from '../../Components/Table/Table'
 import { usePayrollContext } from './Context/PayrollTableContext'
 import { PayrollProvider } from './Context/PayrollTableProvider'
 import style from './styles/Payroll.module.css'
+import PageIntro from '@/Components/PageIntro/PageIntro'
 
 function PayrollContent() {
     const {
@@ -28,7 +29,6 @@ function PayrollContent() {
         isError,
         errorMessage,
     } = usePayrollContext()
-    const hasSearch = search.trim() !== ''
 
     return (
         <div className={style.payrollPage}>
@@ -44,27 +44,11 @@ function PayrollContent() {
                 </div>
             ) : (
                 <>
-                    <section className={style.panel}>
-                        <div className={style.panelHeader}>
-                            <div className={style.panelCopy}>
-                                <span className={style.panelEyebrow}>
-                                    Payroll
-                                </span>
-                                <h1 className={style.panelTitle}>
-                                    Salary records
-                                </h1>
-                                <p className={style.panelDescription}>
-                                    Use employee search and date filters to find
-                                    the payroll rows you need.
-                                </p>
-                            </div>
-                            <div className={style.panelMeta}>
-                                {hasSearch
-                                    ? 'Search active'
-                                    : 'Simple search ready'}
-                            </div>
-                        </div>
-                    </section>
+                    <PageIntro
+                        eyebrow="Payroll"
+                        title="Salary records"
+                        description="Use employee search and date filters to find the payroll rows you need."
+                    />
 
                     <div className={style.tableSection}>
                         <DataTable
@@ -89,6 +73,8 @@ function PayrollContent() {
                             hasActiveFilters={hasActiveFilters}
                             exportFileName="payroll"
                             exportTitle="Payroll table"
+                            emptyTitle="No payroll records found"
+                            emptyDescription="Payroll rows will appear here when the selected employee or month filters match existing records."
                             filterNode={
                                 <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
                                     <label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-slate-500 sm:w-40">

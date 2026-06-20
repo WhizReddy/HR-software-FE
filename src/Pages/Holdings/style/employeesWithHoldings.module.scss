@@ -98,15 +98,15 @@
 
 .avatar {
     object-fit: cover;
-    border: 1px solid #dbeafe;
+    border: 1px solid #e2e8f0;
 }
 
 .avatarFallback {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #eff6ff;
-    color: #2563eb;
+    background: #f1f5f9;
+    color: #334155;
     font-weight: 800;
 }
 
@@ -147,8 +147,8 @@
     align-items: center;
     padding: 0.45rem 0.8rem;
     border-radius: 0.375rem;
-    background: #eff6ff;
-    color: #1d4ed8;
+    background: #f1f5f9;
+    color: #475569;
     font-size: 0.75rem;
     font-weight: 600;
 }
@@ -234,8 +234,8 @@
     }
 
     &.inactive {
-        background: #fef2f2;
-        color: #dc2626;
+        background: #f8fafc;
+        color: #64748b;
     }
 }
 
@@ -246,12 +246,12 @@
     gap: 0.3rem;
     width: 100%;
     padding: 0.85rem 0.95rem;
-    background: #eff6ff;
-    color: #2563eb;
+    background: #f8fafc;
+    color: #334155;
     border-radius: 0.5rem;
     font-size: 0.85rem;
     font-weight: 700;
-    border: 1px solid #dbeafe;
+    border: 1px solid #e2e8f0;
     cursor: pointer;
     transition: all 0.2s;
     text-align: left;
@@ -263,7 +263,7 @@
     }
 
     &:hover {
-        background: #dbeafe;
+        background: #f1f5f9;
         transform: translateY(-1px);
     }
 }

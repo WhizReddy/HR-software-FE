@@ -177,6 +177,8 @@ export const VacationTable = () => {
                 hasActiveFilters={hasActiveFilters}
                 exportFileName="vacation-requests"
                 exportTitle="Vacation requests"
+                emptyTitle="No vacation requests found"
+                emptyDescription="Vacation requests will appear here when employees submit leave or when your selected filters match existing requests."
                 filterNode={
                     <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
                         <label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-slate-500 sm:w-40">

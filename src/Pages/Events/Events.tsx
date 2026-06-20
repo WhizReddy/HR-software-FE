@@ -57,6 +57,7 @@ function EventsContentAndComponents() {
     } = useGetAllEvents()
 
     const { ref, inView } = useInView()
+    const visibleEvents = events?.pages.flatMap((page) => page.data) ?? []
 
     useEffect(() => {
         if (inView && hasNextPage && !isFetchingNextPage) {
@@ -117,10 +118,20 @@ function EventsContentAndComponents() {
             <div className="w-full flex-1">
                 {isLoading ? (
                     <EventsContentLoader />
+                ) : visibleEvents.length === 0 ? (
+                    <div className="flex min-h-[260px] flex-col items-center justify-center rounded-lg border border-dashed border-slate-300 bg-white px-6 py-10 text-center shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
+                        <Calendar size={34} className="text-slate-300" />
+                        <h2 className="mt-4 text-base font-semibold text-slate-900">
+                            No events found
+                        </h2>
+                        <p className="mt-2 max-w-md text-sm leading-6 text-slate-500">
+                            Events will appear here when they match the current
+                            search. Try a different title or location.
+                        </p>
+                    </div>
                 ) : (
                     <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                        {events?.pages.map((page) =>
-                            page.data.map((event: EventsData) => (
+                        {visibleEvents.map((event: EventsData) => (
                                 <div
                                     key={event._id}
                                     className="group flex min-h-[400px] flex-col overflow-hidden rounded-lg border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06)] transition-all duration-200 hover:border-slate-300 hover:shadow-[0_12px_30px_rgba(15,23,42,0.08)]"
@@ -218,8 +229,7 @@ function EventsContentAndComponents() {
                                         </button>
                                     </div>
                                 </div>
-                            )),
-                        )}
+                            ))}
                     </div>
                 )}
 

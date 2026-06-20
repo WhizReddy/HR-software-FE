@@ -90,6 +90,7 @@ const NotificationDropdown: React.FC = () => {
         retry,
         fetchForPeriod,
         currentPeriod,
+        lastLoadedAt,
     } = useGetAllNotifications() ?? {
         notifications: [],
         setNotifications: () => {},
@@ -99,11 +100,19 @@ const NotificationDropdown: React.FC = () => {
         retry: () => Promise.resolve(),
         fetchForPeriod: () => Promise.resolve(),
         currentPeriod: 'today' as NotificationPeriod,
+        lastLoadedAt: null,
     }
     const unreadCount = useMemo(
         () => notifications.filter((n) => !n.isRead).length,
         [notifications],
     )
+    const isBusy = isLoading || isMarkingAll
+    const lastLoadedLabel = lastLoadedAt
+        ? new Intl.DateTimeFormat('en', {
+              hour: '2-digit',
+              minute: '2-digit',
+          }).format(lastLoadedAt)
+        : null
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -307,7 +316,7 @@ const NotificationDropdown: React.FC = () => {
                 <div
                     role="menu"
                     aria-label="Notifications list"
-                    className="fixed left-3 right-3 top-20 z-[70] max-h-[calc(100dvh-6rem)] overflow-hidden rounded-lg border border-slate-200 bg-white shadow-2xl shadow-slate-900/15 sm:absolute sm:left-auto sm:right-0 sm:top-auto sm:mt-2 sm:w-[30rem]"
+                    className="fixed left-3 right-3 top-16 z-[70] max-h-[calc(100dvh-5rem)] overflow-hidden rounded-lg border border-slate-200 bg-white shadow-2xl shadow-slate-900/15 sm:absolute sm:left-auto sm:right-0 sm:top-auto sm:mt-2 sm:w-[30rem]"
                 >
                     <div className="border-b border-slate-100 px-4 py-3">
                         <div className="flex items-start justify-between gap-3">
@@ -318,6 +327,9 @@ const NotificationDropdown: React.FC = () => {
                                 <p className="mt-0.5 text-xs font-medium text-slate-500">
                                     {unreadCount} unread, {notifications.length}{' '}
                                     shown
+                                    {lastLoadedLabel
+                                        ? `, refreshed ${lastLoadedLabel}`
+                                        : ''}
                                 </p>
                             </div>
                             <button
@@ -340,7 +352,7 @@ const NotificationDropdown: React.FC = () => {
                                         <button
                                             key={option.value}
                                             type="button"
-                                            disabled={isLoading}
+                                            disabled={isBusy}
                                             onClick={() =>
                                                 handlePeriodChange(
                                                     option.value,
@@ -361,8 +373,8 @@ const NotificationDropdown: React.FC = () => {
                             <button
                                 type="button"
                                 onClick={handleRefresh}
-                                disabled={isLoading}
-                                className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                                disabled={isBusy}
+                                className="inline-flex h-9 w-full items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
                             >
                                 <RefreshCw
                                     size={14}
@@ -373,7 +385,7 @@ const NotificationDropdown: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="max-h-[calc(100dvh-17rem)] overflow-y-auto p-3 sm:max-h-[28rem]">
+                    <div className="max-h-[calc(100dvh-18rem)] overflow-y-auto p-3 sm:max-h-[28rem]">
                         {isLoading && (
                             <div className="flex min-h-40 flex-col items-center justify-center gap-3 text-center text-sm font-medium text-slate-500">
                                 <Loader2
@@ -398,7 +410,8 @@ const NotificationDropdown: React.FC = () => {
                                         <button
                                             type="button"
                                             onClick={handleRefresh}
-                                            className="mt-2 text-sm font-semibold text-rose-700 underline-offset-4 hover:underline"
+                                            disabled={isBusy}
+                                            className="mt-2 inline-flex h-9 items-center justify-center rounded-md border border-rose-200 bg-white px-3 text-sm font-semibold text-rose-700 transition hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-60"
                                         >
                                             Try again
                                         </button>
@@ -528,7 +541,7 @@ const NotificationDropdown: React.FC = () => {
                             })}
                     </div>
 
-                    <div className="flex flex-col gap-2 border-t border-slate-100 bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex flex-col gap-3 border-t border-slate-100 bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
                         <p className="text-xs font-medium text-slate-500">
                             {currentPeriod === 'today'
                                 ? 'Showing today only'
@@ -536,8 +549,8 @@ const NotificationDropdown: React.FC = () => {
                         </p>
                         <button
                             type="button"
-                            className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-slate-700 bg-slate-800 px-3 text-xs font-semibold text-white transition hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
-                            disabled={unreadCount === 0 || isMarkingAll}
+                            className="inline-flex h-9 w-full items-center justify-center gap-2 rounded-md border border-slate-700 bg-slate-800 px-3 text-xs font-semibold text-white transition hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+                            disabled={unreadCount === 0 || isBusy}
                             onClick={markAllAsRead}
                         >
                             {isMarkingAll ? (

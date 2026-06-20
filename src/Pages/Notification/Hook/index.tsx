@@ -19,6 +19,7 @@ export const useGetAllNotifications = () => {
     const [notifications, setNotifications] = useState<Notification[]>([])
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
+    const [lastLoadedAt, setLastLoadedAt] = useState<Date | null>(null)
     const [currentPeriod, setCurrentPeriod] =
         useState<NotificationPeriod>('today')
 
@@ -33,6 +34,7 @@ export const useGetAllNotifications = () => {
                     `notification/user/${userId}?${params.toString()}`,
                 )
                 setNotifications(response.data)
+                setLastLoadedAt(new Date())
             } catch (error) {
                 console.error('Error fetching notifications:', error)
                 setError('Notifications could not be loaded.')
@@ -76,5 +78,6 @@ export const useGetAllNotifications = () => {
         retry,
         fetchForPeriod,
         currentPeriod,
+        lastLoadedAt,
     }
 }

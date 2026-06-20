@@ -319,7 +319,7 @@ export default function Forms() {
                     </div>
                 </div>
 
-                <div className="sticky bottom-0 z-10 mt-auto rounded-lg border border-slate-200 bg-white/95 p-3 shadow-[0_-6px_18px_rgba(15,23,42,0.08)] backdrop-blur">
+                <div className="sticky bottom-0 z-10 mt-auto border-t border-slate-200 bg-white/95 px-0 pt-4 backdrop-blur">
                     <Button
                         btnText={
                             editingEvent
@@ -331,8 +331,6 @@ export default function Forms() {
                                   : 'Publish Event'
                         }
                         type={ButtonTypes.PRIMARY}
-                        backgroundColor="#2457A3"
-                        border="none"
                         width="100%"
                         padding="12px"
                         disabled={isCreating || isUpdating}

@@ -28,6 +28,7 @@ interface DashboardContextType {
     users: UserProfileData[]
     events: EventsData[]
     upcomingEvents: EventsData[]
+    upcomingInterviews: DashboardUpcomingInterview[]
     calendarItems: DashboardCalendarItem[]
     needsAttention: {
         pendingVacations: number | null
@@ -444,6 +445,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({
                 users,
                 events: sortedEvents,
                 upcomingEvents,
+                upcomingInterviews: upcomingInterviewsForCalendar,
                 calendarItems,
                 needsAttention,
                 isLoading,

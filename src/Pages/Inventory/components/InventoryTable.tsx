@@ -181,6 +181,8 @@ export const InventoryTable = () => {
                 hasActiveFilters={hasActiveFilters}
                 exportFileName="inventory"
                 exportTitle="Inventory records"
+                emptyTitle="No inventory items found"
+                emptyDescription="Inventory items will appear here when they match the selected type, status, or search."
                 filterNode={
                     <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
                         <label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-slate-500 sm:w-40">

@@ -291,7 +291,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             }
                         />
 
-                        <section className="mb-6 rounded-xl border border-slate-200 bg-[#fbfbf8] p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:p-8">
+                        <section className="mb-6 max-w-full overflow-hidden rounded-xl border border-slate-200 bg-[#fbfbf8] p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:p-8">
                             <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-end">
                                 <div className="min-w-0">
                                     <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -332,7 +332,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     </div>
                                 </div>
 
-                                <aside className="rounded-lg border border-slate-200 bg-white p-5">
+                                <aside className="min-w-0 rounded-lg border border-slate-200 bg-white p-5">
                                     <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                                         Current board
                                     </p>
@@ -341,7 +341,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                             <dt className="text-sm font-medium text-slate-500">
                                                 Open roles
                                             </dt>
-                                            <dd className="shrink-0 text-lg font-semibold text-slate-950">
+                                            <dd className="shrink-0 break-words text-lg font-semibold text-slate-950">
                                                 {events.length}
                                             </dd>
                                         </div>
@@ -349,7 +349,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                             <dt className="text-sm font-medium text-slate-500">
                                                 Application form
                                             </dt>
-                                            <dd className="shrink-0 text-sm font-semibold text-slate-950">
+                                            <dd className="shrink-0 break-words text-sm font-semibold text-slate-950">
                                                 Available
                                             </dd>
                                         </div>
@@ -357,7 +357,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                             <dt className="text-sm font-medium text-slate-500">
                                                 Location
                                             </dt>
-                                            <dd className="shrink-0 text-sm font-semibold text-slate-950">
+                                            <dd className="shrink-0 break-words text-sm font-semibold text-slate-950">
                                                 Per role
                                             </dd>
                                         </div>
@@ -368,7 +368,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
 
                         <section
                             id="open-roles"
-                            className="grid scroll-mt-8 gap-5 lg:grid-cols-[320px_minmax(0,1fr)]"
+                            className="grid max-w-full scroll-mt-8 gap-5 overflow-hidden lg:grid-cols-[320px_minmax(0,1fr)]"
                         >
                             <aside
                                 id="application-notes"

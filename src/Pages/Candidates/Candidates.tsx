@@ -56,6 +56,8 @@ function CandidatesCoontext() {
                 hasActiveFilters={hasActiveFilters}
                 exportFileName="candidates"
                 exportTitle="Candidate Pipeline"
+                emptyTitle="No candidates found"
+                emptyDescription="Candidate applications will appear here when they match the selected search or status."
                 filterNode={
                     <label className="flex w-full flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-slate-500 sm:w-44">
                         Status

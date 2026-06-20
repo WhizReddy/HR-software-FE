@@ -101,6 +101,9 @@ const getExportRows = <TRow,>(rows: TRow[], columns: ColDef<TRow>[]) =>
         ),
     )
 
+const tableControlButtonClass =
+    'h-10 w-full justify-center rounded-md sm:w-auto'
+
 function DataTable<TRow>({
     rows,
     columns,
@@ -231,14 +234,14 @@ function DataTable<TRow>({
     }
 
     const exportControls = exportFileName ? (
-        <div className="flex w-full flex-row gap-2 sm:w-auto sm:items-center">
+        <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto sm:items-center">
             <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={handleCsvExport}
                 disabled={!canExport || isLoading}
-                className="h-10 flex-1 justify-center rounded-md sm:flex-none"
+                className={tableControlButtonClass}
             >
                 <Download size={16} />
                 CSV
@@ -249,7 +252,7 @@ function DataTable<TRow>({
                 size="sm"
                 onClick={handlePrintExport}
                 disabled={!canExport || isLoading}
-                className="h-10 flex-1 justify-center rounded-md sm:flex-none"
+                className={tableControlButtonClass}
             >
                 <Printer size={16} />
                 PDF
@@ -264,7 +267,7 @@ function DataTable<TRow>({
             size="sm"
             onClick={onResetFilters}
             disabled={!hasActiveTableFilters || isLoading}
-            className="h-10 min-w-[132px] justify-center rounded-md"
+            className={`${tableControlButtonClass} sm:min-w-[132px]`}
         >
             <RotateCcw size={16} />
             Reset filters
@@ -279,10 +282,10 @@ function DataTable<TRow>({
                 filterNode ||
                 exportControls ||
                 resetControls) && (
-                <div className="grid gap-4 border-b border-slate-200 bg-white px-5 py-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
-                    <div className="flex w-full flex-1 flex-col gap-3 sm:flex-row sm:items-center">
+                <div className="grid gap-4 border-b border-slate-200 bg-white px-4 py-4 sm:px-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+                    <div className="flex w-full flex-1 flex-col gap-3 sm:flex-row sm:items-end">
                         {title && (
-                            <div className="min-w-0 pb-1">
+                            <div className="min-w-0 pb-2">
                                 <h2 className="truncate text-base font-semibold text-slate-900">
                                     {title}
                                 </h2>
@@ -312,7 +315,7 @@ function DataTable<TRow>({
                                         size="sm"
                                         onClick={onSearchClear}
                                         disabled={!hasSearch}
-                                        className="h-10 shrink-0 rounded-md"
+                                        className={`${tableControlButtonClass} sm:shrink-0`}
                                     >
                                         Clear
                                     </Button>
@@ -322,14 +325,14 @@ function DataTable<TRow>({
                     </div>
 
                     {(filterNode || actions || exportControls || resetControls) && (
-                        <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-end lg:w-auto">
+                        <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-end sm:justify-end lg:w-auto">
                             {filterNode && (
-                                <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+                                <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-end">
                                     {filterNode}
                                 </div>
                             )}
                             {(resetControls || exportControls || actions) && (
-                                <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
+                                <div className="grid w-full gap-2 sm:flex sm:w-auto sm:items-center">
                                     {resetControls}
                                     {exportControls}
                                     {actions}
@@ -449,7 +452,7 @@ function DataTable<TRow>({
                 </Table>
             </div>
 
-            <div className="flex flex-col gap-3 border-t border-slate-200/80 bg-white px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-3 border-t border-slate-200/80 bg-white px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
                 <div className="space-y-1">
                     <p className="text-sm font-semibold text-slate-700">
                         {isLoading ? loadingLabel : resultLabel}
@@ -463,9 +466,9 @@ function DataTable<TRow>({
                 </div>
 
                 {showPaginationControls && (
-                    <Pagination className="mx-0 w-auto justify-end">
-                        <PaginationContent className="flex-wrap gap-2">
-                            <PaginationItem>
+                    <Pagination className="mx-0 w-full justify-start sm:w-auto sm:justify-end">
+                        <PaginationContent className="w-full flex-wrap gap-2 sm:w-auto">
+                            <PaginationItem className="w-full sm:w-auto">
                                 <label className="flex items-center gap-2 text-xs font-semibold text-slate-500">
                                     Rows
                                     <select
@@ -487,13 +490,13 @@ function DataTable<TRow>({
                                     </select>
                                 </label>
                             </PaginationItem>
-                            <PaginationItem>
+                            <PaginationItem className="flex flex-1 sm:block sm:flex-none">
                                 <Button
                                     type="button"
                                     variant="outline"
                                     size="sm"
                                     disabled={isLoading || !canPrev}
-                                    className="min-w-[92px] rounded-md"
+                                    className="min-w-[92px] flex-1 rounded-md sm:flex-none"
                                     onClick={() =>
                                         onPaginationModelChange({ page: page - 1, pageSize })
                                     }
@@ -502,13 +505,13 @@ function DataTable<TRow>({
                                     Prev
                                 </Button>
                             </PaginationItem>
-                            <PaginationItem>
+                            <PaginationItem className="flex flex-1 sm:block sm:flex-none">
                                 <Button
                                     type="button"
                                     variant="outline"
                                     size="sm"
                                     disabled={isLoading || !canNext}
-                                    className="min-w-[92px] rounded-md"
+                                    className="min-w-[92px] flex-1 rounded-md sm:flex-none"
                                     onClick={() =>
                                         onPaginationModelChange({ page: page + 1, pageSize })
                                     }
