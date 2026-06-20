@@ -168,6 +168,16 @@ const LoginPageContent = () => {
                         </ErrorText>
                     </div>
                 )}
+
+                <div className="border-t border-slate-100 pt-5 text-center text-sm text-slate-500">
+                    Looking for an open role?{' '}
+                    <Link
+                        to="/career"
+                        className="font-semibold text-slate-900 transition-colors hover:text-slate-700"
+                    >
+                        View careers
+                    </Link>
+                </div>
             </form>
         </AuthPageShell>
     )
