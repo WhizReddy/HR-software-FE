@@ -60,6 +60,7 @@ vi.mock('./Hook', () => ({
 describe('Career page', () => {
     afterEach(() => {
         cleanup()
+        window.history.pushState(null, '', '/')
         careerHookMock.events = [
             {
                 _id: 'role-1',
@@ -95,13 +96,21 @@ describe('Career page', () => {
                 .getByRole('link', { name: /submit application/i })
                 .getAttribute('href'),
         ).toBe('/recruitment')
-        expect(
-            screen
-                .getAllByRole('link', { name: /^apply$/i })[0]
-                .getAttribute('href'),
-        ).toBe('#application-notes')
         expect(screen.getByText('Open roles, written clearly.')).toBeTruthy()
         expect(screen.getByText('Before applying')).toBeTruthy()
+    })
+
+    it('cleans up the old application notes hash', () => {
+        window.history.pushState(null, '', '/career#application-notes')
+
+        render(
+            <MemoryRouter>
+                <Careers />
+            </MemoryRouter>,
+        )
+
+        expect(window.location.pathname).toBe('/career')
+        expect(window.location.hash).toBe('')
     })
 
     it('renders loading and empty public states', () => {

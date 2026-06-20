@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
     ArrowRight,
@@ -8,7 +8,6 @@ import {
     Pencil,
     Plus,
     Search,
-    Sparkles,
     Trash2,
     Users,
 } from 'lucide-react'
@@ -29,7 +28,6 @@ import {
 } from './Hook'
 import { useAuth } from '@/features/auth/context/AuthProvider'
 import { isAdminRole } from '@/features/auth/lib/access'
-import WorkerThree from '/Images/career-meeting-room.jpg'
 
 type CareersProps = {
     managementMode?: boolean
@@ -52,6 +50,18 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
             ? 'Manage public career posts for the People Hub recruitment board.'
             : 'See current People Hub roles and send an application with your CV and role details.',
     })
+
+    useEffect(() => {
+        if (managementMode || window.location.hash !== '#application-notes') {
+            return
+        }
+
+        window.history.replaceState(
+            null,
+            document.title,
+            `${window.location.pathname}${window.location.search}`,
+        )
+    }, [managementMode])
 
     const { events, setEvents, isLoading } = useGetAllEvents()
     const {
@@ -184,92 +194,63 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             }
                         />
 
-                        <section className="overflow-hidden rounded-lg border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
-                            <div className="grid lg:grid-cols-[1.15fr_0.85fr]">
-                                <div className="p-6 sm:p-7">
-                                    <div className="flex flex-wrap items-center gap-2">
-                                        <span className="inline-flex items-center gap-2 rounded-md bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700">
-                                            <Sparkles size={14} />
-                                            Publishing overview
-                                        </span>
-                                        <span className="rounded-md border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-500">
-                                            Admin board
-                                        </span>
-                                    </div>
-
-                                    <h2 className="mt-5 max-w-2xl text-3xl font-semibold leading-tight text-slate-950">
-                                        Keep every open role clear, current, and
-                                        ready for candidates.
-                                    </h2>
-                                    <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-                                        Manage the posts that appear on the
-                                        public career page. Keep titles,
-                                        locations, and descriptions consistent
-                                        so applicants know exactly what they are
-                                        applying for.
-                                    </p>
-
-                                    <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                                        {heroMetrics.map(
-                                            ({ label, value, icon: Icon }) => (
-                                                <div
-                                                    key={label}
-                                                    className="rounded-lg border border-slate-200 bg-slate-50 p-4"
-                                                >
-                                                    <div className="flex items-center gap-2 text-slate-500">
-                                                        <Icon
-                                                            size={16}
-                                                            className="text-slate-600"
-                                                        />
-                                                        <p className="text-[11px] font-semibold uppercase text-slate-500">
-                                                            {label}
-                                                        </p>
-                                                    </div>
-                                                    <p className="mt-3 text-lg font-bold text-slate-900">
-                                                        {value}
+                        <section className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
+                            <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.06)] sm:p-6">
+                                <div className="grid gap-3 sm:grid-cols-3">
+                                    {heroMetrics.map(
+                                        ({ label, value, icon: Icon }) => (
+                                            <article
+                                                key={label}
+                                                className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3"
+                                            >
+                                                <div className="flex items-center gap-2 text-slate-500">
+                                                    <Icon
+                                                        size={16}
+                                                        className="text-slate-600"
+                                                    />
+                                                    <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                                                        {label}
                                                     </p>
                                                 </div>
-                                            ),
-                                        )}
-                                    </div>
-
-                                    <div className="mt-6 grid gap-3 text-sm text-slate-600 sm:grid-cols-3">
-                                        {[
-                                            'Write a direct role title',
-                                            'Keep location details accurate',
-                                            'Preview the public page',
-                                        ].map((item) => (
-                                            <div
-                                                key={item}
-                                                className="flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2"
-                                            >
-                                                <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                                                <span className="font-medium">
-                                                    {item}
-                                                </span>
-                                            </div>
-                                        ))}
-                                    </div>
+                                                <p className="mt-3 text-lg font-semibold text-slate-950">
+                                                    {value}
+                                                </p>
+                                            </article>
+                                        ),
+                                    )}
                                 </div>
 
-                                <div className="relative min-h-[260px] overflow-hidden border-t border-slate-200 lg:border-l lg:border-t-0">
-                                    <img
-                                        src={WorkerThree}
-                                        alt="Team planning in the office"
-                                        className="absolute inset-0 h-full w-full object-cover"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/10 to-transparent" />
-                                    <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
-                                        <p className="text-xs font-semibold text-white/70">
-                                            Public board preview
-                                        </p>
-                                        <p className="mt-2 max-w-sm text-lg font-semibold leading-7">
-                                            Candidates see the posts you manage
-                                            here.
-                                        </p>
-                                    </div>
+                                <div className="mt-5 border-t border-slate-100 pt-5">
+                                    <h2 className="text-base font-semibold text-slate-950">
+                                        Publishing checklist
+                                    </h2>
+                                    <p className="mt-1 text-sm leading-6 text-slate-500">
+                                        Keep every public post plain, current,
+                                        and easy for candidates to match with
+                                        their application.
+                                    </p>
                                 </div>
                             </div>
+
+                            <aside className="rounded-lg border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
+                                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                    Good post rules
+                                </p>
+                                <div className="mt-4 space-y-3">
+                                    {[
+                                        'Use the same role title applicants should enter.',
+                                        'Keep the location short and practical.',
+                                        'Preview the public board after publishing.',
+                                    ].map((item) => (
+                                        <p
+                                            key={item}
+                                            className="border-l border-slate-200 pl-3 text-sm leading-6 text-slate-600"
+                                        >
+                                            {item}
+                                        </p>
+                                    ))}
+                                </div>
+                            </aside>
                         </section>
                     </>
                 ) : (
@@ -279,7 +260,6 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             className="mb-5"
                             navItems={[
                                 { href: '#open-roles', label: 'Open roles' },
-                                { href: '#application-notes', label: 'Apply' },
                             ]}
                             actions={
                                 <Link
@@ -370,10 +350,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             id="open-roles"
                             className="grid max-w-full scroll-mt-8 gap-5 overflow-hidden lg:grid-cols-[320px_minmax(0,1fr)]"
                         >
-                            <aside
-                                id="application-notes"
-                                className="h-fit rounded-xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]"
-                            >
+                            <aside className="h-fit rounded-xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
                                 <label className="flex w-full items-center gap-3 rounded-md border border-slate-200 bg-slate-50 px-4 py-3 focus-within:border-slate-400 focus-within:bg-white focus-within:ring-2 focus-within:ring-slate-400/20">
                                     <Search
                                         size={18}

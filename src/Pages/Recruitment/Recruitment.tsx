@@ -10,7 +10,6 @@ import {
     Phone,
     RotateCcw,
     Send,
-    Sparkles,
     UploadCloud,
 } from 'lucide-react'
 import { ValidationError } from '@tanstack/react-form'
@@ -38,7 +37,6 @@ import {
     RecruitmentSchema,
 } from '@/Schemas/Recruitment/Recruitment.schema'
 import { usePageMeta } from '@/hooks/use-page-meta'
-import Workers from '/Images/career-workspace-hero.jpg'
 
 function RecruitmentBase() {
     usePageMeta({
@@ -99,85 +97,82 @@ function RecruitmentBase() {
                 />
             </div>
 
-            <section className="mx-auto box-border grid w-full min-w-0 max-w-[1500px] gap-6 px-4 py-5 sm:px-6 lg:grid-cols-[minmax(340px,0.9fr)_minmax(0,1.1fr)] lg:px-8 lg:py-8">
-                <aside className="min-w-0 space-y-5 lg:sticky lg:top-6 lg:self-start">
-                    <div className="relative min-h-[430px] w-full min-w-0 max-w-full overflow-hidden rounded-xl border border-slate-200/80 bg-slate-950 text-white shadow-[0_22px_70px_rgba(15,23,42,0.16)]">
-                        <img
-                            alt="Focused office workspace"
-                            src={Workers}
-                            className="absolute inset-0 h-full w-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-[linear-gradient(140deg,rgba(15,23,42,0.94),rgba(15,23,42,0.70)_56%,rgba(15,23,42,0.20))]" />
-                        <div className="relative flex min-h-[430px] min-w-0 flex-col justify-between p-6 sm:p-7">
-                            <div>
-                                <div className="flex flex-wrap gap-2">
-                                    <span className="inline-flex items-center gap-2 rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/85 backdrop-blur">
-                                        <Sparkles size={14} />
-                                        Recruitment
-                                    </span>
-                                    <span className="rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/85 backdrop-blur">
-                                        Candidate form
-                                    </span>
-                                </div>
-                                <h1 className="mt-8 max-w-full break-words text-2xl font-semibold leading-tight [overflow-wrap:anywhere] min-[420px]:text-3xl sm:max-w-xl sm:text-4xl">
-                                    Send your application in one place.
-                                </h1>
-                                <p className="mt-4 max-w-full break-words text-sm leading-7 text-white/75 [overflow-wrap:anywhere] sm:max-w-xl sm:text-base">
-                                    Add your details, attach your CV, and the
-                                    hiring team will review everything from the
-                                    same dashboard.
-                                </p>
-                            </div>
-
-                            <div className="mt-8 grid min-w-0 gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
-                                <div className="rounded-lg border border-white/15 bg-white/10 p-4 backdrop-blur">
-                                    <p className="text-xs font-medium text-white/60">
-                                        CV
-                                    </p>
-                                    <p className="mt-2 font-semibold">
-                                        Required
-                                    </p>
-                                </div>
-                                <div className="rounded-lg border border-white/15 bg-white/10 p-4 backdrop-blur">
-                                    <p className="text-xs font-medium text-white/60">
-                                        Phone
-                                    </p>
-                                    <p className="mt-2 font-semibold">
-                                        International
-                                    </p>
-                                </div>
-                                <div className="rounded-lg border border-white/15 bg-white/10 p-4 backdrop-blur">
-                                    <p className="text-xs font-medium text-white/60">
-                                        Review
-                                    </p>
-                                    <p className="mt-2 font-semibold">
-                                        Email check
-                                    </p>
-                                </div>
-                            </div>
+            <section className="mx-auto box-border w-full min-w-0 max-w-[1500px] px-4 py-5 sm:px-6 lg:px-8 lg:py-8">
+                <section className="mb-6 rounded-xl border border-slate-200 bg-[#fbfbf8] p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:p-8">
+                    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-end">
+                        <div className="min-w-0">
+                            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                Candidate application
+                            </p>
+                            <h1 className="mt-5 max-w-2xl break-words text-2xl font-semibold leading-tight text-slate-950 min-[420px]:text-3xl sm:text-5xl">
+                                Submit application, reviewed clearly.
+                            </h1>
+                            <p className="mt-4 max-w-2xl break-words text-sm leading-7 text-slate-600 sm:text-base">
+                                Add your details, attach your CV, and the hiring
+                                team will review the application from the HR
+                                dashboard.
+                            </p>
                         </div>
-                    </div>
 
-                    <div className="grid min-w-0 gap-3 sm:grid-cols-3 lg:grid-cols-1">
-                        <InfoCard
-                            icon={<FileText size={18} />}
-                            title="CV required"
-                            text={`PDF, DOC, or DOCX up to ${RECRUITMENT_CV_MAX_SIZE_MB}MB.`}
-                        />
-                        <InfoCard
-                            icon={<Clock3 size={18} />}
-                            title="Review flow"
-                            text="Confirmed applications move into candidate review."
-                        />
-                        <InfoCard
-                            icon={<CheckCircle2 size={18} />}
-                            title="Email check"
-                            text="Use an email not already tied to an employee login."
-                        />
+                        <aside className="min-w-0 rounded-lg border border-slate-200 bg-white p-5">
+                            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                Before submitting
+                            </p>
+                            <dl className="mt-5 divide-y divide-slate-100">
+                                <div className="flex flex-wrap items-center justify-between gap-2 py-3 first:pt-0">
+                                    <dt className="text-sm font-medium text-slate-500">
+                                        CV
+                                    </dt>
+                                    <dd className="text-sm font-semibold text-slate-950">
+                                        Required
+                                    </dd>
+                                </div>
+                                <div className="flex flex-wrap items-center justify-between gap-2 py-3">
+                                    <dt className="text-sm font-medium text-slate-500">
+                                        Phone
+                                    </dt>
+                                    <dd className="text-sm font-semibold text-slate-950">
+                                        International
+                                    </dd>
+                                </div>
+                                <div className="flex flex-wrap items-center justify-between gap-2 py-3 last:pb-0">
+                                    <dt className="text-sm font-medium text-slate-500">
+                                        Review
+                                    </dt>
+                                    <dd className="text-sm font-semibold text-slate-950">
+                                        Email check
+                                    </dd>
+                                </div>
+                            </dl>
+                        </aside>
                     </div>
-                </aside>
+                </section>
 
-                <section className="min-w-0 rounded-xl border border-slate-200/80 bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)] sm:p-7 lg:p-8">
+                <div className="grid gap-5 lg:grid-cols-[320px_minmax(0,1fr)]">
+                    <aside className="h-fit min-w-0 rounded-xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] lg:sticky lg:top-6">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                            Application notes
+                        </p>
+                        <div className="mt-5 space-y-3">
+                            <InfoCard
+                                icon={<FileText size={18} />}
+                                title="CV required"
+                                text={`PDF, DOC, or DOCX up to ${RECRUITMENT_CV_MAX_SIZE_MB}MB.`}
+                            />
+                            <InfoCard
+                                icon={<Clock3 size={18} />}
+                                title="Review flow"
+                                text="Confirmed applications move into candidate review."
+                            />
+                            <InfoCard
+                                icon={<CheckCircle2 size={18} />}
+                                title="Email check"
+                                text="Use an email not already tied to an employee login."
+                            />
+                        </div>
+                    </aside>
+
+                    <section className="min-w-0 rounded-xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:p-7 lg:p-8">
                     <div className="flex flex-col gap-4 border-b border-slate-100 pb-6 sm:flex-row sm:items-start sm:justify-between">
                         <div>
                             <p className="text-sm font-semibold text-slate-500">
@@ -672,7 +667,8 @@ function RecruitmentBase() {
                             </button>
                         </div>
                     </form>
-                </section>
+                    </section>
+                </div>
             </section>
 
             <Toast
