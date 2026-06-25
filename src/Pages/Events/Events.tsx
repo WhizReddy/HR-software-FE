@@ -282,9 +282,14 @@ function EventsContentAndComponents() {
             </div>
 
             {/* Infinite Scroll trigger */}
-            <div ref={ref} className="w-full py-6 text-center text-slate-400">
-                {isFetchingNextPage && 'Loading more events...'}
-            </div>
+            {(hasNextPage || isFetchingNextPage) && (
+                <div
+                    ref={ref}
+                    className="flex h-10 w-full items-center justify-center text-sm text-slate-400"
+                >
+                    {isFetchingNextPage && 'Loading more events...'}
+                </div>
+            )}
         </div>
     )
 }

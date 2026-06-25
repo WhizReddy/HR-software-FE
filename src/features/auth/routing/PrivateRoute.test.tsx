@@ -31,11 +31,27 @@ vi.mock('@/Components/SideBar/sidebar', () => ({
 }))
 
 vi.mock('@/Components/ui/sidebar', () => ({
-    SidebarInset: ({ children }: { children: ReactNode }) => (
-        <div>{children}</div>
+    SidebarInset: ({
+        children,
+        className,
+    }: {
+        children: ReactNode
+        className?: string
+    }) => (
+        <div data-testid="sidebar-inset" className={className}>
+            {children}
+        </div>
     ),
-    SidebarProvider: ({ children }: { children: ReactNode }) => (
-        <div>{children}</div>
+    SidebarProvider: ({
+        children,
+        className,
+    }: {
+        children: ReactNode
+        className?: string
+    }) => (
+        <div data-testid="sidebar-provider" className={className}>
+            {children}
+        </div>
     ),
 }))
 
@@ -45,7 +61,12 @@ describe('PrivateRoute', () => {
         authMock.state.isInitializing = false
     })
 
-    afterEach(cleanup)
+    afterEach(() => {
+        cleanup()
+        document.body.style.overflow = ''
+        document.body.style.overscrollBehavior = ''
+        document.documentElement.style.overflow = ''
+    })
 
     it('redirects logged-out users to the login route', async () => {
         render(
@@ -99,5 +120,13 @@ describe('PrivateRoute', () => {
         expect(screen.getByText('Header')).toBeTruthy()
         expect(screen.getByText('Breadcrumbs')).toBeTruthy()
         expect(screen.getByText('Protected dashboard')).toBeTruthy()
+        expect(document.body.style.overflow).toBe('hidden')
+        expect(document.documentElement.style.overflow).toBe('hidden')
+        expect(screen.getByTestId('sidebar-provider').className).toContain(
+            'overflow-hidden',
+        )
+        expect(screen.getByTestId('sidebar-inset').className).toContain(
+            'overflow-hidden',
+        )
     })
 })

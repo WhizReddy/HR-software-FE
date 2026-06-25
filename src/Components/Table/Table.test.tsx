@@ -98,4 +98,26 @@ describe('DataTable', () => {
             pageSize: 5,
         })
     })
+
+    it('lets rows use page scroll instead of a nested vertical table scroll', () => {
+        const { container } = render(
+            <DataTable
+                rows={[{ id: '1', name: 'Redi' }]}
+                columns={columns}
+                getRowId={(row) => String(row.id)}
+                totalPages={1}
+                page={0}
+                pageSize={5}
+                onPaginationModelChange={() => undefined}
+            />,
+        )
+
+        const tableScrollContainer = container.querySelector(
+            '.overflow-x-auto',
+        )
+
+        expect(tableScrollContainer).toBeTruthy()
+        expect(tableScrollContainer?.className).toContain('overflow-y-visible')
+        expect(tableScrollContainer?.className).not.toContain('max-h-[72vh]')
+    })
 })

@@ -159,7 +159,13 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
         'After email confirmation, the application appears in the HR review board.',
     ]
     return (
-        <div className="min-h-screen overflow-x-hidden">
+        <div
+            className={
+                managementMode
+                    ? 'min-h-0 overflow-x-hidden'
+                    : 'min-h-screen overflow-x-hidden'
+            }
+        >
             <div
                 className={
                     managementMode

@@ -55,7 +55,7 @@ const InfoSection: React.FC = () => {
                     No upcoming events are scheduled right now.
                 </div>
             ) : (
-                <ul className="custom-scrollbar m-0 flex-1 list-none space-y-3 overflow-y-auto p-0 pr-2">
+                <ul className="m-0 list-none space-y-3 p-0">
                     {visibleEvents.map((event) => (
                         <li
                             key={event._id}

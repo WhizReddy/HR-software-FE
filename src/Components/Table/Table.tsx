@@ -343,7 +343,7 @@ function DataTable<TRow>({
                 </div>
             )}
 
-            <div className="max-h-[72vh] overflow-auto">
+            <div className="w-full overflow-x-auto overflow-y-visible">
                 <Table className="min-w-[860px] text-left text-sm">
                     <TableHeader className="sticky top-0 z-20 shadow-[0_1px_0_rgba(226,232,240,0.9)]">
                         <TableRow className="border-b border-slate-200 bg-slate-50/80 hover:bg-slate-50/80">
