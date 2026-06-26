@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import NotificationDropdown from '../../Pages/Notification/Notification'
 import { useAuth } from '@/features/auth/context/AuthProvider'
+import { getDefaultPrivatePath } from '@/features/auth/lib/access'
 import { Avatar, AvatarFallback } from '@/Components/ui/avatar'
 import { SidebarTrigger } from '@/Components/ui/sidebar'
 import { ChevronDown, LogOut, User } from 'lucide-react'
@@ -53,7 +54,7 @@ export const Header: React.FC = () => {
       navigate(`/profile/${currentUser._id}`)
       return
     }
-    navigate('/dashboard')
+    navigate(getDefaultPrivatePath(currentUser?.role))
   }
 
   return (

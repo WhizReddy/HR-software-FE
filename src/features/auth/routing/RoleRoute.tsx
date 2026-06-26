@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthProvider'
+import { getDefaultPrivatePath } from '../lib/access'
 
 interface RoleRouteProps {
     children: ReactElement
@@ -13,7 +14,7 @@ export default function RoleRoute({
     children,
     allowedRoles = [],
     allowSelfParam,
-    fallbackPath = '/dashboard',
+    fallbackPath,
 }: RoleRouteProps) {
     const { currentUser, isAuthenticated, isInitializing, userRole } = useAuth()
     const params = useParams()
@@ -36,7 +37,12 @@ export default function RoleRoute({
     )
 
     if (!hasRoleAccess && !hasSelfAccess) {
-        return <Navigate to={fallbackPath} replace />
+        return (
+            <Navigate
+                to={fallbackPath || getDefaultPrivatePath(userRole)}
+                replace
+            />
+        )
     }
 
     return children

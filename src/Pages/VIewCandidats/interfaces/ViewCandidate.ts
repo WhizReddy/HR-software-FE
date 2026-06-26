@@ -19,4 +19,6 @@ export interface CandidateView {
     notes?: string
 }
 
+export type InterviewStep = 'first' | 'second'
+
 export type ModalAction = 'active' | 'reject' | 'employ'

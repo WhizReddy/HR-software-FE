@@ -234,34 +234,29 @@ function DataTable<TRow>({
     }
 
     const exportControls = exportFileName ? (
-        <div className="flex w-full flex-col gap-1 sm:w-auto">
-            <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto sm:items-center">
-                <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={handleCsvExport}
-                    disabled={!canExport || isLoading}
-                    className={tableControlButtonClass}
-                >
-                    <Download size={16} />
-                    CSV
-                </Button>
-                <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={handlePrintExport}
-                    disabled={!canExport || isLoading}
-                    className={tableControlButtonClass}
-                >
-                    <Printer size={16} />
-                    Print
-                </Button>
-            </div>
-            <p className="text-xs font-medium text-slate-400">
-                Exports current table view.
-            </p>
+        <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto sm:items-center">
+            <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleCsvExport}
+                disabled={!canExport || isLoading}
+                className={tableControlButtonClass}
+            >
+                <Download size={16} />
+                CSV
+            </Button>
+            <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handlePrintExport}
+                disabled={!canExport || isLoading}
+                className={tableControlButtonClass}
+            >
+                <Printer size={16} />
+                Print
+            </Button>
         </div>
     ) : null
 

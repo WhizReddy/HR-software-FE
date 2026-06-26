@@ -1,7 +1,7 @@
 import AxiosInstance from '@/Helpers/Axios'
 import { useForm } from '@tanstack/react-form'
 import { AxiosError } from 'axios'
-import { useContext } from 'react'
+import { useContext, useRef } from 'react'
 import { RecruitmentContext } from '../Context/RecruitmentContext'
 import { normalizePhoneNumber } from '../utils/phone'
 
@@ -20,11 +20,19 @@ const getReadableSubmissionError = (payload: unknown) => {
         return 'Enter a valid phone number with digits and an optional country code, for example +355 69 123 4567 or 069 123 4567.'
     }
 
+    if (
+        text.toLowerCase().includes('failed to upload') ||
+        text.toLowerCase().includes('cv')
+    ) {
+        return 'We could not upload your CV. Keep the selected file, wait a moment, and try submitting again. PDF, DOC, and DOCX files up to 5MB are supported.'
+    }
+
     return text || null
 }
 
 export const useRecruitmentForm = () => {
     const { setError, setShowModal } = useContext(RecruitmentContext)
+    const submitLockRef = useRef(false)
     const form = useForm<{
         applicationMethod: string
         dob: string
@@ -52,6 +60,9 @@ export const useRecruitmentForm = () => {
             technologiesUsed: [],
         },
         onSubmit: async ({ value }) => {
+            if (submitLockRef.current) return
+
+            submitLockRef.current = true
             try {
                 setError(null)
                 const formData = new FormData()
@@ -72,15 +83,7 @@ export const useRecruitmentForm = () => {
                     JSON.stringify(value.technologiesUsed),
                 )
 
-                const response = await AxiosInstance.post(
-                    '/applicant',
-                    formData,
-                    {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                        },
-                    },
-                )
+                const response = await AxiosInstance.post('/applicant', formData)
                 if ([200, 201].includes(response.status)) {
                     setShowModal(true)
                     return
@@ -106,6 +109,8 @@ export const useRecruitmentForm = () => {
                     return
                 }
                 setError('An error occurred while creating your applicant')
+            } finally {
+                submitLockRef.current = false
             }
         },
     })

@@ -8,6 +8,7 @@ import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
 import { LoginContext, LoginProvider } from '../context/LoginContext'
 import { useAuth } from '../context/AuthProvider'
+import { getDefaultPrivatePath } from '../lib/access'
 import { useLoginForm } from '../hooks/useLoginForm'
 import { LoginSchema } from '../schemas/login.schema'
 import AuthPageShell from '../components/AuthPageShell'
@@ -20,7 +21,7 @@ const LoginPageContent = () => {
             'Sign in to People Hub to manage HR, recruitment, payroll, assets, and operations.',
     })
 
-    const { isAuthenticated } = useAuth()
+    const { currentUser, isAuthenticated, userRole } = useAuth()
     const navigate = useNavigate()
     const {
         checkingIsAuthenticated,
@@ -39,10 +40,18 @@ const LoginPageContent = () => {
 
     useEffect(() => {
         if (isAuthenticated) {
-            navigate('/dashboard', { replace: true })
+            navigate(getDefaultPrivatePath(userRole || currentUser?.role), {
+                replace: true,
+            })
         }
         setCheckingIsAuthenticated(false)
-    }, [isAuthenticated, navigate, setCheckingIsAuthenticated])
+    }, [
+        currentUser?.role,
+        isAuthenticated,
+        navigate,
+        setCheckingIsAuthenticated,
+        userRole,
+    ])
 
     if (checkingIsAuthenticated) {
         return (

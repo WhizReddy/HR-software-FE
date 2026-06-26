@@ -3,7 +3,11 @@ import ProfileForm from './Components/ProfileForm/ProfileForm'
 import ChangePass from './Components/ChangePass/ChangePass'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Components/ui/tabs'
 import { useAuth } from '@/features/auth/context/AuthProvider'
-import { isAdminRole, isSelfUser } from '@/features/auth/lib/access'
+import {
+    getDefaultPrivatePath,
+    isAdminRole,
+    isSelfUser,
+} from '@/features/auth/lib/access'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/Components/ui/button'
 import { ArrowLeft } from 'lucide-react'
@@ -20,7 +24,9 @@ export default function Profile() {
     const canViewSecurity = isSelfUser(currentUser?._id, id)
     const returnTo = getReturnTo(
         location.state,
-        canViewSecurity ? '/dashboard' : '/employees',
+        canViewSecurity
+            ? getDefaultPrivatePath(userRole || currentUser?.role)
+            : '/employees',
     )
 
     return (

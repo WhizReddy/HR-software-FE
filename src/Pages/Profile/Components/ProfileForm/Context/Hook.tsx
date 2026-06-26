@@ -1,5 +1,5 @@
 import { useAuth } from '@/features/auth/context/AuthProvider'
-import { isAdminRole } from '@/features/auth/lib/access'
+import { getDefaultPrivatePath, isAdminRole } from '@/features/auth/lib/access'
 import AxiosInstance from '@/Helpers/Axios'
 import { UserProfileData } from '@/Pages/Employees/interfaces/Employe'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -35,7 +35,9 @@ export const useGetAndUpdateUserById = () => {
     const isAdmin = isAdminRole(userRole)
     const returnTo = getReturnTo(
         location.state,
-        isCurrentUser ? '/dashboard' : '/employees',
+        isCurrentUser
+            ? getDefaultPrivatePath(userRole || currentUser?.role)
+            : '/employees',
     )
 
     useEffect(() => {

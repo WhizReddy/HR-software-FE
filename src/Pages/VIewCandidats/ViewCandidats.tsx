@@ -59,6 +59,7 @@ export default function ViewCandidats() {
         secondInterviewDate,
         setSecondInterviewDate,
         modalAction,
+        interviewStep,
         toastOpen,
         toastMessage,
         toastSeverity,
@@ -149,17 +150,21 @@ export default function ViewCandidats() {
         !applicant?.currentPhase ||
         applicant.currentPhase === 'applied' ||
         applicant.currentPhase === 'applicant'
-    const canSchedulePhaseTwo = applicant?.currentPhase === 'first_interview'
+    const canSchedulePhaseTwo =
+        applicant?.currentPhase === 'first_interview' &&
+        !applicant?.secondInterviewDate
+    const canReschedulePhaseTwo = Boolean(
+        applicant?.secondInterviewDate ||
+            applicant?.currentPhase === 'second_interview',
+    )
     const canEmploy = Boolean(applicant)
     const interviewNotes = applicant?.notes?.trim()
     const interviewLabel =
-        applicant?.currentPhase === 'first_interview'
+        interviewStep === 'second'
             ? 'Phase 2 Interview Date'
             : 'Phase 1 Interview Date'
     const interviewValue =
-        applicant?.currentPhase === 'first_interview'
-            ? secondInterviewDate
-            : firstInterviewDate
+        interviewStep === 'second' ? secondInterviewDate : firstInterviewDate
     const cvUrl = applicant?.cvAttachment
         ? resolveApiAssetUrl(applicant.cvAttachment)
         : ''
@@ -374,7 +379,7 @@ export default function ViewCandidats() {
                                     <Button
                                         type="button"
                                         onClick={() =>
-                                            handleOpenModal('active')
+                                            handleOpenModal('active', 'first')
                                         }
                                         disabled={isActionPending}
                                         className="w-full justify-start"
@@ -388,13 +393,28 @@ export default function ViewCandidats() {
                                     <Button
                                         type="button"
                                         onClick={() =>
-                                            handleOpenModal('active')
+                                            handleOpenModal('active', 'second')
                                         }
                                         disabled={isActionPending}
                                         className="w-full justify-start"
                                     >
                                         <CalendarClock size={16} />
                                         Schedule Phase 2 Interview
+                                    </Button>
+                                )}
+
+                                {canReschedulePhaseTwo && (
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={() =>
+                                            handleOpenModal('active', 'second')
+                                        }
+                                        disabled={isActionPending}
+                                        className="w-full justify-start"
+                                    >
+                                        <CalendarClock size={16} />
+                                        Reschedule Phase 2 Interview
                                     </Button>
                                 )}
 
@@ -446,7 +466,10 @@ export default function ViewCandidats() {
                             </h2>
                             <p className="mt-2 text-sm leading-6 text-slate-600">
                                 {modalAction === 'active'
-                                    ? 'Schedule the next interview step for this candidate?'
+                                    ? interviewStep === 'second' &&
+                                      applicant?.secondInterviewDate
+                                        ? 'Reschedule the second interview for this candidate?'
+                                        : 'Schedule the next interview step for this candidate?'
                                     : modalAction === 'reject'
                                       ? 'Reject this candidate from the hiring process?'
                                       : 'Mark this candidate as employed?'}
@@ -497,7 +520,7 @@ export default function ViewCandidats() {
                             label={interviewLabel}
                             value={interviewValue}
                             onChange={(event: any) =>
-                                applicant?.currentPhase === 'first_interview'
+                                interviewStep === 'second'
                                     ? setSecondInterviewDate(event.target.value)
                                     : setFirstInterviewDate(event.target.value)
                             }

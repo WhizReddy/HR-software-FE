@@ -79,13 +79,6 @@ const adminNavGroups: NavGroup[] = [
 
 const devNavGroups: NavGroup[] = [
   {
-    label: 'Workspace',
-    items: [
-      { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-      { label: 'Employees', path: '/employees', icon: Users },
-    ],
-  },
-  {
     label: 'Self Service',
     items: [
       { label: 'My Assets', path: '/holdings', icon: Handshake },
@@ -163,9 +156,8 @@ export const SideBar: React.FC = () => {
         ))}
       </SidebarContent>
 
-      <SidebarSeparator />
-
       <SidebarFooter className="p-2">
+        <SidebarSeparator className="mx-0" />
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton

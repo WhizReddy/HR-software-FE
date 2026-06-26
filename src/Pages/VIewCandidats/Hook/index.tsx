@@ -1,12 +1,30 @@
 import { useEffect, useState, useCallback } from 'react'
 import AxiosInstance from '../../../Helpers/Axios'
 import { useParams } from 'react-router-dom'
-import { CandidateView, ModalAction } from '../interfaces/ViewCandidate'
+import {
+    CandidateView,
+    InterviewStep,
+    ModalAction,
+} from '../interfaces/ViewCandidate'
+
+const toDateTimeLocalValue = (value?: string | Date | null) => {
+    if (!value) return ''
+
+    const date = new Date(value)
+    if (Number.isNaN(date.getTime())) return ''
+
+    const timezoneOffsetMs = date.getTimezoneOffset() * 60 * 1000
+    return new Date(date.getTime() - timezoneOffsetMs)
+        .toISOString()
+        .slice(0, 16)
+}
 
 export const useApplicantById = () => {
     const [applicant, setApplicant] = useState<CandidateView | null>(null)
     const [showModal, setShowModal] = useState(false)
     const [modalAction, setModalAction] = useState<ModalAction | ''>('')
+    const [interviewStep, setInterviewStep] =
+        useState<InterviewStep>('first')
     const [showConfirmationModal, setShowConfirmationModal] = useState(false)
     const [firstInterviewDate, setFirstInterviewDate] = useState('')
     const [secondInterviewDate, setSecondInterviewDate] = useState('')
@@ -120,7 +138,24 @@ export const useApplicantById = () => {
         setShowConfirmationModal(false)
     }
 
-    const handleOpenModal = (action: ModalAction) => {
+    const handleOpenModal = (
+        action: ModalAction,
+        nextInterviewStep: InterviewStep = 'first',
+    ) => {
+        if (action === 'active') {
+            setInterviewStep(nextInterviewStep)
+
+            if (nextInterviewStep === 'first') {
+                setFirstInterviewDate(
+                    toDateTimeLocalValue(applicant?.firstInterviewDate),
+                )
+            } else {
+                setSecondInterviewDate(
+                    toDateTimeLocalValue(applicant?.secondInterviewDate),
+                )
+            }
+        }
+
         setModalAction(action)
         setShowModal(true)
     }
@@ -136,28 +171,28 @@ export const useApplicantById = () => {
                 customSubject: customSubject || undefined,
             }
 
-            // Scheduling Phase 1: applicant has no interview yet
-            // 'applied' is the backend enum value; 'applicant' is kept for legacy data compat
-            if (applicant.currentPhase === 'applied' || applicant.currentPhase === 'applicant' || !applicant.currentPhase) {
+            if (interviewStep === 'first') {
                 if (!firstInterviewDate) {
                     setToastMessage('Please select an interview date')
                     setToastSeverity('error')
                     setToastOpen(true)
                     return
                 }
-                payload.firstInterviewDate = new Date(firstInterviewDate).toISOString()
+                payload.firstInterviewDate = new Date(
+                    firstInterviewDate,
+                ).toISOString()
                 payload.currentPhase = 'first_interview'
                 payload.status = 'active' // Critical: transition status to active so they appear in Interview board
-            }
-            // Scheduling Phase 2: candidate already done Phase 1
-            else if (applicant.currentPhase === 'first_interview') {
+            } else {
                 if (!secondInterviewDate) {
                     setToastMessage('Please select an interview date')
                     setToastSeverity('error')
                     setToastOpen(true)
                     return
                 }
-                payload.secondInterviewDate = new Date(secondInterviewDate).toISOString()
+                payload.secondInterviewDate = new Date(
+                    secondInterviewDate,
+                ).toISOString()
                 payload.currentPhase = 'second_interview'
             }
 
@@ -184,6 +219,7 @@ export const useApplicantById = () => {
         handleCloseModal,
         handleOpenModal,
         modalAction,
+        interviewStep,
         handleCloseConfirmationModal,
         showConfirmationModal,
         handleConfirm,

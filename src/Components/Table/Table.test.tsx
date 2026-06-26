@@ -121,7 +121,7 @@ describe('DataTable', () => {
         expect(tableScrollContainer?.className).not.toContain('max-h-[72vh]')
     })
 
-    it('labels print export accurately', () => {
+    it('keeps export controls aligned without helper copy', () => {
         render(
             <DataTable
                 rows={[{ id: '1', name: 'Redi' }]}
@@ -138,6 +138,6 @@ describe('DataTable', () => {
         expect(screen.getByRole('button', { name: /csv/i })).toBeTruthy()
         expect(screen.getByRole('button', { name: /print/i })).toBeTruthy()
         expect(screen.queryByRole('button', { name: /pdf/i })).toBeNull()
-        expect(screen.getByText('Exports current table view.')).toBeTruthy()
+        expect(screen.queryByText('Exports current table view.')).toBeNull()
     })
 })

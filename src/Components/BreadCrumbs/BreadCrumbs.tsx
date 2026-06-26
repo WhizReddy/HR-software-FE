@@ -8,6 +8,8 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from '@/Components/ui/breadcrumb'
+import { useAuth } from '@/features/auth/context/AuthProvider'
+import { getDefaultPrivatePath } from '@/features/auth/lib/access'
 
 type BreadcrumbRoute = {
     label: string
@@ -72,7 +74,9 @@ const getBreadcrumbRoutes = (pathname: string): BreadcrumbRoute[] => {
 
 export const BreadcrumbComponent: React.FC = () => {
     const { pathname } = useLocation()
+    const { currentUser, userRole } = useAuth()
     const crumbs = getBreadcrumbRoutes(pathname)
+    const homePath = getDefaultPrivatePath(userRole || currentUser?.role)
 
     if (crumbs.length === 0) return null
 
@@ -80,7 +84,7 @@ export const BreadcrumbComponent: React.FC = () => {
         <Breadcrumb className="mb-5 px-1">
             <BreadcrumbList className="text-sm text-slate-500">
                 <BreadcrumbItem>
-                    <BreadcrumbLink render={<Link to="/dashboard" className="hover:text-slate-700" />}>
+                    <BreadcrumbLink render={<Link to={homePath} className="hover:text-slate-700" />}>
                         Home
                     </BreadcrumbLink>
                 </BreadcrumbItem>

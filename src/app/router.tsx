@@ -79,22 +79,37 @@ const router = createBrowserRouter([
         children: [
             {
                 path: '/employees',
-                element: withSuspense(
-                    <Employees />,
-                    'Loading employee directory',
+                element: (
+                    <RoleRoute allowedRoles={[...ADMIN_ROLES]}>
+                        {withSuspense(
+                            <Employees />,
+                            'Loading employee directory',
+                        )}
+                    </RoleRoute>
                 ),
             },
             {
                 path: '/dashboard',
-                element: withSuspense(
-                    <Dashboard />,
-                    'Preparing today’s HR overview',
+                element: (
+                    <RoleRoute allowedRoles={[...ADMIN_ROLES]}>
+                        {withSuspense(
+                            <Dashboard />,
+                            'Preparing today’s HR overview',
+                        )}
+                    </RoleRoute>
                 ),
                 index: false,
             },
             {
                 path: '/profile/:id',
-                element: withSuspense(<Profile />),
+                element: (
+                    <RoleRoute
+                        allowedRoles={[...ADMIN_ROLES]}
+                        allowSelfParam="id"
+                    >
+                        {withSuspense(<Profile />)}
+                    </RoleRoute>
+                ),
             },
             {
                 path: '/view/:id',
@@ -168,7 +183,11 @@ const router = createBrowserRouter([
             },
             {
                 path: '/events',
-                element: withSuspense(<Events />, 'Reviewing HR events'),
+                element: (
+                    <RoleRoute allowedRoles={[...ADMIN_ROLES]}>
+                        {withSuspense(<Events />, 'Reviewing HR events')}
+                    </RoleRoute>
+                ),
             },
             {
                 path: '/interview',
@@ -194,7 +213,11 @@ const router = createBrowserRouter([
             },
             {
                 path: '/historic',
-                element: withSuspense(<Analytics />),
+                element: (
+                    <RoleRoute allowedRoles={[...ADMIN_ROLES]}>
+                        {withSuspense(<Analytics />)}
+                    </RoleRoute>
+                ),
             },
             {
                 path: '/inventory',
