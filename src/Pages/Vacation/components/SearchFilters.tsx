@@ -27,15 +27,20 @@ export const EmployeesWithVacationsSearchFilter = () => {
     })
 
     const handleUserFilterChange = (value: string) => {
-        setSearchParams((prev) => {
-            const nextParams = upsertFilterParams(prev, {
-                users: value === 'all' ? null : value,
-                selectedVacation: null,
-                userId: null,
-            })
+        setSearchParams(
+            (prev) => {
+                const nextParams = upsertFilterParams(prev, {
+                    users: value === 'all' ? null : value,
+                    selectedVacation: null,
+                    userId: null,
+                })
 
-            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
-        })
+                return hasSearchParamsChanged(prev, nextParams)
+                    ? nextParams
+                    : prev
+            },
+            { replace: true },
+        )
     }
 
     const userFilterChoices = [

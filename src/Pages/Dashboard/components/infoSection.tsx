@@ -39,10 +39,10 @@ const InfoSection: React.FC = () => {
         <div className="flex h-full flex-col">
             <div className="mb-5">
                 <h2 className="text-base font-semibold text-slate-900">
-                    Upcoming events
+                    Upcoming HR events
                 </h2>
                 <p className="mt-1 text-sm font-medium text-slate-500">
-                    Next scheduled items, sorted by the nearest start date.
+                    Scheduled HR activities, sorted by the nearest start date.
                 </p>
             </div>
 
@@ -52,7 +52,7 @@ const InfoSection: React.FC = () => {
                 </div>
             ) : visibleEvents.length === 0 ? (
                 <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50/70 px-6 text-center text-sm font-medium text-slate-400">
-                    No upcoming events are scheduled right now.
+                    No HR events are scheduled right now.
                 </div>
             ) : (
                 <ul className="m-0 list-none space-y-3 p-0">

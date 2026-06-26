@@ -4,8 +4,9 @@ import AxiosInstance from '@/Helpers/Axios'
 import { UserProfileData } from '@/Pages/Employees/interfaces/Employe'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { EmployeePayroll, EmployePayroll } from './Interface'
+import { getReturnTo } from '@/Helpers/navigation'
 
 type PayrollResponse =
     | EmployeePayroll[]
@@ -27,10 +28,15 @@ export const useGetAndUpdateUserById = () => {
     const [error, setError] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const navigate = useNavigate()
+    const location = useLocation()
     const { userRole, currentUser } = useAuth()
 
     const isCurrentUser = currentUser?._id === id
     const isAdmin = isAdminRole(userRole)
+    const returnTo = getReturnTo(
+        location.state,
+        isCurrentUser ? '/dashboard' : '/employees',
+    )
 
     useEffect(() => {
         setIsLoading(true)
@@ -89,7 +95,7 @@ export const useGetAndUpdateUserById = () => {
         setIsLoading(true)
         try {
             await AxiosInstance.patch(`/user/${id}`, userToUpdate)
-            navigate('/dashboard')
+            navigate(returnTo)
         } catch (error) {
             console.error('Error updating user:', error)
             setError('Failed to update user')

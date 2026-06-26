@@ -17,19 +17,23 @@ function VacationComponent() {
 
     const handleChange = (value: string) => {
         if (value) {
-            setSearchParams((prev) =>
-                upsertFilterParams(prev, {
-                    vacationType: value,
-                    selectedVacation: null,
-                }),
+            setSearchParams(
+                (prev) =>
+                    upsertFilterParams(prev, {
+                        vacationType: value,
+                        selectedVacation: null,
+                    }),
+                { replace: true },
             )
         }
     }
 
     useEffect(() => {
         if (!searchParams.get('vacationType')) {
-            setSearchParams((prev) =>
-                upsertFilterParams(prev, { vacationType: 'requests' }),
+            setSearchParams(
+                (prev) =>
+                    upsertFilterParams(prev, { vacationType: 'requests' }),
+                { replace: true },
             )
         }
     }, [searchParams, setSearchParams])

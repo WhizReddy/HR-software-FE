@@ -120,4 +120,24 @@ describe('DataTable', () => {
         expect(tableScrollContainer?.className).toContain('overflow-y-visible')
         expect(tableScrollContainer?.className).not.toContain('max-h-[72vh]')
     })
+
+    it('labels print export accurately', () => {
+        render(
+            <DataTable
+                rows={[{ id: '1', name: 'Redi' }]}
+                columns={columns}
+                getRowId={(row) => String(row.id)}
+                totalPages={1}
+                page={0}
+                pageSize={5}
+                onPaginationModelChange={() => undefined}
+                exportFileName="people"
+            />,
+        )
+
+        expect(screen.getByRole('button', { name: /csv/i })).toBeTruthy()
+        expect(screen.getByRole('button', { name: /print/i })).toBeTruthy()
+        expect(screen.queryByRole('button', { name: /pdf/i })).toBeNull()
+        expect(screen.getByText('Exports current table view.')).toBeTruthy()
+    })
 })

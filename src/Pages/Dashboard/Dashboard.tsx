@@ -47,53 +47,53 @@ const DashboardContent: React.FC = () => {
     const nextInterviews = upcomingInterviews.slice(0, 3)
     const attentionItems = [
         {
-            label: 'Pending vacation',
+            label: 'Review leave requests',
             value: formatAttentionCount(
                 needsAttention.pendingVacations,
                 needsAttention.isLoading,
             ),
-            hint: 'Awaiting HR action',
+            hint: 'Pending manager or HR decision',
             icon: ClipboardCheck,
             to: '/vacation?vacationType=requests&requestStatus=pending&requestPage=0&requestLimit=5',
             restricted: true,
         },
         {
-            label: 'Active candidates',
+            label: 'Move candidates forward',
             value: formatAttentionCount(
                 needsAttention.activeCandidates,
                 needsAttention.isLoading,
             ),
-            hint: 'Open hiring records',
+            hint: 'Active recruitment records',
             icon: UserRoundCheck,
             to: '/candidates?status=active&page=0&limit=5',
             restricted: true,
         },
         {
-            label: 'Upcoming interviews',
+            label: 'Prepare interview schedule',
             value: formatAttentionCount(
                 needsAttention.upcomingInterviews,
                 needsAttention.isLoading,
             ),
-            hint: 'Active candidates scheduled ahead',
+            hint: 'Upcoming candidate meetings',
             icon: BriefcaseBusiness,
             to: '/interview',
             restricted: true,
         },
         {
-            label: 'Broken assets',
+            label: 'Resolve asset issues',
             value: formatAttentionCount(
                 needsAttention.brokenAssets,
                 needsAttention.isLoading,
             ),
-            hint: 'Need repair or return',
+            hint: 'Equipment needing follow-up',
             icon: PackageSearch,
             to: '/inventory?status=broken&page=0&limit=5',
             restricted: true,
         },
         {
-            label: 'Upcoming events',
+            label: 'Review upcoming events',
             value: String(upcomingEvents.length),
-            hint: 'Scheduled from today onward',
+            hint: 'HR activities from today onward',
             icon: CalendarClock,
             to: '/events?page=0&limit=6',
             restricted: false,
@@ -108,7 +108,7 @@ const DashboardContent: React.FC = () => {
                     title={`${greeter()}, ${userName}`}
                     description={
                         isAdmin
-                            ? 'Check attendance, leave, and upcoming activity before starting the day.'
+                            ? 'Review attendance, leave approvals, hiring work, and HR operations for today.'
                             : undefined
                     }
                     actions={
@@ -117,7 +117,7 @@ const DashboardContent: React.FC = () => {
                             onClick={() => navigate('/employees')}
                             className="inline-flex items-center gap-2 self-start rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-colors hover:border-slate-300 hover:bg-slate-50"
                         >
-                            Open Team Directory
+                            Open employee directory
                             <ArrowUpRight size={16} />
                         </button>
                     }
@@ -131,8 +131,8 @@ const DashboardContent: React.FC = () => {
                         />
                         <p>
                             Some dashboard metrics could not be loaded, so this
-                            view is showing the safest available fallback
-                            values.
+                            HR overview is showing the safest available
+                            fallback values.
                         </p>
                     </div>
                 )}
@@ -142,10 +142,11 @@ const DashboardContent: React.FC = () => {
                         <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                             <div>
                                 <h2 className="text-base font-semibold text-slate-900">
-                                    Needs attention
+                                    Today’s HR actions
                                 </h2>
                                 <p className="mt-1 text-sm font-medium text-slate-500">
-                                    Work that may need a follow-up today.
+                                    Operational items that may need a follow-up
+                                    before the day moves on.
                                 </p>
                             </div>
                         </div>
@@ -182,11 +183,11 @@ const DashboardContent: React.FC = () => {
                                 <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                                     <div>
                                         <h3 className="text-sm font-semibold text-slate-900">
-                                            Next interviews
+                                            Next scheduled interviews
                                         </h3>
                                         <p className="mt-1 text-xs font-medium text-slate-500">
-                                            Active candidates with scheduled
-                                            interview dates.
+                                            Candidate meetings HR should prepare
+                                            for next.
                                         </p>
                                     </div>
                                     <button
@@ -194,7 +195,7 @@ const DashboardContent: React.FC = () => {
                                         onClick={() => navigate('/interview')}
                                         className="inline-flex h-9 items-center justify-center rounded-md border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
                                     >
-                                        Open interviews
+                                        Review interviews
                                     </button>
                                 </div>
                                 <div className="grid gap-2 md:grid-cols-3">
@@ -271,7 +272,7 @@ const DashboardContent: React.FC = () => {
 
                     <div className="flex h-full flex-col rounded-lg border border-slate-200 bg-white p-6 xl:col-span-4">
                         <h3 className="mb-4 text-base font-semibold text-slate-900">
-                            Calendar
+                            HR calendar
                         </h3>
                         <div className="flex-1">
                             <Calendar />
@@ -284,11 +285,11 @@ const DashboardContent: React.FC = () => {
 
                     <div className="flex min-h-[500px] flex-col rounded-lg border border-slate-200 bg-white p-6 xl:col-span-4">
                         <h3 className="mb-4 text-base font-semibold text-slate-900">
-                            Status overview
+                            Attendance mix
                         </h3>
                         <p className="mb-6 text-sm font-medium leading-6 text-slate-500">
-                            Built from total employees, remote work, and active
-                            leave.
+                            Built from today’s attendance, remote work, and
+                            active leave records.
                         </p>
                         <div className="flex-1 flex items-center justify-center">
                             <PieChartComponent />
@@ -297,16 +298,16 @@ const DashboardContent: React.FC = () => {
 
                     <div className="rounded-lg border border-slate-200 bg-white p-6 xl:col-span-12">
                         <h3 className="mb-6 text-base font-semibold text-slate-900">
-                            Team Directory
+                            Employee directory
                         </h3>
                         {isUsersLoading ? (
                             <div className="flex min-h-[180px] items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50/70 px-6 text-center text-sm font-medium text-slate-400">
-                                Loading team directory...
+                                Loading employee directory...
                             </div>
                         ) : users.length === 0 ? (
                             <div className="flex min-h-[180px] items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50/70 px-6 text-center text-sm font-medium text-slate-400">
-                                No employees are available in the team directory
-                                yet.
+                                No employee profiles are available for this HR
+                                directory yet.
                             </div>
                         ) : (
                             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10">

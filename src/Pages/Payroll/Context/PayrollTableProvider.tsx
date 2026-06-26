@@ -1,10 +1,11 @@
 import React, { useCallback, useState } from 'react'
 import { PayrollContext, PayrollRow } from '../Interface/Payroll'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import AxiosInstance from '@/Helpers/Axios'
 import { useQuery } from '@tanstack/react-query'
 import { getMonthName } from '../utils/Utils'
 import { useUrlTableState } from '@/hooks/use-url-table-state'
+import { getReturnState } from '@/Helpers/navigation'
 import {
     hasSearchParamsChanged,
     upsertFilterParams,
@@ -31,6 +32,11 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
     const [netSalary, setNetSalary] = useState<number | undefined>(undefined)
     const [filters, setFilters] = useState<Record<string, string | boolean>>({})
     const [searchParams, setSearchParams] = useSearchParams()
+    const location = useLocation()
+    const returnState = React.useMemo(
+        () => getReturnState(location),
+        [location],
+    )
     const {
         searchValue: search,
         setSearchValue: setSearch,
@@ -49,19 +55,22 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const updateNumberFilter = useCallback(
         (key: 'month' | 'year', value: number | undefined) => {
-            setSearchParams((prev) => {
-                const nextParams = upsertFilterParams(
-                    prev,
-                    {
-                        [key]: value,
-                    },
-                    { resetPage: true },
-                )
+            setSearchParams(
+                (prev) => {
+                    const nextParams = upsertFilterParams(
+                        prev,
+                        {
+                            [key]: value,
+                        },
+                        { resetPage: true },
+                    )
 
-                return hasSearchParamsChanged(prev, nextParams)
-                    ? nextParams
-                    : prev
-            })
+                    return hasSearchParamsChanged(prev, nextParams)
+                        ? nextParams
+                        : prev
+                },
+                { replace: true },
+            )
         },
         [setSearchParams],
     )
@@ -210,7 +219,9 @@ export const PayrollProvider: React.FC<{ children: React.ReactNode }> = ({
         if (!params.row.originalId) {
             return
         }
-        navigate(`/payroll/user/${params.row.originalId}`)
+        navigate(`/payroll/user/${params.row.originalId}`, {
+            state: returnState,
+        })
     }
 
     const contextValue = {

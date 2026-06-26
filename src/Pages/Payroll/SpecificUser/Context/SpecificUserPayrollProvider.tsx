@@ -33,35 +33,50 @@ export const PayrollProviderSpecific: React.FC<{
     const [employeeName, setEmployeeName] = useState('')
 
     useEffect(() => {
-        setSearchParams((prev) => {
-            const nextParams = ensurePaginationParams(prev)
+        setSearchParams(
+            (prev) => {
+                const nextParams = ensurePaginationParams(prev)
 
-            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
-        })
+                return hasSearchParamsChanged(prev, nextParams)
+                    ? nextParams
+                    : prev
+            },
+            { replace: true },
+        )
     }, [setSearchParams])
 
     const setUrlFilter = (key: 'month' | 'year', value: number | undefined) => {
-        setSearchParams((prev) => {
-            const nextParams = upsertFilterParams(
-                prev,
-                { [key]: value },
-                { resetPage: true },
-            )
+        setSearchParams(
+            (prev) => {
+                const nextParams = upsertFilterParams(
+                    prev,
+                    { [key]: value },
+                    { resetPage: true },
+                )
 
-            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
-        })
+                return hasSearchParamsChanged(prev, nextParams)
+                    ? nextParams
+                    : prev
+            },
+            { replace: true },
+        )
     }
 
     const resetFilters = () => {
-        setSearchParams((prev) => {
-            const nextParams = upsertFilterParams(
-                prev,
-                { month: null, year: null },
-                { resetPage: true },
-            )
+        setSearchParams(
+            (prev) => {
+                const nextParams = upsertFilterParams(
+                    prev,
+                    { month: null, year: null },
+                    { resetPage: true },
+                )
 
-            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
-        })
+                return hasSearchParamsChanged(prev, nextParams)
+                    ? nextParams
+                    : prev
+            },
+            { replace: true },
+        )
     }
 
     const handlePaginationModelChange = (model: PaginationModel) => {

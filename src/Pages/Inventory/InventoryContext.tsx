@@ -8,6 +8,15 @@ import {
 } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
+type SearchParamUpdater =
+    | URLSearchParams
+    | ((prev: URLSearchParams) => URLSearchParams)
+
+type SearchParamSetter = (
+    nextInit: SearchParamUpdater,
+    navigateOptions?: { replace?: boolean },
+) => void
+
 interface AssetContextType {
     error: string | null
     setError: Dispatch<SetStateAction<string | null>>
@@ -18,7 +27,7 @@ interface AssetContextType {
     handleCloseViewAssetModalOpen: () => void
     handleOpenViewAssetModalOpen: () => void
     searchParams: URLSearchParams
-    setSearchParams: Dispatch<SetStateAction<URLSearchParams>>
+    setSearchParams: SearchParamSetter
 }
 
 const defaultContextValue: AssetContextType = {

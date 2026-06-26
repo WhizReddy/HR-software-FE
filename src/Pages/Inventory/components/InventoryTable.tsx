@@ -33,18 +33,23 @@ export const InventoryTable = () => {
     const typeFilter = searchParams.get('type') || 'all'
 
     const handleFilterChange = (key: string, value: string) => {
-        setSearchParams((prev) => {
-            const nextParams = upsertFilterParams(
-                prev,
-                {
-                    [key]: value === 'all' ? null : value,
-                    selectedInventoryItem: null,
-                },
-                { resetPage: true },
-            )
+        setSearchParams(
+            (prev) => {
+                const nextParams = upsertFilterParams(
+                    prev,
+                    {
+                        [key]: value === 'all' ? null : value,
+                        selectedInventoryItem: null,
+                    },
+                    { resetPage: true },
+                )
 
-            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
-        })
+                return hasSearchParamsChanged(prev, nextParams)
+                    ? nextParams
+                    : prev
+            },
+            { replace: true },
+        )
     }
 
     const resetFilters = () => {

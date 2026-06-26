@@ -13,7 +13,10 @@ type SearchParamUpdater =
     | URLSearchParams
     | ((prev: URLSearchParams) => URLSearchParams)
 
-type SearchParamSetter = (nextInit: SearchParamUpdater) => void
+type SearchParamSetter = (
+    nextInit: SearchParamUpdater,
+    navigateOptions?: { replace?: boolean },
+) => void
 
 const DEFAULT_PAGE_SIZE_OPTIONS = [5, 10, 20]
 
@@ -66,17 +69,22 @@ export const useUrlTableState = ({
             return
         }
 
-        setSearchParams((prev) => {
-            const nextParams = ensurePaginationParams(prev, {
-                pageKey,
-                limitKey,
-                defaultPage: String(defaultPage),
-                defaultLimit: String(defaultPageSize),
-                allowedLimits: pageSizeOptions,
-            })
+        setSearchParams(
+            (prev) => {
+                const nextParams = ensurePaginationParams(prev, {
+                    pageKey,
+                    limitKey,
+                    defaultPage: String(defaultPage),
+                    defaultLimit: String(defaultPageSize),
+                    allowedLimits: pageSizeOptions,
+                })
 
-            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
-        })
+                return hasSearchParamsChanged(prev, nextParams)
+                    ? nextParams
+                    : prev
+            },
+            { replace: true },
+        )
     }, [
         defaultPage,
         defaultPageSize,
@@ -105,24 +113,29 @@ export const useUrlTableState = ({
             return
         }
 
-        setSearchParams((prev) => {
-            const nextParams = upsertFilterParams(
-                prev,
-                {
-                    [searchKey]: normalizedSearch || null,
-                    ...stableAdditionalSearchUpdates,
-                },
-                {
-                    resetPage: resetPageOnSearch,
-                    pageKey,
-                    limitKey,
-                    defaultPage: String(defaultPage),
-                    defaultLimit: String(defaultPageSize),
-                },
-            )
+        setSearchParams(
+            (prev) => {
+                const nextParams = upsertFilterParams(
+                    prev,
+                    {
+                        [searchKey]: normalizedSearch || null,
+                        ...stableAdditionalSearchUpdates,
+                    },
+                    {
+                        resetPage: resetPageOnSearch,
+                        pageKey,
+                        limitKey,
+                        defaultPage: String(defaultPage),
+                        defaultLimit: String(defaultPageSize),
+                    },
+                )
 
-            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
-        })
+                return hasSearchParamsChanged(prev, nextParams)
+                    ? nextParams
+                    : prev
+            },
+            { replace: true },
+        )
     }, [
         appliedSearch,
         debouncedSearch,
@@ -140,24 +153,29 @@ export const useUrlTableState = ({
     const clearSearch = useCallback(() => {
         setSearchValue('')
 
-        setSearchParams((prev) => {
-            const nextParams = upsertFilterParams(
-                prev,
-                {
-                    [searchKey]: null,
-                    ...stableAdditionalSearchUpdates,
-                },
-                {
-                    resetPage: resetPageOnSearch,
-                    pageKey,
-                    limitKey,
-                    defaultPage: String(defaultPage),
-                    defaultLimit: String(defaultPageSize),
-                },
-            )
+        setSearchParams(
+            (prev) => {
+                const nextParams = upsertFilterParams(
+                    prev,
+                    {
+                        [searchKey]: null,
+                        ...stableAdditionalSearchUpdates,
+                    },
+                    {
+                        resetPage: resetPageOnSearch,
+                        pageKey,
+                        limitKey,
+                        defaultPage: String(defaultPage),
+                        defaultLimit: String(defaultPageSize),
+                    },
+                )
 
-            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
-        })
+                return hasSearchParamsChanged(prev, nextParams)
+                    ? nextParams
+                    : prev
+            },
+            { replace: true },
+        )
     }, [
         defaultPage,
         defaultPageSize,
@@ -173,27 +191,30 @@ export const useUrlTableState = ({
         (filterUpdates: Record<string, UrlParamValue> = {}) => {
             setSearchValue('')
 
-            setSearchParams((prev) => {
-                const nextParams = upsertFilterParams(
-                    prev,
-                    {
-                        [searchKey]: null,
-                        ...stableAdditionalSearchUpdates,
-                        ...filterUpdates,
-                    },
-                    {
-                        resetPage: true,
-                        pageKey,
-                        limitKey,
-                        defaultPage: String(defaultPage),
-                        defaultLimit: String(defaultPageSize),
-                    },
-                )
+            setSearchParams(
+                (prev) => {
+                    const nextParams = upsertFilterParams(
+                        prev,
+                        {
+                            [searchKey]: null,
+                            ...stableAdditionalSearchUpdates,
+                            ...filterUpdates,
+                        },
+                        {
+                            resetPage: true,
+                            pageKey,
+                            limitKey,
+                            defaultPage: String(defaultPage),
+                            defaultLimit: String(defaultPageSize),
+                        },
+                    )
 
-                return hasSearchParamsChanged(prev, nextParams)
-                    ? nextParams
-                    : prev
-            })
+                    return hasSearchParamsChanged(prev, nextParams)
+                        ? nextParams
+                        : prev
+                },
+                { replace: true },
+            )
         },
         [
             defaultPage,

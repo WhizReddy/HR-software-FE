@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import {
+    ArrowLeft,
     BriefcaseBusiness,
     CalendarClock,
     CheckCircle2,
@@ -9,6 +10,7 @@ import {
     UserRound,
     XCircle,
 } from 'lucide-react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import PageIntro from '@/Components/PageIntro/PageIntro'
 import { Card } from '@/Components/ui/card'
 import { Button } from '@/Components/ui/button'
@@ -16,6 +18,7 @@ import { ModalComponent } from '../../Components/Modal/Modal'
 import Input from '@/Components/Input/Index'
 import Toast from '@/Components/Toast/Toast'
 import { resolveApiAssetUrl } from '@/Helpers/Axios'
+import { getReturnTo } from '@/Helpers/navigation'
 import { useApplicantById } from './Hook'
 
 const formatPhase = (phase?: string) => {
@@ -35,6 +38,9 @@ const formatList = (items?: string[] | string) => {
 }
 
 export default function ViewCandidats() {
+    const navigate = useNavigate()
+    const location = useLocation()
+    const returnTo = getReturnTo(location.state, '/candidates')
     const {
         applicant,
         showModal,
@@ -83,7 +89,7 @@ export default function ViewCandidats() {
                 label: 'Full name',
                 value: applicant
                     ? `${applicant.firstName} ${applicant.lastName}`
-                    : 'Loading...',
+                    : 'Loading candidate profile',
             },
             {
                 label: 'Email',
@@ -169,22 +175,33 @@ export default function ViewCandidats() {
                 }
                 description="Review the applicant profile, CV, interview dates, and hiring notes."
                 actions={
-                    applicant && (
-                        <div className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-4 py-3 shadow-sm">
-                            <span
-                                className={`h-2.5 w-2.5 rounded-full ${
-                                    applicant.status === 'employed'
-                                        ? 'bg-emerald-500'
-                                        : applicant.status === 'rejected'
-                                          ? 'bg-rose-500'
-                                          : 'bg-slate-500'
-                                }`}
-                            />
-                            <span className="text-sm font-semibold capitalize text-slate-800">
-                                {applicant.status || 'active'}
-                            </span>
-                        </div>
-                    )
+                    <div className="flex flex-wrap items-center gap-2">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => navigate(returnTo)}
+                        >
+                            <ArrowLeft size={16} />
+                            Back to candidates
+                        </Button>
+                        {applicant && (
+                            <div className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-4 py-3 shadow-sm">
+                                <span
+                                    className={`h-2.5 w-2.5 rounded-full ${
+                                        applicant.status === 'employed'
+                                            ? 'bg-emerald-500'
+                                            : applicant.status === 'rejected'
+                                              ? 'bg-rose-500'
+                                              : 'bg-slate-500'
+                                    }`}
+                                />
+                                <span className="text-sm font-semibold capitalize text-slate-800">
+                                    {applicant.status || 'active'}
+                                </span>
+                            </div>
+                        )}
+                    </div>
                 }
             />
 

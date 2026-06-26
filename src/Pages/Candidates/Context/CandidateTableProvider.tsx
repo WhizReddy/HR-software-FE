@@ -1,11 +1,17 @@
 import React from 'react'
 import { CandidateContext, CandidateRow } from '../Interfaces/Candidate'
 import { RenderCellParams } from '@/types/table'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import {
+    Link,
+    useLocation,
+    useNavigate,
+    useSearchParams,
+} from 'react-router-dom'
 import { StatusBadge } from '@/Components/StatusBadge/StatusBadge'
 import AxiosInstance from '@/Helpers/Axios'
 import { useQuery } from '@tanstack/react-query'
 import { useUrlTableState } from '@/hooks/use-url-table-state'
+import { getReturnState } from '@/Helpers/navigation'
 import {
     hasSearchParamsChanged,
     upsertFilterParams,
@@ -41,6 +47,11 @@ export const CandidateProvider: React.FC<{ children: any }> = ({
     children,
 }) => {
     const [searchParams, setSearchParams] = useSearchParams()
+    const location = useLocation()
+    const returnState = React.useMemo(
+        () => getReturnState(location),
+        [location],
+    )
     const {
         searchValue: search,
         setSearchValue: setSearch,
@@ -60,19 +71,22 @@ export const CandidateProvider: React.FC<{ children: any }> = ({
 
     const setStatusFilter = React.useCallback(
         (status: string) => {
-            setSearchParams((prev) => {
-                const nextParams = upsertFilterParams(
-                    prev,
-                    {
-                        status: status === 'all' ? null : status,
-                    },
-                    { resetPage: true },
-                )
+            setSearchParams(
+                (prev) => {
+                    const nextParams = upsertFilterParams(
+                        prev,
+                        {
+                            status: status === 'all' ? null : status,
+                        },
+                        { resetPage: true },
+                    )
 
-                return hasSearchParamsChanged(prev, nextParams)
-                    ? nextParams
-                    : prev
-            })
+                    return hasSearchParamsChanged(prev, nextParams)
+                        ? nextParams
+                        : prev
+                },
+                { replace: true },
+            )
         },
         [setSearchParams],
     )
@@ -219,6 +233,7 @@ export const CandidateProvider: React.FC<{ children: any }> = ({
                 <Link
                     style={{ textDecoration: 'none', color: '#4C556B' }}
                     to={`/view/${params.row.originalId}`}
+                    state={returnState}
                     onClick={(e) => e.stopPropagation()}
                 >
                     View More
@@ -230,7 +245,7 @@ export const CandidateProvider: React.FC<{ children: any }> = ({
     const getRowId = (row: CandidateRow) => row.id
 
     const handleRowClick = (params: { row: CandidateRow }) => {
-        navigate(`/view/${params.row.originalId}`)
+        navigate(`/view/${params.row.originalId}`, { state: returnState })
     }
 
     const contextValue = {

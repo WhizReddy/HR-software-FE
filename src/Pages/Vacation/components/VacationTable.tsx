@@ -43,22 +43,27 @@ export const VacationTable = () => {
     const typeFilter = searchParams.get('requestType') || 'all'
 
     const handleFilterChange = (key: string, value: string) => {
-        setSearchParams((prev) => {
-            const nextParams = upsertFilterParams(
-                prev,
-                {
-                    [key]: value === 'all' ? null : value,
-                    selectedVacation: null,
-                },
-                {
-                    resetPage: true,
-                    pageKey: 'requestPage',
-                    limitKey: 'requestLimit',
-                },
-            )
+        setSearchParams(
+            (prev) => {
+                const nextParams = upsertFilterParams(
+                    prev,
+                    {
+                        [key]: value === 'all' ? null : value,
+                        selectedVacation: null,
+                    },
+                    {
+                        resetPage: true,
+                        pageKey: 'requestPage',
+                        limitKey: 'requestLimit',
+                    },
+                )
 
-            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
-        })
+                return hasSearchParamsChanged(prev, nextParams)
+                    ? nextParams
+                    : prev
+            },
+            { replace: true },
+        )
     }
 
     const resetFilters = () => {

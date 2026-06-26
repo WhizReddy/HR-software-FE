@@ -8,6 +8,15 @@ import {
 } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
+type SearchParamUpdater =
+    | URLSearchParams
+    | ((prev: URLSearchParams) => URLSearchParams)
+
+type SearchParamSetter = (
+    nextInit: SearchParamUpdater,
+    navigateOptions?: { replace?: boolean },
+) => void
+
 interface VacationContextType {
     errors: {
         createError: string | null
@@ -20,7 +29,7 @@ interface VacationContextType {
         }>
     >
     searchParams: URLSearchParams
-    setSearchParams: Dispatch<SetStateAction<URLSearchParams>>
+    setSearchParams: SearchParamSetter
     handleOpenViewVacationModalOpen: (id: string) => void
     handleCloseVacationModalOpen: () => void
     createVacationToggler: () => void

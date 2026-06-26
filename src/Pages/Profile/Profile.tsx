@@ -4,18 +4,38 @@ import ChangePass from './Components/ChangePass/ChangePass'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Components/ui/tabs'
 import { useAuth } from '@/features/auth/context/AuthProvider'
 import { isAdminRole, isSelfUser } from '@/features/auth/lib/access'
-import { useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Button } from '@/Components/ui/button'
+import { ArrowLeft } from 'lucide-react'
+import { getReturnTo } from '@/Helpers/navigation'
 
 export default function Profile() {
     const { currentUser, userRole } = useAuth()
     const { id } = useParams<{ id: string }>()
+    const navigate = useNavigate()
+    const location = useLocation()
 
     const canViewPayroll =
         isAdminRole(userRole) || isSelfUser(currentUser?._id, id)
     const canViewSecurity = isSelfUser(currentUser?._id, id)
+    const returnTo = getReturnTo(
+        location.state,
+        canViewSecurity ? '/dashboard' : '/employees',
+    )
 
     return (
         <main className="w-full flex-1">
+            <div className="mb-4">
+                <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate(returnTo)}
+                >
+                    <ArrowLeft size={16} />
+                    Back
+                </Button>
+            </div>
             <div className="w-full overflow-hidden rounded-lg border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
                 <Tabs
                     defaultValue="profile"

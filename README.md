@@ -50,6 +50,8 @@ VITE_API_URL=http://localhost:3000
 VITE_GOOGLE_MAPS_API_KEY=<your-google-maps-browser-key>
 ```
 
+`VITE_API_URL` is required for backend API calls. The frontend does not fall back to a deployed backend when it is missing.
+
 The map key is optional for basic app usage. Event map controls show a fallback state when the key is missing or loading fails.
 
 ## Quality Checks
@@ -100,4 +102,3 @@ vercel --prod
 - Backend is expected to run on Render free tier in the current deployment setup.
 - If the backend sleeps, the first request may take 30-60+ seconds while Render wakes it up.
 - Uploaded files and map features depend on the configured backend and optional Google Maps key.
-- The frontend still has a temporary hardcoded backend fallback for older deployments. Treat it as deprecated and remove it only after every environment has `VITE_API_URL` configured.

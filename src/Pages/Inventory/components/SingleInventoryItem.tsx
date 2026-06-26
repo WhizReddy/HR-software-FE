@@ -7,6 +7,7 @@ import style from '../style/singleInventoryItem.module.scss'
 import { TitleCaser } from '@/Helpers/TitleCaser'
 import { ItemHistory } from '../types'
 import dayjs from 'dayjs'
+import WorkspaceLoader from '@/Components/Loading/WorkspaceLoader'
 
 export const SingleInventoryItem = () => {
     const {
@@ -20,7 +21,7 @@ export const SingleInventoryItem = () => {
             {error ? (
                 <p>Error fetching asset</p>
             ) : isLoading ? (
-                <p>Loading...</p>
+                <WorkspaceLoader label="Loading asset details" />
             ) : (
                 <>
                     <div className="p-2">

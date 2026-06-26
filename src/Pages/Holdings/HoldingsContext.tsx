@@ -9,9 +9,18 @@ import {
 import { useSearchParams } from 'react-router-dom'
 import { Asset } from './TAsset'
 
+type SearchParamUpdater =
+    | URLSearchParams
+    | ((prev: URLSearchParams) => URLSearchParams)
+
+type SearchParamSetter = (
+    nextInit: SearchParamUpdater,
+    navigateOptions?: { replace?: boolean },
+) => void
+
 interface HoldingsContextType {
     searchParams: URLSearchParams
-    setSearchParams: Dispatch<SetStateAction<URLSearchParams>>
+    setSearchParams: SearchParamSetter
     toastConfigs: {
         message: string | null
         severity: 'success' | 'error'
@@ -114,13 +123,16 @@ const HoldingsProvider: FC<{ children: ReactNode }> = ({ children }) => {
             state: '',
             date: new Date().toISOString(),
         })
-        setSearchParams((prev) => {
-            const newParams = new URLSearchParams(prev)
-            newParams.delete('ownedItem')
-            newParams.delete('assignItem')
-            newParams.delete('selectedUser')
-            return newParams
-        })
+        setSearchParams(
+            (prev) => {
+                const newParams = new URLSearchParams(prev)
+                newParams.delete('ownedItem')
+                newParams.delete('assignItem')
+                newParams.delete('selectedUser')
+                return newParams
+            },
+            { replace: true },
+        )
     }
 
     return (

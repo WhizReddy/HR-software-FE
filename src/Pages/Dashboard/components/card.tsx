@@ -20,7 +20,7 @@ const CardInfo: React.FC<CardProps> = ({ title, content }) => {
                 </div>
                 <div className="z-10 flex flex-col">
                     <p className="mb-1 text-sm font-medium text-slate-500">
-                        {title}
+                        {cfg.label}
                     </p>
                     <p className="text-2xl font-semibold leading-none text-slate-950">
                         {content}

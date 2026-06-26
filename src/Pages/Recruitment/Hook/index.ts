@@ -5,6 +5,24 @@ import { useContext } from 'react'
 import { RecruitmentContext } from '../Context/RecruitmentContext'
 import { normalizePhoneNumber } from '../utils/phone'
 
+const getReadableSubmissionError = (payload: unknown) => {
+    const message =
+        payload && typeof payload === 'object' && 'message' in payload
+            ? (payload as { message?: unknown }).message
+            : undefined
+    const text = Array.isArray(message)
+        ? message.filter(Boolean).join(', ')
+        : typeof message === 'string'
+          ? message
+          : ''
+
+    if (text.toLowerCase().includes('invalid phone number')) {
+        return 'Enter a valid phone number with digits and an optional country code, for example +355 69 123 4567 or 069 123 4567.'
+    }
+
+    return text || null
+}
+
 export const useRecruitmentForm = () => {
     const { setError, setShowModal } = useContext(RecruitmentContext)
     const form = useForm<{
@@ -70,8 +88,12 @@ export const useRecruitmentForm = () => {
                 setError('Unexpected response while creating your applicant')
             } catch (err: unknown) {
                 if (err instanceof AxiosError) {
-                    if (err?.response?.data?.message) {
-                        setError(err?.response?.data?.message)
+                    const readableError = getReadableSubmissionError(
+                        err.response?.data,
+                    )
+
+                    if (readableError) {
+                        setError(readableError)
                         return
                     }
                     if (err.code === 'ERR_NETWORK') {

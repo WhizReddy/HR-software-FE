@@ -7,6 +7,7 @@ import { Button } from '@/Components/ui/button'
 import { HoldingsContext } from '../../HoldingsContext'
 import { ErrorText } from '@/Components/Error/ErrorTextForm'
 import { picklist } from 'valibot'
+import WorkspaceLoader from '@/Components/Loading/WorkspaceLoader'
 
 export const ReturnAssetModal = () => {
     const { searchParams, handleCloseOnModal: handleClose } =
@@ -20,9 +21,7 @@ export const ReturnAssetModal = () => {
         >
             <div className="p-6 max-w-md w-full mx-auto bg-white rounded-xl shadow-lg relative">
                 {itemGetter.isLoading ? (
-                    <div className="py-8 text-center text-slate-500">
-                        Loading...
-                    </div>
+                    <WorkspaceLoader label="Loading assigned asset" />
                 ) : itemGetter.isError ? (
                     <div className="py-8 text-center text-red-500">
                         Error: {itemGetter.error.message}

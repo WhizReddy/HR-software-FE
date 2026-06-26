@@ -3,26 +3,29 @@ const configuredApiUrl = (
     import.meta.env.VITE_API_URL as string | undefined
 )?.replace(/\/+$/, '')
 
-export const API_URL =
-    configuredApiUrl || 'https://hr-software-backend.onrender.com'
+const isTestMode = import.meta.env.MODE === 'test'
 
-if (import.meta.env.DEV && !configuredApiUrl) {
-    console.warn(
-        'VITE_API_URL is not set. Using the temporary backend fallback; configure VITE_API_URL before removing the fallback.',
-    )
+export const API_URL = configuredApiUrl || (isTestMode ? 'http://localhost:3000' : '')
+
+export const MISSING_API_URL_MESSAGE =
+    'VITE_API_URL is not set. Configure it in your environment before using backend features.'
+
+if (import.meta.env.DEV && !isTestMode && !configuredApiUrl) {
+    console.error(MISSING_API_URL_MESSAGE)
 }
 
 export const PublicAxiosInstance = axios.create({
-    baseURL: API_URL,
+    baseURL: API_URL || undefined,
 })
 
 export const resolveApiAssetUrl = (path?: string | null) => {
     if (!path) return ''
+    if (!API_URL) return path
     return path.startsWith('http') ? path : `${API_URL}${path}`
 }
 
 const AxiosInstance = axios.create({
-    baseURL: API_URL,
+    baseURL: API_URL || undefined,
 })
 
 AxiosInstance.interceptors.request.use(

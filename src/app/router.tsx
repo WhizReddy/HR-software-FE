@@ -4,6 +4,7 @@ import { ADMIN_ROLES } from '@/features/auth/lib/access'
 import PrivateRoute from '@/features/auth/routing/PrivateRoute'
 import RoleRoute from '@/features/auth/routing/RoleRoute'
 import { ChunkLoadBoundary } from '@/Components/Error/ChunkLoadBoundary'
+import WorkspaceLoader from '@/Components/Loading/WorkspaceLoader'
 
 const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'))
 const ResetPasswordPage = lazy(
@@ -33,15 +34,18 @@ const EmailConfirmation = lazy(
 )
 const NotFound = lazy(() => import('@/Pages/NotFound/NotFound'))
 
-const RouteLoader = () => (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 text-sm font-medium text-slate-500">
-        Loading...
-    </div>
-)
-
-const withSuspense = (element: ReactNode) => (
+const withSuspense = (element: ReactNode, loadingLabel?: string) => (
     <ChunkLoadBoundary>
-        <Suspense fallback={<RouteLoader />}>{element}</Suspense>
+        <Suspense
+            fallback={
+                <WorkspaceLoader
+                    fullScreen
+                    label={loadingLabel || 'Loading workspace'}
+                />
+            }
+        >
+            {element}
+        </Suspense>
     </ChunkLoadBoundary>
 )
 
@@ -52,7 +56,7 @@ const router = createBrowserRouter([
     },
     {
         path: '/recruitment',
-        element: withSuspense(<Recruitment />),
+        element: withSuspense(<Recruitment />, 'Loading hiring pipeline'),
     },
     {
         path: '/applicant/confirm',
@@ -75,11 +79,17 @@ const router = createBrowserRouter([
         children: [
             {
                 path: '/employees',
-                element: withSuspense(<Employees />),
+                element: withSuspense(
+                    <Employees />,
+                    'Loading employee directory',
+                ),
             },
             {
                 path: '/dashboard',
-                element: withSuspense(<Dashboard />),
+                element: withSuspense(
+                    <Dashboard />,
+                    'Preparing today’s HR overview',
+                ),
                 index: false,
             },
             {
@@ -90,19 +100,22 @@ const router = createBrowserRouter([
                 path: '/view/:id',
                 element: (
                     <RoleRoute allowedRoles={[...ADMIN_ROLES]}>
-                        {withSuspense(<ViewCandidats />)}
+                        {withSuspense(
+                            <ViewCandidats />,
+                            'Loading hiring pipeline',
+                        )}
                     </RoleRoute>
                 ),
             },
             {
                 path: '/holdings',
-                element: withSuspense(<Holdings />),
+                element: withSuspense(<Holdings />, 'Loading asset holdings'),
             },
             {
                 path: '/vacation',
                 element: (
                     <RoleRoute allowedRoles={[...ADMIN_ROLES]}>
-                        {withSuspense(<Vacation />)}
+                        {withSuspense(<Vacation />, 'Checking leave requests')}
                     </RoleRoute>
                 ),
             },
@@ -113,7 +126,10 @@ const router = createBrowserRouter([
                         allowedRoles={[...ADMIN_ROLES]}
                         allowSelfParam="id"
                     >
-                        {withSuspense(<UserVacations />)}
+                        {withSuspense(
+                            <UserVacations />,
+                            'Checking leave requests',
+                        )}
                     </RoleRoute>
                 ),
             },
@@ -124,7 +140,10 @@ const router = createBrowserRouter([
                         allowedRoles={[...ADMIN_ROLES]}
                         allowSelfParam="id"
                     >
-                        {withSuspense(<SpecificUserPayroll />)}
+                        {withSuspense(
+                            <SpecificUserPayroll />,
+                            'Loading payroll records',
+                        )}
                     </RoleRoute>
                 ),
             },
@@ -132,7 +151,7 @@ const router = createBrowserRouter([
                 path: '/payroll',
                 element: (
                     <RoleRoute allowedRoles={[...ADMIN_ROLES]}>
-                        {withSuspense(<Payroll />)}
+                        {withSuspense(<Payroll />, 'Loading payroll records')}
                     </RoleRoute>
                 ),
             },
@@ -140,19 +159,25 @@ const router = createBrowserRouter([
                 path: '/candidates',
                 element: (
                     <RoleRoute allowedRoles={[...ADMIN_ROLES]}>
-                        {withSuspense(<Candidates />)}
+                        {withSuspense(
+                            <Candidates />,
+                            'Loading hiring pipeline',
+                        )}
                     </RoleRoute>
                 ),
             },
             {
                 path: '/events',
-                element: withSuspense(<Events />),
+                element: withSuspense(<Events />, 'Reviewing HR events'),
             },
             {
                 path: '/interview',
                 element: (
                     <RoleRoute allowedRoles={[...ADMIN_ROLES]}>
-                        {withSuspense(<Interview />)}
+                        {withSuspense(
+                            <Interview />,
+                            'Loading hiring pipeline',
+                        )}
                     </RoleRoute>
                 ),
             },
@@ -160,7 +185,10 @@ const router = createBrowserRouter([
                 path: '/career-posts',
                 element: (
                     <RoleRoute allowedRoles={[...ADMIN_ROLES]}>
-                        {withSuspense(<CareerPosts />)}
+                        {withSuspense(
+                            <CareerPosts />,
+                            'Loading hiring pipeline',
+                        )}
                     </RoleRoute>
                 ),
             },
@@ -172,7 +200,7 @@ const router = createBrowserRouter([
                 path: '/inventory',
                 element: (
                     <RoleRoute allowedRoles={[...ADMIN_ROLES]}>
-                        {withSuspense(<Inventory />)}
+                        {withSuspense(<Inventory />, 'Loading asset inventory')}
                     </RoleRoute>
                 ),
             },

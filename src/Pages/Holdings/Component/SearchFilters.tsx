@@ -20,20 +20,25 @@ export const HoldingsSearchFilter = () => {
     })
 
     const handleChange = (value: string) => {
-        setSearchParams((prev) => {
-            const nextParams = upsertFilterParams(
-                prev,
-                {
-                    users: value === 'all' ? null : value,
-                    selectedUser: null,
-                    assignItem: null,
-                    ownedItem: null,
-                },
-                { resetPage: true },
-            )
+        setSearchParams(
+            (prev) => {
+                const nextParams = upsertFilterParams(
+                    prev,
+                    {
+                        users: value === 'all' ? null : value,
+                        selectedUser: null,
+                        assignItem: null,
+                        ownedItem: null,
+                    },
+                    { resetPage: true },
+                )
 
-            return hasSearchParamsChanged(prev, nextParams) ? nextParams : prev
-        })
+                return hasSearchParamsChanged(prev, nextParams)
+                    ? nextParams
+                    : prev
+            },
+            { replace: true },
+        )
     }
 
     const userFilterChoices = [

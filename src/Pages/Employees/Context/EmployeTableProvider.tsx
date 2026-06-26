@@ -1,6 +1,11 @@
 import React from 'react'
 import { RenderCellParams } from '@/types/table'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import {
+    Link,
+    useLocation,
+    useNavigate,
+    useSearchParams,
+} from 'react-router-dom'
 import {
     EmployeeContext,
     EmployeeRow,
@@ -9,6 +14,7 @@ import {
 import AxiosInstance from '@/Helpers/Axios'
 import { useQuery } from '@tanstack/react-query'
 import { useUrlTableState } from '@/hooks/use-url-table-state'
+import { getReturnState } from '@/Helpers/navigation'
 import {
     hasSearchParamsChanged,
     upsertFilterParams,
@@ -26,6 +32,11 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
     const [searchParams, setSearchParams] = useSearchParams()
+    const location = useLocation()
+    const returnState = React.useMemo(
+        () => getReturnState(location),
+        [location],
+    )
     const {
         searchValue: search,
         setSearchValue: setSearch,
@@ -43,19 +54,22 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const setRoleFilter = React.useCallback(
         (role: string) => {
-            setSearchParams((prev) => {
-                const nextParams = upsertFilterParams(
-                    prev,
-                    {
-                        role: role === 'all' ? null : role,
-                    },
-                    { resetPage: true },
-                )
+            setSearchParams(
+                (prev) => {
+                    const nextParams = upsertFilterParams(
+                        prev,
+                        {
+                            role: role === 'all' ? null : role,
+                        },
+                        { resetPage: true },
+                    )
 
-                return hasSearchParamsChanged(prev, nextParams)
-                    ? nextParams
-                    : prev
-            })
+                    return hasSearchParamsChanged(prev, nextParams)
+                        ? nextParams
+                        : prev
+                },
+                { replace: true },
+            )
         },
         [setSearchParams],
     )
@@ -171,6 +185,7 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
                 <Link
                     style={{ textDecoration: 'none', color: '#4C556B' }}
                     to={`/profile/${params.row.originalId}`}
+                    state={returnState}
                 >
                     View More
                 </Link>
@@ -180,7 +195,7 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({
     const getRowId = (row: EmployeeRow) => row.id
 
     const handleRowClick = (params: { row: EmployeeRow }) => {
-        navigate(`/profile/${params.row.originalId}`)
+        navigate(`/profile/${params.row.originalId}`, { state: returnState })
     }
 
     const contextValue = {

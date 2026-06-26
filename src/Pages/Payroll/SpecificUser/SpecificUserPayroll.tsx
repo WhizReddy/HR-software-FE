@@ -4,8 +4,15 @@ import { PayrollProviderSpecific } from './Context/SpecificUserPayrollProvider'
 import style from '../styles/Payroll.module.css'
 import { usePayrollContextSpecific } from './Context/SpecificUserPayrollContext'
 import { EventsProvider } from '@/Pages/Events/Context/EventsContext'
+import { Button } from '@/Components/ui/button'
+import { ArrowLeft } from 'lucide-react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { getReturnTo } from '@/Helpers/navigation'
 
 function SpecificUserPayrollContent() {
+    const navigate = useNavigate()
+    const location = useLocation()
+    const returnTo = getReturnTo(location.state, '/payroll')
     const {
         rows,
         columns,
@@ -56,7 +63,18 @@ function SpecificUserPayrollContent() {
                             Salary history for this employee.
                         </p>
                     </div>
-                    <div className={style.panelMeta}>History view</div>
+                    <div className="flex flex-wrap items-center gap-2">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => navigate(returnTo)}
+                        >
+                            <ArrowLeft size={16} />
+                            Back to payroll
+                        </Button>
+                        <div className={style.panelMeta}>History view</div>
+                    </div>
                 </div>
             </section>
 

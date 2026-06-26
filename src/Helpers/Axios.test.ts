@@ -1,6 +1,6 @@
 import type { AxiosAdapter } from 'axios'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import AxiosInstance from './Axios'
+import AxiosInstance, { API_URL, resolveApiAssetUrl } from './Axios'
 
 const originalAdapter = AxiosInstance.defaults.adapter
 
@@ -41,5 +41,13 @@ describe('Axios auth handling', () => {
 
         expect(logoutListener).not.toHaveBeenCalled()
         window.removeEventListener('auth:logout', logoutListener)
+    })
+
+    it('does not use the deployed backend as a missing-env fallback in tests', () => {
+        expect(API_URL).toBe('http://localhost:3000')
+        expect(API_URL).not.toContain('onrender.com')
+        expect(resolveApiAssetUrl('/uploads/cv.pdf')).toBe(
+            'http://localhost:3000/uploads/cv.pdf',
+        )
     })
 })
