@@ -50,6 +50,8 @@ export default function ViewCandidats() {
         showConfirmationModal,
         firstInterviewDate,
         setFirstInterviewDate,
+        interviewNotesDraft,
+        setInterviewNotesDraft,
         customMessage,
         setCustomMessage,
         handleSend,
@@ -153,6 +155,10 @@ export default function ViewCandidats() {
     const canSchedulePhaseTwo =
         applicant?.currentPhase === 'first_interview' &&
         !applicant?.secondInterviewDate
+    const canReschedulePhaseOne = Boolean(
+        applicant?.currentPhase === 'first_interview' &&
+            applicant?.firstInterviewDate,
+    )
     const canReschedulePhaseTwo = Boolean(
         applicant?.secondInterviewDate ||
             applicant?.currentPhase === 'second_interview',
@@ -168,6 +174,16 @@ export default function ViewCandidats() {
     const cvUrl = applicant?.cvAttachment
         ? resolveApiAssetUrl(applicant.cvAttachment)
         : ''
+    const isReschedulingFirstInterview =
+        interviewStep === 'first' && Boolean(applicant?.firstInterviewDate)
+    const isReschedulingSecondInterview =
+        interviewStep === 'second' && Boolean(applicant?.secondInterviewDate)
+    const scheduleButtonClass =
+        'w-full justify-start border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-950'
+    const positiveButtonClass =
+        'w-full justify-start border-emerald-200 bg-white text-emerald-700 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-800'
+    const dangerButtonClass =
+        'w-full justify-start border-rose-200 bg-white text-rose-700 hover:border-rose-300 hover:bg-rose-50 hover:text-rose-800'
 
     return (
         <main className="mx-auto w-full max-w-full space-y-6">
@@ -378,25 +394,42 @@ export default function ViewCandidats() {
                                 {canSchedulePhaseOne && (
                                     <Button
                                         type="button"
+                                        variant="outline"
                                         onClick={() =>
                                             handleOpenModal('active', 'first')
                                         }
                                         disabled={isActionPending}
-                                        className="w-full justify-start"
+                                        className={scheduleButtonClass}
                                     >
                                         <CalendarClock size={16} />
                                         Schedule Phase 1 Interview
                                     </Button>
                                 )}
 
+                                {canReschedulePhaseOne && (
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={() =>
+                                            handleOpenModal('active', 'first')
+                                        }
+                                        disabled={isActionPending}
+                                        className={scheduleButtonClass}
+                                    >
+                                        <CalendarClock size={16} />
+                                        Reschedule Phase 1 Interview
+                                    </Button>
+                                )}
+
                                 {canSchedulePhaseTwo && (
                                     <Button
                                         type="button"
+                                        variant="outline"
                                         onClick={() =>
                                             handleOpenModal('active', 'second')
                                         }
                                         disabled={isActionPending}
-                                        className="w-full justify-start"
+                                        className={scheduleButtonClass}
                                     >
                                         <CalendarClock size={16} />
                                         Schedule Phase 2 Interview
@@ -411,7 +444,7 @@ export default function ViewCandidats() {
                                             handleOpenModal('active', 'second')
                                         }
                                         disabled={isActionPending}
-                                        className="w-full justify-start"
+                                        className={scheduleButtonClass}
                                     >
                                         <CalendarClock size={16} />
                                         Reschedule Phase 2 Interview
@@ -421,12 +454,12 @@ export default function ViewCandidats() {
                                 {canEmploy && (
                                     <Button
                                         type="button"
-                                        variant="success"
+                                        variant="outline"
                                         onClick={() =>
                                             handleOpenModal('employ')
                                         }
                                         disabled={isActionPending}
-                                        className="w-full justify-start"
+                                        className={positiveButtonClass}
                                     >
                                         <CheckCircle2 size={16} />
                                         Employ Candidate
@@ -435,10 +468,10 @@ export default function ViewCandidats() {
 
                                 <Button
                                     type="button"
-                                    variant="destructive"
+                                    variant="outline"
                                     onClick={() => handleOpenModal('reject')}
                                     disabled={isActionPending}
-                                    className="w-full justify-start"
+                                    className={dangerButtonClass}
                                 >
                                     <XCircle size={16} />
                                     Reject Candidate
@@ -466,9 +499,10 @@ export default function ViewCandidats() {
                             </h2>
                             <p className="mt-2 text-sm leading-6 text-slate-600">
                                 {modalAction === 'active'
-                                    ? interviewStep === 'second' &&
-                                      applicant?.secondInterviewDate
+                                    ? isReschedulingSecondInterview
                                         ? 'Reschedule the second interview for this candidate?'
+                                        : isReschedulingFirstInterview
+                                          ? 'Reschedule the first interview for this candidate?'
                                         : 'Schedule the next interview step for this candidate?'
                                     : modalAction === 'reject'
                                       ? 'Reject this candidate from the hiring process?'
@@ -523,6 +557,19 @@ export default function ViewCandidats() {
                                 interviewStep === 'second'
                                     ? setSecondInterviewDate(event.target.value)
                                     : setFirstInterviewDate(event.target.value)
+                            }
+                        />
+
+                        <Input
+                            IsUsername
+                            type="textarea"
+                            name="interviewNotes"
+                            label="Interview Notes"
+                            multiline
+                            rows={3}
+                            value={interviewNotesDraft}
+                            onChange={(event: any) =>
+                                setInterviewNotesDraft(event.target.value)
                             }
                         />
 

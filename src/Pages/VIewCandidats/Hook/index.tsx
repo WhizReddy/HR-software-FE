@@ -28,6 +28,7 @@ export const useApplicantById = () => {
     const [showConfirmationModal, setShowConfirmationModal] = useState(false)
     const [firstInterviewDate, setFirstInterviewDate] = useState('')
     const [secondInterviewDate, setSecondInterviewDate] = useState('')
+    const [interviewNotesDraft, setInterviewNotesDraft] = useState('')
     const [customMessage, setCustomMessage] = useState('')
     const [customSubject, setCustomSubject] = useState('')
     const [toastOpen, setToastOpen] = useState(false)
@@ -144,6 +145,7 @@ export const useApplicantById = () => {
     ) => {
         if (action === 'active') {
             setInterviewStep(nextInterviewStep)
+            setInterviewNotesDraft(applicant?.notes || '')
 
             if (nextInterviewStep === 'first') {
                 setFirstInterviewDate(
@@ -169,6 +171,7 @@ export const useApplicantById = () => {
             const payload: any = {
                 customMessage: customMessage || undefined,
                 customSubject: customSubject || undefined,
+                notes: interviewNotesDraft.trim(),
             }
 
             if (interviewStep === 'first') {
@@ -227,6 +230,8 @@ export const useApplicantById = () => {
         setFirstInterviewDate,
         secondInterviewDate,
         setSecondInterviewDate,
+        interviewNotesDraft,
+        setInterviewNotesDraft,
         customMessage,
         setCustomMessage,
         handleSend,
