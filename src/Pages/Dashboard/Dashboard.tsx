@@ -150,9 +150,9 @@ const DashboardContent: React.FC = () => {
                     </div>
                 )}
 
-                <section className="grid items-start gap-3 xl:grid-cols-[minmax(0,1fr)_340px]">
-                    <div className="rounded-lg border border-slate-200 bg-white p-4">
-                        <div className="mb-3 flex items-center justify-between gap-3">
+                <section className="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_340px]">
+                    <div className="space-y-3">
+                        <div className="flex items-center justify-between gap-3 px-1">
                             <div>
                                 <h2 className="text-base font-semibold text-slate-900">
                                     Team today
@@ -220,8 +220,8 @@ const DashboardContent: React.FC = () => {
                     )}
                 </section>
 
-                <section className="grid items-start gap-3 xl:grid-cols-[minmax(0,1.5fr)_minmax(320px,0.7fr)]">
-                    <div className="grid gap-3">
+                <section className="grid items-start gap-4 xl:grid-cols-[minmax(0,1.5fr)_minmax(320px,0.7fr)]">
+                    <div className="grid gap-4">
                         <div className="flex h-full flex-col rounded-lg border border-slate-200 bg-white p-4">
                             <h3 className="mb-3 text-base font-semibold text-slate-900">
                                 HR calendar
@@ -279,7 +279,7 @@ const DashboardContent: React.FC = () => {
                         )}
                     </div>
 
-                    <div className="grid gap-3">
+                    <div className="grid gap-4">
                         <div className="rounded-lg border border-slate-200 bg-white p-4">
                             <InfoSection />
                         </div>

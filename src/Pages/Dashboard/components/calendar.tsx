@@ -190,63 +190,73 @@ export default function Calendar() {
                     )
                 })}
             </div>
-            <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50/70 p-3 text-left">
-                <div className="mb-3 flex items-center justify-between gap-3">
-                    <div>
-                        <p className="text-sm font-semibold text-slate-900">
-                            {selectedDate.format('DD MMM YYYY')}
-                        </p>
-                        <p className="mt-0.5 text-xs font-medium text-slate-500">
-                            {selectedDayItems.length} calendar item
-                            {selectedDayItems.length === 1 ? '' : 's'}
-                        </p>
+            <div className="mt-4 grid gap-3 lg:grid-cols-[minmax(0,1fr)_220px]">
+                <div className="rounded-lg border border-slate-200 bg-slate-50/70 p-3 text-left">
+                    <div className="mb-3 flex items-center justify-between gap-3">
+                        <div>
+                            <p className="text-sm font-semibold text-slate-900">
+                                {selectedDate.format('DD MMM YYYY')}
+                            </p>
+                            <p className="mt-0.5 text-xs font-medium text-slate-500">
+                                {selectedDayItems.length} calendar item
+                                {selectedDayItems.length === 1 ? '' : 's'}
+                            </p>
+                        </div>
                     </div>
+                    {selectedDayItems.length > 0 ? (
+                        <ul className="space-y-2">
+                            {selectedDayItems.map((item) => (
+                                <li
+                                    key={item.id}
+                                    className="flex items-start gap-2 rounded-md bg-white px-3 py-2 text-sm text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)]"
+                                >
+                                    <span
+                                        className={`mt-1.5 h-2 w-2 flex-shrink-0 rounded-full ${markerStyles[item.kind]}`}
+                                    />
+                                    <div className="min-w-0">
+                                        <p className="font-semibold text-slate-900">
+                                            {item.title}
+                                        </p>
+                                        <p className="mt-0.5 text-xs font-medium text-slate-500">
+                                            {markerLabels[item.kind]}
+                                        </p>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p className="rounded-md bg-white px-3 py-2 text-sm font-medium text-slate-500 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+                            No calendar items for this day.
+                        </p>
+                    )}
                 </div>
-                {selectedDayItems.length > 0 ? (
-                    <ul className="space-y-2">
-                        {selectedDayItems.map((item) => (
-                            <li
-                                key={item.id}
-                                className="flex items-start gap-2 rounded-md bg-white px-3 py-2 text-sm text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)]"
+                <div className="rounded-lg border border-slate-200 bg-slate-50/70 p-3">
+                    <p className="mb-2 text-xs font-semibold uppercase text-slate-500">
+                        Month summary
+                    </p>
+                    <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs font-semibold text-slate-500 lg:flex-col lg:gap-2">
+                        {Object.entries(markerLabels).map(([kind, label]) => (
+                            <span
+                                key={kind}
+                                className="inline-flex items-center gap-1.5"
                             >
                                 <span
-                                    className={`mt-1.5 h-2 w-2 flex-shrink-0 rounded-full ${markerStyles[item.kind]}`}
+                                    className={`h-2 w-2 rounded-full ${
+                                        markerStyles[
+                                            kind as DashboardCalendarItem['kind']
+                                        ]
+                                    }`}
                                 />
-                                <div className="min-w-0">
-                                    <p className="font-semibold text-slate-900">
-                                        {item.title}
-                                    </p>
-                                    <p className="mt-0.5 text-xs font-medium text-slate-500">
-                                        {markerLabels[item.kind]}
-                                    </p>
-                                </div>
-                            </li>
+                                {label}:{' '}
+                                {
+                                    monthCounts[
+                                        kind as DashboardCalendarItem['kind']
+                                    ]
+                                }
+                            </span>
                         ))}
-                    </ul>
-                ) : (
-                    <p className="rounded-md bg-white px-3 py-2 text-sm font-medium text-slate-500 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-                        No calendar items for this day.
-                    </p>
-                )}
-            </div>
-            <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-xs font-semibold text-slate-500">
-                {Object.entries(markerLabels).map(([kind, label]) => (
-                    <span key={kind} className="inline-flex items-center gap-1.5">
-                        <span
-                            className={`h-2 w-2 rounded-full ${
-                                markerStyles[
-                                    kind as DashboardCalendarItem['kind']
-                                ]
-                            }`}
-                        />
-                        {label}:{' '}
-                        {
-                            monthCounts[
-                                kind as DashboardCalendarItem['kind']
-                            ]
-                        }
-                    </span>
-                ))}
+                    </div>
+                </div>
             </div>
         </div>
     )
