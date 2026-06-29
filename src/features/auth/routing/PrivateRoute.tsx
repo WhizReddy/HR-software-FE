@@ -17,15 +17,28 @@ const PrivateRoute = () => {
         const previousBodyOverflow = document.body.style.overflow
         const previousHtmlOverflow = document.documentElement.style.overflow
         const previousBodyOverscroll = document.body.style.overscrollBehavior
+        const previousHtmlOverscroll =
+            document.documentElement.style.overscrollBehavior
+        const previousBodyHeight = document.body.style.height
+        const previousHtmlHeight = document.documentElement.style.height
 
+        document.documentElement.classList.add('private-workspace-lock')
         document.body.style.overflow = 'hidden'
         document.documentElement.style.overflow = 'hidden'
         document.body.style.overscrollBehavior = 'none'
+        document.documentElement.style.overscrollBehavior = 'none'
+        document.body.style.height = '100dvh'
+        document.documentElement.style.height = '100dvh'
 
         return () => {
+            document.documentElement.classList.remove('private-workspace-lock')
             document.body.style.overflow = previousBodyOverflow
             document.documentElement.style.overflow = previousHtmlOverflow
             document.body.style.overscrollBehavior = previousBodyOverscroll
+            document.documentElement.style.overscrollBehavior =
+                previousHtmlOverscroll
+            document.body.style.height = previousBodyHeight
+            document.documentElement.style.height = previousHtmlHeight
         }
     }, [])
 
@@ -44,13 +57,13 @@ const PrivateRoute = () => {
     return (
         <SidebarProvider
             defaultOpen
-            className="h-dvh min-h-0 overflow-hidden"
+            className="h-dvh max-h-dvh min-h-0 overflow-hidden"
         >
             <div className="relative flex h-dvh w-full overflow-hidden bg-slate-50">
                 <SideBar />
                 <SidebarInset className="flex h-dvh min-w-0 flex-col overflow-hidden bg-transparent">
                     <Header />
-                    <main className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+                    <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-contain">
                         <div
                             className={`mx-auto w-full ${contentMaxWidth} px-4 py-5 sm:px-6 lg:px-8`}
                         >
@@ -59,7 +72,7 @@ const PrivateRoute = () => {
                             </div>
                             <Outlet />
                         </div>
-                    </main>
+                    </div>
                 </SidebarInset>
             </div>
         </SidebarProvider>

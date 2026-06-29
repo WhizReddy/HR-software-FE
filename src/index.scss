@@ -115,6 +115,15 @@ body {
     min-height: 100vh;
 }
 
+html.private-workspace-lock,
+html.private-workspace-lock body,
+html.private-workspace-lock #root {
+    height: 100dvh;
+    min-height: 100dvh;
+    overflow: hidden;
+    overscroll-behavior: none;
+}
+
 h1,
 h2,
 h3,

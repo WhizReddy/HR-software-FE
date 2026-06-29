@@ -65,7 +65,11 @@ describe('PrivateRoute', () => {
         cleanup()
         document.body.style.overflow = ''
         document.body.style.overscrollBehavior = ''
+        document.body.style.height = ''
         document.documentElement.style.overflow = ''
+        document.documentElement.style.overscrollBehavior = ''
+        document.documentElement.style.height = ''
+        document.documentElement.classList.remove('private-workspace-lock')
     })
 
     it('redirects logged-out users to the login route', async () => {
@@ -122,6 +126,12 @@ describe('PrivateRoute', () => {
         expect(screen.getByText('Protected dashboard')).toBeTruthy()
         expect(document.body.style.overflow).toBe('hidden')
         expect(document.documentElement.style.overflow).toBe('hidden')
+        expect(document.body.style.height).toBe('100dvh')
+        expect(
+            document.documentElement.classList.contains(
+                'private-workspace-lock',
+            ),
+        ).toBe(true)
         expect(screen.getByTestId('sidebar-provider').className).toContain(
             'overflow-hidden',
         )
