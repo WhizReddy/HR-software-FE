@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Navigate, Outlet } from 'react-router-dom'
+import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { RingLoader } from 'react-spinners'
 import { BreadcrumbComponent } from '@/Components/BreadCrumbs/BreadCrumbs'
 import Header from '@/Components/Header/header'
@@ -9,6 +9,9 @@ import { useAuth } from '../context/AuthProvider'
 
 const PrivateRoute = () => {
     const { isAuthenticated, isInitializing } = useAuth()
+    const { pathname } = useLocation()
+    const contentMaxWidth =
+        pathname === '/dashboard' ? 'max-w-[1760px]' : 'max-w-[1400px]'
 
     useEffect(() => {
         const previousBodyOverflow = document.body.style.overflow
@@ -48,7 +51,9 @@ const PrivateRoute = () => {
                 <SidebarInset className="flex h-dvh min-w-0 flex-col overflow-hidden bg-transparent">
                     <Header />
                     <main className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-                        <div className="mx-auto w-full max-w-[1400px] px-4 py-5 sm:px-6 lg:px-8">
+                        <div
+                            className={`mx-auto w-full ${contentMaxWidth} px-4 py-5 sm:px-6 lg:px-8`}
+                        >
                             <div>
                                 <BreadcrumbComponent />
                             </div>
