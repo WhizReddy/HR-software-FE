@@ -119,7 +119,7 @@ const DashboardContent: React.FC = () => {
 
     return (
         <div className="relative overflow-x-hidden">
-            <div className="relative z-10 mx-auto w-full max-w-full space-y-4">
+            <div className="relative z-10 mx-auto w-full max-w-full space-y-3">
                 <PageIntro
                     eyebrow={isAdmin ? 'People operations' : undefined}
                     title="Dashboard"
@@ -150,7 +150,7 @@ const DashboardContent: React.FC = () => {
                     </div>
                 )}
 
-                <section className="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_340px]">
+                <section className="grid items-start gap-3 xl:grid-cols-[minmax(0,1fr)_340px]">
                     <div className="rounded-lg border border-slate-200 bg-white p-4">
                         <div className="mb-3 flex items-center justify-between gap-3">
                             <div>
@@ -188,7 +188,7 @@ const DashboardContent: React.FC = () => {
                                     </p>
                                 </div>
                             </div>
-                            <div className="space-y-2">
+                            <div className="space-y-1.5">
                                 {attentionItems.map((item) => {
                                     const Icon = item.icon
                                     return (
@@ -196,10 +196,10 @@ const DashboardContent: React.FC = () => {
                                             key={item.label}
                                             type="button"
                                             onClick={() => navigate(item.to)}
-                                            className="group flex w-full items-center gap-3 rounded-md border border-slate-200 bg-white px-3 py-3 text-left transition-colors hover:border-slate-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/25"
+                                            className="group flex w-full items-center gap-3 rounded-md border border-slate-200 bg-white px-3 py-2.5 text-left transition-colors hover:border-slate-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/25"
                                         >
-                                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-slate-100 text-slate-600 transition-colors group-hover:bg-white">
-                                                <Icon size={18} />
+                                            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-slate-100 text-slate-600 transition-colors group-hover:bg-white">
+                                                <Icon size={17} />
                                             </span>
                                             <span className="min-w-0 flex-1">
                                                 <span className="block truncate text-sm font-semibold text-slate-800">
@@ -209,7 +209,7 @@ const DashboardContent: React.FC = () => {
                                                     {item.hint}
                                                 </span>
                                             </span>
-                                            <span className="shrink-0 text-xl font-semibold text-slate-950">
+                                            <span className="shrink-0 text-lg font-semibold text-slate-950">
                                                 {item.value}
                                             </span>
                                         </button>
@@ -220,8 +220,8 @@ const DashboardContent: React.FC = () => {
                     )}
                 </section>
 
-                <section className="grid items-start gap-4 xl:grid-cols-[minmax(0,1.5fr)_minmax(320px,0.7fr)]">
-                    <div className="grid gap-4">
+                <section className="grid items-start gap-3 xl:grid-cols-[minmax(0,1.5fr)_minmax(320px,0.7fr)]">
+                    <div className="grid gap-3">
                         <div className="flex h-full flex-col rounded-lg border border-slate-200 bg-white p-4">
                             <h3 className="mb-3 text-base font-semibold text-slate-900">
                                 HR calendar
@@ -279,7 +279,7 @@ const DashboardContent: React.FC = () => {
                         )}
                     </div>
 
-                    <div className="grid gap-4">
+                    <div className="grid gap-3">
                         <div className="rounded-lg border border-slate-200 bg-white p-4">
                             <InfoSection />
                         </div>
