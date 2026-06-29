@@ -50,7 +50,7 @@ export default function PublicPageNav({
             </div>
 
             {(navItems.length > 0 || actions) && (
-                <div className="flex w-full min-w-0 flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:justify-end">
+                <div className="flex w-full min-w-0 max-w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:justify-end">
                     {navItems.map((item) => (
                         <a
                             key={item.href}

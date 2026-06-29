@@ -96,8 +96,10 @@ describe('Career page', () => {
                 .getByRole('link', { name: /submit application/i })
                 .getAttribute('href'),
         ).toBe('/recruitment')
-        expect(screen.getByText('Open roles, written clearly.')).toBeTruthy()
-        expect(screen.getByText('Before applying')).toBeTruthy()
+        expect(
+            screen.getByText('A small team hiring for practical work.'),
+        ).toBeTruthy()
+        expect(screen.getByText('Application notes')).toBeTruthy()
     })
 
     it('cleans up the old application notes hash', () => {

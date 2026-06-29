@@ -263,7 +263,7 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                     <>
                         <PublicPageNav
                             contextLabel="Careers"
-                            className="mb-5"
+                            className="mb-4"
                             navItems={[
                                 { href: '#open-roles', label: 'Open roles' },
                             ]}
@@ -277,27 +277,28 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                             }
                         />
 
-                        <section className="mb-6 max-w-full overflow-hidden rounded-xl border border-slate-200 bg-[#fbfbf8] p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:p-8">
-                            <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-end">
-                                <div className="min-w-0">
+                        <section className="mb-5 min-w-0 overflow-hidden rounded-lg border border-slate-200 bg-white">
+                            <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_340px]">
+                                <div className="min-w-0 p-5 sm:p-7">
                                     <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                                         People Hub Careers
                                     </p>
-                                    <h1 className="mt-5 max-w-2xl break-words text-2xl font-semibold leading-tight text-slate-950 min-[420px]:text-3xl sm:text-5xl">
-                                        Open roles, written clearly.
+                                    <h1 className="mt-4 max-w-3xl break-words text-3xl font-semibold leading-tight text-slate-950 sm:text-5xl">
+                                        A small team hiring for practical work.
                                     </h1>
                                     <p className="mt-4 max-w-2xl break-words text-sm leading-7 text-slate-600 sm:text-base">
-                                        Browse the roles currently published by
-                                        the HR team. If nothing fits today, you
-                                        can still send a general application.
+                                        Read the open roles, choose the closest
+                                        match, and send one clear application.
+                                        The same form works for specific and
+                                        general applications.
                                     </p>
 
-                                    <div className="mt-7 flex min-w-0 flex-col gap-3 sm:flex-row">
+                                    <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                                         <a
                                             href="#open-roles"
                                             className={`${publicButtonClasses.primary} w-full sm:w-auto`}
                                         >
-                                            View roles
+                                            Open roles
                                             <ArrowRight size={16} />
                                         </a>
                                         <Link
@@ -305,7 +306,6 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                             className={`${publicButtonClasses.secondary} w-full sm:w-auto`}
                                         >
                                             Submit application
-                                            <ArrowRight size={16} />
                                         </Link>
                                         {isManager && (
                                             <Link
@@ -318,53 +318,53 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     </div>
                                 </div>
 
-                                <aside className="min-w-0 rounded-lg border border-slate-200 bg-white p-5">
+                                <aside className="min-w-0 border-t border-slate-200 bg-slate-50/70 p-5 sm:p-7 lg:border-l lg:border-t-0">
                                     <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                                        Current board
+                                        Hiring board
                                     </p>
-                                    <dl className="mt-5 divide-y divide-slate-100">
-                                        <div className="flex flex-wrap items-center justify-between gap-2 py-3 first:pt-0">
-                                            <dt className="text-sm font-medium text-slate-500">
-                                                Open roles
-                                            </dt>
-                                            <dd className="shrink-0 break-words text-lg font-semibold text-slate-950">
-                                                {events.length}
-                                            </dd>
-                                        </div>
-                                        <div className="flex flex-wrap items-center justify-between gap-2 py-3">
-                                            <dt className="text-sm font-medium text-slate-500">
-                                                Application form
-                                            </dt>
-                                            <dd className="shrink-0 break-words text-sm font-semibold text-slate-950">
-                                                Available
-                                            </dd>
-                                        </div>
-                                        <div className="flex flex-wrap items-center justify-between gap-2 py-3 last:pb-0">
-                                            <dt className="text-sm font-medium text-slate-500">
-                                                Location
-                                            </dt>
-                                            <dd className="shrink-0 break-words text-sm font-semibold text-slate-950">
-                                                Per role
-                                            </dd>
-                                        </div>
-                                    </dl>
+                                    <div className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-3 lg:grid-cols-1">
+                                        {heroMetrics.map(
+                                            ({ label, value, icon: Icon }) => (
+                                                <div
+                                                    key={label}
+                                                    className="min-w-0 rounded-md border border-slate-200 bg-white px-3 py-3"
+                                                >
+                                                    <div className="flex items-center gap-2 text-slate-500">
+                                                        <Icon
+                                                            size={15}
+                                                            className="shrink-0"
+                                                        />
+                                                        <p className="truncate text-[11px] font-semibold uppercase tracking-wide">
+                                                            {label}
+                                                        </p>
+                                                    </div>
+                                                    <p className="mt-2 truncate text-sm font-semibold text-slate-950 sm:text-base">
+                                                        {value}
+                                                    </p>
+                                                </div>
+                                            ),
+                                        )}
+                                    </div>
                                 </aside>
                             </div>
                         </section>
 
                         <section
                             id="open-roles"
-                            className="grid max-w-full scroll-mt-8 gap-5 overflow-hidden lg:grid-cols-[320px_minmax(0,1fr)]"
+                            className="grid max-w-full grid-cols-1 items-start gap-5 overflow-hidden scroll-mt-8 lg:grid-cols-[300px_minmax(0,1fr)]"
                         >
-                            <aside className="h-fit rounded-xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-                                <label className="flex w-full items-center gap-3 rounded-md border border-slate-200 bg-slate-50 px-4 py-3 focus-within:border-slate-400 focus-within:bg-white focus-within:ring-2 focus-within:ring-slate-400/20">
+                            <aside className="h-fit rounded-lg border border-slate-200 bg-white p-5 lg:sticky lg:top-20">
+                                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                    Find a role
+                                </p>
+                                <label className="mt-4 flex w-full items-center gap-3 rounded-md border border-slate-200 bg-slate-50 px-4 py-3 focus-within:border-slate-400 focus-within:bg-white focus-within:ring-2 focus-within:ring-slate-400/20">
                                     <Search
                                         size={18}
                                         className="shrink-0 text-slate-400"
                                     />
                                     <input
                                         type="text"
-                                        placeholder="Search roles..."
+                                        placeholder="Search title, text, location..."
                                         value={filter}
                                         onChange={(e) =>
                                             setFilter(e.target.value)
@@ -373,31 +373,34 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     />
                                 </label>
 
-                                <div className="mt-6">
+                                <div className="mt-6 border-t border-slate-100 pt-5">
                                     <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                                        Before applying
+                                        Application notes
                                     </p>
-                                    <div className="mt-4 space-y-3">
-                                        {applicationNotes.map((note) => (
-                                            <p
+                                    <ol className="mt-4 space-y-3">
+                                        {applicationNotes.map((note, index) => (
+                                            <li
                                                 key={note}
-                                                className="border-l border-slate-200 pl-3 text-sm leading-6 text-slate-600"
+                                                className="flex gap-3 text-sm leading-6 text-slate-600"
                                             >
-                                                {note}
-                                            </p>
+                                                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-semibold text-slate-600">
+                                                    {index + 1}
+                                                </span>
+                                                <span>{note}</span>
+                                            </li>
                                         ))}
-                                    </div>
+                                    </ol>
                                 </div>
                             </aside>
 
-                            <div className="min-w-0 rounded-xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:p-6">
-                                <div className="flex flex-col gap-2 border-b border-slate-100 pb-5 sm:flex-row sm:items-end sm:justify-between">
+                            <div className="min-w-0 rounded-lg border border-slate-200 bg-white">
+                                <div className="flex flex-col gap-2 border-b border-slate-100 p-5 sm:flex-row sm:items-end sm:justify-between">
                                     <div>
                                         <p className="text-sm font-semibold text-slate-500">
                                             Open roles
                                         </p>
                                         <h2 className="mt-1 text-2xl font-semibold text-slate-950">
-                                            {filteredEvents.length} result
+                                            {filteredEvents.length} position
                                             {filteredEvents.length === 1
                                                 ? ''
                                                 : 's'}
@@ -405,59 +408,67 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                     </div>
                                     {filter && (
                                         <p className="text-sm text-slate-500">
-                                            Search: “{filter}”
+                                            Search: {filter}
                                         </p>
                                     )}
                                 </div>
 
                                 {isLoading ? (
-                                    <div className="mt-5 space-y-3">
+                                    <div className="space-y-3 p-5">
                                         {Array.from({ length: 3 }).map(
                                             (_, index) => (
                                                 <div
                                                     key={index}
-                                                    className="h-32 animate-pulse rounded-lg border border-slate-200 bg-slate-100"
+                                                    className="h-28 animate-pulse rounded-md border border-slate-200 bg-slate-100"
                                                 />
                                             ),
                                         )}
                                     </div>
                                 ) : filteredEvents.length === 0 ? (
-                                    <div className="mt-5 rounded-lg border border-dashed border-slate-200 bg-slate-50 p-6">
-                                        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                                            <div>
-                                                <h3 className="text-lg font-semibold text-slate-950">
-                                                    No open role matches right
-                                                    now
-                                                </h3>
-                                                <p className="mt-2 text-sm leading-6 text-slate-600">
-                                                    Send a general application
-                                                    and the HR team can review
-                                                    your profile when a role
-                                                    opens.
-                                                </p>
+                                    <div className="p-5">
+                                        <div className="rounded-md border border-dashed border-slate-200 bg-slate-50 p-6">
+                                            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                                                <div>
+                                                    <h3 className="text-lg font-semibold text-slate-950">
+                                                        No open role matches
+                                                        right now
+                                                    </h3>
+                                                    <p className="mt-2 text-sm leading-6 text-slate-600">
+                                                        Send a general
+                                                        application and the HR
+                                                        team can review your
+                                                        profile when a role
+                                                        opens.
+                                                    </p>
+                                                </div>
+                                                <Link
+                                                    to="/recruitment"
+                                                    className={`${publicButtonClasses.secondary} w-full shrink-0 sm:w-auto`}
+                                                >
+                                                    Apply anyway
+                                                    <ArrowRight size={16} />
+                                                </Link>
                                             </div>
-                                            <Link
-                                                to="/recruitment"
-                                                className={`${publicButtonClasses.secondary} w-full shrink-0 sm:w-auto`}
-                                            >
-                                                Apply anyway
-                                                <ArrowRight size={16} />
-                                            </Link>
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className="mt-5 space-y-3">
-                                        {filteredEvents.map((careerEvent) => (
-                                            <article
-                                                key={careerEvent._id}
-                                                className="rounded-lg border border-slate-200 bg-white p-5 transition hover:border-slate-300 hover:bg-slate-50/70"
-                                            >
-                                                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                                    <div className="divide-y divide-slate-100">
+                                        {filteredEvents.map(
+                                            (careerEvent, index) => (
+                                                <article
+                                                    key={careerEvent._id}
+                                                    className="grid gap-4 p-5 transition-colors hover:bg-slate-50/70 md:grid-cols-[64px_minmax(0,1fr)_auto] md:items-start"
+                                                >
+                                                    <div className="flex h-12 w-12 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-sm font-semibold text-slate-500">
+                                                        {String(
+                                                            index + 1,
+                                                        ).padStart(2, '0')}
+                                                    </div>
                                                     <div className="min-w-0">
                                                         <h3 className="break-words text-xl font-semibold text-slate-950">
                                                             {careerEvent.title}
                                                         </h3>
-                                                        <p className="mt-3 flex items-center gap-2 text-sm font-medium text-slate-500">
+                                                        <p className="mt-2 flex items-center gap-2 text-sm font-medium text-slate-500">
                                                             <MapPin
                                                                 size={15}
                                                                 className="shrink-0"
@@ -467,25 +478,25 @@ export const Careers = ({ managementMode = false }: CareersProps) => {
                                                                     'Location to be confirmed'}
                                                             </span>
                                                         </p>
+                                                        <p className="mt-4 text-sm leading-7 text-slate-600">
+                                                            {truncateText(
+                                                                careerEvent.description,
+                                                                260,
+                                                            )}
+                                                        </p>
                                                     </div>
                                                     <Link
                                                         to="/recruitment"
-                                                        className={`${publicButtonClasses.primary} w-full shrink-0 sm:w-auto`}
+                                                        className={`${publicButtonClasses.primary} w-full shrink-0 md:w-auto`}
                                                     >
                                                         Apply
                                                         <ArrowRight
                                                             size={16}
                                                         />
                                                     </Link>
-                                                </div>
-                                                <p className="mt-4 text-sm leading-7 text-slate-600">
-                                                    {truncateText(
-                                                        careerEvent.description,
-                                                        220,
-                                                    )}
-                                                </p>
-                                            </article>
-                                        ))}
+                                                </article>
+                                            ),
+                                        )}
                                     </div>
                                 )}
                             </div>
