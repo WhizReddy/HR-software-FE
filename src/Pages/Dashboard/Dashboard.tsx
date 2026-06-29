@@ -45,7 +45,7 @@ const DashboardContent: React.FC = () => {
     const userName = currentUser ? currentUser.firstName : 'User'
     const isAdmin = currentUser?.role === 'admin' || currentUser?.role === 'hr'
     const nextInterviews = upcomingInterviews.slice(0, 3)
-    const teamPreview = users.slice(0, 10)
+    const teamPreview = users.slice(0, 6)
     const dashboardStats = [
         {
             title: 'Present' as const,
@@ -121,7 +121,7 @@ const DashboardContent: React.FC = () => {
 
     return (
         <div className="relative overflow-x-hidden">
-            <div className="relative z-10 mx-auto w-full max-w-full space-y-5">
+            <div className="relative z-10 mx-auto w-full max-w-full space-y-4">
                 <PageIntro
                     eyebrow="Dashboard"
                     title={`${greeter()}, ${userName}`}
@@ -156,9 +156,9 @@ const DashboardContent: React.FC = () => {
                     </div>
                 )}
 
-                <section className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
-                    <div className="rounded-lg border border-slate-200 bg-white p-5">
-                        <div className="mb-4 flex items-center justify-between gap-3">
+                <section className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_340px]">
+                    <div className="rounded-lg border border-slate-200 bg-white p-4">
+                        <div className="mb-3 flex items-center justify-between gap-3">
                             <div>
                                 <h2 className="text-base font-semibold text-slate-900">
                                     Team today
@@ -171,7 +171,7 @@ const DashboardContent: React.FC = () => {
                                 {employeeData.total} total
                             </p>
                         </div>
-                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 2xl:grid-cols-4">
                             {dashboardStats.map((stat) => (
                                 <CardInfo
                                     key={stat.title}
@@ -183,8 +183,8 @@ const DashboardContent: React.FC = () => {
                     </div>
 
                     {attentionItems.length > 0 && (
-                        <div className="rounded-lg border border-slate-200 bg-white p-5">
-                            <div className="mb-4 flex items-center justify-between gap-3">
+                        <div className="rounded-lg border border-slate-200 bg-white p-4">
+                            <div className="mb-3 flex items-center justify-between gap-3">
                                 <div>
                                     <h2 className="text-base font-semibold text-slate-900">
                                         Work queue
@@ -226,67 +226,72 @@ const DashboardContent: React.FC = () => {
                     )}
                 </section>
 
-                {nextInterviews.length > 0 && (
-                    <section className="rounded-lg border border-slate-200 bg-white p-5">
-                        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                            <div>
-                                <h2 className="text-base font-semibold text-slate-900">
-                                    Next interviews
-                                </h2>
-                                <p className="mt-1 text-sm font-medium text-slate-500">
-                                    The next candidate meetings on the schedule.
-                                </p>
-                            </div>
-                            <button
-                                type="button"
-                                onClick={() => navigate('/interview')}
-                                className="inline-flex h-9 items-center justify-center rounded-md border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
-                            >
-                                Review schedule
-                            </button>
-                        </div>
-                        <div className="grid gap-3 md:grid-cols-3">
-                            {nextInterviews.map((interview) => (
-                                <article
-                                    key={interview.id}
-                                    className="rounded-md border border-slate-200 bg-slate-50/70 px-4 py-3"
-                                >
-                                    <p className="truncate text-sm font-semibold text-slate-900">
-                                        {interview.fullName}
-                                    </p>
-                                    <p className="mt-1 text-xs font-medium capitalize text-slate-500">
-                                        {interview.phase.replace('_', ' ')}
-                                    </p>
-                                    <p className="mt-2 text-xs font-semibold text-slate-700">
-                                        {dayjs(interview.interviewDate).isValid()
-                                            ? dayjs(
-                                                  interview.interviewDate,
-                                              ).format('DD MMM, HH:mm')
-                                            : 'Date pending'}
-                                    </p>
-                                </article>
-                            ))}
-                        </div>
-                    </section>
-                )}
-
-                <section className="grid gap-5 xl:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)]">
-                    <div className="flex h-full flex-col rounded-lg border border-slate-200 bg-white p-5">
-                        <h3 className="mb-4 text-base font-semibold text-slate-900">
-                            HR calendar
-                        </h3>
-                        <div className="flex-1">
+                <section className="grid items-start gap-4 xl:grid-cols-[minmax(0,1.5fr)_minmax(320px,0.7fr)]">
+                    <div className="grid gap-4">
+                        <div className="flex h-full flex-col rounded-lg border border-slate-200 bg-white p-4">
+                            <h3 className="mb-3 text-base font-semibold text-slate-900">
+                                HR calendar
+                            </h3>
                             <Calendar />
                         </div>
+
+                        {nextInterviews.length > 0 && (
+                            <section className="rounded-lg border border-slate-200 bg-white p-4">
+                                <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                                    <div>
+                                        <h2 className="text-base font-semibold text-slate-900">
+                                            Next interviews
+                                        </h2>
+                                        <p className="mt-1 text-sm font-medium text-slate-500">
+                                            Candidate meetings coming up.
+                                        </p>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => navigate('/interview')}
+                                        className="inline-flex h-9 items-center justify-center rounded-md border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+                                    >
+                                        Review schedule
+                                    </button>
+                                </div>
+                                <div className="grid gap-3 md:grid-cols-3">
+                                    {nextInterviews.map((interview) => (
+                                        <article
+                                            key={interview.id}
+                                            className="rounded-md border border-slate-200 bg-slate-50/70 px-4 py-3"
+                                        >
+                                            <p className="truncate text-sm font-semibold text-slate-900">
+                                                {interview.fullName}
+                                            </p>
+                                            <p className="mt-1 text-xs font-medium capitalize text-slate-500">
+                                                {interview.phase.replace(
+                                                    '_',
+                                                    ' ',
+                                                )}
+                                            </p>
+                                            <p className="mt-2 text-xs font-semibold text-slate-700">
+                                                {dayjs(
+                                                    interview.interviewDate,
+                                                ).isValid()
+                                                    ? dayjs(
+                                                          interview.interviewDate,
+                                                      ).format('DD MMM, HH:mm')
+                                                    : 'Date pending'}
+                                            </p>
+                                        </article>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
                     </div>
 
-                    <div className="grid gap-5">
-                        <div className="rounded-lg border border-slate-200 bg-white p-5">
+                    <div className="grid gap-4">
+                        <div className="rounded-lg border border-slate-200 bg-white p-4">
                             <InfoSection />
                         </div>
 
-                        <div className="rounded-lg border border-slate-200 bg-white p-5">
-                            <div className="mb-4">
+                        <div className="rounded-lg border border-slate-200 bg-white p-4">
+                            <div className="mb-3">
                                 <h3 className="text-base font-semibold text-slate-900">
                                     Attendance mix
                                 </h3>
@@ -296,71 +301,78 @@ const DashboardContent: React.FC = () => {
                             </div>
                             <PieChartComponent />
                         </div>
-                    </div>
-                </section>
 
-                <section className="rounded-lg border border-slate-200 bg-white p-5">
-                    <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                        <div>
-                            <h3 className="text-base font-semibold text-slate-900">
-                                Team preview
-                            </h3>
-                            <p className="mt-1 text-sm font-medium text-slate-500">
-                                Quick access to recent employee profiles.
-                            </p>
-                        </div>
-                        <button
-                            type="button"
-                            onClick={() => navigate('/employees')}
-                            className="inline-flex h-9 items-center justify-center rounded-md border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
-                        >
-                            Open directory
-                        </button>
-                    </div>
-                    {isUsersLoading ? (
-                        <div className="flex min-h-[96px] items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50/70 px-6 text-center text-sm font-medium text-slate-400">
-                            Loading employee directory...
-                        </div>
-                    ) : teamPreview.length === 0 ? (
-                        <div className="flex min-h-[96px] items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50/70 px-6 text-center text-sm font-medium text-slate-400">
-                            No employee profiles are available yet.
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-10">
-                            {teamPreview.map((employee) => (
+                        <section className="rounded-lg border border-slate-200 bg-white p-4">
+                            <div className="mb-3 flex items-center justify-between gap-3">
+                                <div>
+                                    <h3 className="text-base font-semibold text-slate-900">
+                                        Team shortcuts
+                                    </h3>
+                                    <p className="mt-1 text-sm font-medium text-slate-500">
+                                        Recent employee profiles.
+                                    </p>
+                                </div>
                                 <button
-                                    key={employee._id}
                                     type="button"
-                                    className="group flex min-w-0 items-center gap-3 rounded-md border border-slate-100 bg-slate-50/70 px-3 py-3 text-left transition-colors hover:border-slate-200 hover:bg-white"
-                                    onClick={() =>
-                                        navigate(`/profile/${employee._id}`)
-                                    }
+                                    onClick={() => navigate('/employees')}
+                                    className="inline-flex h-9 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
                                 >
-                                    {employee.imageUrl ? (
-                                        <img
-                                            src={employee.imageUrl}
-                                            alt={`${employee.firstName} ${employee.lastName}`}
-                                            className="h-9 w-9 shrink-0 rounded-full object-cover"
-                                        />
-                                    ) : (
-                                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-800 text-xs font-bold text-white">
-                                            {employee.firstName?.charAt(0)}
-                                            {employee.lastName?.charAt(0)}
-                                        </span>
-                                    )}
-                                    <span className="min-w-0">
-                                        <span className="block truncate text-sm font-semibold text-slate-800">
-                                            {employee.firstName}{' '}
-                                            {employee.lastName}
-                                        </span>
-                                        <span className="block truncate text-xs font-medium capitalize text-slate-500">
-                                            {employee.role || 'Employee'}
-                                        </span>
-                                    </span>
+                                    View all
                                 </button>
-                            ))}
-                        </div>
-                    )}
+                            </div>
+                            {isUsersLoading ? (
+                                <div className="flex min-h-[96px] items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50/70 px-6 text-center text-sm font-medium text-slate-400">
+                                    Loading employee directory...
+                                </div>
+                            ) : teamPreview.length === 0 ? (
+                                <div className="flex min-h-[96px] items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50/70 px-6 text-center text-sm font-medium text-slate-400">
+                                    No employee profiles are available yet.
+                                </div>
+                            ) : (
+                                <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
+                                    {teamPreview.map((employee) => (
+                                        <button
+                                            key={employee._id}
+                                            type="button"
+                                            className="group flex min-w-0 items-center gap-3 rounded-md border border-slate-100 bg-slate-50/70 px-3 py-2.5 text-left transition-colors hover:border-slate-200 hover:bg-white"
+                                            onClick={() =>
+                                                navigate(
+                                                    `/profile/${employee._id}`,
+                                                )
+                                            }
+                                        >
+                                            {employee.imageUrl ? (
+                                                <img
+                                                    src={employee.imageUrl}
+                                                    alt={`${employee.firstName} ${employee.lastName}`}
+                                                    className="h-9 w-9 shrink-0 rounded-full object-cover"
+                                                />
+                                            ) : (
+                                                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-800 text-xs font-bold text-white">
+                                                    {employee.firstName?.charAt(
+                                                        0,
+                                                    )}
+                                                    {employee.lastName?.charAt(
+                                                        0,
+                                                    )}
+                                                </span>
+                                            )}
+                                            <span className="min-w-0">
+                                                <span className="block truncate text-sm font-semibold text-slate-800">
+                                                    {employee.firstName}{' '}
+                                                    {employee.lastName}
+                                                </span>
+                                                <span className="block truncate text-xs font-medium capitalize text-slate-500">
+                                                    {employee.role ||
+                                                        'Employee'}
+                                                </span>
+                                            </span>
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </section>
+                    </div>
                 </section>
             </div>
         </div>

@@ -33,11 +33,11 @@ const getTimelineLabel = (startDate: string, endDate: string) => {
 
 const InfoSection: React.FC = () => {
     const { upcomingEvents, isEventsLoading } = useDashboardContext()
-    const visibleEvents = upcomingEvents.slice(0, 4)
+    const visibleEvents = upcomingEvents.slice(0, 3)
 
     return (
         <div className="flex h-full flex-col">
-            <div className="mb-5">
+            <div className="mb-3">
                 <h2 className="text-base font-semibold text-slate-900">
                     Upcoming HR events
                 </h2>
@@ -55,11 +55,11 @@ const InfoSection: React.FC = () => {
                     No HR events are scheduled right now.
                 </div>
             ) : (
-                <ul className="m-0 list-none space-y-3 p-0">
+                <ul className="m-0 list-none space-y-2 p-0">
                     {visibleEvents.map((event) => (
                         <li
                             key={event._id}
-                            className="group rounded-lg border border-transparent bg-white px-4 py-4 transition-colors duration-200 hover:border-slate-200 hover:bg-slate-50"
+                            className="group rounded-lg border border-slate-100 bg-slate-50/70 px-3 py-3 transition-colors duration-200 hover:border-slate-200 hover:bg-white"
                         >
                             <div className="flex items-start justify-between gap-3">
                                 <div className="min-w-0">
@@ -74,12 +74,12 @@ const InfoSection: React.FC = () => {
                                     <img
                                         src={event.photo[0]}
                                         alt={event.title}
-                                        className="h-12 w-12 flex-shrink-0 rounded-xl object-cover shadow-sm transition-shadow duration-300 group-hover:shadow-md"
+                                        className="h-10 w-10 flex-shrink-0 rounded-lg object-cover shadow-sm transition-shadow duration-300 group-hover:shadow-md"
                                     />
                                 )}
                             </div>
 
-                            <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-semibold text-slate-500">
+                            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs font-semibold text-slate-500">
                                 <span className="inline-flex items-center gap-1.5">
                                     <CalendarDays size={14} className="text-slate-500" />
                                     {dayjs(event.startDate).isValid()
@@ -101,7 +101,7 @@ const InfoSection: React.FC = () => {
                             </div>
 
                             {event.description && (
-                                <p className="mt-3 line-clamp-2 text-sm font-medium text-slate-500">
+                                <p className="mt-2 line-clamp-2 text-sm font-medium text-slate-500">
                                     {event.description}
                                 </p>
                             )}

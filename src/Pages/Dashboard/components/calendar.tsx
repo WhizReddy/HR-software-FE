@@ -102,9 +102,9 @@ export default function Calendar() {
 
     return (
         <div className="w-full">
-            <div className="mb-5 flex items-center justify-between gap-3 px-1">
+            <div className="mb-4 flex items-center justify-between gap-3 px-1">
                 <div>
-                    <h3 className="text-xl font-semibold text-slate-950">
+                    <h3 className="text-lg font-semibold text-slate-950">
                         {visibleMonth.format('MMMM YYYY')}
                     </h3>
                     <p className="mt-1 text-xs font-medium text-slate-500">
@@ -132,14 +132,14 @@ export default function Calendar() {
                     </button>
                 </div>
             </div>
-            <div className="mb-3 grid grid-cols-7 gap-1 text-center text-xs font-medium text-slate-500">
+            <div className="mb-2 grid grid-cols-7 gap-1.5 text-center text-xs font-medium text-slate-500">
                 {weekDays.map((day) => (
                     <div key={day}>{day}</div>
                 ))}
             </div>
-            <div className="grid grid-cols-7 gap-x-1 gap-y-2 text-center text-sm">
+            <div className="grid grid-cols-7 gap-1.5 text-center text-sm">
                 {Array.from({ length: firstDay }).map((_, index) => (
-                    <div key={`empty-${index}`} className="h-10 rounded-lg" />
+                    <div key={`empty-${index}`} className="h-11 rounded-lg" />
                 ))}
                 {Array.from({ length: daysInMonth }).map((_, index) => {
                     const date = index + 1
@@ -157,7 +157,7 @@ export default function Calendar() {
                             onClick={() =>
                                 setSelectedDate(visibleMonth.date(date).startOf('day'))
                             }
-                            className={`relative mx-auto flex h-10 w-10 items-center justify-center rounded-lg font-medium transition-colors ${
+                            className={`relative flex h-11 w-full items-center justify-center rounded-lg font-medium transition-colors ${
                                 isToday
                                     ? 'bg-slate-900 text-white'
                                     : selectedDate.isSame(
@@ -173,7 +173,7 @@ export default function Calendar() {
                         >
                             {date}
                             {visibleMarkers.length > 0 && (
-                                <span className="absolute -bottom-1 flex gap-0.5">
+                                <span className="absolute bottom-1 flex gap-0.5">
                                     {visibleMarkers.map((kind) => (
                                         <span
                                             key={kind}
@@ -190,7 +190,7 @@ export default function Calendar() {
                     )
                 })}
             </div>
-            <div className="mt-5 rounded-lg border border-slate-200 bg-slate-50/70 p-4 text-left">
+            <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50/70 p-3 text-left">
                 <div className="mb-3 flex items-center justify-between gap-3">
                     <div>
                         <p className="text-sm font-semibold text-slate-900">
@@ -229,7 +229,7 @@ export default function Calendar() {
                     </p>
                 )}
             </div>
-            <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 text-xs font-semibold text-slate-500">
+            <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-xs font-semibold text-slate-500">
                 {Object.entries(markerLabels).map(([kind, label]) => (
                     <span key={kind} className="inline-flex items-center gap-1.5">
                         <span
