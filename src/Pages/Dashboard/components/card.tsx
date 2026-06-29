@@ -11,7 +11,7 @@ const CardInfo: React.FC<CardProps> = ({ title, content }) => {
     const Icon = cfg.icon
 
     return (
-        <div className="relative h-full overflow-hidden rounded-lg border border-slate-200 bg-white p-4 transition-colors duration-200 hover:border-slate-300">
+        <div className="relative h-full overflow-hidden rounded-lg border border-slate-200 bg-slate-50/70 p-4 transition-colors duration-200 hover:border-slate-300 hover:bg-white">
             <div className="flex items-center gap-3">
                 <div
                     className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-slate-100 text-slate-600"
