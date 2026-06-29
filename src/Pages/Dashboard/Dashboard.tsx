@@ -5,7 +5,6 @@ import CardInfo from './components/card.tsx'
 import InfoSection from './components/infoSection.tsx'
 import PieChartComponent from './components/piechart.tsx'
 import { DashboardProvider, useDashboardContext } from './context/hook.tsx'
-import { greeter } from '@/Helpers/Greeter.tsx'
 import { useNavigate } from 'react-router-dom'
 import {
     AlertCircle,
@@ -42,7 +41,6 @@ const DashboardContent: React.FC = () => {
     const { currentUser } = useAuth()
     const navigate = useNavigate()
 
-    const userName = currentUser ? currentUser.firstName : 'User'
     const isAdmin = currentUser?.role === 'admin' || currentUser?.role === 'hr'
     const nextInterviews = upcomingInterviews.slice(0, 3)
     const teamPreview = users.slice(0, 6)
@@ -123,13 +121,9 @@ const DashboardContent: React.FC = () => {
         <div className="relative overflow-x-hidden">
             <div className="relative z-10 mx-auto w-full max-w-full space-y-4">
                 <PageIntro
-                    eyebrow="Dashboard"
-                    title={`${greeter()}, ${userName}`}
-                    description={
-                        isAdmin
-                            ? 'Review attendance, leave approvals, hiring work, and HR operations for today.'
-                            : undefined
-                    }
+                    eyebrow={isAdmin ? 'People operations' : undefined}
+                    title="Dashboard"
+                    description="Overview of today’s HR activity, attendance, recruitment, and upcoming events."
                     actions={
                         <button
                             type="button"
@@ -156,7 +150,7 @@ const DashboardContent: React.FC = () => {
                     </div>
                 )}
 
-                <section className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_340px]">
+                <section className="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_340px]">
                     <div className="rounded-lg border border-slate-200 bg-white p-4">
                         <div className="mb-3 flex items-center justify-between gap-3">
                             <div>
@@ -171,7 +165,7 @@ const DashboardContent: React.FC = () => {
                                 {employeeData.total} total
                             </p>
                         </div>
-                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 2xl:grid-cols-4">
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 min-[1180px]:grid-cols-4">
                             {dashboardStats.map((stat) => (
                                 <CardInfo
                                     key={stat.title}
